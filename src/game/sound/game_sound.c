@@ -1,0 +1,28 @@
+#include <allegro/sound.h>
+#include "game_sound.h"
+
+const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
+		"assets/music/menu.s3m"
+};
+
+const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
+		"assets/sounds/click.wav",
+        "assets/sounds/click.wav"
+};
+
+void game_snd_load_sounds() {
+    snd_init_sounds(GAME_SOUNDS_COUNT);
+    for (int i = 0; i < GAME_SOUNDS_COUNT; i++) {
+        snd_load_sound(i, load_sample(gameSoundFilenames[i]));
+    }
+}
+
+void game_snd_play_music(GameMusic gameMusic) {
+    if (gameMusicFilenames[gameMusic] != NULL) {
+        snd_play_music(gameMusicFilenames[gameMusic]);
+    }
+}
+
+void game_snd_play_sound(GameSound gameSound) {
+    snd_play_sound(gameSound, 255, 128, 1000);
+}

@@ -8,11 +8,11 @@ typedef enum {
 	MOUSE_CURSOR_SELECT,
 	MOUSE_CURSOR_ATTACK,
 	MOUSE_CURSOR_TARGET,
-	NUM_MOUSE_CURSOR_STATES
+	NUM_MOUSE_CURSORS
 } MouseCursorStateEnum;
 
-extern InitializationStatusEnum game_mouse_init_cursors();
-extern void game_mouse_set_cursor_state(MouseCursorStateEnum state);
-extern MouseCursorStateEnum game_mouse_get_cursor_state();
+InitializationStatusEnum game_mouse_init_cursors();
+void game_mouse_set_cursor_state(MouseCursorStateEnum state);
+MouseCursorStateEnum game_mouse_get_cursor_state();
 
 #endif

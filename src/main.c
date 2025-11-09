@@ -5,6 +5,7 @@
 #include "common/sound/sound.h"
 #include "game/game.h"
 #include "game/mouse/game_mouse.h"
+#include "game/sound/game_sound.h"
 
 #define INTERNAL_WIDTH 320
 #define INTERNAL_HEIGHT 200
@@ -92,16 +93,6 @@ void printMouse(BITMAP *buffer) {
 				  makecol(255, 255, 255), "mouse_z = %-5d mouse_w = %-5d", mouse_z, mouse_w);
 }
 
-typedef enum {
-	GAME_MUSIC_NONE,
-	GAME_MUSIC_TITLE,
-} GameMusic;
-
-char* gameMusicFilenames [] = {
-		NULL,
-		"assets/menu.s3m"
-};
-
 int main(int argc, char *argv[]) {
 
 	if (allegro_init() != ALLEGRO_INIT_OK) return PROGRAM_ERROR;
@@ -114,7 +105,7 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
-	if(snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
+	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
 		printf("Error initializing sound.");
 		return PROGRAM_ERROR;
 	}
@@ -123,14 +114,16 @@ int main(int argc, char *argv[]) {
 	LOCK_FUNCTION(close_button_handler);
 	set_close_button_callback(close_button_handler);
 
-	snd_play_music(gameMusicFilenames[GAME_MUSIC_TITLE]);
+	//game_snd_play_music(GAME_MUSIC_TITLE);
 
-	if(game_mouse_init_cursors() != INITIALIZATION_OK) {
+	if (game_mouse_init_cursors() != INITIALIZATION_OK) {
 		printf("Error initializing mouse.");
 		return PROGRAM_ERROR;
 	}
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	set_mouse_sprite_focus(0, 0);
+
+	game_snd_load_sounds();
 
 	globalGameState.gameState = GAME_STATE_MAIN_MENU;
 
@@ -138,6 +131,7 @@ int main(int argc, char *argv[]) {
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
 		// Execute game logic
 		gameStateTable[globalGameState.gameState](&globalGameState);
+		if (mouse_b & 1) game_snd_play_sound(GAME_SOUND_CLICK);
 		vsync();
 
 		// Render game
@@ -153,6 +147,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	snd_stop_music();
+	snd_destroy_sounds();
 	destroy_bitmap(buffer);
 	mouse_destroy_cursors();
 	allegro_exit();

@@ -16,5 +16,5 @@ typedef GameStateEnum (*StateFunction)(GameState*);
 
 extern StateFunction gameStateTable[NUM_GAME_STATES];
 
-extern GameStateEnum handle_main_menu(GameState* gameState);
+GameStateEnum handle_main_menu(GameState* gameState);
 #endif
