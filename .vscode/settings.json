@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "*.h": "c",
-        "*.c": "c"
+        "*.c": "c",
+        "cstdio": "c"
     },
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modifications",

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <allegro.h>
 #include <jgmod.h>
+#include "common/common.h"
+#include "common/sound/sound.h"
 #include "game/game.h"
-
-#define PROGRAM_OK 0
-#define PROGRAM_ERROR 1
+#include "game/mouse/game_mouse.h"
 
 #define INTERNAL_WIDTH 320
 #define INTERNAL_HEIGHT 200
@@ -38,14 +38,11 @@ GameState globalGameState;
 
 int mickeyx = 0;
 int mickeyy = 0;
-int c = 0;
-
-#define ALLEGRO_INIT_OK 0
+int mickeyFrames = 0;
 
 #define MOD_VOICES 8
 #define GAME_VOICES 16
-
-JGMOD *music;
+#define GAME_COLOR_DEPTH 8
 
 void printMouse(BITMAP *buffer) {
 	poll_mouse();
@@ -60,8 +57,8 @@ void printMouse(BITMAP *buffer) {
        * there's no need for that other than to slow the numbers down
        * a bit so that you will have time to read them...
        */
-	c++;
-	if ((c & 3) == 0) get_mouse_mickeys(&mickeyx, &mickeyy);
+	mickeyFrames++;
+	if ((mickeyFrames & 3) == 0) get_mouse_mickeys(&mickeyx, &mickeyy);
 
 	textprintf_ex(buffer, font, 16, 88, makecol(0, 0, 0),
 				  makecol(255, 255, 255), "mickey_x = %-7d", mickeyx);
@@ -95,27 +92,30 @@ void printMouse(BITMAP *buffer) {
 				  makecol(255, 255, 255), "mouse_z = %-5d mouse_w = %-5d", mouse_z, mouse_w);
 }
 
+typedef enum {
+	GAME_MUSIC_NONE,
+	GAME_MUSIC_TITLE,
+} GameMusic;
+
+char* gameMusicFilenames [] = {
+		NULL,
+		"assets/menu.s3m"
+};
+
 int main(int argc, char *argv[]) {
 
 	if (allegro_init() != ALLEGRO_INIT_OK) return PROGRAM_ERROR;
 	if (install_keyboard() != ALLEGRO_INIT_OK) return PROGRAM_ERROR;
 
-	set_color_depth(8);
-
+	set_color_depth(GAME_COLOR_DEPTH);
 	if (setVideoMode() != ALLEGRO_INIT_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 		allegro_message("Unable to set any graphic mode\n%s\n", allegro_error);
 		return PROGRAM_ERROR;
 	}
 
-	reserve_voices(GAME_VOICES, -1);
-	if (install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL) < ALLEGRO_INIT_OK) {
-		printf("Error initializing sound card");
-		return PROGRAM_ERROR;
-	}
-
-	if (install_mod(MOD_VOICES) < ALLEGRO_INIT_OK) {
-		printf("Error setting digi voices");
+	if(snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
+		printf("Error initializing sound.");
 		return PROGRAM_ERROR;
 	}
 
@@ -123,47 +123,38 @@ int main(int argc, char *argv[]) {
 	LOCK_FUNCTION(close_button_handler);
 	set_close_button_callback(close_button_handler);
 
-	music = load_mod("assets/menu.s3m");
-	if (music == NULL) {
-		printf("Error reading menu.s3m");
+	snd_play_music(gameMusicFilenames[GAME_MUSIC_TITLE]);
+
+	if(game_mouse_init_cursors() != INITIALIZATION_OK) {
+		printf("Error initializing mouse.");
 		return PROGRAM_ERROR;
 	}
-	play_mod(music, TRUE);
-
-	BITMAP *buffer = create_bitmap(INTERNAL_WIDTH, INTERNAL_HEIGHT);
-
-	if (install_mouse() < ALLEGRO_INIT_OK) {
-		printf("Error installing mouse");
-		return PROGRAM_ERROR;
-	}
-
-	BITMAP *mouseCursor = load_bitmap("assets/mouse/idle.pcx", NULL);
-	show_mouse(NULL);
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	set_mouse_sprite_focus(0, 0);
 
 	globalGameState.gameState = GAME_STATE_MAIN_MENU;
 
+	BITMAP *buffer = create_bitmap(INTERNAL_WIDTH, INTERNAL_HEIGHT);
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
-		clear_bitmap(buffer);
+		// Execute game logic
 		gameStateTable[globalGameState.gameState](&globalGameState);
-		printMouse(buffer);
-
-		draw_sprite(
-				buffer,
-				mouseCursor,
-				mouse_x - mouse_x_focus,
-				mouse_y - mouse_y_focus);
-
 		vsync();
+
+		// Render game
+		clear_bitmap(buffer);
+		printMouse(buffer);
+		draw_sprite(buffer, mouse_get_cursor(), mouse_x - mouse_x_focus, mouse_y - mouse_y_focus);
+		vsync();
+
+		// Move buffer to screen
 		acquire_screen();
 		stretch_blit(buffer, screen, 0, 0, buffer->w, buffer->h, 0, 0, screen->w, screen->h);
 		release_screen();
 	}
 
-	stop_mod();
-	destroy_mod(music);
+	snd_stop_music();
 	destroy_bitmap(buffer);
-	destroy_bitmap(mouseCursor);
+	mouse_destroy_cursors();
 	allegro_exit();
 	return PROGRAM_OK;
 }

@@ -1,5 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
+#include "../common/common.h"
+#include <allegro/gfx.h>
 
 typedef enum {
     GAME_STATE_MAIN_MENU,

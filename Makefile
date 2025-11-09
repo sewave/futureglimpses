@@ -42,7 +42,7 @@ endif
 # BUILD MODE AND FLAGS (STD ADDED HERE)
 # ==============================================================================
 # Base flags for std, Warnings, and Debug/Optimization
-BASE_FLAGS = -Wall -std=gnu99
+BASE_FLAGS = -Wall -std=gnu99 -fgnu89-inline
 
 ifeq ($(BUILD_MODE), debug)
     # Add IFLAGS (custom includes) and Debug flags
