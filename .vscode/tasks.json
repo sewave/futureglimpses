@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Win Debug (Default)",
+            "type": "shell",
+            "command": "${config:makePath} debug", 
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Builds the debug executable using MinGW"
+        },
+        {
+            "label": "Build Win Release",
+            "type": "shell",
+            "command": "${config:makePath} release",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Builds the release executable using MinGW"
+        },
+        {
+            "label": "Build DOS Release",
+            "type": "shell",
+            "command": "${config:makePath} ENV=djgpp release",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Builds the release executable for DJGPP"
+        },
+        {
+            "label": "Clean Project",
+            "type": "shell",
+            "command": "${config:makePath} clean",
+            "group": "none",
+            "problemMatcher": []
+        }
+    ]
+}

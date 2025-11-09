@@ -1,0 +1,6 @@
+.cache/
+build/
+.vscode/userdata
+*.exe
+out
+CWSDPMI.SWP

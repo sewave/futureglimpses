@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "Run DOS release",
+            "request": "launch",
+            "command": "${config:dosboxPath} -conf ${workspaceFolder}/.dos/dosbox-x.conf -fastlaunch -exit ${workspaceFolder}/dos_rel.exe",
+            "preLaunchTask": "Build DOS Release"
+        },
+        {
+            "type": "node-terminal",
+            "name": "Run Windows release",
+            "request": "launch",
+            "command": "${workspaceFolder}/win_rel.exe",
+            "preLaunchTask": "Build Win Release"
+        },
+        {
+            "name": "Run Windows debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/win_dbg.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${config:gdbPath}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "targetArchitecture": "x86",
+            "preLaunchTask": "Build Win Debug (Default)"
+        }
+    ]
+}

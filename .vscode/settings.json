@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c"
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications",
+    "makePath": "C:/dev-allegro/mingw32/bin/mingw32-make",
+    "dosboxPath": "C:/dev-allegro/dosbox-x/dosbox-x.exe",
+    "gdbPath": "C:/dev-allegro/mingw32/bin/gdb.exe",
+    "allegroIncludePath": "C:/dev-allegro/allegro4-win/include",
+    "compilerPath": "C:/dev-allegro/mingw32/bin/gcc.exe"
+}
