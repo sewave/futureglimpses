@@ -8,5 +8,7 @@ BITMAP *mouse_get_cursor_sprite();
 void mouse_set_cursor(uchar index);
 void mouse_destroy_cursors(void);
 InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouseCursorFilenames);
+int mouse_get_x(void);
+int mouse_get_y(void);
 
 #endif

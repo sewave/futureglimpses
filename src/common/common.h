@@ -15,4 +15,6 @@ typedef enum {
 #define uchar   unsigned char
 #endif
 
+#define RESOLUTION_MULTIPLIER 3
+
 #endif /* COMMON_H */

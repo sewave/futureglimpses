@@ -15,9 +15,7 @@ void game_snd_load_sounds() {
 }
 
 void game_snd_play_music(GameMusic gameMusic) {
-    if (gameMusicFilenames[gameMusic] != NULL) {
-        snd_play_music(gameMusicFilenames[gameMusic]);
-    }
+    snd_play_music(gameMusicFilenames[gameMusic]);
 }
 
 void game_snd_play_sound(GameSound gameSound) {

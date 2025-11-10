@@ -3,19 +3,11 @@
 #include <jgmod.h>
 #include "common/common.h"
 #include "common/sound/sound.h"
+#include "common/video/video.h"
 #include "game/game.h"
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
-
-#define INTERNAL_WIDTH 320
-#define INTERNAL_HEIGHT 200
-#ifdef DOS
-#define EXTERNAL_WIDTH INTERNAL_WIDTH
-#define EXTERNAL_HEIGHT INTERNAL_HEIGHT
-#else
-#define EXTERNAL_WIDTH INTERNAL_WIDTH * 3
-#define EXTERNAL_HEIGHT INTERNAL_HEIGHT * 3
-#endif
+#include "game/video/game_video.h"
 
 volatile int closeButtonPressed = FALSE;
 
@@ -24,18 +16,8 @@ void close_button_handler() {
 }
 END_OF_FUNCTION(close_button_handler)
 
-int setVideoMode() {
-#ifdef DOS
-	if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, EXTERNAL_WIDTH, EXTERNAL_HEIGHT, 0, 0) != 0) {
-#endif
-		if (set_gfx_mode(GFX_SAFE, EXTERNAL_WIDTH, EXTERNAL_HEIGHT, 0, 0) != 0) return 1;
-#ifdef DOS
-	}
-#endif
-	return 0;
-}
-
 GameState globalGameState;
+char keyPrevious[KEY_MAX];
 
 int mickeyx = 0;
 int mickeyy = 0;
@@ -43,7 +25,6 @@ int mickeyFrames = 0;
 
 #define MOD_VOICES 8
 #define GAME_VOICES 16
-#define GAME_COLOR_DEPTH 8
 
 void printMouse(BITMAP *buffer) {
 	poll_mouse();
@@ -94,27 +75,30 @@ void printMouse(BITMAP *buffer) {
 }
 
 int main(int argc, char *argv[]) {
-
-	if (allegro_init() != ALLEGRO_INIT_OK) return PROGRAM_ERROR;
-	if (install_keyboard() != ALLEGRO_INIT_OK) return PROGRAM_ERROR;
-
-	set_color_depth(GAME_COLOR_DEPTH);
-	if (setVideoMode() != ALLEGRO_INIT_OK) {
-		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
-		allegro_message("Unable to set any graphic mode\n%s\n", allegro_error);
+	/* Init all systems */
+	if (allegro_init() != ALLEGRO_INIT_OK) {
+		printf("Error initializing Allegro.");
 		return PROGRAM_ERROR;
 	}
-
+	if (install_keyboard() != ALLEGRO_INIT_OK) {
+		printf("Error initializing keyboard.");
+		return PROGRAM_ERROR;
+	}
+	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
+		printf("Error initializing video.");
+		return PROGRAM_ERROR;
+	}
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
 		printf("Error initializing sound.");
 		return PROGRAM_ERROR;
 	}
 
+	/* Attach function to clos ebutton */
 	LOCK_VARIABLE(closeButtonPressed);
 	LOCK_FUNCTION(close_button_handler);
 	set_close_button_callback(close_button_handler);
 
-	//game_snd_play_music(GAME_MUSIC_TITLE);
+	game_snd_play_music(GAME_MUSIC_TITLE);
 
 	if (game_mouse_init_cursors() != INITIALIZATION_OK) {
 		printf("Error initializing mouse.");
@@ -127,31 +111,33 @@ int main(int argc, char *argv[]) {
 
 	globalGameState.gameState = GAME_STATE_MAIN_MENU;
 
-	BITMAP *buffer = create_bitmap(INTERNAL_WIDTH, INTERNAL_HEIGHT);
+	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	memset(keyPrevious, FALSE, sizeof(keyPrevious));
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
-		if (keyboard_needs_poll()) poll_keyboard();
+		poll_keyboard();
 		// Execute game logic
 		gameStateTable[globalGameState.gameState](&globalGameState);
-		if (key[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
-		if (key[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
+		if (key[KEY_A] && !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
+		if (key[KEY_S] && !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
 		vsync();
 
 		// Render game
-		clear_bitmap(buffer);
-		printMouse(buffer);
-		draw_sprite(buffer, mouse_get_cursor_sprite(), mouse_x - mouse_x_focus, mouse_y - mouse_y_focus);
+		clear_bitmap(screenBuffer);
+		printMouse(screenBuffer);
+		draw_sprite(screenBuffer, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus);
 		vsync();
 
 		// Move buffer to screen
 		acquire_screen();
-		stretch_blit(buffer, screen, 0, 0, buffer->w, buffer->h, 0, 0, screen->w, screen->h);
+		stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
 		release_screen();
+		memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 	}
 
 	snd_stop_music();
 	snd_destroy_sounds();
-	destroy_bitmap(buffer);
 	mouse_destroy_cursors();
+	destroy_bitmap(screenBuffer);
 	allegro_exit();
 	return PROGRAM_OK;
 }

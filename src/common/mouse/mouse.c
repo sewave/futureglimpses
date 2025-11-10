@@ -44,3 +44,19 @@ void mouse_destroy_cursors(void) {
 	}
     free(mouseCursors);
 }
+
+int mouse_get_x() {
+    #ifdef DOS
+        return mouse_x;
+    #else
+        return mouse_x / RESOLUTION_MULTIPLIER;
+    #endif
+}
+
+int mouse_get_y() {
+    #ifdef DOS
+        return mouse_y;
+    #else
+        return mouse_y / RESOLUTION_MULTIPLIER;
+    #endif
+}

@@ -1,0 +1,18 @@
+#ifndef GAME_VIDEO_H
+#define GAME_VIDEO_H
+#include "../../common/common.h"
+
+#define GAME_INTERNAL_WIDTH 320
+#define GAME_INTERNAL_HEIGHT 200
+#ifdef DOS
+#define GAME_EXTERNAL_WIDTH GAME_INTERNAL_WIDTH
+#define GAME_EXTERNAL_HEIGHT GAME_INTERNAL_HEIGHT
+#else
+#define GAME_EXTERNAL_WIDTH GAME_INTERNAL_WIDTH * 3
+#define GAME_EXTERNAL_HEIGHT GAME_INTERNAL_HEIGHT * 3
+#endif
+
+#define GAME_COLOR_DEPTH 8
+
+InitializationStatusEnum game_video_init();
+#endif /* GAME_VIDEO_H */
