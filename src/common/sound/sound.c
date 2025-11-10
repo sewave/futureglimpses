@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "sound.h"
 #include <jgmod.h>
 
@@ -5,8 +6,20 @@ JGMOD *currentModMusic = NULL;
 MIDI *currentMidiMusic = NULL;
 MusicType currentMusicType = MUSIC_TYPE_MIDI;
 
-SAMPLE** sounds = NULL;
+SAMPLE **sounds = NULL;
 int totalSounds = 0;
+
+/* PRIVATE AREA */
+void _snd_destroy_sound(int soundIndex) {
+	if (sounds[soundIndex] != NULL) {
+		SAMPLE *sample = sounds[soundIndex];
+		stop_sample(sample);
+		destroy_sample(sample);
+		sounds[soundIndex] = NULL;
+	}
+}
+
+/* PUBLIC AREA */
 
 /*
     Initializes the sound system with the specified number of total voices and music voices.
@@ -15,12 +28,14 @@ int totalSounds = 0;
 */
 InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, MusicType musicType) {
 	remove_sound();
-	if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	currentMusicType = musicType;
 	if (currentMusicType == MUSIC_TYPE_MIDI) {
 		reserve_voices(totalVoices, musicVoices);
 	} else {
 		reserve_voices(totalVoices, -1);
+	}
+	if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
+	if (currentMusicType == MUSIC_TYPE_MOD) {
 		if (install_mod(musicVoices) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	}
 	return INITIALIZATION_OK;
@@ -60,30 +75,19 @@ void snd_stop_music(void) {
 	}
 }
 
-void snd_init_sounds(int numSounds) {
+void snd_init_sounds(int numSounds, const char **soundFilenames) {
 	totalSounds = numSounds;
 	sounds = (SAMPLE **) calloc(totalSounds, sizeof(SAMPLE *));
+	for (int i = 0; i < totalSounds; i++) {
+		_snd_destroy_sound(i);
+		sounds[i] = load_sample(soundFilenames[i]);
+	}
 }
 
 void snd_play_sound(int soundIndex, int volume, int pan, int freq) {
 	if (soundIndex < 0 || soundIndex >= totalSounds) return;
 	if (sounds[soundIndex] == NULL) return;
-	play_sample(sounds[soundIndex], volume, pan, freq, FALSE);
-}
-
-void _snd_destroy_sound(int soundIndex) {
-	if (sounds[soundIndex] != NULL) {
-		SAMPLE* sample = sounds[soundIndex];
-		stop_sample(sample);
-		destroy_sample(sample);
-		sounds[soundIndex] = NULL;
-	}
-}
-
-void snd_load_sound(int soundIndex, SAMPLE* sound) {
-	if (soundIndex < 0 || soundIndex >= totalSounds) return;
-	_snd_destroy_sound(soundIndex);
-	sounds[soundIndex] = sound;
+	play_sample(sounds[soundIndex], volume, pan, freq, TRUE);
 }
 
 void snd_destroy_sounds() {

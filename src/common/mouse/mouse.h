@@ -4,7 +4,7 @@
 #include <allegro/gfx.h>
 #include <allegro/mouse.h>
 
-BITMAP *mouse_get_cursor();
+BITMAP *mouse_get_cursor_sprite();
 void mouse_set_cursor(uchar index);
 void mouse_destroy_cursors(void);
 InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouseCursorFilenames);

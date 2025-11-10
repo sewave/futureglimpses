@@ -6,15 +6,12 @@ const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
 };
 
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
-		"assets/sounds/click.wav",
-        "assets/sounds/click.wav"
+		"assets/sound/click.wav",
+        "assets/sound/click2.wav"
 };
 
 void game_snd_load_sounds() {
-    snd_init_sounds(GAME_SOUNDS_COUNT);
-    for (int i = 0; i < GAME_SOUNDS_COUNT; i++) {
-        snd_load_sound(i, load_sample(gameSoundFilenames[i]));
-    }
+    snd_init_sounds(GAME_SOUNDS_COUNT, gameSoundFilenames);
 }
 
 void game_snd_play_music(GameMusic gameMusic) {

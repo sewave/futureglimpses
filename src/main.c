@@ -129,15 +129,17 @@ int main(int argc, char *argv[]) {
 
 	BITMAP *buffer = create_bitmap(INTERNAL_WIDTH, INTERNAL_HEIGHT);
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
+		if (keyboard_needs_poll()) poll_keyboard();
 		// Execute game logic
 		gameStateTable[globalGameState.gameState](&globalGameState);
-		if (mouse_b & 1) game_snd_play_sound(GAME_SOUND_CLICK);
+		if (key[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
+		if (key[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
 		vsync();
 
 		// Render game
 		clear_bitmap(buffer);
 		printMouse(buffer);
-		draw_sprite(buffer, mouse_get_cursor(), mouse_x - mouse_x_focus, mouse_y - mouse_y_focus);
+		draw_sprite(buffer, mouse_get_cursor_sprite(), mouse_x - mouse_x_focus, mouse_y - mouse_y_focus);
 		vsync();
 
 		// Move buffer to screen

@@ -13,8 +13,7 @@ void snd_play_music(const char* filename);
 void snd_pause_music(void);
 void snd_resume_music(void);
 void snd_stop_music(void);
-void snd_init_sounds(int numSounds);
-void snd_load_sound(int soundIndex, SAMPLE* sample);
+void snd_init_sounds(int numSounds, const char** soundFilenames);
 void snd_play_sound(int soundIndex, int volume, int pan, int freq);
 void snd_destroy_sounds(void);
 

@@ -27,7 +27,7 @@ InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouse
     return INITIALIZATION_OK;
 }
 
-BITMAP *mouse_get_cursor() {
+BITMAP *mouse_get_cursor_sprite() {
 	return mouseCursors[currentMouseCursor];
 }
 
