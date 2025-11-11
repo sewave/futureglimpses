@@ -4,6 +4,7 @@
 #include "common/common.h"
 #include "common/sound/sound.h"
 #include "common/video/video.h"
+#include "common/video/render_queue.h"
 #include "game/game.h"
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
@@ -17,16 +18,14 @@ void close_button_handler() {
 END_OF_FUNCTION(close_button_handler)
 
 GameState globalGameState;
+RenderQueue renderQueue;
 char keyPrevious[KEY_MAX];
 
 int mickeyx = 0;
 int mickeyy = 0;
 int mickeyFrames = 0;
 
-#define MOD_VOICES 8
-#define GAME_VOICES 16
-
-void printMouse(BITMAP *buffer) {
+void printMouse(BITMAP *buffer, RenderQueue *queue) {
 	poll_mouse();
 
 	textprintf_ex(buffer, font, 16, 48, makecol(0, 0, 0),
@@ -34,11 +33,6 @@ void printMouse(BITMAP *buffer) {
 	textprintf_ex(buffer, font, 16, 64, makecol(0, 0, 0),
 				  makecol(255, 255, 255), "mouse_y = %-5d", mouse_y);
 
-	/* or you can use this function to measure the speed of movement.
-       * Note that we only call it every fourth time round the loop:
-       * there's no need for that other than to slow the numbers down
-       * a bit so that you will have time to read them...
-       */
 	mickeyFrames++;
 	if ((mickeyFrames & 3) == 0) get_mouse_mickeys(&mickeyx, &mickeyy);
 
@@ -49,25 +43,31 @@ void printMouse(BITMAP *buffer) {
 
 	/* the mouse button state is stored in the variable mouse_b */
 	if (mouse_b & 1)
-		textout_ex(buffer, font, "left button is pressed ", 16, 128,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "left button pressed", 16, 128,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 	else
-		textout_ex(buffer, font, "left button not pressed", 16, 128,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "left button not pressed", 16, 128,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 
 	if (mouse_b & 2)
-		textout_ex(buffer, font, "right button is pressed ", 16, 144,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "right button pressed", 16, 144,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 	else
-		textout_ex(buffer, font, "right button not pressed", 16, 144,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "right button not pressed", 16, 144,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 
 	if (mouse_b & 4)
-		textout_ex(buffer, font, "middle button is pressed ", 16, 160,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "middle button pressed", 16, 160,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 	else
-		textout_ex(buffer, font, "middle button not pressed", 16, 160,
-				   makecol(0, 0, 0), makecol(255, 255, 255));
+		render_queue_submit_text(
+				queue, UI_Z_ORDER, font, "middle button not pressed", 16, 160,
+				makecol(0, 0, 0), makecol(255, 255, 255));
 
 	/* the wheel position is stored in the variable mouse_z */
 	textprintf_ex(buffer, font, 16, 184, makecol(0, 0, 0),
@@ -110,28 +110,31 @@ int main(int argc, char *argv[]) {
 	game_snd_load_sounds();
 
 	globalGameState.gameState = GAME_STATE_MAIN_MENU;
+	render_queue_init(&renderQueue);
 
 	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	memset(keyPrevious, FALSE, sizeof(keyPrevious));
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
+		memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 		poll_keyboard();
 		// Execute game logic
 		gameStateTable[globalGameState.gameState](&globalGameState);
-		if (key[KEY_A] && !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
-		if (key[KEY_S] && !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
+		if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
+		if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
+
+		render_queue_submit_clear(&renderQueue, BACKGROUND_Z_ORDER, 0);
+		render_queue_submit_sprite(&renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, 0);
 		vsync();
 
 		// Render game
-		clear_bitmap(screenBuffer);
-		printMouse(screenBuffer);
-		draw_sprite(screenBuffer, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus);
+		printMouse(screenBuffer, &renderQueue);
+		render_queue_execute(&renderQueue, screenBuffer);
 		vsync();
 
 		// Move buffer to screen
 		acquire_screen();
 		stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
 		release_screen();
-		memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 	}
 
 	snd_stop_music();

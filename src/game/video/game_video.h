@@ -14,5 +14,9 @@
 
 #define GAME_COLOR_DEPTH 8
 
-InitializationStatusEnum game_video_init();
+#define BACKGROUND_Z_ORDER 0
+#define SPRITES_Z_ORDER 1000
+#define UI_Z_ORDER 2000
+#define MOUSE_Z_ORDER 3000
+
 #endif /* GAME_VIDEO_H */

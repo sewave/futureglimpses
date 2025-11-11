@@ -1,0 +1,133 @@
+#include <string.h>
+#include <stdlib.h>
+#include "render_queue.h"
+// --- Helper Functions ---
+
+// Comparison function for qsort (sorts by zOrder ascending)
+static int compare_commands(const void *a, const void *b) {
+	return ((RenderCommand *) a)->zOrder - ((RenderCommand *) b)->zOrder;
+}
+
+// --- Manager Functions ---
+
+void render_queue_init(RenderQueue *queue) {
+	queue->count = 0;
+	memset(queue->commands, 0, sizeof(RenderCommand) * MAX_COMMANDS);
+}
+
+void render_queue_clear(RenderQueue *queue) {
+	queue->count = 0;
+}
+
+static RenderCommand *render_queue_get_next_command(RenderQueue *queue, int z, RenderCommandType type) {
+	if (queue->count >= MAX_COMMANDS) return NULL;
+	RenderCommand *cmd = &queue->commands[queue->count++];
+	cmd->type = type;
+	cmd->zOrder = z;
+	return cmd;
+}
+
+// --- Submission Functions ---
+
+void render_queue_submit_clear(RenderQueue *queue, int z, int color) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_CLEAR);
+	if (cmd) {
+		cmd->data.clear.color = color;
+	}
+}
+
+void render_queue_submit_solid(RenderQueue *queue, int z, BITMAP *bmp, int x, int y, int flags) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_SOLID);
+	if (cmd) {
+		cmd->data.solid.bitmap = bmp;
+		cmd->data.solid.x = x;
+		cmd->data.solid.y = y;
+		cmd->data.solid.flags = flags;
+	}
+}
+
+void render_queue_submit_sprite(RenderQueue *queue, int z, BITMAP *bmp, int x, int y, int flags) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_SPRITE);
+	if (cmd) {
+		cmd->data.sprite.bitmap = bmp;
+		cmd->data.sprite.x = x;
+		cmd->data.sprite.y = y;
+		cmd->data.sprite.flags = flags;
+	}
+}
+
+void render_queue_submit_rect_fill(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, RND_CMD_RECT_FILL, z);
+	if (cmd) {
+		cmd->data.rectFill.x1 = x1;
+		cmd->data.rectFill.y1 = y1;
+		cmd->data.rectFill.x2 = x2;
+		cmd->data.rectFill.y2 = y2;
+		cmd->data.rectFill.color = color;
+	}
+}
+
+void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_TEXT);
+	if (cmd) {
+		cmd->data.text.font = font;
+		cmd->data.text.text = text;
+		cmd->data.text.x = x;
+		cmd->data.text.y = y;
+		cmd->data.text.color = color;
+		cmd->data.text.background = background;
+	}
+}
+
+// --- Execution Function ---
+
+void render_queue_execute(RenderQueue *queue, BITMAP *target) {
+	if (queue->count == 0) return;
+
+	qsort(queue->commands, queue->count, sizeof(RenderCommand), compare_commands);
+
+	RenderCommand *cmd = &queue->commands[0];
+	for (int i = 0; i < queue->count; ++i, ++cmd) {
+		acquire_bitmap(target);
+
+		switch (cmd->type) {
+			case RND_CMD_CLEAR:
+				clear_to_color(target, cmd->data.clear.color);
+				break;
+			case RND_CMD_SOLID:
+				blit(cmd->data.solid.bitmap,
+					 target,
+					 0, 0,
+					 cmd->data.solid.x,
+					 cmd->data.solid.y,
+					 cmd->data.solid.bitmap->w,
+					 cmd->data.solid.bitmap->h);
+				break;
+			case RND_CMD_SPRITE:
+				// TODO flip and rotate flags handling
+				draw_sprite(target,
+							cmd->data.sprite.bitmap,
+							cmd->data.sprite.x,
+							cmd->data.sprite.y);
+				break;
+			case RND_CMD_RECT_FILL:
+				rectfill(target,
+						 cmd->data.rectFill.x1, cmd->data.rectFill.y1,
+						 cmd->data.rectFill.x2, cmd->data.rectFill.y2,
+						 cmd->data.rectFill.color);
+				break;
+			case RND_CMD_TEXT:
+				textout_ex(target,
+						   cmd->data.text.font,
+						   cmd->data.text.text,
+						   cmd->data.text.x,
+						   cmd->data.text.y,
+						   cmd->data.text.color,
+						   cmd->data.text.background);
+				break;
+		}
+		release_bitmap(target);
+	}
+
+	render_queue_clear(queue);
+}
