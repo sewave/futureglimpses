@@ -87,7 +87,7 @@ void snd_init_sounds(int numSounds, const char **soundFilenames) {
 void snd_play_sound(int soundIndex, int volume, int pan, int freq) {
 	if (soundIndex < 0 || soundIndex >= totalSounds) return;
 	if (sounds[soundIndex] == NULL) return;
-	play_sample(sounds[soundIndex], volume, pan, freq, TRUE);
+	play_sample(sounds[soundIndex], volume, pan, freq, FALSE);
 }
 
 void snd_destroy_sounds() {

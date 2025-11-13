@@ -22,6 +22,16 @@ GameState globalGameState;
 RenderQueue renderQueue;
 char keyPrevious[KEY_MAX];
 
+#define LOGIC_RATE_BPS 60
+#define MAX_CATCHUP_TICKS 5
+volatile long logic_ticks = 0;
+char redraw_needed = FALSE;
+
+void timer_handler() {
+    logic_ticks++;
+}
+END_OF_FUNCTION(timer_handler);
+
 int mickeyx = 0;
 int mickeyy = 0;
 int mickeyFrames = 0;
@@ -64,7 +74,7 @@ typedef struct {
 	int vy;
 } Sprite;
 
-#define MAX_SPRITES 256
+#define MAX_SPRITES 64
 
 Sprite sprites[MAX_SPRITES];
 
@@ -120,6 +130,10 @@ int main(int argc, char *argv[]) {
 	LOCK_FUNCTION(close_button_handler);
 	set_close_button_callback(close_button_handler);
 
+	LOCK_VARIABLE(logic_ticks);
+	LOCK_FUNCTION(timer_handler);
+	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
+
 	// mod music uses 5 FPS
 	// 25 FPS 256 SPRITES
 	//game_snd_play_music(GAME_MUSIC_TITLE);
@@ -141,34 +155,50 @@ int main(int argc, char *argv[]) {
 	
 	fps_init();
 	init_sprites();
+	long last_tick_count = logic_ticks;
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
-		memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
-		poll_keyboard();
-		// Execute game logic
-		//gameStateTable[globalGameState.gameState](&globalGameState);
-		move_all_sprites();
-		if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
-		if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
+		if (logic_ticks > last_tick_count) {
+            long ticks_to_catchup = logic_ticks - last_tick_count;
+            if (ticks_to_catchup > MAX_CATCHUP_TICKS) {
+                last_tick_count = logic_ticks - MAX_CATCHUP_TICKS;
+                ticks_to_catchup = MAX_CATCHUP_TICKS;
+            }
+            while (ticks_to_catchup > 0) {
+				render_queue_clear(&renderQueue);
+				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
+				poll_keyboard();
+				//gameStateTable[globalGameState.gameState](&globalGameState);
+				move_all_sprites();
+				if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
+				if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
 
-		render_queue_submit_clear(&renderQueue, BACKGROUND_Z_ORDER, 0);
-		render_queue_submit_sprite(&renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, 0);
-		//vsync();
+				render_queue_submit_clear(&renderQueue, BACKGROUND_Z_ORDER, 0);
+				render_queue_submit_sprite(&renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLG_HV_FLIP);
+				printMouse(screenBuffer, &renderQueue);
+
+				char fpsText[64];
+				snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
+				render_queue_submit_text(&renderQueue, 5000, font, fpsText, 10, 10, 1, 0);
+
+                last_tick_count++;
+                ticks_to_catchup--;
+            }            
+            redraw_needed = TRUE; 
+        }
 
 		// Render game
-		printMouse(screenBuffer, &renderQueue);
-		render_queue_execute(&renderQueue, screenBuffer);
-
-	    char fpsText[64];
-    	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-    	textout_ex(screenBuffer, font, fpsText, 10, 10, 1, 0);
-
-		vsync();
-
-		// Move buffer to screen
-		acquire_screen();
-		stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
-		release_screen();
-		fps_update();
+		if (redraw_needed) {
+			render_queue_execute(&renderQueue, screenBuffer);
+			vsync();
+			acquire_screen();
+			stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
+			release_screen();
+			redraw_needed = FALSE;
+			fps_update();
+		}
+		else {
+			rest(1);
+		}
 	}
 
 	snd_stop_music();

@@ -27,6 +27,23 @@ static RenderCommand *render_queue_get_next_command(RenderQueue *queue, int z, R
 	return cmd;
 }
 
+static void render_sprite(BITMAP *target, RenderSpriteCommand *spriteCmd) {
+	switch (spriteCmd->flags) {
+		case RND_FLG_NORMAL:
+			draw_sprite(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
+			break;
+		case RND_FLG_H_FLIP:
+			draw_sprite_h_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
+			break;
+		case RND_FLG_V_FLIP:
+			draw_sprite_v_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
+			break;
+		case RND_FLG_HV_FLIP:
+			draw_sprite_vh_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
+			break;
+	}
+}
+
 // --- Submission Functions ---
 
 void render_queue_submit_clear(RenderQueue *queue, int z, int color) {
@@ -104,11 +121,7 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 					 cmd->data.solid.bitmap->h);
 				break;
 			case RND_CMD_SPRITE:
-				// TODO flip and rotate flags handling
-				draw_sprite(target,
-							cmd->data.sprite.bitmap,
-							cmd->data.sprite.x,
-							cmd->data.sprite.y);
+				render_sprite(target, &cmd->data.sprite);
 				break;
 			case RND_CMD_RECT_FILL:
 				rectfill(target,
