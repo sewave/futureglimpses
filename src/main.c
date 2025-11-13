@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <allegro.h>
-#include <jgmod.h>
 #include "common/common.h"
 #include "common/sound/sound.h"
 #include "common/video/video.h"
 #include "common/video/render_queue.h"
+#include "common/time/fps.h"
 #include "game/game.h"
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
@@ -28,20 +29,6 @@ int mickeyFrames = 0;
 void printMouse(BITMAP *buffer, RenderQueue *queue) {
 	poll_mouse();
 
-	textprintf_ex(buffer, font, 16, 48, makecol(0, 0, 0),
-				  makecol(255, 255, 255), "mouse_x = %-5d", mouse_x);
-	textprintf_ex(buffer, font, 16, 64, makecol(0, 0, 0),
-				  makecol(255, 255, 255), "mouse_y = %-5d", mouse_y);
-
-	mickeyFrames++;
-	if ((mickeyFrames & 3) == 0) get_mouse_mickeys(&mickeyx, &mickeyy);
-
-	textprintf_ex(buffer, font, 16, 88, makecol(0, 0, 0),
-				  makecol(255, 255, 255), "mickey_x = %-7d", mickeyx);
-	textprintf_ex(buffer, font, 16, 104, makecol(0, 0, 0),
-				  makecol(255, 255, 255), "mickey_y = %-7d", mickeyy);
-
-	/* the mouse button state is stored in the variable mouse_b */
 	if (mouse_b & 1)
 		render_queue_submit_text(
 				queue, UI_Z_ORDER, font, "left button pressed", 16, 128,
@@ -68,10 +55,45 @@ void printMouse(BITMAP *buffer, RenderQueue *queue) {
 		render_queue_submit_text(
 				queue, UI_Z_ORDER, font, "middle button not pressed", 16, 160,
 				makecol(0, 0, 0), makecol(255, 255, 255));
+}
 
-	/* the wheel position is stored in the variable mouse_z */
-	textprintf_ex(buffer, font, 16, 184, makecol(0, 0, 0),
-				  makecol(255, 255, 255), "mouse_z = %-5d mouse_w = %-5d", mouse_z, mouse_w);
+typedef struct {
+	int x;
+	int y;
+	int vx;
+	int vy;
+} Sprite;
+
+#define MAX_SPRITES 256
+
+Sprite sprites[MAX_SPRITES];
+
+void init_sprites() {
+	for(int i = 0; i < MAX_SPRITES; i++) {
+		sprites[i].x = rand() % GAME_INTERNAL_WIDTH;
+		sprites[i].y = rand() % GAME_INTERNAL_HEIGHT;
+		sprites[i].vx = (rand() % 5) + 1;
+		sprites[i].vy = (rand() % 5) + 1;
+	}
+}
+
+void move_sprite_and_bounce(Sprite* sprite) {
+	sprite->x += sprite->vx;
+	sprite->y += sprite->vy;
+
+	if (sprite->x < 0 || sprite->x > GAME_INTERNAL_WIDTH - 16) {
+		sprite->vx = -sprite->vx;
+	}
+	if (sprite->y < 0 || sprite->y > GAME_INTERNAL_HEIGHT - 16) {
+		sprite->vy = -sprite->vy;
+	}
+}
+
+void move_all_sprites() {
+	for(int i = 0; i < MAX_SPRITES; i++) {
+		move_sprite_and_bounce(&sprites[i]);
+		render_queue_submit_sprite(&renderQueue, SPRITES_Z_ORDER + i, mouse_get_cursor_sprite(), sprites[i].x, sprites[i].y, 0);
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -93,12 +115,14 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
-	/* Attach function to clos ebutton */
+	/* Attach function to close button */
 	LOCK_VARIABLE(closeButtonPressed);
 	LOCK_FUNCTION(close_button_handler);
 	set_close_button_callback(close_button_handler);
 
-	game_snd_play_music(GAME_MUSIC_TITLE);
+	// mod music uses 5 FPS
+	// 25 FPS 256 SPRITES
+	//game_snd_play_music(GAME_MUSIC_TITLE);
 
 	if (game_mouse_init_cursors() != INITIALIZATION_OK) {
 		printf("Error initializing mouse.");
@@ -114,27 +138,37 @@ int main(int argc, char *argv[]) {
 
 	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	memset(keyPrevious, FALSE, sizeof(keyPrevious));
+	
+	fps_init();
+	init_sprites();
 	while (!closeButtonPressed && !key[KEY_ESC] && globalGameState.gameState != NUM_GAME_STATES) {
 		memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 		poll_keyboard();
 		// Execute game logic
-		gameStateTable[globalGameState.gameState](&globalGameState);
+		//gameStateTable[globalGameState.gameState](&globalGameState);
+		move_all_sprites();
 		if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
 		if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);
 
 		render_queue_submit_clear(&renderQueue, BACKGROUND_Z_ORDER, 0);
 		render_queue_submit_sprite(&renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, 0);
-		vsync();
+		//vsync();
 
 		// Render game
 		printMouse(screenBuffer, &renderQueue);
 		render_queue_execute(&renderQueue, screenBuffer);
+
+	    char fpsText[64];
+    	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
+    	textout_ex(screenBuffer, font, fpsText, 10, 10, 1, 0);
+
 		vsync();
 
 		// Move buffer to screen
 		acquire_screen();
 		stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
 		release_screen();
+		fps_update();
 	}
 
 	snd_stop_music();
