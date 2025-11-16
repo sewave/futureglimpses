@@ -8,10 +8,10 @@
 #include "../common.h"
 
 typedef enum {
-    RND_FLG_NORMAL,
-    RND_FLG_H_FLIP,
-    RND_FLG_V_FLIP,
-    RND_FLG_HV_FLIP,
+	RND_FLAG_NORMAL,
+	RND_FLAG_H_FLIP,
+	RND_FLAG_V_FLIP,
+	RND_FLAG_HV_FLIP,
 } RENDER_FLAGS;
 
 typedef enum {

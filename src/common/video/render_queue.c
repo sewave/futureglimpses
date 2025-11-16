@@ -8,17 +8,6 @@ static int compare_commands(const void *a, const void *b) {
 	return ((RenderCommand *) a)->zOrder - ((RenderCommand *) b)->zOrder;
 }
 
-// --- Manager Functions ---
-
-void render_queue_init(RenderQueue *queue) {
-	queue->count = 0;
-	memset(queue->commands, 0, sizeof(RenderCommand) * MAX_COMMANDS);
-}
-
-void render_queue_clear(RenderQueue *queue) {
-	queue->count = 0;
-}
-
 static RenderCommand *render_queue_get_next_command(RenderQueue *queue, int z, RenderCommandType type) {
 	if (queue->count >= MAX_COMMANDS) return NULL;
 	RenderCommand *cmd = &queue->commands[queue->count++];
@@ -29,23 +18,32 @@ static RenderCommand *render_queue_get_next_command(RenderQueue *queue, int z, R
 
 static void render_sprite(BITMAP *target, RenderSpriteCommand *spriteCmd) {
 	switch (spriteCmd->flags) {
-		case RND_FLG_NORMAL:
+		case RND_FLAG_NORMAL:
 			draw_sprite(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
-		case RND_FLG_H_FLIP:
+		case RND_FLAG_H_FLIP:
 			draw_sprite_h_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
-		case RND_FLG_V_FLIP:
+		case RND_FLAG_V_FLIP:
 			draw_sprite_v_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
-		case RND_FLG_HV_FLIP:
+		case RND_FLAG_HV_FLIP:
 			draw_sprite_vh_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
 	}
 }
 
-// --- Submission Functions ---
+// --- Manager Functions ---
+void render_queue_init(RenderQueue *queue) {
+	queue->count = 0;
+	memset(queue->commands, 0, sizeof(RenderCommand) * MAX_COMMANDS);
+}
 
+void render_queue_clear(RenderQueue *queue) {
+	queue->count = 0;
+}
+
+// --- Submission Functions ---
 void render_queue_submit_clear(RenderQueue *queue, int z, int color) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_CLEAR);
 	if (cmd) {
@@ -97,7 +95,6 @@ void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char 
 }
 
 // --- Execution Function ---
-
 void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 	if (queue->count == 0) return;
 

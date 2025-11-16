@@ -17,4 +17,11 @@ typedef enum {
 
 #define RESOLUTION_MULTIPLIER 3
 
+char common_init_basic(
+		int minCpuFamily,
+		int requiredCpuCapabilities,
+		const char *unsupportedCpuMessage,
+		int requiredRamMb,
+		int (*mouse_init_func)(void));
+
 #endif /* COMMON_H */
