@@ -1,20 +1,109 @@
 #ifndef GAME_H
 #define GAME_H
-#include "../common/common.h"
+#include "../common/common_lib.h"
 #include <allegro/gfx.h>
 
+#define BOARD_WIDTH 64
+#define BOARD_HEIGHT 64
+#define TILE_SIZE 16
+
 typedef enum {
-    GAME_STATE_MAIN_MENU,
+    GAME_STATE_LOAD_MAP,
+    GAME_STATE_PLAY_MAP,
+    GAME_STATE_EXIT,
     NUM_GAME_STATES
 } GameStateEnum;
 
+typedef enum {
+    BOARD_UNEXPLORED,
+    BOARD_EXPLORED
+} BoardExplorationEnum;
+
+typedef enum {
+    BOARD_GRASS,
+    BOARD_DIRT,
+    BOARD_WATER,
+    BOARD_MOUNTAIN,
+    BOARD_ROAD,
+    BOARD_FOREST,
+    BOARD_UNKNOWN
+} BoardTypeEnum;
+
+typedef enum {
+    UNIT_TYPE_NONE,
+    UNIT_TYPE_WORKER,
+    UNIT_TYPE_SOLDIER,
+    UNIT_TYPE_RANGER,
+    UNIT_TYPE_MOUNT,
+    UNIT_TYPE_SIEGE
+} UnitTypeEnum;
+
+typedef enum {
+    UNIT_CONTROLLER_PLAYER,
+    UNIT_CONTROLLER_AI
+} UnitControllerEnum;
+
+typedef enum {
+    UNIT_STATUS_IDLE,
+    /* Worker statuses */
+    UNIT_STATUS_CUTTING,
+    UNIT_STATUS_MINING,
+    UNIT_STATUS_BUILDING,
+    UNIT_STATUS_REPAIRING,
+    /* Common statuses */
+    UNIT_STATUS_ATTACKING,
+    UNIT_STATUS_DEFENDING,
+    UNIT_STATUS_MOVING,
+    UNIT_STATUS_MOVING_TO_ATTACK,
+} UnitStatusEnum;
+
+typedef enum {
+    TARGET_TYPE_NONE,
+    TARGET_TYPE_UNIT,
+    TARGET_TYPE_BUILDING,
+    TARGET_TYPE_POSITION
+} TargetTypeEnum;
+
+typedef struct {
+    int id;
+    UnitTypeEnum type;
+    UnitControllerEnum controller;
+    UnitStatusEnum status;
+    
+    float x, y;
+    float vx, vy;
+    int boardX, boardY;
+    int health, maxHealth;
+
+    TargetTypeEnum targetType;
+    union {
+        struct {
+            int targetBoardX, targetBoardY;
+        } boardTarget;
+        struct {
+            int targetUnitId;
+            int targetUnitSlot;
+        } unitTarget;
+        struct {
+            int targetBuildingId;
+        } buildingTarget;
+    };
+} GameUnit;
+
 typedef struct {
     GameStateEnum gameState;
+    BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
+    int board[BOARD_WIDTH][BOARD_HEIGHT];
+    // Whenever the board is modified, we re-render the modified parts to this bitmap
+    BITMAP *renderedBoard;
+    int xPosition, yPosition; // Top-left position of the viewport on the board
 } GameState;
 
-typedef GameStateEnum (*StateFunction)(GameState*);
+typedef GameStateEnum (*StateFunction)(GameState*, RenderQueue*);
 
+extern GameState globalGameState;
 extern StateFunction gameStateTable[NUM_GAME_STATES];
 
-GameStateEnum handle_main_menu(GameState* gameState);
-#endif
+GameStateEnum handle_load_map(GameState* gameState, RenderQueue* renderQueue);
+GameStateEnum handle_play_map(GameState *gameState, RenderQueue* renderQueue);
+#endif /* GAME_H */

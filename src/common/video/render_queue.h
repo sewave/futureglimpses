@@ -19,7 +19,8 @@ typedef enum {
     RND_CMD_SOLID,
     RND_CMD_SPRITE,
     RND_CMD_RECT_FILL,
-    RND_CMD_TEXT
+    RND_CMD_TEXT,
+    RND_CMD_SOLID_PARTIAL
 } RenderCommandType;
 
 typedef struct {
@@ -32,6 +33,14 @@ typedef struct {
     int y;
     int flags;
 } RenderSolidCommand;
+
+typedef struct {
+    BITMAP* bitmap;
+    int originX, originY;    
+    int destX, destY;
+    int height, width;
+    int flags;
+} RenderSolidPartialCommand;
 
 typedef struct {
     BITMAP* bitmap;
@@ -62,6 +71,7 @@ typedef struct {
         RenderTextCommand text;
         RenderClearCommand clear;
         RenderSolidCommand solid;
+        RenderSolidPartialCommand solidPartial;
     } data;
 } RenderCommand;
 
@@ -80,5 +90,6 @@ void render_queue_submit_clear(RenderQueue* queue, int z, int color);
 void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, int y, int flags);
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
 void render_queue_execute(RenderQueue* queue, BITMAP* targetBmp);
+void render_queue_submit_solid_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int height, int width, int flags);
 
 #endif /* RENDER_QUEUE_H */
