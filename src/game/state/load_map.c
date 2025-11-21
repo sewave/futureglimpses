@@ -13,15 +13,18 @@ GameStateEnum handle_load_map(GameState *gameState, RenderQueue *renderQueue) {
 		}
 	}
 
-	// Load the map here (for now we just fill it with zeros)
+	// Load the map here (for now we just fill it with random)
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			gameState->board[x][y] = rand() % BOARD_UNKNOWN;// Randomly assign tile types 0 or 1
+			gameState->board[x][y] = rand() % BOARD_UNKNOWN;
 		}
 	}
 
 	if (gameState->renderedBoard) { destroy_bitmap(gameState->renderedBoard); }
 	gameState->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
+
+	if (gameState->renderedMinimap) { destroy_bitmap(gameState->renderedMinimap); }
+	gameState->renderedMinimap = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
 
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -47,11 +50,10 @@ GameStateEnum handle_load_map(GameState *gameState, RenderQueue *renderQueue) {
 					break;
 			}
 			rectfill(gameState->renderedBoard,
-					 x * TILE_SIZE,
-					 y * TILE_SIZE,
-					 (x + 1) * TILE_SIZE - 1,
-					 (y + 1) * TILE_SIZE - 1,
+					 x * TILE_SIZE, y * TILE_SIZE,
+					 (x + 1) * TILE_SIZE - 1, (y + 1) * TILE_SIZE - 1,
 					 color);
+			putpixel(gameState->renderedMinimap, x, y, color);		 
 		}
 	}
 	return GAME_STATE_PLAY_MAP;

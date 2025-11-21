@@ -13,10 +13,10 @@
 #define MINIMAP_X_POS 3
 #define MINIMAP_Y_POS 6
 
-#define MOUSE_X_GO_LEFT TILE_SIZE
-#define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE)
-#define MOUSE_Y_GO_UP TILE_SIZE
-#define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE)
+#define MOUSE_X_GO_LEFT TILE_SIZE / 2
+#define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE / 2)
+#define MOUSE_Y_GO_UP TILE_SIZE / 2
+#define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE / 2)
 
 static char fpsText[16];
 int keyHeldCounter = 0;
@@ -30,13 +30,16 @@ GameStateEnum handle_play_map(GameState *gameState, RenderQueue *renderQueue) {
 	int mouseY = mouse_get_y();
 
 	// If we click the mouse on the minimap, we should move the camera there
-	if (mouse_b & 1)
-	if (mouseX >= MINIMAP_X_POS &&
-		mouseX <= MINIMAP_X_POS + VIEWPORT_WIDTH_TILES &&
-		mouseY >= MINIMAP_Y_POS &&
-		mouseY <= MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES) {
-		gameState->xPosition = mouseX - MINIMAP_X_POS;
-		gameState->yPosition = mouseY - MINIMAP_Y_POS;
+	if (mouse_b & 1) {
+		if (mouseX >= MINIMAP_X_POS &&
+			mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
+			mouseY >= MINIMAP_Y_POS &&
+			mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
+			gameState->xPosition = mouseX - MINIMAP_X_POS;
+			gameState->yPosition = mouseY - MINIMAP_Y_POS;
+			if (gameState->xPosition > MAX_CAMERA_X_POSITION) gameState->xPosition = MAX_CAMERA_X_POSITION;
+			if (gameState->yPosition > MAX_CAMERA_Y_POSITION) gameState->yPosition = MAX_CAMERA_Y_POSITION;
+		}
 	}
 
 	if (key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT] ||
@@ -69,18 +72,20 @@ GameStateEnum handle_play_map(GameState *gameState, RenderQueue *renderQueue) {
 
 	// Submit to render the viewport from the renderedBoard
 	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER, gameState->gameBack,
-							  0, 0, RND_FLAG_NORMAL);
+							  0, 0);
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER + 1, gameState->renderedBoard,
 									  gameState->xPosition * TILE_SIZE, gameState->yPosition * TILE_SIZE,
 									  72, 12,
-									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
-									  RND_FLAG_NORMAL);
+									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER + 1, gameState->renderedMinimap,
+									  MINIMAP_X_POS, MINIMAP_Y_POS);
+
 	render_queue_submit_rect(renderQueue,
-							 BACKGROUND_Z_ORDER + 2,
+							 BACKGROUND_Z_ORDER + 3,
 							 gameState->xPosition + MINIMAP_X_POS,
 							 gameState->yPosition + MINIMAP_Y_POS,
-							 gameState->xPosition + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES,
-							 gameState->yPosition + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES,
+							 gameState->xPosition + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
+							 gameState->yPosition + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 makecol8(255, 255, 255));
 
 	render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);

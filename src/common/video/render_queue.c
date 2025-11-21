@@ -51,13 +51,12 @@ void render_queue_submit_clear(RenderQueue *queue, int z, int color) {
 	}
 }
 
-void render_queue_submit_solid(RenderQueue *queue, int z, BITMAP *bmp, int x, int y, int flags) {
+void render_queue_submit_solid(RenderQueue *queue, int z, BITMAP *bmp, int x, int y) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_SOLID);
 	if (cmd) {
 		cmd->data.solid.bitmap = bmp;
 		cmd->data.solid.x = x;
 		cmd->data.solid.y = y;
-		cmd->data.solid.flags = flags;
 	}
 }
 
@@ -69,8 +68,7 @@ void render_queue_submit_solid_partial(RenderQueue *queue,
 									   int destX,
 									   int destY,
 									   int width,
-									   int height,
-									   int flags) {
+									   int height) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_SOLID_PARTIAL);
 	if (cmd) {
 		cmd->data.solidPartial.bitmap = bmp;
@@ -80,7 +78,6 @@ void render_queue_submit_solid_partial(RenderQueue *queue,
 		cmd->data.solidPartial.destY = destY;
 		cmd->data.solidPartial.height = height;
 		cmd->data.solidPartial.width = width;
-		cmd->data.solidPartial.flags = flags;
 	}
 }
 
