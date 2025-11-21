@@ -73,6 +73,12 @@ int main(int argc, char *argv[]) {
 
 	customFont = load_font("assets/font/ex01.pcx", NULL, NULL);
 
+	PALETTE p;
+	if(video_load_raw_palette("assets/pal/game.pal", p) != PROGRAM_OK) {
+		return PROGRAM_ERROR;
+	}
+	set_palette_range(p, 32, 247, 0);
+
 	fps_init();
 	// mod music uses 5 FPS
 	//game_snd_play_music(GAME_MUSIC_TITLE);

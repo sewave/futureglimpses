@@ -4,6 +4,7 @@
 #include <allegro.h>
 
 GameStateEnum handle_load_map(GameState *gameState, RenderQueue *renderQueue) {
+	gameState->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	// Reset the board exploration
 	for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -27,22 +28,22 @@ GameStateEnum handle_load_map(GameState *gameState, RenderQueue *renderQueue) {
 			int color = 0;
 			switch (gameState->board[x][y]) {
 				case BOARD_GRASS:
-					color = makecol(0, 255, 0);// Green for grass
+					color = makecol8(0, 255, 0);// Green for grass
 					break;
 				case BOARD_DIRT:
-					color = makecol(139, 69, 19);// Brown for dirt
+					color = makecol8(139, 69, 19);// Brown for dirt
 					break;
 				case BOARD_WATER:
-					color = makecol(0, 0, 255);// Blue for water
+					color = makecol8(0, 0, 255);// Blue for water
 					break;
 				case BOARD_MOUNTAIN:
-					color = makecol(128, 128, 128);// Gray for mountain
+					color = makecol8(128, 128, 128);// Gray for mountain
 					break;
 				case BOARD_ROAD:
-					color = makecol(210, 180, 140);// Tan for road
+					color = makecol8(210, 180, 140);// Tan for road
 					break;
 				case BOARD_FOREST:
-					color = makecol(34, 139, 34);// Forest green for forest
+					color = makecol8(34, 139, 34);// Forest green for forest
 					break;
 			}
 			rectfill(gameState->renderedBoard,

@@ -95,13 +95,24 @@ void render_queue_submit_sprite(RenderQueue *queue, int z, BITMAP *bmp, int x, i
 }
 
 void render_queue_submit_rect_fill(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color) {
-	RenderCommand *cmd = render_queue_get_next_command(queue, RND_CMD_RECT_FILL, z);
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_RECT_FILL);
 	if (cmd) {
 		cmd->data.rectFill.x1 = x1;
 		cmd->data.rectFill.y1 = y1;
 		cmd->data.rectFill.x2 = x2;
 		cmd->data.rectFill.y2 = y2;
 		cmd->data.rectFill.color = color;
+	}
+}
+
+void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_RECT);
+	if (cmd) {
+		cmd->data.rect.x1 = x1;
+		cmd->data.rect.y1 = y1;
+		cmd->data.rect.x2 = x2;
+		cmd->data.rect.y2 = y2;
+		cmd->data.rect.color = color;
 	}
 }
 
@@ -152,6 +163,12 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 			case RND_CMD_SPRITE:
 				render_sprite(target, &cmd->data.sprite);
 				break;
+			case RND_CMD_RECT:
+				rect(target,
+						 cmd->data.rect.x1, cmd->data.rect.y1,
+						 cmd->data.rect.x2, cmd->data.rect.y2,
+						 cmd->data.rect.color);
+				break;	
 			case RND_CMD_RECT_FILL:
 				rectfill(target,
 						 cmd->data.rectFill.x1, cmd->data.rectFill.y1,

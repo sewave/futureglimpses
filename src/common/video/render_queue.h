@@ -18,6 +18,7 @@ typedef enum {
     RND_CMD_CLEAR,
     RND_CMD_SOLID,
     RND_CMD_SPRITE,
+    RND_CMD_RECT,
     RND_CMD_RECT_FILL,
     RND_CMD_TEXT,
     RND_CMD_SOLID_PARTIAL
@@ -55,6 +56,11 @@ typedef struct {
 } RenderRectFillCommand;
 
 typedef struct {
+    int x1, y1, x2, y2;
+    int color;
+} RenderRectCommand;
+
+typedef struct {
     FONT *font;
     const char* text;
     int x, y;
@@ -68,6 +74,7 @@ typedef struct {
     union {
         RenderSpriteCommand sprite;
         RenderRectFillCommand rectFill;
+        RenderRectCommand rect;
         RenderTextCommand text;
         RenderClearCommand clear;
         RenderSolidCommand solid;
@@ -85,6 +92,7 @@ typedef struct {
 void render_queue_init(RenderQueue* queue);
 void render_queue_clear(RenderQueue* queue);
 void render_queue_submit_sprite(RenderQueue* queue, int z, BITMAP* bmp, int x, int y, int flags);
+void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_rect_fill(RenderQueue* queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_clear(RenderQueue* queue, int z, int color);
 void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, int y, int flags);

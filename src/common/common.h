@@ -11,6 +11,9 @@ typedef enum {
 #define PROGRAM_OK 0
 #define PROGRAM_ERROR 1
 
+#define FUNCTION_OK 0
+#define FUNCTION_ERROR -1
+
 #ifndef uchar
 #define uchar   unsigned char
 #endif

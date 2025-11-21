@@ -97,6 +97,7 @@ typedef struct {
     // Whenever the board is modified, we re-render the modified parts to this bitmap
     BITMAP *renderedBoard;
     int xPosition, yPosition; // Top-left position of the viewport on the board
+    BITMAP *gameBack;
 } GameState;
 
 typedef GameStateEnum (*StateFunction)(GameState*, RenderQueue*);
