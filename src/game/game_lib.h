@@ -4,4 +4,5 @@
 #include "mouse/game_mouse.h"
 #include "sound/game_sound.h"
 #include "video/game_video.h"
+#include "map/map.h"
 #endif /* GAME_LIB_H */

@@ -99,13 +99,16 @@ typedef struct {
     BITMAP *renderedMinimap;
     int xPosition, yPosition; // Top-left position of the viewport on the board
     BITMAP *gameBack;
+    BITMAP *tileSet;
 } GameState;
 
 typedef GameStateEnum (*StateFunction)(GameState*, RenderQueue*);
 
 extern GameState globalGameState;
 extern StateFunction gameStateTable[NUM_GAME_STATES];
+void game_free_game_state(GameState* gameState);
 
 GameStateEnum handle_load_map(GameState* gameState, RenderQueue* renderQueue);
 GameStateEnum handle_play_map(GameState *gameState, RenderQueue* renderQueue);
+
 #endif /* GAME_H */

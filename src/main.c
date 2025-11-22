@@ -90,6 +90,7 @@ int main(int argc, char *argv[]) {
 	mouse_destroy_cursors();
 	destroy_bitmap(screenBuffer);
 	destroy_font(customFont);
+	game_free_game_state(&globalGameState);
 	allegro_exit();
 	return PROGRAM_OK;
 }
