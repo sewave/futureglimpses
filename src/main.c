@@ -13,7 +13,8 @@ END_OF_FUNCTION(close_button_handler)
 
 #define LOGIC_RATE_BPS 60
 #define MAX_CATCHUP_TICKS 5
-#define PROGRAM_REQUIRED_RAM_MB 8
+// First MB is special so we check for 7 more
+#define PROGRAM_REQUIRED_RAM_MB 7
 #define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
 #define REQUIRED_CPU_CAPABILITIES CPU_FPU
 #define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
@@ -142,8 +143,6 @@ void main_loop(BITMAP *screenBuffer,
 			release_screen();
 			redrawNeeded = FALSE;
 			fps_update();
-		} else {
-			//rest(1);
 		}
 	}
 }

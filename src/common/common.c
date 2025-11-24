@@ -17,12 +17,12 @@ char common_init_basic(
 		printf("Error initializing Allegro.");
 		return PROGRAM_ERROR;
 	}
-	// Check cpu is at least a 486 and has fpu
+	// Check cpu is at least a minCpuFamily and has requiredCpuCapabilities
 	if (cpu_family < minCpuFamily || !(cpu_capabilities & requiredCpuCapabilities)) {
 		printf(unsupportedCpuMessage);
 		return PROGRAM_ERROR;
 	}
-	// Check for 8 MB of memory
+	// Check for requiredRamMb MB of extra memory
 	if (!has_minimal_free_memory(requiredRamMb)) {
 		printf("Error: Not enough memory. At least %d MB of RAM is required.", requiredRamMb);
 		return PROGRAM_ERROR;

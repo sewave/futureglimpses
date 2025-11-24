@@ -40,4 +40,4 @@ void game_map_free_data(MapData *map);
  */
 MapData* game_map_load_data(const char *filename);
 
-#endif /** MAP_H */
+#endif /* MAP_H */

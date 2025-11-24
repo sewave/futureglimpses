@@ -6,6 +6,20 @@
 #define BOARD_WIDTH 64
 #define BOARD_HEIGHT 64
 #define TILE_SIZE 16
+#define BOARD_SIZE (BOARD_WIDTH * BOARD_HEIGHT)
+#define WORLD_WIDTH BOARD_WIDTH * TILE_SIZE
+#define WORLD_HEIGHT BOARD_HEIGHT * TILE_SIZE
+#define INVERSE_TILE_SIZE 1.0f / TILE_SIZE
+
+// --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
+#define ID_INDEX_MASK 0xFFFF        // Lower 16 bits for Index
+#define ID_GEN_SHIFT 16             // Upper 16 bits for Generation
+
+#define GET_INDEX(id) (id & ID_INDEX_MASK)
+#define GET_GEN(id) ((id >> ID_GEN_SHIFT) & 0xFFFF)
+#define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
+
+#define UNUSED_BUCKET_ID -1
 
 typedef enum {
     GAME_STATE_LOAD_MAP,
@@ -64,14 +78,18 @@ typedef enum {
     TARGET_TYPE_POSITION
 } TargetTypeEnum;
 
+#define MAX_GAME_UNITS 1024
+
 typedef struct {
     int id;
+    unsigned char active;
     UnitTypeEnum type;
     UnitControllerEnum controller;
     UnitStatusEnum status;
     
     float x, y;
     float vx, vy;
+    float width, height;
     int boardX, boardY;
     int health, maxHealth;
 
@@ -84,9 +102,6 @@ typedef struct {
             int targetUnitId;
             int targetUnitSlot;
         } unitTarget;
-        struct {
-            int targetBuildingId;
-        } buildingTarget;
     };
 } GameUnit;
 
@@ -94,12 +109,16 @@ typedef struct {
     GameStateEnum gameState;
     BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
     int board[BOARD_WIDTH][BOARD_HEIGHT];
+    GameUnit units[MAX_GAME_UNITS];
     // Whenever the board is modified, we re-render the modified parts to this bitmap
     BITMAP *renderedBoard;
     BITMAP *renderedMinimap;
     int xPosition, yPosition; // Top-left position of the viewport on the board
     BITMAP *gameBack;
     BITMAP *tileSet;
+    unsigned short unitGenerations[MAX_GAME_UNITS];
+    int buckets[BOARD_SIZE];
+    int nextUnitIndices[MAX_GAME_UNITS];
 } GameState;
 
 typedef GameStateEnum (*StateFunction)(GameState*, RenderQueue*);
