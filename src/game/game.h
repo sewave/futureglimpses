@@ -20,6 +20,7 @@
 #define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
 
 #define UNUSED_BUCKET_ID -1
+#define HANDLER_NOT_FOUND -1
 
 typedef enum {
     GAME_STATE_LOAD_MAP,
@@ -90,6 +91,7 @@ typedef struct {
     float x, y;
     float vx, vy;
     float width, height;
+    float attackRange, sightRange;
     int boardX, boardY;
     int health, maxHealth;
 

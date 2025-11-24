@@ -16,9 +16,33 @@ void game_unit_destroy(GameState* gameState, int handle) {
     if (u) u->active = FALSE;
 }
 
-void game_units_init(GameState* gameState, int handle) {
+void game_units_init(GameState* gameState) {
     for (int i = 0; i < MAX_GAME_UNITS; i++) {
         gameState->units[i].active = FALSE;
         gameState->unitGenerations[i] = FIRST_UNIT_GENERATION;
     }
+}
+
+int game_unit_spawn(GameState* gameState, GameUnit* unitData) {
+    int index = HANDLER_NOT_FOUND;
+    for (int i = 0; i < MAX_GAME_UNITS; i++) {
+        if (!gameState->units[i].active) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index == HANDLER_NOT_FOUND) {
+        printf("Error: Max units reached!\n");
+        return HANDLER_NOT_FOUND;
+    }
+
+    gameState->unitGenerations[index]++;
+
+    GameUnit* unit = &gameState->units[index];
+    memcpy(unit, unitData, sizeof(GameUnit));
+    unit->id = MAKE_ID(index, gameState->unitGenerations[index]);
+    unit->active = TRUE;
+
+    return unit->id;
 }
