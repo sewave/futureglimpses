@@ -3,6 +3,8 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
+//TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
+
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
