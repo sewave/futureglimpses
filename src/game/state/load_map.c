@@ -3,7 +3,7 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-GameStateEnum handle_load_map(GameState *gameState, RenderQueue *renderQueue) {
+GameStateEnum handle_load_map(GameContext *gameState, RenderQueue *renderQueue) {
 	gameState->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	// Reset the board exploration

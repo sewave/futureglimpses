@@ -11,16 +11,24 @@
 #define WORLD_HEIGHT BOARD_HEIGHT * TILE_SIZE
 #define INVERSE_TILE_SIZE 1.0f / TILE_SIZE
 
+#define UNUSED_BUCKET_ID -1
+#define FREE_UNIT_SLOT_NOT_FOUND -1
+
 // --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
-#define ID_INDEX_MASK 0xFFFF        // Lower 16 bits for Index
-#define ID_GEN_SHIFT 16             // Upper 16 bits for Generation
+#define ID_INDEX_MASK 0xFFFF// Lower 16 bits for Index
+#define ID_GEN_SHIFT 16     // Upper 16 bits for Generation
 
 #define GET_INDEX(id) (id & ID_INDEX_MASK)
 #define GET_GEN(id) ((id >> ID_GEN_SHIFT) & 0xFFFF)
 #define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
+#define NULL_HANDLE 0
 
-#define UNUSED_BUCKET_ID -1
-#define HANDLER_NOT_FOUND -1
+typedef struct {
+    int startCol;
+    int endCol;
+    int startRow;
+    int endRow;
+} GridRect;
 
 typedef enum {
     GAME_STATE_LOAD_MAP,
@@ -33,16 +41,6 @@ typedef enum {
     BOARD_UNEXPLORED,
     BOARD_EXPLORED
 } BoardExplorationEnum;
-
-typedef enum {
-    BOARD_GRASS,
-    BOARD_DIRT,
-    BOARD_WATER,
-    BOARD_MOUNTAIN,
-    BOARD_ROAD,
-    BOARD_FOREST,
-    BOARD_UNKNOWN
-} BoardTypeEnum;
 
 typedef enum {
     UNIT_TYPE_NONE,
@@ -118,18 +116,15 @@ typedef struct {
     int xPosition, yPosition; // Top-left position of the viewport on the board
     BITMAP *gameBack;
     BITMAP *tileSet;
-    unsigned short unitGenerations[MAX_GAME_UNITS];
-    int buckets[BOARD_SIZE];
-    int nextUnitIndices[MAX_GAME_UNITS];
-} GameState;
+} GameContext;
 
-typedef GameStateEnum (*StateFunction)(GameState*, RenderQueue*);
+typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 
-extern GameState globalGameState;
+extern GameContext globalGameState;
 extern StateFunction gameStateTable[NUM_GAME_STATES];
-void game_free_game_state(GameState* gameState);
+void game_free_game_state(GameContext *gameState);
 
-GameStateEnum handle_load_map(GameState* gameState, RenderQueue* renderQueue);
-GameStateEnum handle_play_map(GameState *gameState, RenderQueue* renderQueue);
+GameStateEnum handle_load_map(GameContext *gameState, RenderQueue *renderQueue);
+GameStateEnum handle_play_map(GameContext *gameState, RenderQueue *renderQueue);
 
 #endif /* GAME_H */

@@ -20,7 +20,7 @@
 
 static char fpsText[16];
 int moveViewportCounter = 0;
-GameStateEnum handle_play_map(GameState *gameState, RenderQueue *renderQueue) {
+GameStateEnum handle_play_map(GameContext *gameState, RenderQueue *renderQueue) {
 	/*if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
 	if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);*/
 	// Move camera every 10 frames while arrow key is held down

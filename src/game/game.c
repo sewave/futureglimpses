@@ -1,6 +1,6 @@
 #include "game.h"
 
-GameState globalGameState;
+GameContext globalGameState;
 
 StateFunction gameStateTable[NUM_GAME_STATES] = {
     &handle_load_map,
@@ -8,8 +8,8 @@ StateFunction gameStateTable[NUM_GAME_STATES] = {
     &handle_play_map
 };
 
-void game_free_game_state(GameState* gameState) {
-    destroy_bitmap(gameState->gameBack);
+void game_free_game_state(GameContext *gameState) {
+	destroy_bitmap(gameState->gameBack);
     destroy_bitmap(gameState->renderedBoard);
     destroy_bitmap(gameState->renderedMinimap);
     destroy_bitmap(gameState->tileSet);
