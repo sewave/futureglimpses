@@ -120,11 +120,11 @@ typedef struct {
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 
-extern GameContext globalGameState;
+extern GameContext gameContext;
 extern StateFunction gameStateTable[NUM_GAME_STATES];
-void game_free_game_state(GameContext *gameState);
+void game_free_game_state(GameContext *context);
 
-GameStateEnum handle_load_map(GameContext *gameState, RenderQueue *renderQueue);
-GameStateEnum handle_play_map(GameContext *gameState, RenderQueue *renderQueue);
+GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue);
+GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue);
 
 #endif /* GAME_H */

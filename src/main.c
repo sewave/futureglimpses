@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 	fps_init();
 	// mod music uses 5 FPS
 	//game_snd_play_music(GAME_MUSIC_TITLE);
-	globalGameState.gameState = GAME_STATE_LOAD_MAP;
+	gameContext.gameState = GAME_STATE_LOAD_MAP;
 	main_loop(screenBuffer, &logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 
 	snd_stop_music();
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 	mouse_destroy_cursors();
 	destroy_bitmap(screenBuffer);
 	destroy_font(customFont);
-	game_free_game_state(&globalGameState);
+	game_free_game_state(&gameContext);
 	allegro_exit();
 	return PROGRAM_OK;
 }
@@ -111,7 +111,7 @@ void main_loop(BITMAP *screenBuffer,
 	lastTickCount = *logicTicks;
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
-	while (!*closeButtonFlag && globalGameState.gameState != endState) {
+	while (!*closeButtonFlag && gameContext.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
 			long ticksToCatchup = *logicTicks - lastTickCount;
 			if (ticksToCatchup > maxCatchUpTicks) {
@@ -123,7 +123,7 @@ void main_loop(BITMAP *screenBuffer,
 				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 				poll_keyboard();
 				poll_mouse();
-				globalGameState.gameState = gameStateTable[globalGameState.gameState](&globalGameState, &renderQueue);
+				gameContext.gameState = gameStateTable[gameContext.gameState](&gameContext, &renderQueue);
 				lastTickCount++;
 				ticksToCatchup--;
 			}
