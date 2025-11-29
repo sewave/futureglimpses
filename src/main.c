@@ -28,7 +28,7 @@ END_OF_FUNCTION(timer_handler);
 
 FONT *customFont = NULL;
 
-void main_loop(BITMAP* screenBuffer, volatile long* logicTicks, volatile int* closeButtonFlag, int maxCatchUpTicks, int endState);
+void main_loop(volatile long* logicTicks, volatile int* closeButtonFlag, int maxCatchUpTicks, int endState);
 
 void install_timers() {
 	/* Attach function to close button */
@@ -70,10 +70,8 @@ int main(int argc, char *argv[]) {
 
 	game_snd_load_sounds();
 
-	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 
-	customFont = load_font("assets/font/ex01.pcx", NULL, NULL);
-
+	//TODO move palette init to init state
 	PALETTE p;
 	if(video_load_raw_palette("assets/pal/game.pal", p) != PROGRAM_OK) {
 		return PROGRAM_ERROR;
@@ -83,15 +81,9 @@ int main(int argc, char *argv[]) {
 	fps_init();
 	// mod music uses 5 FPS
 	//game_snd_play_music(GAME_MUSIC_TITLE);
-	gameContext.gameState = GAME_STATE_LOAD_MAP;
-	main_loop(screenBuffer, &logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 
-	snd_stop_music();
-	snd_destroy_sounds();
-	mouse_destroy_cursors();
-	destroy_bitmap(screenBuffer);
-	destroy_font(customFont);
-	game_free_game_state(&gameContext);
+	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
+
 	allegro_exit();
 	return PROGRAM_OK;
 }
@@ -100,18 +92,20 @@ static long lastTickCount;
 static char redrawNeeded;
 static RenderQueue renderQueue;
 static char keyPrevious[KEY_MAX];
+static GameContext context;
 char fpsText[16];
 
-void main_loop(BITMAP *screenBuffer,
-			   volatile long *logicTicks,
+void main_loop(volatile long *logicTicks,
 			   volatile int *closeButtonFlag,
 			   int maxCatchUpTicks,
 			   int endState) {
+	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	context.gameState = GAME_STATE_LOAD_MAP;
 	memset(keyPrevious, FALSE, sizeof(keyPrevious));
 	lastTickCount = *logicTicks;
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
-	while (!*closeButtonFlag && gameContext.gameState != endState) {
+	while (!*closeButtonFlag && context.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
 			long ticksToCatchup = *logicTicks - lastTickCount;
 			if (ticksToCatchup > maxCatchUpTicks) {
@@ -123,7 +117,7 @@ void main_loop(BITMAP *screenBuffer,
 				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 				poll_keyboard();
 				poll_mouse();
-				gameContext.gameState = gameStateTable[gameContext.gameState](&gameContext, &renderQueue);
+				context.gameState = game_execute_state(&context, &renderQueue);
 				lastTickCount++;
 				ticksToCatchup--;
 			}
@@ -145,6 +139,11 @@ void main_loop(BITMAP *screenBuffer,
 			fps_update();
 		}
 	}
+	snd_stop_music();
+	snd_destroy_sounds();
+	mouse_destroy_cursors();
+	destroy_bitmap(screenBuffer);
+	game_free_context(&context);
 }
 
 END_OF_MAIN()

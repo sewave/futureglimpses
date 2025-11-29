@@ -81,28 +81,16 @@ typedef enum {
 
 typedef struct {
 	int id;
-	unsigned char active;
+	unsigned char isActive;
 	UnitTypeEnum type;
 	UnitControllerEnum controller;
 	UnitStatusEnum status;
 
-	float x, y;
-	float vx, vy;
-	float width, height;
-	float attackRange, sightRange;
-	int boardX, boardY;
+	int x, y;
+	int attackRange, sightRange;
 	int health, maxHealth;
 
-	TargetTypeEnum targetType;
-	union {
-		struct {
-			int targetBoardX, targetBoardY;
-		} boardTarget;
-		struct {
-			int targetUnitId;
-			int targetUnitSlot;
-		} unitTarget;
-	};
+	int targetBoardX, targetBoardY;
 } GameUnit;
 
 typedef struct {
@@ -120,11 +108,7 @@ typedef struct {
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 
-extern GameContext gameContext;
-extern StateFunction gameStateTable[NUM_GAME_STATES];
-void game_free_game_state(GameContext *context);
-
-GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue);
-GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue);
+void game_free_context(GameContext *context);
+GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue);
 
 #endif /* GAME_H */

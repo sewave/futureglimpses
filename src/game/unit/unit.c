@@ -1,51 +1,65 @@
 #include "unit.h"
 
 #define FIRST_UNIT_GENERATION 1
+#define NO_FREE_UNIT_INDEX -1
 static unsigned short unitGenerations[MAX_GAME_UNITS];
+static int activeIndices[MAX_GAME_UNITS];
+static int activeUnitCount;
+static int nextFreeIndex;
+static int selectedUnits[MAX_GAME_UNITS];
+static int selectedUnitCount = 0;
 
-GameUnit *game_unit_get_by_handle(GameContext *gameContext, int handle) {
-	int index = GET_INDEX(handle);
-	int gen = GET_GEN(handle);
+static int game_unit_find_free_index(GameUnit units[]) {
+	int startIndex = nextFreeIndex;
+	int index = NO_FREE_UNIT_INDEX;
 
-	if (index < 0 || index >= MAX_GAME_UNITS) return NULL;
-	if (!gameContext->units[index].active) return NULL;
-	if (unitGenerations[index] != gen) return NULL;
-
-	return &gameContext->units[index];
-}
-
-void game_unit_destroy(GameContext *gameContext, int handle) {
-	GameUnit *u = game_unit_get_by_handle(gameContext, handle);
-	if (u) u->active = FALSE;
-}
-
-void game_units_init(GameContext *gameContext) {
 	for (int i = 0; i < MAX_GAME_UNITS; i++) {
-		gameContext->units[i].active = FALSE;
-		unitGenerations[i] = FIRST_UNIT_GENERATION;
-	}
-}
-
-int game_unit_spawn(GameContext *gameContext, GameUnit *unitData) {
-	int index = FREE_UNIT_SLOT_NOT_FOUND;
-	for (int i = 0; i < MAX_GAME_UNITS; i++) {
-		if (!gameContext->units[i].active) {
-			index = i;
+		int checkIndex = (startIndex + i) % MAX_GAME_UNITS;
+		if (!units[checkIndex].isActive) {
+			index = checkIndex;
+			nextFreeIndex = (index + 1) % MAX_GAME_UNITS;
 			break;
 		}
 	}
 
-	if (index == FREE_UNIT_SLOT_NOT_FOUND) {
-		printf("Error: Max units reached!\n");
-		return FREE_UNIT_SLOT_NOT_FOUND;
+	return index;
+}
+
+void game_units_init(GameContext *context) {
+	for (int i = 0; i < MAX_GAME_UNITS; i++) {
+		context->units[i].isActive = FALSE;
+		context->units[i].id = NULL_HANDLE;
+		unitGenerations[i] = FIRST_UNIT_GENERATION;
 	}
+	activeUnitCount = 0;
+	nextFreeIndex = 0;
+}
 
+GameUnit *game_unit_get_by_handle(GameContext *context, int handle) {
+	int index = GET_INDEX(handle);
+	int gen = GET_GEN(handle);
+
+	if (index < 0 || index >= MAX_GAME_UNITS) return NULL;
+	if (!context->units[index].isActive) return NULL;
+	if (unitGenerations[index] != gen) return NULL;
+
+	return &context->units[index];
+}
+
+void game_unit_destroy(GameContext *context, int handle) {
+	GameUnit *u = game_unit_get_by_handle(context, handle);
+	if (u) u->isActive = FALSE;
+}
+
+GameUnit* game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
+	int index = game_unit_find_free_index(context->units);
+	if(index == NO_FREE_UNIT_INDEX) return NULL;
+
+	GameUnit *unit = &context->units[index];
 	unitGenerations[index]++;
-
-	GameUnit *unit = &gameContext->units[index];
-	memcpy(unit, unitData, sizeof(GameUnit));
+	memcpy(unit, unitToSpawn, sizeof(GameUnit));
 	unit->id = MAKE_ID(index, unitGenerations[index]);
-	unit->active = TRUE;
+	unit->isActive = TRUE;
 
-	return unit->id;
+	return unit;
 }

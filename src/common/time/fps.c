@@ -13,7 +13,7 @@ typedef struct {
     long lastTimeMs;
 } FPSCounter;
 
-FPSCounter fpsCounter;
+static FPSCounter fpsCounter;
 
 static long get_current_ms() {
 	return (long) (((double) clock() / CLOCKS_PER_SEC) * MS_IN_SECOND);

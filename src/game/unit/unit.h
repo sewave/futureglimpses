@@ -5,6 +5,6 @@
 GameUnit *game_unit_get_by_handle(GameContext *context, int handle);
 void game_unit_destroy(GameContext *context, int handle);
 void game_units_init(GameContext *context);
-int game_unit_spawn(GameContext *context, GameUnit *unitData);
+GameUnit* game_unit_spawn(GameContext *gameContext, GameUnit *unitData);
 
 #endif /* UNIT_H */

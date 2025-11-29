@@ -5,10 +5,10 @@
 
 #define VIEWPORT_WIDTH_TILES 15
 #define VIEWPORT_HEIGHT_TILES 11
-#define VIEWPORT_WIDTH VIEWPORT_WIDTH_TILES *TILE_SIZE
-#define VIEWPORT_HEIGHT VIEWPORT_HEIGHT_TILES *TILE_SIZE
-#define MAX_CAMERA_X_POSITION (BOARD_WIDTH - VIEWPORT_WIDTH_TILES)
-#define MAX_CAMERA_Y_POSITION (BOARD_HEIGHT - VIEWPORT_HEIGHT_TILES)
+#define VIEWPORT_WIDTH VIEWPORT_WIDTH_TILES * TILE_SIZE
+#define VIEWPORT_HEIGHT VIEWPORT_HEIGHT_TILES * TILE_SIZE
+#define MAX_CAMERA_X_POSITION (WORLD_WIDTH - VIEWPORT_WIDTH)
+#define MAX_CAMERA_Y_POSITION (WORLD_HEIGHT - VIEWPORT_HEIGHT)
 
 #define MINIMAP_X_POS 3
 #define MINIMAP_Y_POS 6
@@ -35,8 +35,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 			mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
 			mouseY >= MINIMAP_Y_POS &&
 			mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
-			context->xPosition = mouseX - MINIMAP_X_POS - 8;
-			context->yPosition = mouseY - MINIMAP_Y_POS - 6;
+			context->xPosition = (mouseX - MINIMAP_X_POS - 8) * TILE_SIZE;
+			context->yPosition = (mouseY - MINIMAP_Y_POS - 6) * TILE_SIZE;
 			if (context->yPosition < 0) context->yPosition = 0;
 			if (context->xPosition < 0) context->xPosition = 0;
 			if (context->xPosition > MAX_CAMERA_X_POSITION) context->xPosition = MAX_CAMERA_X_POSITION;
@@ -51,22 +51,23 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	} else {
 		moveViewportCounter = 0;
 	}
+	int cameraSpeed = 2;
 
-	if (moveViewportCounter >= 5) {
+	if (moveViewportCounter >= 1) {
 		if (key[KEY_UP] || mouseY < MOUSE_Y_GO_UP) {
-			context->yPosition -= 1;
+			context->yPosition -= cameraSpeed;
 			if (context->yPosition < 0) context->yPosition = 0;
 		}
 		if (key[KEY_DOWN] || mouseY > MOUSE_Y_GO_DOWN) {
-			context->yPosition += 1;
+			context->yPosition += cameraSpeed;
 			if (context->yPosition > MAX_CAMERA_Y_POSITION) context->yPosition = MAX_CAMERA_Y_POSITION;
 		}
 		if (key[KEY_LEFT] || mouseX < MOUSE_X_GO_LEFT) {
-			context->xPosition -= 1;
+			context->xPosition -= cameraSpeed;
 			if (context->xPosition < 0) context->xPosition = 0;
 		}
 		if (key[KEY_RIGHT] || mouseX > MOUSE_X_GO_RIGHT) {
-			context->xPosition += 1;
+			context->xPosition += cameraSpeed;
 			if (context->xPosition > MAX_CAMERA_X_POSITION) context->xPosition = MAX_CAMERA_X_POSITION;
 		}
 		moveViewportCounter = 0;
@@ -76,7 +77,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER, context->gameBack, 0, 0);
 
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER + 1, context->renderedBoard,
-									  context->xPosition * TILE_SIZE, context->yPosition * TILE_SIZE,
+									  context->xPosition, context->yPosition,
 									  72, 12,
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	// Minimap
@@ -86,10 +87,10 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// Minimap viewport window
 	render_queue_submit_rect(renderQueue,
 							 BACKGROUND_Z_ORDER + 3,
-							 context->xPosition + MINIMAP_X_POS,
-							 context->yPosition + MINIMAP_Y_POS,
-							 context->xPosition + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
-							 context->yPosition + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
+							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
+							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
+							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
+							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 makecol8(255, 255, 255));
 
 	render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);
