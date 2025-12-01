@@ -44,6 +44,11 @@ typedef enum {
 } BoardExplorationEnum;
 
 typedef enum {
+	WALKABILITY_FREE,
+	WALKABILITY_BLOCKED,
+} WalkabilityEnum;
+
+typedef enum {
 	UNIT_TYPE_NONE,
 	UNIT_TYPE_WORKER,
 	UNIT_TYPE_SOLDIER,
@@ -90,21 +95,24 @@ typedef struct {
 	UnitControllerEnum controller;
 	UnitStatusEnum status;
 
-	int x, y;
+	uint16_t x, y;
 	uint8_t attackRange, sightRange;
 	int health, maxHealth;
 
-	uint32_t targetX, targetY;
+	uint16_t targetX, targetY;
 	UnitId targetId;
 
 	uint16_t reactionTime;
 	uint16_t reactionCurrentTime;
+	uint16_t stateFinalCounter;
+	uint16_t stateCurrentCounter;
 	UnitStatusEnum nextStatus;
 } GameUnit;
 
 typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
+	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
 	int board[BOARD_WIDTH][BOARD_HEIGHT];
 	GameUnit units[MAX_GAME_UNITS];
 	// Whenever the board is modified, we re-render the modified parts to this bitmap

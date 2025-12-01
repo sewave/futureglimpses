@@ -9,4 +9,5 @@
 #include "unit/unit.h"
 #include "unit/unit_ai.h"
 #include "unit/unit_command.h"
+#include "unit/unit_path.h"
 #endif /* GAME_LIB_H */

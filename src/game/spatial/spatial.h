@@ -15,4 +15,6 @@ uint16_t game_spatial_query_grid(const GameContext* context, uint16_t centerTile
 
 uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUnit *source, const GameUnit *found);
 
+uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range);
+
 #endif /* SPATIAL_H */
