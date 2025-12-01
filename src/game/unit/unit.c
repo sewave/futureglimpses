@@ -35,9 +35,9 @@ void game_units_init(GameContext *context) {
 	nextFreeIndex = 0;
 }
 
-GameUnit *game_unit_get_by_handle(GameContext *context, int handle) {
-	int index = GET_INDEX(handle);
-	int gen = GET_GEN(handle);
+GameUnit *game_unit_get_by_id(GameContext *context, int id) {
+	int index = GET_INDEX(id);
+	int gen = GET_GEN(id);
 
 	if (index < 0 || index >= MAX_GAME_UNITS) return NULL;
 	if (!context->units[index].isActive) return NULL;
@@ -46,8 +46,8 @@ GameUnit *game_unit_get_by_handle(GameContext *context, int handle) {
 	return &context->units[index];
 }
 
-void game_unit_destroy(GameContext *context, int handle) {
-	GameUnit *u = game_unit_get_by_handle(context, handle);
+void game_unit_destroy(GameContext *context, int id) {
+	GameUnit *u = game_unit_get_by_id(context, id);
 	if (u) u->isActive = FALSE;
 }
 

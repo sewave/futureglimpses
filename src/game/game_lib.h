@@ -7,4 +7,6 @@
 #include "map/map.h"
 #include "spatial/spatial.h"
 #include "unit/unit.h"
+#include "unit/unit_ai.h"
+#include "unit/unit_command.h"
 #endif /* GAME_LIB_H */

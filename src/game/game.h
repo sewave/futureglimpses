@@ -13,6 +13,7 @@
 
 #define UNUSED_BUCKET_ID -1
 #define FREE_UNIT_SLOT_NOT_FOUND -1
+#define NO_TARGET_POSITION -1
 
 // --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
 #define ID_INDEX_MASK 0xFFFF// Lower 16 bits for Index
@@ -59,15 +60,16 @@ typedef enum {
 typedef enum {
 	UNIT_STATUS_IDLE,
 	/* Worker statuses */
-	UNIT_STATUS_CUTTING,
-	UNIT_STATUS_MINING,
-	UNIT_STATUS_BUILDING,
-	UNIT_STATUS_REPAIRING,
+	UNIT_STATUS_CUT,
+	UNIT_STATUS_MINE,
+	UNIT_STATUS_BUILD,
+	UNIT_STATUS_REPAIR,
 	/* Common statuses */
-	UNIT_STATUS_ATTACKING,
-	UNIT_STATUS_DEFENDING,
-	UNIT_STATUS_MOVING,
-	UNIT_STATUS_MOVING_TO_ATTACK,
+	UNIT_STATUS_ATTACK,
+	UNIT_STATUS_DEFEND,
+	UNIT_STATUS_MOVE,
+	UNIT_STATUS_MOVE_ANIM,
+	UNIT_STATUS_MOVE_ATTACK,
 } UnitStatusEnum;
 
 typedef enum {
@@ -79,18 +81,25 @@ typedef enum {
 
 #define MAX_GAME_UNITS 1024
 
+typedef uint32_t UnitId;
+
 typedef struct {
-	int id;
+	UnitId id;
 	unsigned char isActive;
 	UnitTypeEnum type;
 	UnitControllerEnum controller;
 	UnitStatusEnum status;
 
 	int x, y;
-	int attackRange, sightRange;
+	uint8_t attackRange, sightRange;
 	int health, maxHealth;
 
-	int targetBoardX, targetBoardY;
+	uint32_t targetX, targetY;
+	UnitId targetId;
+
+	uint16_t reactionTime;
+	uint16_t reactionCurrentTime;
+	UnitStatusEnum nextStatus;
 } GameUnit;
 
 typedef struct {
