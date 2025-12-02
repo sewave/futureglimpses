@@ -97,9 +97,11 @@ typedef struct {
 
 	uint16_t x, y;
 	uint8_t attackRange, sightRange;
-	int health, maxHealth;
+	uint16_t health, maxHealth;
+	uint8_t tileSize;
 
 	uint16_t targetX, targetY;
+	uint16_t drawX, drawY;
 	UnitId targetId;
 
 	uint16_t reactionTime;
@@ -121,6 +123,7 @@ typedef struct {
 	int xPosition, yPosition;// Top-left position of the viewport on the board
 	BITMAP *gameBack;
 	BITMAP *tileSet;
+	long ticksToCatchup;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

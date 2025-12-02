@@ -49,14 +49,14 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 		return;
 	}
 
-	if (context->walkabilityGrid[unit->x][unit->y] == WALKABILITY_FREE) {
-		// TODO: Si la posición está ocupada y estamos alrededor, pasamos a IDLE.
+	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE && game_spatial_target_in_range(unit, targetX, targetY, 1)) {
 		game_unit_command_idle(unit);
 		return;
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		game_unit_command_move_anim(context, unit);
+		// TODO: reset my counters
+		game_unit_command_move_anim(unit, UNIT_STATUS_MOVE);
 	}
 }
 
@@ -89,16 +89,17 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 	}
 }
 
+#define MOVE_PRECISION 1024
+
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
-    // TODO: Interpolated move from prev to current
-    if(++unit->stateCurrentCounter >unit->stateFinalCounter) {
-        unit->status = unit->nextStatus;
-        unit->nextStatus = UNIT_STATUS_IDLE;
-    }
+	// TODO: Interpolated move from prev to current
+	if (++unit->stateCurrentCounter > unit->stateFinalCounter) {
+		unit->status = unit->nextStatus;
+		unit->nextStatus = UNIT_STATUS_IDLE;
+	}
 }
 
 static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
-
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
@@ -116,10 +117,10 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 			game_unit_ai_move(context, unit);
 			break;
 		case UNIT_STATUS_MOVE_ANIM:
-            game_unit_ai_move_anim(context, unit);
+			game_unit_ai_move_anim(context, unit);
 			break;
 		case UNIT_STATUS_MOVE_ATTACK:
-            game_unit_ai_move_attack(context, unit);
+			game_unit_ai_move_attack(context, unit);
 			break;
 	}
 }

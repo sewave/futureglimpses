@@ -73,6 +73,12 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
+	// If there are more ticks to draw, skip queue phase
+	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
+
+	// TODO queue units
+	// TODO queue effects, proyectiles, particles, etc
+
 	// Submit to render the viewport from the renderedBoard
 	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER, context->gameBack, 0, 0);
 

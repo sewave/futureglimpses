@@ -93,7 +93,6 @@ static char redrawNeeded;
 static RenderQueue renderQueue;
 static char keyPrevious[KEY_MAX];
 static GameContext context;
-char fpsText[16];
 
 void main_loop(volatile long *logicTicks,
 			   volatile int *closeButtonFlag,
@@ -107,19 +106,19 @@ void main_loop(volatile long *logicTicks,
 	render_queue_init(&renderQueue);
 	while (!*closeButtonFlag && context.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
-			long ticksToCatchup = *logicTicks - lastTickCount;
-			if (ticksToCatchup > maxCatchUpTicks) {
+			context.ticksToCatchup = *logicTicks - lastTickCount;
+			if (context.ticksToCatchup > maxCatchUpTicks) {
 				lastTickCount = *logicTicks - maxCatchUpTicks;
-				ticksToCatchup = maxCatchUpTicks;
+				context.ticksToCatchup = maxCatchUpTicks;
 			}
-			while (ticksToCatchup > 0) {
+			while (context.ticksToCatchup > 0) {
+				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
 				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 				poll_keyboard();
 				poll_mouse();
 				context.gameState = game_execute_state(&context, &renderQueue);
 				lastTickCount++;
-				ticksToCatchup--;
 			}
 			redrawNeeded = TRUE;
 		}
