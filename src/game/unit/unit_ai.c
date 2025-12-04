@@ -13,7 +13,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 		if (foundUnitsCount > 0) {
 			GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
 			if (target) {
-				game_unit_command_attack(unit, target, UNIT_STATUS_IDLE);
+				game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
 			} else {
 				foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
 														  game_spatial_filter_enemy_units, unit, foundUnitIds,
@@ -55,8 +55,8 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		// TODO: reset my counters
-		game_unit_command_move_anim(unit, UNIT_STATUS_MOVE);
+		// TODO: Put unit move time
+		game_unit_command_move_anim(unit, UNIT_STATE_MOVE, 99);
 	}
 }
 
@@ -68,23 +68,21 @@ static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 												  MAX_FOUND_UNITS);
 		if (foundUnitsCount > 0) {
 			GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
-			if (target) game_unit_command_attack(unit, target, UNIT_STATUS_DEFEND);
+			if (target) game_unit_command_attack(unit, target, UNIT_STATE_DEFEND);
 		}
 	}
 }
 
 static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
-	// TODO
-	// Do animation
+	// TODO manipulate animation
 	// Checkpoints sound/apply damage
-	// TODO IF animation ended
-	if (TRUE) {
+	if (++unit->stateCurrentCounter >= unit->stateFinalCounter) {
 		GameUnit *target = game_unit_get_by_id(context, unit->targetId);
 		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
-			// TODO restart animation
+			unit->stateCurrentCounter = 0;
 		} else {
-			unit->status = unit->nextStatus;
-			unit->nextStatus = UNIT_STATUS_IDLE;
+			unit->state = unit->nextState;
+			unit->nextState = UNIT_STATE_IDLE;
 		}
 	}
 }
@@ -92,10 +90,9 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 #define MOVE_PRECISION 1024
 
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
-	// TODO: Interpolated move from prev to current
 	if (++unit->stateCurrentCounter > unit->stateFinalCounter) {
-		unit->status = unit->nextStatus;
-		unit->nextStatus = UNIT_STATUS_IDLE;
+		unit->state = unit->nextState;
+		unit->nextState = UNIT_STATE_IDLE;
 	}
 }
 
@@ -103,23 +100,23 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
-	switch (unit->status) {
-		case UNIT_STATUS_IDLE:
+	switch (unit->state) {
+		case UNIT_STATE_IDLE:
 			game_unit_ai_idle(context, unit);
 			break;
-		case UNIT_STATUS_ATTACK:
+		case UNIT_STATE_ATTACK:
 			game_unit_ai_attack(context, unit);
 			break;
-		case UNIT_STATUS_DEFEND:
+		case UNIT_STATE_DEFEND:
 			game_unit_ai_defend(context, unit);
 			break;
-		case UNIT_STATUS_MOVE:
+		case UNIT_STATE_MOVE:
 			game_unit_ai_move(context, unit);
 			break;
-		case UNIT_STATUS_MOVE_ANIM:
+		case UNIT_STATE_MOVE_ANIM:
 			game_unit_ai_move_anim(context, unit);
 			break;
-		case UNIT_STATUS_MOVE_ATTACK:
+		case UNIT_STATE_MOVE_ATTACK:
 			game_unit_ai_move_attack(context, unit);
 			break;
 	}

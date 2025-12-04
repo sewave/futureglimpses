@@ -7,7 +7,8 @@ const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
 
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
 		"assets/sound/click.wav",
-        "assets/sound/click2.wav"
+        "assets/sound/click2.wav",
+        "assets/sound/click2.wav",
 };
 
 void game_snd_load_sounds() {

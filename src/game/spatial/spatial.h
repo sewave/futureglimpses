@@ -17,4 +17,6 @@ uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUn
 
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range);
 
+uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, uint16_t targetY, uint8_t range);
+
 #endif /* SPATIAL_H */

@@ -49,12 +49,17 @@ typedef enum {
 } WalkabilityEnum;
 
 typedef enum {
-	UNIT_TYPE_NONE,
 	UNIT_TYPE_WORKER,
 	UNIT_TYPE_SOLDIER,
 	UNIT_TYPE_RANGER,
 	UNIT_TYPE_MOUNT,
-	UNIT_TYPE_SIEGE
+	UNIT_TYPE_MAGE,
+	UNIT_TYPE_CITY_HALL,
+	UNIT_TYPE_FARM,
+	UNIT_TYPE_BARRACKS,
+	UNIT_TYPE_BLACKSMITH,
+	UNIT_TYPE_STABLES,
+	UNIT_TYPE_TOWER,
 } UnitTypeEnum;
 
 typedef enum {
@@ -63,28 +68,71 @@ typedef enum {
 } UnitControllerEnum;
 
 typedef enum {
-	UNIT_STATUS_IDLE,
-	/* Worker statuses */
-	UNIT_STATUS_CUT,
-	UNIT_STATUS_MINE,
-	UNIT_STATUS_BUILD,
-	UNIT_STATUS_REPAIR,
-	/* Common statuses */
-	UNIT_STATUS_ATTACK,
-	UNIT_STATUS_DEFEND,
-	UNIT_STATUS_MOVE,
-	UNIT_STATUS_MOVE_ANIM,
-	UNIT_STATUS_MOVE_ATTACK,
-} UnitStatusEnum;
+	UNIT_STATE_IDLE,
+	UNIT_STATE_ATTACK,
+	UNIT_STATE_DEFEND,
+	UNIT_STATE_MOVE,
+	UNIT_STATE_MOVE_ANIM,
+	UNIT_STATE_MOVE_ATTACK,
+	UNIT_STATE_WORK,
+} UnitStateEnum;
 
 typedef enum {
-	TARGET_TYPE_NONE,
-	TARGET_TYPE_UNIT,
-	TARGET_TYPE_BUILDING,
-	TARGET_TYPE_POSITION
-} TargetTypeEnum;
+	DIRECTION_NORTH,
+	DIRECTION_NORTH_EAST,
+	DIRECTION_EAST,
+	DIRECTION_SOUTH_EAST,
+	DIRECTION_SOUTH,
+	DIRECTION_SOUTH_WEST,
+	DIRECTION_WEST,
+	DIRECTION_NORTH_WEST,
+	DIRECTIONS_COUNT,
+} DirectionEnum;
 
-#define MAX_GAME_UNITS 1024
+typedef enum {
+	EVENT_TYPE_SOUND,
+	EVENT_TYPE_DAMAGE,
+	EVENT_TYPE_SPAWN_ARROW,
+	EVENT_TYPE_SPAWN_MAGIC,
+	EVENT_TYPE_WORK,
+} EventType;
+
+#define MAX_FRAMES 4
+#define MAX_EVENTS 4
+
+typedef struct {
+	uint16_t xOffset, yOffset;
+	uint16_t width, height;
+	uint8_t vFlip;
+	uint8_t hFlip;
+} AnimationSheetProperties;
+
+typedef enum {
+	ANIMATION_TYPE_ONCE,
+	ANIMATION_TYPE_CYCLE,
+	ANIMATION_TYPE_PINGPONG,
+} AnimationType;
+
+typedef struct {
+	EventType type;
+	uint16_t data;
+	uint16_t fireTime;
+} AnimationEvent;
+
+typedef struct {
+	AnimationType type;
+	uint16_t frameDuration[MAX_FRAMES];
+	uint8_t numFrames;
+	AnimationEvent events[MAX_EVENTS];
+	uint8_t numEvents;
+} AnimationData;
+
+typedef struct {
+	AnimationSheetProperties* prop;
+	AnimationData* data;
+} Animation;
+
+#define MAX_GAME_UNITS 512
 
 typedef uint32_t UnitId;
 
@@ -93,7 +141,8 @@ typedef struct {
 	unsigned char isActive;
 	UnitTypeEnum type;
 	UnitControllerEnum controller;
-	UnitStatusEnum status;
+	UnitStateEnum state;
+	DirectionEnum direction;
 
 	uint16_t x, y;
 	uint8_t attackRange, sightRange;
@@ -108,13 +157,14 @@ typedef struct {
 	uint16_t reactionCurrentTime;
 	uint16_t stateFinalCounter;
 	uint16_t stateCurrentCounter;
-	UnitStatusEnum nextStatus;
+	UnitStateEnum nextState;
 } GameUnit;
 
 typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
+	// TODO resources/walls grid
 	int board[BOARD_WIDTH][BOARD_HEIGHT];
 	GameUnit units[MAX_GAME_UNITS];
 	// Whenever the board is modified, we re-render the modified parts to this bitmap
