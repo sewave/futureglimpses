@@ -6,24 +6,23 @@ static uint8_t game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitSta
         return FALSE;
 	} else {
 		unit->state = unitState;
+        game_animation_movable_unit_set(unit);
         return TRUE;
 	}
 }
 
 void game_unit_command_idle(GameUnit *unit) {
-    unit->reactionCurrentTime = 0;
+    unit->reactionTimeCounter = 0;
     game_unit_set_state_or_next(unit, UNIT_STATE_IDLE);
 }
 
 void game_unit_command_attack(GameUnit *unit, GameUnit *target, UnitStateEnum nextState) {
-    // TODO: start animation counters
-    unit->stateCurrentCounter = 0;
     unit->targetId = target->id;
     game_unit_set_state_or_next(unit, UNIT_STATE_ATTACK);
 }
 
 void game_unit_command_defend(GameUnit *unit) {
-    unit->reactionCurrentTime = 0;
+    unit->reactionTimeCounter = 0;
     game_unit_set_state_or_next(unit, UNIT_STATE_DEFEND);
 }
 
@@ -41,9 +40,9 @@ void game_unit_command_move_attack(GameUnit *unit, GameUnit *target, int16_t tar
     game_unit_set_state_or_next(unit, UNIT_STATE_MOVE_ATTACK);
 }
 
-void game_unit_command_move_anim(GameUnit *unit, UnitStateEnum nextState, uint16_t totalAnimationTime) {
-    unit->stateCurrentCounter = 0;
-    unit->stateFinalCounter = totalAnimationTime;
+void game_unit_command_move_anim(GameUnit *unit, UnitStateEnum nextState) {
+    unit->moveTimeCounter = 0;
     unit->state = UNIT_STATE_MOVE_ANIM;
     unit->nextState = nextState;
+    game_animation_movable_unit_set(unit);
 }

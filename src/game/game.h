@@ -154,10 +154,14 @@ typedef struct {
 	UnitId targetId;
 
 	uint16_t reactionTime;
-	uint16_t reactionCurrentTime;
-	uint16_t stateFinalCounter;
-	uint16_t stateCurrentCounter;
+	uint16_t reactionTimeCounter;
+	uint16_t moveTime;
+	uint16_t moveTimeCounter;
 	UnitStateEnum nextState;
+	Animation* animation;
+	uint16_t animationFrameTicks;
+	uint16_t animationTotalTicks;
+	uint8_t animationFrame;
 } GameUnit;
 
 typedef struct {

@@ -70,7 +70,6 @@ int main(int argc, char *argv[]) {
 
 	game_snd_load_sounds();
 
-
 	//TODO move palette init to init state
 	PALETTE p;
 	if(video_load_raw_palette("assets/pal/game.pal", p) != PROGRAM_OK) {
@@ -79,7 +78,7 @@ int main(int argc, char *argv[]) {
 	set_palette_range(p, 32, 247, 0);
 
 	fps_init();
-	// mod music uses 5 FPS
+	// mod music uses ~5 FPS
 	//game_snd_play_music(GAME_MUSIC_TITLE);
 
 	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);

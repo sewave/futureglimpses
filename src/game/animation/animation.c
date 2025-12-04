@@ -38,6 +38,25 @@ Animation* MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][MOVABLE_UNITS_STATES] = {
     {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE},
 };
 
-Animation* game_animation_movable_unit_get(GameUnit* unit) {
-    return &(MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state][unit->direction]);
+void game_animation_movable_unit_set(GameUnit* unit) {
+    unit->animation = &(MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state][unit->direction]);
+    game_animation_unit_reset(unit);
+}
+
+void game_animation_unit_advance(GameUnit* unit) {
+    // TODO advance animation and fire event if needed
+}
+
+uint8_t game_animation_unit_finished(GameUnit* unit) {
+    AnimationData* data = unit->animation->data;
+    // Infinite animations are always finished
+    if(data->type != ANIMATION_TYPE_ONCE) return TRUE;
+    uint8_t frame = clamp(unit->animationFrame, 0, data->numFrames);    
+    return frame == data->numFrames && unit->animationFrameTicks >= data->frameDuration[frame];
+}
+
+void game_animation_unit_reset(GameUnit* unit) {
+    unit->animationFrame = 0;
+    unit->animationFrameTicks = 0;
+    unit->animationTotalTicks = 0;
 }

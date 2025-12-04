@@ -5,8 +5,8 @@ static UnitId foundUnitIds[MAX_FOUND_UNITS];
 static uint16_t foundUnitsCount;
 
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
-	if (++unit->reactionCurrentTime >= unit->reactionTime) {
-		unit->reactionCurrentTime = 0;
+	if (++unit->reactionTimeCounter >= unit->reactionTime) {
+		unit->reactionTimeCounter = 0;
 		foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
 												  game_spatial_filter_enemy_units, unit, foundUnitIds,
 												  MAX_FOUND_UNITS);
@@ -55,14 +55,13 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		// TODO: Put unit move time
-		game_unit_command_move_anim(unit, UNIT_STATE_MOVE, 99);
+		game_unit_command_move_anim(unit, UNIT_STATE_MOVE);
 	}
 }
 
 static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
-	if (++unit->reactionCurrentTime >= unit->reactionTime) {
-		unit->reactionCurrentTime = 0;
+	if (++unit->reactionTimeCounter >= unit->reactionTime) {
+		unit->reactionTimeCounter = 0;
 		foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
 												  game_spatial_filter_enemy_units, unit, foundUnitIds,
 												  MAX_FOUND_UNITS);
@@ -74,12 +73,10 @@ static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
-	// TODO manipulate animation
-	// Checkpoints sound/apply damage
-	if (++unit->stateCurrentCounter >= unit->stateFinalCounter) {
+	if (game_animation_unit_finished(unit)) {
 		GameUnit *target = game_unit_get_by_id(context, unit->targetId);
 		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
-			unit->stateCurrentCounter = 0;
+            game_animation_unit_reset(unit);
 		} else {
 			unit->state = unit->nextState;
 			unit->nextState = UNIT_STATE_IDLE;
@@ -90,9 +87,10 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 #define MOVE_PRECISION 1024
 
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
-	if (++unit->stateCurrentCounter > unit->stateFinalCounter) {
+	if (++unit->moveTimeCounter > unit->moveTime) {
 		unit->state = unit->nextState;
 		unit->nextState = UNIT_STATE_IDLE;
+        game_animation_movable_unit_set(unit);
 	}
 }
 

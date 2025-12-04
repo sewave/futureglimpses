@@ -2,8 +2,8 @@
 
 uint16_t game_spatial_query_grid(const GameContext* context, uint16_t centerTileX, uint16_t centerTileY, uint8_t tileRadius,
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
-								 UnitId outHandles[], uint16_t maxResults) {
-    // TODO
+								 UnitId foundIds[], uint16_t maxResults) {
+    // TODO spatial query grid
 	return 0;
 }
 
