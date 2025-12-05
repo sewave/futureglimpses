@@ -4,9 +4,9 @@
 #include "mouse.h"
 #include <stdlib.h>
 
-BITMAP **mouseCursors = NULL;
-uchar numMouseCursors = 0;
-uchar currentMouseCursor = 0;
+static BITMAP **mouseCursors = NULL;
+static uchar numMouseCursors = 0;
+static uchar currentMouseCursor = 0;
 
 void _mouse_load_cursor(uchar index, BITMAP* cursor) {
     if (index >= numMouseCursors) return;

@@ -2,9 +2,9 @@
 #include "sound.h"
 #include <jgmod.h>
 
-JGMOD *currentModMusic = NULL;
-MIDI *currentMidiMusic = NULL;
-MusicType currentMusicType = MUSIC_TYPE_MIDI;
+static JGMOD *currentModMusic = NULL;
+static MIDI *currentMidiMusic = NULL;
+static MusicType currentMusicType = MUSIC_TYPE_MIDI;
 
 SAMPLE **sounds = NULL;
 int totalSounds = 0;

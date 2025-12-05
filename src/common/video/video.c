@@ -1,7 +1,6 @@
 #include <allegro/gfx.h>
 #include "video.h"
 
-
 int video_init_system(int width, int height, int depth) {
 	set_color_depth(depth);
 #ifdef DOS
@@ -18,15 +17,14 @@ int video_init_system(int width, int height, int depth) {
 }
 
 int video_load_raw_palette(const char *filename, PALETTE p) {
-    RGB_FILE_ENTRY fileEntry;
-    RGB *currentRgb = p; 
-    
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
         printf("Error: Could not open palette file '%s'\n", filename);
         return FUNCTION_ERROR;
     }
     
+    RGB_FILE_ENTRY fileEntry;
+    RGB *currentRgb = p; 
     for (int i = 0; i < PALETTE_ENTRIES; ++i, ++currentRgb) {
         if (fread(&fileEntry, sizeof(RGB_FILE_ENTRY), 1, fp) != 1) {
             printf("Error reading color entry %d from file '%s'.\n", i, filename);

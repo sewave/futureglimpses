@@ -117,5 +117,8 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 		case UNIT_STATE_MOVE_ATTACK:
 			game_unit_ai_move_attack(context, unit);
 			break;
+        case UNIT_STATE_WORK:
+            // TODO
+        break;
 	}
 }

@@ -23,7 +23,6 @@ int moveViewportCounter = 0;
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	/*if (key[KEY_A] & !keyPrevious[KEY_A]) game_snd_play_sound(GAME_SOUND_SEA_WAVES);
 	if (key[KEY_S] & !keyPrevious[KEY_S]) game_snd_play_sound(GAME_SOUND_CLICK);*/
-	// Move camera every 10 frames while arrow key is held down
 
 	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
 	int mouseX = mouse_get_x();

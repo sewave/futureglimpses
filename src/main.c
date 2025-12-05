@@ -86,6 +86,7 @@ int main(int argc, char *argv[]) {
 	allegro_exit();
 	return PROGRAM_OK;
 }
+END_OF_MAIN()
 
 static long lastTickCount;
 static char redrawNeeded;
@@ -100,9 +101,9 @@ void main_loop(volatile long *logicTicks,
 	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_LOAD_MAP;
 	memset(keyPrevious, FALSE, sizeof(keyPrevious));
-	lastTickCount = *logicTicks;
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
+	lastTickCount = *logicTicks;
 	while (!*closeButtonFlag && context.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
 			context.ticksToCatchup = *logicTicks - lastTickCount;
@@ -121,8 +122,6 @@ void main_loop(volatile long *logicTicks,
 			}
 			redrawNeeded = TRUE;
 		}
-
-		// Render game
 		if (redrawNeeded) {
 			render_queue_execute(&renderQueue, screenBuffer);
 			vsync();
@@ -143,5 +142,3 @@ void main_loop(volatile long *logicTicks,
 	destroy_bitmap(screenBuffer);
 	game_free_context(&context);
 }
-
-END_OF_MAIN()
