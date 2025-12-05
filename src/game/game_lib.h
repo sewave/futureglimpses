@@ -11,4 +11,6 @@
 #include "unit/unit_ai.h"
 #include "unit/unit_command.h"
 #include "unit/unit_path.h"
+#include "gfx/gfx.h"
+#include "render/render.h"
 #endif /* GAME_LIB_H */

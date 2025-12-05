@@ -15,13 +15,14 @@ typedef enum {
 } RENDER_FLAGS;
 
 typedef enum {
-    RND_CMD_CLEAR,
-    RND_CMD_SOLID,
-    RND_CMD_SPRITE,
-    RND_CMD_RECT,
-    RND_CMD_RECT_FILL,
-    RND_CMD_TEXT,
-    RND_CMD_SOLID_PARTIAL
+	RND_CMD_CLEAR,
+	RND_CMD_SOLID,
+	RND_CMD_SPRITE,
+	RND_CMD_MASKED_PARTIAL,
+	RND_CMD_RECT,
+	RND_CMD_RECT_FILL,
+	RND_CMD_TEXT,
+	RND_CMD_SOLID_PARTIAL
 } RenderCommandType;
 
 typedef struct {
@@ -49,6 +50,13 @@ typedef struct {
 } RenderSpriteCommand;
 
 typedef struct {
+	BITMAP *bitmap;
+	int originX, originY;
+	int destX, destY;
+	int height, width;
+} RenderSpritePartialCommand;
+
+typedef struct {
     int x1, y1, x2, y2;
     int color;
 } RenderRectFillCommand;
@@ -71,8 +79,9 @@ typedef struct {
     int zOrder;
     union {
         RenderSpriteCommand sprite;
-        RenderRectFillCommand rectFill;
-        RenderRectCommand rect;
+		RenderSpritePartialCommand spritePartial;
+		RenderRectFillCommand rectFill;
+		RenderRectCommand rect;
         RenderTextCommand text;
         RenderClearCommand clear;
         RenderSolidCommand solid;
@@ -97,5 +106,6 @@ void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, in
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
 void render_queue_execute(RenderQueue* queue, BITMAP* targetBmp);
 void render_queue_submit_solid_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int width, int height);
+void render_queue_submit_masked_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int width, int height);
 
 #endif /* RENDER_QUEUE_H */

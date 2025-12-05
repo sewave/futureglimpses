@@ -11,14 +11,6 @@ void close_button_handler() {
 }
 END_OF_FUNCTION(close_button_handler)
 
-#define LOGIC_RATE_BPS 60
-#define MAX_CATCHUP_TICKS 5
-// First MB is special so we check for 7 more
-#define PROGRAM_REQUIRED_RAM_MB 7
-#define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
-#define REQUIRED_CPU_CAPABILITIES CPU_FPU
-#define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
-
 volatile long logic_ticks = 0;
 
 void timer_handler() {
@@ -53,11 +45,6 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
-	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
-		printf("Error initializing video.");
-		return PROGRAM_ERROR;
-	}
-
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
 		printf("Error initializing sound.");
 		return PROGRAM_ERROR;
@@ -69,6 +56,15 @@ int main(int argc, char *argv[]) {
 	set_mouse_sprite_focus(0, 0);
 
 	game_snd_load_sounds();
+	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
+		printf("Error loading sprite sheets.");
+		return PROGRAM_ERROR;
+	}
+
+	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
+		printf("Error initializing video.");
+		return PROGRAM_ERROR;
+	}
 
 	//TODO move palette init to init state
 	PALETTE p;
@@ -83,6 +79,10 @@ int main(int argc, char *argv[]) {
 
 	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 
+	game_gfx_destroy_sprite_sheets();
+	snd_stop_music();
+	snd_destroy_sounds();
+	mouse_destroy_cursors();
 	allegro_exit();
 	return PROGRAM_OK;
 }
@@ -136,9 +136,6 @@ void main_loop(volatile long *logicTicks,
 			fps_update();
 		}
 	}
-	snd_stop_music();
-	snd_destroy_sounds();
-	mouse_destroy_cursors();
 	destroy_bitmap(screenBuffer);
 	game_free_context(&context);
 }

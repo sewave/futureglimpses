@@ -8,7 +8,7 @@ static BITMAP **mouseCursors = NULL;
 static uchar numMouseCursors = 0;
 static uchar currentMouseCursor = 0;
 
-void _mouse_load_cursor(uchar index, BITMAP* cursor) {
+static void mouse_load_cursor(uchar index, BITMAP* cursor) {
     if (index >= numMouseCursors) return;
     if (mouseCursors[index] != NULL) destroy_bitmap(mouseCursors[index]);
     mouseCursors[index] = cursor;
@@ -22,7 +22,7 @@ InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouse
 	for (int i = 0; i < numMouseCursors; i++) {
         BITMAP* cursorBitmap = load_bitmap(mouseCursorFilenames[i], NULL);
         if (cursorBitmap == NULL) return INITIALIZATION_ERROR;
-        _mouse_load_cursor(i, cursorBitmap);
+        mouse_load_cursor(i, cursorBitmap);
     }
     return INITIALIZATION_OK;
 }

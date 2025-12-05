@@ -60,6 +60,8 @@ GameUnit* game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	memcpy(unit, unitToSpawn, sizeof(GameUnit));
 	unit->id = MAKE_ID(index, unitGenerations[index]);
 	unit->isActive = TRUE;
-
+	unit->direction = DIRECTION_SOUTH;
+	game_animation_unit_set(unit);
+	game_gfx_set_sprite_sheet(unit);
 	return unit;
 }

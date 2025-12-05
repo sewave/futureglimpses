@@ -6,8 +6,8 @@ static uint8_t game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitSta
         return FALSE;
 	} else {
 		unit->state = unitState;
-        game_animation_movable_unit_set(unit);
-        return TRUE;
+		game_animation_unit_set(unit);
+		return TRUE;
 	}
 }
 
@@ -44,5 +44,5 @@ void game_unit_command_move_anim(GameUnit *unit, UnitStateEnum nextState) {
     unit->moveTimeCounter = 0;
     unit->state = UNIT_STATE_MOVE_ANIM;
     unit->nextState = nextState;
-    game_animation_movable_unit_set(unit);
+	game_animation_unit_set(unit);
 }

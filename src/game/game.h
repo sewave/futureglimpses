@@ -60,6 +60,7 @@ typedef enum {
 	UNIT_TYPE_BLACKSMITH,
 	UNIT_TYPE_STABLES,
 	UNIT_TYPE_TOWER,
+	UNIT_TYPE_NUMBER,
 } UnitTypeEnum;
 
 typedef enum {
@@ -105,12 +106,11 @@ typedef struct {
 	uint16_t width, height;
 	uint8_t vFlip;
 	uint8_t hFlip;
-} AnimationSheetProperties;
+} AnimationProperties;
 
 typedef enum {
 	ANIMATION_TYPE_ONCE,
 	ANIMATION_TYPE_CYCLE,
-	ANIMATION_TYPE_PINGPONG,
 } AnimationType;
 
 typedef struct {
@@ -122,15 +122,23 @@ typedef struct {
 typedef struct {
 	AnimationType type;
 	uint16_t frameDuration[MAX_FRAMES];
-	uint8_t numFrames;
+	uint8_t lastFrameIndex;
 	AnimationEvent events[MAX_EVENTS];
 	uint8_t numEvents;
 } AnimationData;
 
 typedef struct {
-	AnimationSheetProperties* prop;
+	AnimationProperties *prop;
 	AnimationData* data;
 } Animation;
+
+typedef struct {
+	BITMAP *sheet;
+	Animation *animation;
+	uint16_t frameTicks;
+	uint16_t totalTicks;
+	uint8_t frame;
+} AnimationStatus;
 
 #define MAX_GAME_UNITS 512
 
@@ -142,6 +150,7 @@ typedef struct {
 	UnitTypeEnum type;
 	UnitControllerEnum controller;
 	UnitStateEnum state;
+	UnitStateEnum nextState;
 	DirectionEnum direction;
 
 	uint16_t x, y;
@@ -157,11 +166,7 @@ typedef struct {
 	uint16_t reactionTimeCounter;
 	uint16_t moveTime;
 	uint16_t moveTimeCounter;
-	UnitStateEnum nextState;
-	Animation* animation;
-	uint16_t animationFrameTicks;
-	uint16_t animationTotalTicks;
-	uint8_t animationFrame;
+	AnimationStatus animationStatus;
 } GameUnit;
 
 typedef struct {
@@ -184,5 +189,13 @@ typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 
 void game_free_context(GameContext *context);
 GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue);
+
+#define LOGIC_RATE_BPS 60
+#define MAX_CATCHUP_TICKS 5
+// First MB is special so we check for 7 more
+#define PROGRAM_REQUIRED_RAM_MB 7
+#define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
+#define REQUIRED_CPU_CAPABILITIES CPU_FPU
+#define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
 
 #endif /* GAME_H */

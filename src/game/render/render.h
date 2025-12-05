@@ -1,0 +1,14 @@
+#ifndef RENDER_H
+#define RENDER_H
+#include "../game_lib.h"
+
+#define VIEWPORT_WIDTH_TILES 15
+#define VIEWPORT_HEIGHT_TILES 11
+#define VIEWPORT_WIDTH VIEWPORT_WIDTH_TILES * TILE_SIZE
+#define VIEWPORT_HEIGHT VIEWPORT_HEIGHT_TILES * TILE_SIZE
+#define MAX_CAMERA_X_POSITION (WORLD_WIDTH - VIEWPORT_WIDTH)
+#define MAX_CAMERA_Y_POSITION (WORLD_HEIGHT - VIEWPORT_HEIGHT)
+
+void render_queue_units(GameContext* context, RenderQueue* renderQueue);
+
+#endif /* RENDER_H */

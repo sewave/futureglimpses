@@ -3,13 +3,6 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-#define VIEWPORT_WIDTH_TILES 15
-#define VIEWPORT_HEIGHT_TILES 11
-#define VIEWPORT_WIDTH VIEWPORT_WIDTH_TILES * TILE_SIZE
-#define VIEWPORT_HEIGHT VIEWPORT_HEIGHT_TILES * TILE_SIZE
-#define MAX_CAMERA_X_POSITION (WORLD_WIDTH - VIEWPORT_WIDTH)
-#define MAX_CAMERA_Y_POSITION (WORLD_HEIGHT - VIEWPORT_HEIGHT)
-
 #define MINIMAP_X_POS 3
 #define MINIMAP_Y_POS 6
 
@@ -72,10 +65,17 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
+	// Advance units animation
+	// TODO only active units
+	 GameUnit* unit = context->units;
+    for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
+        if(unit->isActive) game_animation_unit_advance(unit);
+    }
+
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
-	// TODO queue units based on animation
+	render_queue_units(context, renderQueue);
 	// TODO queue effects, proyectiles, particles, etc
 
 	// Submit to render the viewport from the renderedBoard

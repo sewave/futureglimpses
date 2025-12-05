@@ -4,8 +4,19 @@
 #include <allegro.h>
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
+static GameUnit archer = {
+
+	};
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
+	BITMAP* archerBitmap;
+
+
+
+	// Spawn an idle archer
+	// game_unit_spawn(context, &archer);
+
+
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	// Reset the board exploration

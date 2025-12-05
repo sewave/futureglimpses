@@ -90,7 +90,7 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 	if (++unit->moveTimeCounter > unit->moveTime) {
 		unit->state = unit->nextState;
 		unit->nextState = UNIT_STATE_IDLE;
-        game_animation_movable_unit_set(unit);
+		game_animation_unit_set(unit);
 	}
 }
 
