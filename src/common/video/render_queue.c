@@ -102,13 +102,13 @@ void render_queue_submit_masked_partial(RenderQueue *queue,
 										int height) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_MASKED_PARTIAL);
 	if (cmd) {
-		cmd->data.spritePartial.bitmap = bmp;
-		cmd->data.spritePartial.originX = originX;
-		cmd->data.spritePartial.originY = originY;
-		cmd->data.spritePartial.destX = destX;
-		cmd->data.spritePartial.destY = destY;
-		cmd->data.spritePartial.height = height;
-		cmd->data.spritePartial.width = width;
+		cmd->data.maskedPartial.bitmap = bmp;
+		cmd->data.maskedPartial.originX = originX;
+		cmd->data.maskedPartial.originY = originY;
+		cmd->data.maskedPartial.destX = destX;
+		cmd->data.maskedPartial.destY = destY;
+		cmd->data.maskedPartial.height = height;
+		cmd->data.maskedPartial.width = width;
 	}
 }
 
@@ -182,14 +182,15 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 				render_sprite(target, &cmd->data.sprite);
 				break;
 			case RND_CMD_MASKED_PARTIAL:
-				masked_blit(cmd->data.solidPartial.bitmap,
+				masked_blit(cmd->data.maskedPartial.bitmap,
 							target,
-							cmd->data.solidPartial.originX,
-							cmd->data.solidPartial.originY,
-							cmd->data.solidPartial.destX,
-							cmd->data.solidPartial.destY,
-							cmd->data.solidPartial.width,
-							cmd->data.solidPartial.height);
+							cmd->data.maskedPartial.originX,
+							cmd->data.maskedPartial.originY,
+							cmd->data.maskedPartial.destX,
+							cmd->data.maskedPartial.destY,
+							cmd->data.maskedPartial.width,
+							cmd->data.maskedPartial.height);
+				break;
 			case RND_CMD_RECT:
 				rect(target,
 						 cmd->data.rect.x1, cmd->data.rect.y1,

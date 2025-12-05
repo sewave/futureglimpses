@@ -79,19 +79,20 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO queue effects, proyectiles, particles, etc
 
 	// Submit to render the viewport from the renderedBoard
-	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER, context->gameBack, 0, 0);
+	// TODO MASKED TOTAL
+	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER, context->gameBack, 0, 0, 0,0, 320, 200);
 
-	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER + 1, context->renderedBoard,
+	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
 									  context->xPosition, context->yPosition,
-									  72, 12,
+									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	// Minimap
-	render_queue_submit_solid(renderQueue, BACKGROUND_Z_ORDER + 1, context->renderedMinimap,
+	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 1, context->renderedMinimap,
 									  MINIMAP_X_POS, MINIMAP_Y_POS);
 
 	// Minimap viewport window
 	render_queue_submit_rect(renderQueue,
-							 BACKGROUND_Z_ORDER + 3,
+							 UI_Z_ORDER + 3,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,

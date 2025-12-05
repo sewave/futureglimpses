@@ -5,17 +5,42 @@
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
 static GameUnit archer = {
-
-	};
+		.id = 0,
+		.isActive = FALSE,
+		.type = UNIT_TYPE_RANGER,
+		.controller = UNIT_CONTROLLER_PLAYER,
+		.state = UNIT_STATE_IDLE,
+		.nextState = UNIT_STATE_IDLE,
+		.direction = DIRECTION_SOUTH,
+		.x = 5,
+		.y = 5,
+		.attackRange = 5,
+		.sightRange = 10,
+		.health = 40,
+		.maxHealth = 40,
+		.tileSize = 1,
+		.targetX = NO_TARGET_POSITION,
+		.targetY = NO_TARGET_POSITION,
+		.targetId = NO_TARGET_ID,
+		.reactionTime = 10,
+		.reactionTimeCounter = 0,
+		.moveTime = 10,
+		.moveTimeCounter = 0,
+		.animationStatus = {.sheet = NULL, .animation = NULL, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
-	BITMAP* archerBitmap;
-
-
-
 	// Spawn an idle archer
-	// game_unit_spawn(context, &archer);
-
+	game_unit_spawn(context, &archer);
+	archer.direction = DIRECTION_NORTH;
+	archer.y -= 1;
+	game_unit_spawn(context, &archer);
+	archer.direction = DIRECTION_EAST;
+	archer.y += 1;
+	archer.x -= 1;
+	game_unit_spawn(context, &archer);
+	archer.direction = DIRECTION_WEST;
+	archer.x += 2;
+	game_unit_spawn(context, &archer);
 
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 

@@ -54,7 +54,7 @@ typedef struct {
 	int originX, originY;
 	int destX, destY;
 	int height, width;
-} RenderSpritePartialCommand;
+} RenderMaskedPartialCommand;
 
 typedef struct {
     int x1, y1, x2, y2;
@@ -79,7 +79,7 @@ typedef struct {
     int zOrder;
     union {
         RenderSpriteCommand sprite;
-		RenderSpritePartialCommand spritePartial;
+		RenderMaskedPartialCommand maskedPartial;
 		RenderRectFillCommand rectFill;
 		RenderRectCommand rect;
         RenderTextCommand text;

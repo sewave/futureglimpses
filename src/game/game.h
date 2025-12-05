@@ -14,6 +14,7 @@
 #define UNUSED_BUCKET_ID -1
 #define FREE_UNIT_SLOT_NOT_FOUND -1
 #define NO_TARGET_POSITION -1
+#define NO_TARGET_ID -1
 
 // --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
 #define ID_INDEX_MASK 0xFFFF// Lower 16 bits for Index
@@ -159,7 +160,6 @@ typedef struct {
 	uint8_t tileSize;
 
 	uint16_t targetX, targetY;
-	uint16_t drawX, drawY;
 	UnitId targetId;
 
 	uint16_t reactionTime;
