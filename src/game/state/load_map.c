@@ -4,7 +4,7 @@
 #include <allegro.h>
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
-static GameUnit archer = {
+static GameUnit tmpUnit = {
 		.id = 0,
 		.isActive = FALSE,
 		.type = UNIT_TYPE_ARCHER,
@@ -29,46 +29,47 @@ static GameUnit archer = {
 		.animationStatus = {.sheet = NULL, .animation = NULL, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
-	// Spawn an idle archer
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_AI;
-	archer.y += 5;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_PLAYER;
-	archer.y -= 5;
-	archer.direction = DIRECTION_NORTH;
-	archer.y -= 1;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_AI;
-	archer.y += 5;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_PLAYER;
-	archer.y -= 5;
-	archer.direction = DIRECTION_WEST;
-	archer.y += 1;
-	archer.x -= 1;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_AI;
-	archer.y += 5;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_PLAYER;
-	archer.y -= 5;
-	archer.direction = DIRECTION_EAST;
-	archer.x += 2;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_AI;
-	archer.y += 5;
-	game_unit_spawn(context, &archer);
-	archer.controller = UNIT_CONTROLLER_PLAYER;
-	archer.y -= 5;
+	// Spawn an idle tmpUnit
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_AI;
+	tmpUnit.y += 5;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
+	tmpUnit.y -= 5;
+	tmpUnit.direction = DIRECTION_NORTH;
+	tmpUnit.y -= 1;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_AI;
+	tmpUnit.y += 5;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
+	tmpUnit.y -= 5;
+	tmpUnit.direction = DIRECTION_WEST;
+	tmpUnit.y += 1;
+	tmpUnit.x -= 1;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_AI;
+	tmpUnit.y += 5;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
+	tmpUnit.y -= 5;
+	tmpUnit.direction = DIRECTION_EAST;
+	tmpUnit.x += 2;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_AI;
+	tmpUnit.y += 5;
+	game_unit_spawn(context, &tmpUnit);
+	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
+	tmpUnit.y -= 5;
 	for(int i = 0; i < 40; i++) {
-		archer.x++;
-		game_unit_spawn(context, &archer);
-		archer.controller = UNIT_CONTROLLER_AI;
-		archer.y += 5;
-		game_unit_spawn(context, &archer);
-		archer.controller = UNIT_CONTROLLER_PLAYER;
-		archer.y -= 5;
+		tmpUnit.type = (tmpUnit.type + 1) % 5;
+		tmpUnit.x++;
+		game_unit_spawn(context, &tmpUnit);
+		tmpUnit.controller = UNIT_CONTROLLER_AI;
+		tmpUnit.y += 5;
+		game_unit_spawn(context, &tmpUnit);
+		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
+		tmpUnit.y -= 5;
 	}
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 

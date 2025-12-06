@@ -7,8 +7,8 @@ static BITMAP* spriteSheetsBlue[UNIT_TYPE_NUMBER];
 static BITMAP* spriteSheetsRed[UNIT_TYPE_NUMBER];
 
 static const char* spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
+    "assets/gfx/unit/workerb.pcx",
+    "assets/gfx/unit/swordfb.pcx",
     "assets/gfx/unit/archerb.pcx",
     "assets/gfx/unit/archerb.pcx",
     "assets/gfx/unit/archerb.pcx",
@@ -21,8 +21,8 @@ static const char* spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
 };
 
 static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
+    "assets/gfx/unit/workerr.pcx",
+    "assets/gfx/unit/swordfr.pcx",
     "assets/gfx/unit/archerr.pcx",
     "assets/gfx/unit/archerr.pcx",
     "assets/gfx/unit/archerr.pcx",

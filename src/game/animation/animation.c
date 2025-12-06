@@ -5,40 +5,24 @@
 
 static AnimationProperties IDLE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_NORTH_EAST
-		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 320, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_EAST
-		{.yOffset = 0,   .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_SOUTH_EAST
-		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 0,   .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_SOUTH
-		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_SOUTH_WEST
-		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 160, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_WEST
-		{.yOffset = 480, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_NORTH_WEST
-		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 480, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
 };
 
 static AnimationProperties MOVE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 352, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_NORTH_EAST
-		{.yOffset = 352, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 352, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_EAST
-		{.yOffset = 0,   .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_SOUTH_EAST
-		{.yOffset = 192, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 0,   .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_SOUTH
-		{.yOffset = 192, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_SOUTH_WEST
-		{.yOffset = 192, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 192, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
         // DIRECTION_WEST
-		{.yOffset = 512, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-        // DIRECTION_NORTH_WEST
-		{.yOffset = 352, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 512, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
 };
 
 static AnimationData WORKER_IDLE_ANIMATION_DATA = {
@@ -68,34 +52,26 @@ static AnimationData WORKER_MOVE_ANIMATION_DATA = {
 };
 
 static Animation WORKER_IDLE[DIRECTIONS_COUNT] = {
-		{.prop = &IDLE_PROPERTIES[DIRECTION_NORTH],         .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_NORTH_EAST],    .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_EAST],          .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_SOUTH_EAST],    .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_SOUTH],         .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_SOUTH_WEST],    .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_WEST],          .data = &WORKER_IDLE_ANIMATION_DATA},
-		{.prop = &IDLE_PROPERTIES[DIRECTION_NORTH_WEST],    .data = &WORKER_IDLE_ANIMATION_DATA},
+		{.prop = &IDLE_PROPERTIES[DIRECTION_NORTH], .data = &WORKER_IDLE_ANIMATION_DATA},
+		{.prop = &IDLE_PROPERTIES[DIRECTION_EAST],  .data = &WORKER_IDLE_ANIMATION_DATA},
+		{.prop = &IDLE_PROPERTIES[DIRECTION_SOUTH], .data = &WORKER_IDLE_ANIMATION_DATA},
+		{.prop = &IDLE_PROPERTIES[DIRECTION_WEST],  .data = &WORKER_IDLE_ANIMATION_DATA},
 };
 
 static Animation WORKER_MOVE[DIRECTIONS_COUNT] = {
-		{.prop = &MOVE_PROPERTIES[DIRECTION_NORTH],         .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_NORTH_EAST],    .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_EAST],          .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_SOUTH_EAST],    .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_SOUTH],         .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_SOUTH_WEST],    .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_WEST],          .data = &WORKER_MOVE_ANIMATION_DATA},
-		{.prop = &MOVE_PROPERTIES[DIRECTION_NORTH_WEST],    .data = &WORKER_MOVE_ANIMATION_DATA},
+		{.prop = &MOVE_PROPERTIES[DIRECTION_NORTH], .data = &WORKER_MOVE_ANIMATION_DATA},
+		{.prop = &MOVE_PROPERTIES[DIRECTION_EAST],  .data = &WORKER_MOVE_ANIMATION_DATA},
+		{.prop = &MOVE_PROPERTIES[DIRECTION_SOUTH], .data = &WORKER_MOVE_ANIMATION_DATA},
+		{.prop = &MOVE_PROPERTIES[DIRECTION_WEST],  .data = &WORKER_MOVE_ANIMATION_DATA},
 };
 
 // UNIT_STATE_IDLE, UNIT_STATE_ATTACK, UNIT_STATE_DEFEND, UNIT_STATE_MOVE, UNIT_STATE_MOVE_ANIM, UNIT_STATE_MOVE_ATTACK, UNIT_STATE_WORK
 Animation* MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
-    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
-    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
-    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
-    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
-    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
+    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
+    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
+    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
+    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
+    {WORKER_IDLE, WORKER_IDLE, WORKER_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_IDLE, WORKER_IDLE},
 };
 
 void game_animation_unit_set(GameUnit *unit) {
@@ -116,7 +92,7 @@ void game_animation_unit_advance(GameUnit* unit) {
                 if(data->type == ANIMATION_TYPE_CYCLE) game_animation_unit_reset(unit);
                 // TODO test to do all animations
                 unit->state = (unit->state + 1) % UNIT_STATE_WORK;
-                //unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT;
+                unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT;
                 game_animation_unit_set(unit);
             }
             else {

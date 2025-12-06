@@ -82,13 +82,9 @@ typedef enum {
 
 typedef enum {
 	DIRECTION_NORTH,
-	DIRECTION_NORTH_EAST,
 	DIRECTION_EAST,
-	DIRECTION_SOUTH_EAST,
 	DIRECTION_SOUTH,
-	DIRECTION_SOUTH_WEST,
 	DIRECTION_WEST,
-	DIRECTION_NORTH_WEST,
 	DIRECTIONS_COUNT,
 } DirectionEnum;
 
@@ -106,6 +102,7 @@ typedef enum {
 typedef struct {
 	uint16_t yOffset;
 	uint16_t width, height;
+	uint8_t xRepos, yRepos;
 } AnimationProperties;
 
 typedef enum {

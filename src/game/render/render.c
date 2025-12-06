@@ -13,8 +13,8 @@ void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
             // TODO print selection box if unit is selected
             AnimationStatus* animationStatus = &unit->animationStatus;
             AnimationProperties* prop = animationStatus->animation->prop;
-            int unitXCamera = (unit->x * TILE_SIZE) - context->xPosition - prop->width / 4 + VIEWPORT_X_OFFSET;
-            int unitYCamera = (unit->y * TILE_SIZE) - context->yPosition - prop->height / 4 + VIEWPORT_Y_OFFSET;
+            int unitXCamera = (unit->x * TILE_SIZE) - context->xPosition - prop->xRepos + VIEWPORT_X_OFFSET;
+            int unitYCamera = (unit->y * TILE_SIZE) - context->yPosition - prop->yRepos + VIEWPORT_Y_OFFSET;
             render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
                 animationStatus->animation->data->frames[animationStatus->frame].xOffset,
                 prop->yOffset,
