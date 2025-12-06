@@ -9,21 +9,21 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 		unit->reactionTimeCounter = 0;
 		foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
 												  game_spatial_filter_enemy_units, unit, foundUnitIds,
-												  MAX_FOUND_UNITS);
+												  1);
 		if (foundUnitsCount > 0) {
 			GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
-			if (target) {
-				game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
-			} else {
-				foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
-														  game_spatial_filter_enemy_units, unit, foundUnitIds,
-														  MAX_FOUND_UNITS);
-				if (foundUnitsCount > 0) {
-					GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
-					if (target) {
-						game_unit_command_move_attack(unit, target, NO_TARGET_POSITION, NO_TARGET_POSITION);
-					}
-				}
+			if (target) game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
+		} else {
+			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
+														game_spatial_filter_enemy_units, unit, foundUnitIds,
+														1);
+			if (foundUnitsCount > 0) {
+				GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
+				if (target) game_unit_command_move_attack(unit, target, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			}
+			else {
+				// We found nothing, so we change direction to make it "look" around
+				unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT; 
 			}
 		}
 	}
@@ -76,15 +76,15 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 	if (game_animation_unit_finished(unit)) {
 		GameUnit *target = game_unit_get_by_id(context, unit->targetId);
 		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
+			game_unit_face_target(unit, target);
             game_animation_unit_reset(unit);
 		} else {
 			unit->state = unit->nextState;
 			unit->nextState = UNIT_STATE_IDLE;
+			game_animation_unit_set(unit);
 		}
 	}
 }
-
-#define MOVE_PRECISION 1024
 
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 	if (++unit->moveTimeCounter > unit->moveTime) {
@@ -95,6 +95,33 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
+	uint16_t targetX, targetY;
+	if (unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION) {
+		targetX = unit->targetX;
+		targetY = unit->targetY;
+	} else {
+		GameUnit *targetUnit = game_unit_get_by_id(context, unit->targetId);
+		if (!targetUnit) {
+			game_unit_command_idle(unit);
+			return;
+		}
+		targetX = targetUnit->x;
+		targetY = targetUnit->y;
+	}
+
+	if (unit->x == targetX && unit->y == targetY) {
+		game_unit_command_idle(unit);
+		return;
+	}
+
+	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE && game_spatial_target_in_range(unit, targetX, targetY, unit->attackRange)) {
+		game_unit_command_idle(unit);
+		return;
+	}
+
+	if (game_unit_path_find(context, unit, targetX, targetY)) {
+		game_unit_command_move_anim(unit, UNIT_STATE_MOVE);
+	}
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
@@ -119,6 +146,9 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 			break;
         case UNIT_STATE_WORK:
             // TODO
-        break;
+	        break;
+		case UNIT_STATES_COUNT:
+			// Nothing, to disable warning
+			break;
 	}
 }

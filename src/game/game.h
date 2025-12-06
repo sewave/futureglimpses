@@ -9,16 +9,14 @@
 #define BOARD_SIZE (BOARD_WIDTH * BOARD_HEIGHT)
 #define WORLD_WIDTH BOARD_WIDTH *TILE_SIZE
 #define WORLD_HEIGHT BOARD_HEIGHT *TILE_SIZE
-#define INVERSE_TILE_SIZE 1.0f / TILE_SIZE
 
-#define UNUSED_BUCKET_ID -1
-#define FREE_UNIT_SLOT_NOT_FOUND -1
-#define NO_TARGET_POSITION -1
-#define NO_TARGET_ID -1
+#define NO_TARGET_POSITION 65535
+#define NO_TARGET_ID 0
 
 // --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
 #define ID_INDEX_MASK 0xFFFF// Lower 16 bits for Index
 #define ID_GEN_SHIFT 16     // Upper 16 bits for Generation
+#define HANDLE_ID_THRESHOLD (1 << ID_GEN_SHIFT)// 1024
 
 #define GET_INDEX(id) (id & ID_INDEX_MASK)
 #define GET_GEN(id) ((id >> ID_GEN_SHIFT) & 0xFFFF)
@@ -193,7 +191,7 @@ typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 void game_free_context(GameContext *context);
 GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue);
 
-#define LOGIC_RATE_BPS 60
+#define LOGIC_RATE_BPS 35
 #define MAX_CATCHUP_TICKS 5
 // First MB is special so we check for 7 more
 #define PROGRAM_REQUIRED_RAM_MB 7

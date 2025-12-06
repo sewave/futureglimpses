@@ -1,5 +1,7 @@
 #include "render.h"
 
+#define MOVE_PRECISION 16384
+
 void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
     GameUnit* unit = context->units;
     uint16_t cameraMinX = context->xPosition / TILE_SIZE;
@@ -9,12 +11,28 @@ void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
     // TODO For now render all active units if on-screen
     for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
         if(unit->isActive && unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
-            // TODO movement interpolation
             // TODO print selection box if unit is selected
             AnimationStatus* animationStatus = &unit->animationStatus;
             AnimationProperties* prop = animationStatus->animation->prop;
-            int unitXCamera = (unit->x * TILE_SIZE) - context->xPosition - prop->xRepos + VIEWPORT_X_OFFSET;
-            int unitYCamera = (unit->y * TILE_SIZE) - context->yPosition - prop->yRepos + VIEWPORT_Y_OFFSET;
+            int unitWorldX, unitWorldY;
+            if(unit->state == UNIT_STATE_MOVE_ANIM) {
+                int t = (unit->moveTimeCounter * MOVE_PRECISION) / unit->moveTime;
+                t = clamp(t, 0, MOVE_PRECISION);
+
+                int startX = unit->prevX * TILE_SIZE;
+				int startY = unit->prevY * TILE_SIZE;
+                int finalX = unit->x * TILE_SIZE;
+				int finalY = unit->y * TILE_SIZE;
+				unitWorldX = (startX * (MOVE_PRECISION - t)) / MOVE_PRECISION + (finalX * t) / MOVE_PRECISION;
+				unitWorldY = (startY * (MOVE_PRECISION - t)) / MOVE_PRECISION + (finalY * t) / MOVE_PRECISION;
+            }
+            else {
+                unitWorldX = (unit->x * TILE_SIZE);
+                unitWorldY = (unit->y * TILE_SIZE);
+            }
+
+            int unitXCamera = unitWorldX - context->xPosition - prop->xRepos + VIEWPORT_X_OFFSET;
+            int unitYCamera = unitWorldY - context->yPosition - prop->yRepos + VIEWPORT_Y_OFFSET;
             render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
                 animationStatus->animation->data->frames[animationStatus->frame].xOffset,
                 prop->yOffset,

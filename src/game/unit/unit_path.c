@@ -2,50 +2,46 @@
 
 #define NO_DIRECTION -1
 #define UNIT_DIRS 8
-#define UNIT_DIR_AXIS 2
-static const uint8_t unit_movements[UNIT_DIRS][UNIT_DIR_AXIS] = {
-		{0, 1},
-		{1, 1},
-		{1, 0},
-		{1, -1},
-		{0, -1},
-		{-1, -1},
-		{-1, 0},
-		{-1, 1}};
+#define UNIT_DIR_VARS 3
+#define UNIT_DIR_X 0
+#define UNIT_DIR_Y 1
+#define UNIT_DIR_DIR 2
+static const int8_t unitMovements[UNIT_DIRS][UNIT_DIR_VARS] = {
+		{0, -1,  DIRECTION_NORTH},
+		{1, -1,  DIRECTION_NORTH},
+		{1,  0,  DIRECTION_WEST},
+		{1,  1,  DIRECTION_SOUTH},
+		{0,  1,  DIRECTION_SOUTH},
+		{-1, 1,  DIRECTION_SOUTH},
+		{-1, 0,  DIRECTION_EAST},
+		{-1, -1, DIRECTION_NORTH}
+};
 
-static int game_unit_path_get_best_direction(GameUnit *unit, int targetX, int targetY) {
-	int best_dir = NO_DIRECTION;
-	int min_dist_sq = 999999999;
-	for (int i = 0; i < UNIT_DIRS; i++) {
-		int nextX = unit->x + unit_movements[i][0];
-		int nextY = unit->y + unit_movements[i][1];
+static int8_t game_unit_path_get_best_direction(GameContext *context, GameUnit *unit, int targetX, int targetY) {
+	int8_t bestDir = NO_DIRECTION;
+	int minDistSq = 999999999;
+	for (int8_t i = 0; i < UNIT_DIRS; i++) {
+		uint16_t nextX = unit->x + unitMovements[i][UNIT_DIR_X];
+		uint16_t nextY = unit->y + unitMovements[i][UNIT_DIR_Y];
 		int dist = distance_sq(nextX, nextY, targetX, targetY);
 
-		if (dist < min_dist_sq) {
-			min_dist_sq = dist;
-			best_dir = i;
+		if (context->walkabilityGrid[nextX][nextY] == WALKABILITY_FREE && dist < minDistSq) {
+			minDistSq = dist;
+			bestDir = i;
 		}
 	}
-	return best_dir;
+	return bestDir;
 }
 
-uint8_t game_unit_path_find(GameContext* context, GameUnit* unit, uint16_t targetX, uint16_t targetY) {
-    int8_t dir = game_unit_path_get_best_direction(unit, targetX, targetY);
-    if(dir == NO_DIRECTION) return FALSE;
-
-    unit->prevX = unit->x;
-    unit->prevY = unit->y;
-
-    // Clear previous position on grid
-    context->walkabilityGrid[unit->prevY][unit->prevX] = WALKABILITY_FREE;
-
-    // Instant movement, animation will be slower
-    unit->x = unit_movements[dir][0];
-    unit->y = unit_movements[dir][1];
-
-    // Mark new position as occupied
-    context->walkabilityGrid[unit->y][unit->x] = unit->id;
-    unit->direction = dir;
-
-    return TRUE;
+uint8_t game_unit_path_find(GameContext *context, GameUnit *unit, uint16_t targetX, uint16_t targetY) {
+	int8_t dir = game_unit_path_get_best_direction(context, unit, targetX, targetY);
+	if (dir == NO_DIRECTION) return FALSE;
+	context->walkabilityGrid[unit->x][unit->y] = WALKABILITY_FREE;
+	unit->prevX = unit->x;
+	unit->prevY = unit->y;      
+	unit->x += unitMovements[dir][UNIT_DIR_X];
+	unit->y += unitMovements[dir][UNIT_DIR_Y];
+	context->walkabilityGrid[unit->x][unit->y] = unit->id;
+	unit->direction = unitMovements[dir][UNIT_DIR_DIR];
+	return TRUE;
 }

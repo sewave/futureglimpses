@@ -9,14 +9,14 @@ static GameUnit tmpUnit = {
 		.isActive = FALSE,
 		.isBuilding = FALSE,
 		.isSelected = FALSE,
-		.type = UNIT_TYPE_ARCHER,
+		.type = UNIT_TYPE_SOLDIER,
 		.controller = UNIT_CONTROLLER_PLAYER,
 		.state = UNIT_STATE_IDLE,
 		.nextState = UNIT_STATE_IDLE,
 		.direction = DIRECTION_SOUTH,
 		.x = 25,
 		.y = 25,
-		.attackRange = 5,
+		.attackRange = 1,
 		.sightRange = 10,
 		.health = 40,
 		.maxHealth = 40,
@@ -24,17 +24,19 @@ static GameUnit tmpUnit = {
 		.targetX = NO_TARGET_POSITION,
 		.targetY = NO_TARGET_POSITION,
 		.targetId = NO_TARGET_ID,
-		.reactionTime = 10,
+		.reactionTime = 15,
 		.reactionTimeCounter = 0,
-		.moveTime = 10,
+		.moveTime = 35,
 		.moveTimeCounter = 0,
 		.animationStatus = {.sheet = NULL, .animation = NULL, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
 
 void spawn_test_units(GameContext* context) {
+	context->xPosition = 20 * TILE_SIZE;
+	context->yPosition = 25 * TILE_SIZE;
 	// Spawn an idle tmpUnit
 	game_unit_spawn(context, &tmpUnit);
 	tmpUnit.controller = UNIT_CONTROLLER_AI;
-	tmpUnit.y += 5;
+	tmpUnit.y += 10;
 	game_unit_spawn(context, &tmpUnit);
 	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
 	tmpUnit.y -= 5;
@@ -68,10 +70,10 @@ void spawn_test_units(GameContext* context) {
 		tmpUnit.x++;
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_AI;
-		tmpUnit.y += 5;
+		tmpUnit.y += 10;
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-		tmpUnit.y -= 5;
+		tmpUnit.y -= 10;
 	}
 }
 
