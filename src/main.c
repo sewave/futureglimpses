@@ -68,11 +68,11 @@ int main(int argc, char *argv[]) {
 	}
 
 	//TODO move palette init to init state
-	PALETTE p;
-	if(video_load_raw_palette("assets/pal/game.pal", p) != PROGRAM_OK) {
+	PALETTE universalPal;
+	if(video_load_raw_palette("assets/pal/game.pal", universalPal) != PROGRAM_OK) {
 		return PROGRAM_ERROR;
 	}
-	set_palette_range(p, 32, 247, 0);
+	set_palette_range(universalPal, UNIVERSAL_PAL_FIRST_INDEX, UNIVERSAL_PAL_LAST_INDEX, FALSE);
 
 	fps_init();
 	// mod music uses ~5 FPS

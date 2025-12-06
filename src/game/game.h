@@ -44,6 +44,7 @@ typedef enum {
 	BOARD_EXPLORED
 } BoardExplorationEnum;
 
+#define MAX_WALKABLE_TILE 127
 typedef enum {
 	WALKABILITY_FREE,
 	WALKABILITY_BLOCKED,
@@ -148,7 +149,7 @@ typedef uint32_t UnitId;
 
 typedef struct {
 	UnitId id;
-	unsigned char isActive;
+	uint8_t isActive, isSelected, isBuilding;
 	UnitTypeEnum type;
 	UnitControllerEnum controller;
 	UnitStateEnum state;
@@ -156,6 +157,7 @@ typedef struct {
 	DirectionEnum direction;
 
 	uint16_t x, y;
+	uint16_t prevX, prevY;
 	uint8_t attackRange, sightRange;
 	uint16_t health, maxHealth;
 	uint8_t tileSize;

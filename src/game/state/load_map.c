@@ -7,6 +7,8 @@
 static GameUnit tmpUnit = {
 		.id = 0,
 		.isActive = FALSE,
+		.isBuilding = FALSE,
+		.isSelected = FALSE,
 		.type = UNIT_TYPE_ARCHER,
 		.controller = UNIT_CONTROLLER_PLAYER,
 		.state = UNIT_STATE_IDLE,
@@ -28,7 +30,7 @@ static GameUnit tmpUnit = {
 		.moveTimeCounter = 0,
 		.animationStatus = {.sheet = NULL, .animation = NULL, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
 
-GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
+void spawn_test_units(GameContext* context) {
 	// Spawn an idle tmpUnit
 	game_unit_spawn(context, &tmpUnit);
 	tmpUnit.controller = UNIT_CONTROLLER_AI;
@@ -71,14 +73,15 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
 		tmpUnit.y -= 5;
 	}
+}
+
+GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
+	
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
-	// Reset the board exploration
-	for (int x = 0; x < BOARD_WIDTH; x++) {
-		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			context->boardExploration[x][y] = BOARD_UNEXPLORED;
-		}
-	}
+	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
+	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
+
 
 	// TODO this file path should be in context, selected in a filebrowser
 	MapData *map = game_map_load_data("assets/map/test.map");
@@ -86,11 +89,16 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	// Load the map here (for now we just fill it with random)
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			context->board[x][y] = map->tile_layers->tiles[x + y * BOARD_WIDTH];
+			uint16_t tile = map->tile_layers->tiles[x + y * BOARD_WIDTH];
+			context->board[x][y] = tile;
+			if(tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
+			// TODO marcar en tabla de recursos
 		}
 	}
 
 	game_map_free_data(map);
+
+	spawn_test_units(context);
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);

@@ -8,3 +8,10 @@ char has_minimal_free_memory(int megaBytes) {
 	}
 	return 0;
 }
+
+int distance_sq(int x1, int y1, int x2, int y2) {
+	int xDif = x2 - x1;
+	int yDif = y2 - y1;
+	return xDif * xDif + yDif * yDif;
+}
+

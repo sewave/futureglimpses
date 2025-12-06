@@ -7,5 +7,6 @@
 #define clamp(val, minVal, maxVal) (max_val((minVal), min_val((val), (maxVal))))
 
 char has_minimal_free_memory(int megaBytes);
+int distance_sq(int x1, int y1, int x2, int y2);
 
 #endif // UTIL_H

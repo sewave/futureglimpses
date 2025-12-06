@@ -52,9 +52,9 @@ void game_unit_destroy(GameContext *context, int id) {
 }
 
 GameUnit* game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
+	if(context->walkabilityGrid[unitToSpawn->x][unitToSpawn->y] != WALKABILITY_FREE) return NULL;
 	int index = game_unit_find_free_index(context->units);
 	if(index == NO_FREE_UNIT_INDEX) return NULL;
-
 	GameUnit *unit = &context->units[index];
 	unitGenerations[index]++;
 	memcpy(unit, unitToSpawn, sizeof(GameUnit));
@@ -62,5 +62,6 @@ GameUnit* game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	unit->isActive = TRUE;
 	game_animation_unit_set(unit);
 	game_gfx_set_sprite_sheet(unit);
+	context->walkabilityGrid[unit->x][unit->y] = unit->id;
 	return unit;
 }

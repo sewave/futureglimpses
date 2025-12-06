@@ -69,7 +69,10 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO only active units
 	 GameUnit* unit = context->units;
     for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
-        if(unit->isActive) game_animation_unit_advance(unit);
+        if(unit->isActive) {
+			game_animation_unit_advance(unit);
+			game_unit_ai_invoke(context, unit);
+		}
     }
 
 	// If there are more ticks to draw, skip queue phase
