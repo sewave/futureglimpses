@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "common.h"
 #include "util/util.h"
 #include <allegro/system.h>
@@ -38,6 +40,8 @@ char common_init_basic(
 			return PROGRAM_ERROR;
 		}
 	}
+
+	srand(time(NULL));
 
 	return PROGRAM_OK;
 }

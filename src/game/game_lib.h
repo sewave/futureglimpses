@@ -13,4 +13,5 @@
 #include "unit/unit_path.h"
 #include "gfx/gfx.h"
 #include "render/render.h"
+#include "event/event.h"
 #endif /* GAME_LIB_H */

@@ -71,7 +71,7 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
             {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
         },
 		.lastFrameIndex = 3,
-		.events = {{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HUMAN_STEP, .fireTime = 80}},
+		.events = {{.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.8)}},
 		.numEvents = 1,
 };
 
@@ -110,14 +110,19 @@ void game_animation_unit_set(GameUnit *unit) {
 	game_animation_unit_reset(unit);
 }
 
-void game_animation_unit_advance(GameUnit* unit) {
+void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
     AnimationStatus* animationStatus = &unit->animationStatus;
     AnimationData *data = animationStatus->animation->data;
     AnimationFrame* frame = &data->frames[animationStatus->frame];
     if(animationStatus->frameTicks < frame->duration) {
         ++animationStatus->frameTicks;
         ++animationStatus->totalTicks;
-        // TODO fire event/s if needed
+        AnimationEvent* event = data->events;
+        for(uint8_t i = 0; i < data->numEvents; i++, event++) {
+            if(event->fireTime == animationStatus->totalTicks) {
+                game_event_process(context, event->type, unit, event->data);
+            }
+        }
         if(animationStatus->frameTicks == frame->duration) {
             if(animationStatus->frame == data->lastFrameIndex) {
                 if(data->type == ANIMATION_TYPE_CYCLE) game_animation_unit_reset(unit);

@@ -20,6 +20,8 @@ static GameUnit tmpUnit = {
 		.sightRange = 10,
 		.health = 40,
 		.maxHealth = 40,
+		.minDamage = 3,
+		.maxDamage = 5,
 		.tileSize = 1,
 		.targetX = NO_TARGET_POSITION,
 		.targetY = NO_TARGET_POSITION,
@@ -67,13 +69,13 @@ void spawn_test_units(GameContext* context) {
 	tmpUnit.y -= 5;
 	for(int i = 0; i < 40; i++) {
 		tmpUnit.type = (tmpUnit.type + 1) % 5;
-		tmpUnit.x++;
+		tmpUnit.y++;
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_AI;
-		tmpUnit.y += 10;
+		tmpUnit.x += 3;
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-		tmpUnit.y -= 10;
+		tmpUnit.x -= 3;
 	}
 }
 

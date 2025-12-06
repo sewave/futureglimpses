@@ -7,5 +7,6 @@ void game_unit_destroy(GameContext *context, UnitId handle);
 void game_units_init(GameContext *context);
 GameUnit* game_unit_spawn(GameContext *gameContext, GameUnit *unitData);
 void game_unit_face_target(GameUnit* unit, GameUnit* target);
+void game_unit_damage(GameContext *gameContext, GameUnit* unit, GameUnit* target);
 
 #endif /* UNIT_H */

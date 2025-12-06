@@ -82,11 +82,26 @@ void game_unit_face_target(GameUnit *unit, GameUnit *target) {
 				if (target->x < unit->x) {
 					unit->direction = DIRECTION_EAST;
 				} else {
-					if (target->x > unit->y) {
+					if (target->x > unit->x) {
 						unit->direction = DIRECTION_WEST;
 					}
 				}
 			}
 		}
+	}
+}
+
+void game_unit_damage(GameContext* context, GameUnit* unit, GameUnit* target) {
+	if(!unit->isActive || !target->isActive) return;
+	uint8_t damage = random_int(unit->minDamage, unit->maxDamage);
+	//printf("Unit %d damaging unit %d for %d \n", unit->id, target->id, damage);
+	if(target->health <= damage) {
+		target->health = 0;
+		// TODO die animation
+		//printf("Unit %d has been killed by %d! \n", target->id, unit->id);
+		game_unit_destroy(context, target->id);
+	}
+	else {
+		target->health -= damage;
 	}
 }

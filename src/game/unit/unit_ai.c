@@ -120,7 +120,7 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		game_unit_command_move_anim(unit, UNIT_STATE_MOVE);
+		game_unit_command_move_anim(unit, UNIT_STATE_MOVE_ATTACK);
 	}
 }
 

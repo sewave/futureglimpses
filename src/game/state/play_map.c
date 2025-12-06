@@ -70,7 +70,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	 GameUnit* unit = context->units;
     for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
         if(unit->isActive) {
-			game_animation_unit_advance(unit);
+			game_animation_unit_advance(context, unit);
 			game_unit_ai_invoke(context, unit);
 		}
     }
@@ -82,19 +82,19 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO queue effects, proyectiles, particles, etc
 
 	// Submit to render the viewport from the renderedBoard
-	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER, context->gameBack, 0, 0, 0,0, 320, 200);
+	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 10, context->gameBack, 0, 0, 0,0, 320, 200);
 
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
 									  context->xPosition, context->yPosition,
 									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	// Minimap
-	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 1, context->renderedMinimap,
+	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 11, context->renderedMinimap,
 									  MINIMAP_X_POS, MINIMAP_Y_POS);
 
 	// Minimap viewport window
 	render_queue_submit_rect(renderQueue,
-							 UI_Z_ORDER + 3,
+							 UI_Z_ORDER + 13,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
@@ -103,7 +103,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, 5000, font, fpsText, 0, 190, makecol8(255, 255, 255), -1);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 100, font, fpsText, 0, 190, makecol8(255, 255, 255), -1);
 
 	return GAME_STATE_PLAY_MAP;
 }

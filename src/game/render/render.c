@@ -1,4 +1,5 @@
 #include "render.h"
+#include <allegro/color.h>
 
 #define MOVE_PRECISION 16384
 
@@ -41,6 +42,26 @@ void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
                 prop->width,
                 prop->height
             );
+            if(unit->health < unit->maxHealth) {
+                render_queue_submit_rect_fill(
+                    renderQueue,
+                    UI_Z_ORDER,
+                    unitXCamera + prop->xRepos, 
+                    unitYCamera + prop->yRepos - 4,
+                    unitXCamera + prop->xRepos + TILE_SIZE,
+                    unitYCamera + prop->yRepos - 2,
+                    makecol8(20, 20, 20)
+                );
+                render_queue_submit_rect_fill(
+                    renderQueue,
+                    UI_Z_ORDER + 1,
+                    unitXCamera + prop->xRepos, 
+                    unitYCamera + prop->yRepos - 4,
+                    unitXCamera + prop->xRepos + ((int) unit->health * TILE_SIZE) / unit->maxHealth,
+                    unitYCamera + prop->yRepos - 2,
+                    makecol8(0, 255, 0)
+                );
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 #ifndef UTIL_H
 #define UTIL_H
-#include <stdlib.h>
 
 #define min_val(a, b) ((a) < (b) ? (a) : (b))
 #define max_val(a, b) ((a) > (b) ? (a) : (b))
@@ -8,5 +7,6 @@
 
 char has_minimal_free_memory(int megaBytes);
 int distance_sq(int x1, int y1, int x2, int y2);
+int random_int(int minVal, int maxVal);
 
 #endif // UTIL_H
