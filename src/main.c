@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
 
 	game_snd_load_sounds();
 	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
+		game_gfx_destroy_sprite_sheets();
 		printf("Error loading sprite sheets.");
 		return PROGRAM_ERROR;
 	}

@@ -7,13 +7,13 @@
 static GameUnit archer = {
 		.id = 0,
 		.isActive = FALSE,
-		.type = UNIT_TYPE_RANGER,
+		.type = UNIT_TYPE_ARCHER,
 		.controller = UNIT_CONTROLLER_PLAYER,
 		.state = UNIT_STATE_IDLE,
 		.nextState = UNIT_STATE_IDLE,
 		.direction = DIRECTION_SOUTH,
-		.x = 5,
-		.y = 5,
+		.x = 25,
+		.y = 25,
 		.attackRange = 5,
 		.sightRange = 10,
 		.health = 40,
@@ -31,17 +31,45 @@ static GameUnit archer = {
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	// Spawn an idle archer
 	game_unit_spawn(context, &archer);
+	archer.controller = UNIT_CONTROLLER_AI;
+	archer.y += 5;
+	game_unit_spawn(context, &archer);
+	archer.controller = UNIT_CONTROLLER_PLAYER;
+	archer.y -= 5;
 	archer.direction = DIRECTION_NORTH;
 	archer.y -= 1;
 	game_unit_spawn(context, &archer);
-	archer.direction = DIRECTION_EAST;
+	archer.controller = UNIT_CONTROLLER_AI;
+	archer.y += 5;
+	game_unit_spawn(context, &archer);
+	archer.controller = UNIT_CONTROLLER_PLAYER;
+	archer.y -= 5;
+	archer.direction = DIRECTION_WEST;
 	archer.y += 1;
 	archer.x -= 1;
 	game_unit_spawn(context, &archer);
-	archer.direction = DIRECTION_WEST;
+	archer.controller = UNIT_CONTROLLER_AI;
+	archer.y += 5;
+	game_unit_spawn(context, &archer);
+	archer.controller = UNIT_CONTROLLER_PLAYER;
+	archer.y -= 5;
+	archer.direction = DIRECTION_EAST;
 	archer.x += 2;
 	game_unit_spawn(context, &archer);
-
+	archer.controller = UNIT_CONTROLLER_AI;
+	archer.y += 5;
+	game_unit_spawn(context, &archer);
+	archer.controller = UNIT_CONTROLLER_PLAYER;
+	archer.y -= 5;
+	for(int i = 0; i < 40; i++) {
+		archer.x++;
+		game_unit_spawn(context, &archer);
+		archer.controller = UNIT_CONTROLLER_AI;
+		archer.y += 5;
+		game_unit_spawn(context, &archer);
+		archer.controller = UNIT_CONTROLLER_PLAYER;
+		archer.y -= 5;
+	}
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	// Reset the board exploration

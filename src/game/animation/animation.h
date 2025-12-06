@@ -2,7 +2,6 @@
 #define ANIMATION_H
 #include "../game_lib.h"
 #define MOVABLE_UNITS 5
-#define MOVABLE_UNITS_STATES 5
 
 void game_animation_unit_set(GameUnit *unit);
 void game_animation_unit_reset(GameUnit* unit);
