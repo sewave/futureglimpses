@@ -1,21 +1,27 @@
 #include "animation.h"
 
 #define SEC_TO_FRAMES(secs) (uint16_t) (secs * LOGIC_RATE_BPS)
+#define UNIT_FRAME_SIZE 32
 
 static AnimationProperties IDLE_PROPERTIES[DIRECTIONS_COUNT] = {
-		{.xOffset = 0, .yOffset = 320, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 320, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 0, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 160, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 160, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 160, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 0, .width = 32, .height = 32, .hFlip = TRUE, .vFlip = FALSE},
-		{.xOffset = 0, .yOffset = 320, .width = 32, .height = 32, .hFlip = FALSE, .vFlip = FALSE},
+		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 0,   .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 160, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 0,   .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.yOffset = 320, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
 };
 
 static AnimationData WORKER_IDLE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
-		.frameDuration = {SEC_TO_FRAMES(0.1), SEC_TO_FRAMES(0.1), SEC_TO_FRAMES(0.1), SEC_TO_FRAMES(0.1)},
+		.frames = {
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+        },
 		.lastFrameIndex = 3,
 		.events = {{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HUMAN_STEP, .fireTime = 80}},
 		.numEvents = 1,
@@ -48,12 +54,12 @@ void game_animation_unit_set(GameUnit *unit) {
 void game_animation_unit_advance(GameUnit* unit) {
     AnimationStatus* animationStatus = &unit->animationStatus;
     AnimationData *data = animationStatus->animation->data;
-    uint16_t frameDuration = data->frameDuration[animationStatus->frame];
-    if(animationStatus->frameTicks < frameDuration) {
+    AnimationFrame* frame = &data->frames[animationStatus->frame];
+    if(animationStatus->frameTicks < frame->duration) {
         ++animationStatus->frameTicks;
         ++animationStatus->totalTicks;
         // TODO fire event/s if needed
-        if(animationStatus->frameTicks == frameDuration) {
+        if(animationStatus->frameTicks == frame->duration) {
             if(animationStatus->frame == data->lastFrameIndex) {
                 if(data->type == ANIMATION_TYPE_CYCLE) game_animation_unit_reset(unit);
             }
@@ -67,10 +73,11 @@ void game_animation_unit_advance(GameUnit* unit) {
 
 uint8_t game_animation_unit_finished(GameUnit* unit) {
 	AnimationData *data = unit->animationStatus.animation->data;
-	// Infinite animations are always finished
+	// Looping animations are always finished
     if(data->type != ANIMATION_TYPE_ONCE) return TRUE;
-	uint8_t frame = clamp(unit->animationStatus.frame, 0, data->lastFrameIndex);
-	return frame == data->lastFrameIndex && unit->animationStatus.frameTicks >= data->frameDuration[frame];
+    uint8_t frame = unit->animationStatus.frame;
+    AnimationFrame* frameAnim = &data->frames[frame];
+	return frame == data->lastFrameIndex && unit->animationStatus.frameTicks >= frameAnim->duration;
 }
 
 void game_animation_unit_reset(GameUnit* unit) {

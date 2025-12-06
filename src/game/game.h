@@ -103,10 +103,8 @@ typedef enum {
 #define MAX_EVENTS 4
 
 typedef struct {
-	uint16_t xOffset, yOffset;
+	uint16_t yOffset;
 	uint16_t width, height;
-	uint8_t vFlip;
-	uint8_t hFlip;
 } AnimationProperties;
 
 typedef enum {
@@ -121,8 +119,13 @@ typedef struct {
 } AnimationEvent;
 
 typedef struct {
+	uint16_t duration;
+	uint16_t xOffset;
+} AnimationFrame;
+
+typedef struct {
 	AnimationType type;
-	uint16_t frameDuration[MAX_FRAMES];
+	AnimationFrame frames[MAX_FRAMES];
 	uint8_t lastFrameIndex;
 	AnimationEvent events[MAX_EVENTS];
 	uint8_t numEvents;

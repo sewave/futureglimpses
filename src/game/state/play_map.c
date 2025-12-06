@@ -79,7 +79,6 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO queue effects, proyectiles, particles, etc
 
 	// Submit to render the viewport from the renderedBoard
-	// TODO MASKED TOTAL
 	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER, context->gameBack, 0, 0, 0,0, 320, 200);
 
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
