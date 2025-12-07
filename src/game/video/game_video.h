@@ -1,6 +1,6 @@
 #ifndef GAME_VIDEO_H
 #define GAME_VIDEO_H
-#include "../../common/common.h"
+#include "../game_lib.h"
 
 #define GAME_INTERNAL_WIDTH 320
 #define GAME_INTERNAL_HEIGHT 200
@@ -21,5 +21,14 @@
 
 #define UNIVERSAL_PAL_FIRST_INDEX 32
 #define UNIVERSAL_PAL_LAST_INDEX 247
+
+#define PAL_COLOR_TRANS 0
+#define PAL_COLOR_WHITE 1
+#define PAL_COLOR_BLACK 2
+#define PAL_COLOR_GREEN 3
+#define PAL_COLOR_YELLOW 4
+#define PAL_COLOR_RED 5
+
+InitializationStatusEnum game_video_load_universal_pal();
 
 #endif /* GAME_VIDEO_H */

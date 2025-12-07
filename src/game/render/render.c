@@ -43,14 +43,19 @@ void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
                 prop->height
             );
             if(unit->health < unit->maxHealth) {
+                int color = PAL_COLOR_GREEN;
+                if(unit->health <= unit->maxHealth / 2) {
+                    color = PAL_COLOR_YELLOW;
+                    if(unit->health <= unit->maxHealth / 4) color = PAL_COLOR_RED;
+                }
                 render_queue_submit_rect_fill(
                     renderQueue,
                     UI_Z_ORDER,
-                    unitXCamera + prop->xRepos, 
+                    unitXCamera + prop->xRepos,
                     unitYCamera + prop->yRepos - 4,
                     unitXCamera + prop->xRepos + TILE_SIZE,
                     unitYCamera + prop->yRepos - 2,
-                    makecol8(20, 20, 20)
+                    PAL_COLOR_BLACK
                 );
                 render_queue_submit_rect_fill(
                     renderQueue,
@@ -59,7 +64,7 @@ void render_queue_units(GameContext* context, RenderQueue* renderQueue) {
                     unitYCamera + prop->yRepos - 4,
                     unitXCamera + prop->xRepos + ((int) unit->health * TILE_SIZE) / unit->maxHealth,
                     unitYCamera + prop->yRepos - 2,
-                    makecol8(0, 255, 0)
+                    color
                 );
             }
         }
