@@ -6,5 +6,8 @@ void game_event_process(GameContext* context, EventType eventType, GameUnit* uni
             GameUnit* target = game_unit_get_by_id(context, unit->targetId);
             if(target && target->isActive) game_unit_damage(context, unit, target);
         break;
+        case EVENT_TYPE_SOUND:
+            game_snd_play_sound((GameSound) data);
+        break;
     }
 }

@@ -124,6 +124,12 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	}
 }
 
+static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
+	if (game_animation_unit_finished(unit)) {
+		game_unit_destroy(context, unit->id);
+	}
+}
+
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	switch (unit->state) {
 		case UNIT_STATE_IDLE:
@@ -147,6 +153,9 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
         case UNIT_STATE_WORK:
             // TODO
 	        break;
+		case UNIT_STATE_DIE:
+			game_unit_ai_die(context, unit);
+		break;
 		case UNIT_STATES_COUNT:
 			// Nothing, to disable warning
 			break;

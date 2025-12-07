@@ -14,8 +14,8 @@ static GameUnit tmpUnit = {
 		.state = UNIT_STATE_IDLE,
 		.nextState = UNIT_STATE_IDLE,
 		.direction = DIRECTION_SOUTH,
-		.x = 25,
-		.y = 25,
+		.x = 3,
+		.y = 1,
 		.attackRange = 1,
 		.sightRange = 10,
 		.health = 40,
@@ -33,49 +33,17 @@ static GameUnit tmpUnit = {
 		.animationStatus = {.sheet = NULL, .animation = NULL, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
 
 void spawn_test_units(GameContext* context) {
-	context->xPosition = 20 * TILE_SIZE;
-	context->yPosition = 25 * TILE_SIZE;
-	// Spawn an idle tmpUnit
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_AI;
-	tmpUnit.y += 10;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-	tmpUnit.y -= 5;
-	tmpUnit.direction = DIRECTION_NORTH;
-	tmpUnit.y -= 1;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_AI;
-	tmpUnit.y += 5;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-	tmpUnit.y -= 5;
-	tmpUnit.direction = DIRECTION_WEST;
-	tmpUnit.y += 1;
-	tmpUnit.x -= 1;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_AI;
-	tmpUnit.y += 5;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-	tmpUnit.y -= 5;
-	tmpUnit.direction = DIRECTION_EAST;
-	tmpUnit.x += 2;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_AI;
-	tmpUnit.y += 5;
-	game_unit_spawn(context, &tmpUnit);
-	tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-	tmpUnit.y -= 5;
-	for(int i = 0; i < 40; i++) {
-		tmpUnit.type = (tmpUnit.type + 1) % 5;
-		tmpUnit.y++;
+	context->xPosition = 3 * TILE_SIZE;
+	context->yPosition = 0 * TILE_SIZE;
+	for(int i = 0; i < 16; i++) {
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_AI;
-		tmpUnit.x += 3;
+		tmpUnit.y += 10;
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-		tmpUnit.x -= 3;
+		tmpUnit.y -= 10;
+		tmpUnit.type = (tmpUnit.type + 1) % 5;
+		tmpUnit.x++;
 	}
 }
 

@@ -99,11 +99,11 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
-							 makecol8(255, 255, 255));
+							 PAL_COLOR_WHITE);
 
 	render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 100, font, fpsText, 0, 190, makecol8(255, 255, 255), -1);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 100, font, fpsText, 0, 190, PAL_COLOR_WHITE, -1);
 
 	return GAME_STATE_PLAY_MAP;
 }

@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 
 	fps_init();
 	// mod music uses ~5 FPS
-	//game_snd_play_music(GAME_MUSIC_TITLE);
+	// game_snd_play_music(GAME_MUSIC_TITLE);
 
 	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 

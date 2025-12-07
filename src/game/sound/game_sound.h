@@ -11,10 +11,12 @@ typedef enum {
 } GameMusic;
 
 typedef enum {
-    GAME_SOUND_SEA_WAVES,
+	GAME_SOUND_SEA_WAVES,
 	GAME_SOUND_CLICK,
-    GAME_SOUND_HUMAN_STEP,
-    GAME_SOUNDS_COUNT,
+	GAME_SOUND_HUMAN_STEP,
+	GAME_SOUND_HIT,
+	GAME_SOUND_DIE,
+	GAME_SOUNDS_COUNT
 } GameSound;
 
 void game_snd_play_music(GameMusic gameMusic);

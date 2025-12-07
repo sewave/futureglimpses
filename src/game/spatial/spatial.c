@@ -47,7 +47,7 @@ uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uin
 }
 
 uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUnit *source, const GameUnit *found) {
-	return source->isActive && found->isActive && source->controller != found->controller;
+	return source->isActive && found->isActive && source->controller != found->controller && found->state != UNIT_STATE_DIE;
 }
 
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range) {

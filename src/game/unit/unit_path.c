@@ -21,8 +21,9 @@ static int8_t game_unit_path_get_best_direction(GameContext *context, GameUnit *
 	int8_t bestDir = NO_DIRECTION;
 	int minDistSq = 999999999;
 	for (int8_t i = 0; i < UNIT_DIRS; i++) {
-		uint16_t nextX = unit->x + unitMovements[i][UNIT_DIR_X];
-		uint16_t nextY = unit->y + unitMovements[i][UNIT_DIR_Y];
+		int nextX = unit->x + unitMovements[i][UNIT_DIR_X];
+		int nextY = unit->y + unitMovements[i][UNIT_DIR_Y];
+        if(nextX < 0 || nextY < 0 || nextX >= BOARD_WIDTH || nextY >= BOARD_HEIGHT) continue;
 		int dist = distance_sq(nextX, nextY, targetX, targetY);
 
 		if (context->walkabilityGrid[nextX][nextY] == WALKABILITY_FREE && dist < minDistSq) {

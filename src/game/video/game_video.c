@@ -1,5 +1,5 @@
-#include <allegro/gfx.h>
 #include <allegro/palette.h>
+#include <allegro/color.h>
 #include "game_video.h"
 
 #define FIRST_COLORS 32
