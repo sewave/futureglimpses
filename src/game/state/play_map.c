@@ -65,20 +65,18 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
-	// Advance units animation
-	// TODO only active units list
-	 GameUnit* unit = context->units;
-    for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
-        if(unit->isActive) {
-			game_animation_unit_advance(context, unit);
-			game_unit_ai_invoke(context, unit);
-		}
-    }
+	// Process active units
+	GameUnit **activeUnits = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *unit = *activeUnits;
+		game_animation_unit_advance(context, unit);
+		game_unit_ai_invoke(context, unit);
+	}
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
-	render_queue_units(context, renderQueue);
+	render_queue_add_active_units(context, renderQueue);
 	// TODO queue effects, proyectiles, particles, etc
 
 	// Submit to render the viewport from the renderedBoard

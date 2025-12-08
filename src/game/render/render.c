@@ -8,19 +8,18 @@
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
 
-void render_queue_units(GameContext *context, RenderQueue *renderQueue) {
+void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue) {
 	uint16_t cameraMinX = context->xPosition / TILE_SIZE;
 	uint16_t cameraMaxX = (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE;
 	uint16_t cameraMinY = context->yPosition / TILE_SIZE;
 	uint16_t cameraMaxY = (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
-	// TODO For now render all active units if on-screen
-    uint16_t* unitIndex = context->activeIndices;
-	for (int i = 0; i < context->activeUnitCount; i++, unitIndex++) {
-        GameUnit *unit = &context->units[*unitIndex];
+	GameUnit **activeUnits = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *unit = *activeUnits;
 		if (unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
 			// TODO print selection box if unit is selected
 			AnimationStatus *animationStatus = &unit->animationStatus;
-			AnimationProperties *prop = animationStatus->animation->prop;
+			AnimationProperties *prop = animationStatus->animation.prop;
 			int unitWorldX, unitWorldY;
 			if (unit->state == UNIT_STATE_MOVE_ANIM) {
 				int t = (unit->moveTimeCounter * MOVE_PRECISION) / unit->moveTime;
@@ -40,7 +39,7 @@ void render_queue_units(GameContext *context, RenderQueue *renderQueue) {
 			int unitXCamera = unitWorldX - context->xPosition - prop->xRepos + VIEWPORT_X_OFFSET;
 			int unitYCamera = unitWorldY - context->yPosition - prop->yRepos + VIEWPORT_Y_OFFSET;
 			render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
-											   animationStatus->animation->data->frames[animationStatus->frame].xOffset,
+											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
 											   prop->yOffset,
 											   unitXCamera,
 											   unitYCamera,

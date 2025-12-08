@@ -11,6 +11,6 @@
 #define MAX_CAMERA_X_POSITION (WORLD_WIDTH - VIEWPORT_WIDTH)
 #define MAX_CAMERA_Y_POSITION (WORLD_HEIGHT - VIEWPORT_HEIGHT)
 
-void render_queue_units(GameContext* context, RenderQueue* renderQueue);
+void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue);
 
 #endif /* RENDER_H */

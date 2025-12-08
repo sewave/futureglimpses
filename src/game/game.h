@@ -136,7 +136,7 @@ typedef struct {
 
 typedef struct {
 	BITMAP *sheet;
-	Animation *animation;
+	Animation animation;
 	uint16_t frameTicks;
 	uint16_t totalTicks;
 	uint8_t frame;
@@ -188,7 +188,7 @@ typedef struct {
 	BITMAP *tileSet;
 	long ticksToCatchup;
 
-	uint16_t activeIndices[MAX_GAME_UNITS];
+	GameUnit *activeUnits[MAX_GAME_UNITS];
 	uint16_t activeUnitCount;
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;

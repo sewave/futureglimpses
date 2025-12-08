@@ -47,11 +47,10 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	if (unit && unit->isActive) {
 		unit->isActive = FALSE;
 		context->walkabilityGrid[unit->x][unit->y] = WALKABILITY_FREE;
-		int index = GET_INDEX(id);
-		uint16_t* active = context->activeIndices;
-		for (int i = 0; i < context->activeUnitCount; i++, active++) {
-			if (*active == index) {
-				*active = context->activeIndices[--context->activeUnitCount];
+		GameUnit **activeList = context->activeUnits;
+		for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+			if (*activeList == unit) {
+				*activeList = context->activeUnits[--context->activeUnitCount];
 				break;
 			}
 		}
@@ -72,7 +71,7 @@ GameUnit *game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	// Register unit in walkability
 	context->walkabilityGrid[unit->x][unit->y] = unit->id;
 	// Add to active list
-	context->activeIndices[context->activeUnitCount++] = index;
+	context->activeUnits[context->activeUnitCount++] = unit;
 	return unit;
 }
 
