@@ -9,14 +9,15 @@
 #define HEALTH_BAR_HALF 2
 
 void render_queue_units(GameContext *context, RenderQueue *renderQueue) {
-	GameUnit *unit = context->units;
 	uint16_t cameraMinX = context->xPosition / TILE_SIZE;
 	uint16_t cameraMaxX = (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE;
 	uint16_t cameraMinY = context->yPosition / TILE_SIZE;
 	uint16_t cameraMaxY = (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
 	// TODO For now render all active units if on-screen
-	for (int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
-		if (unit->isActive && unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
+    uint16_t* unitIndex = context->activeIndices;
+	for (int i = 0; i < context->activeUnitCount; i++, unitIndex++) {
+        GameUnit *unit = &context->units[*unitIndex];
+		if (unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
 			// TODO print selection box if unit is selected
 			AnimationStatus *animationStatus = &unit->animationStatus;
 			AnimationProperties *prop = animationStatus->animation->prop;

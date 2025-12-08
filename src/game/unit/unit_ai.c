@@ -1,24 +1,34 @@
 #include "unit_ai.h"
 
 #define MAX_FOUND_UNITS 32
-static UnitId foundUnitIds[MAX_FOUND_UNITS];
-static uint16_t foundUnitsCount;
+static GameUnit* foundUnits[MAX_FOUND_UNITS];
 
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 	if (++unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
-		foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
-												  game_spatial_filter_enemy_units, unit, foundUnitIds,
+		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
+												  game_spatial_filter_enemy_units, unit, foundUnits,
 												  1);
+		// TODO Attack by priority?
 		if (foundUnitsCount > 0) {
-			GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
-			if (target) game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
+			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_IDLE);
 		} else {
 			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
-														game_spatial_filter_enemy_units, unit, foundUnitIds,
-														1);
+														game_spatial_filter_enemy_units, unit, foundUnits,
+														MAX_FOUND_UNITS);
 			if (foundUnitsCount > 0) {
-				GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
+				// Target nearest unit
+				GameUnit *target = NULL;
+				int distance = 9999999;
+				GameUnit **newTargetList = foundUnits;
+				for(int i = 0; i < foundUnitsCount; i++, newTargetList++) {
+					GameUnit *newTarget = *newTargetList;
+					int newDistance = distance_sq(unit->x, unit->y, newTarget->x, newTarget->y);
+					if(newDistance < distance) {
+						target = newTarget;
+						distance = newDistance;
+					}
+				}
 				if (target) game_unit_command_move_attack(unit, target, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			}
 			else {
@@ -62,19 +72,16 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 	if (++unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
-		foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
-												  game_spatial_filter_enemy_units, unit, foundUnitIds,
-												  MAX_FOUND_UNITS);
-		if (foundUnitsCount > 0) {
-			GameUnit *target = game_unit_get_by_id(context, foundUnitIds[0]);
-			if (target) game_unit_command_attack(unit, target, UNIT_STATE_DEFEND);
-		}
+		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
+												  game_spatial_filter_enemy_units, unit, foundUnits,
+												  1);
+		if (foundUnitsCount > 0) game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_DEFEND);
 	}
 }
 
 static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
-	if (game_animation_unit_finished(unit)) {
-		GameUnit *target = game_unit_get_by_id(context, unit->targetId);
+	GameUnit *target = game_unit_get_by_id(context, unit->targetId);
+	if (game_animation_unit_finished(unit) || !target || !target->isActive || target->state == UNIT_STATE_DIE) {
 		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
 			game_unit_face_target(unit, target);
             game_animation_unit_reset(unit);
@@ -155,7 +162,7 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	        break;
 		case UNIT_STATE_DIE:
 			game_unit_ai_die(context, unit);
-		break;
+			break;
 		case UNIT_STATES_COUNT:
 			// Nothing, to disable warning
 			break;

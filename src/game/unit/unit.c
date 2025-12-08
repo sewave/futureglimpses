@@ -3,11 +3,7 @@
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1
 static unsigned short unitGenerations[MAX_GAME_UNITS];
-static int activeIndices[MAX_GAME_UNITS];
-static int activeUnitCount;
-static int nextFreeIndex;
-static int selectedUnits[MAX_GAME_UNITS];
-static int selectedUnitCount = 0;
+static uint16_t nextFreeIndex;
 
 static int game_unit_find_free_index(GameUnit units[]) {
 	int startIndex = nextFreeIndex;
@@ -31,7 +27,7 @@ void game_units_init(GameContext *context) {
 		context->units[i].id = NULL_HANDLE;
 		unitGenerations[i] = FIRST_UNIT_GENERATION;
 	}
-	activeUnitCount = 0;
+	context->activeUnitCount = 0;
 	nextFreeIndex = 0;
 }
 
@@ -51,6 +47,14 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	if (unit && unit->isActive) {
 		unit->isActive = FALSE;
 		context->walkabilityGrid[unit->x][unit->y] = WALKABILITY_FREE;
+		int index = GET_INDEX(id);
+		uint16_t* active = context->activeIndices;
+		for (int i = 0; i < context->activeUnitCount; i++, active++) {
+			if (*active == index) {
+				*active = context->activeIndices[--context->activeUnitCount];
+				break;
+			}
+		}
 	}
 }
 
@@ -67,6 +71,8 @@ GameUnit *game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	game_gfx_set_sprite_sheet(unit);
 	// Register unit in walkability
 	context->walkabilityGrid[unit->x][unit->y] = unit->id;
+	// Add to active list
+	context->activeIndices[context->activeUnitCount++] = index;
 	return unit;
 }
 

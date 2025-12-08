@@ -187,6 +187,11 @@ typedef struct {
 	BITMAP *gameBack;
 	BITMAP *tileSet;
 	long ticksToCatchup;
+
+	uint16_t activeIndices[MAX_GAME_UNITS];
+	uint16_t activeUnitCount;
+	UnitId selectedUnits[MAX_GAME_UNITS];
+	uint16_t selectedUnitCount;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

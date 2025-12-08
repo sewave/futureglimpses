@@ -7,6 +7,7 @@ void game_event_process(GameContext* context, EventType eventType, GameUnit* uni
             if(target && target->isActive) game_unit_damage(context, unit, target);
         break;
         case EVENT_TYPE_SOUND:
+            // TODO only if unit is visible
             game_snd_play_sound((GameSound) data);
         break;
     }

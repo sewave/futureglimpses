@@ -66,7 +66,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	// Advance units animation
-	// TODO only active units
+	// TODO only active units list
 	 GameUnit* unit = context->units;
     for(int i = 0; i < MAX_GAME_UNITS; i++, unit++) {
         if(unit->isActive) {
