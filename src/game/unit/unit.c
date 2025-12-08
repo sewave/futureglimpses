@@ -83,6 +83,7 @@ GameUnit *game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	context->walkabilityGrid[unit->x][unit->y] = unit->id;
 	// Add to active list
 	context->activeUnits[context->activeUnitCount++] = unit;
+	unit->blinkTime = 0;
 	return unit;
 }
 

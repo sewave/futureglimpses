@@ -9,6 +9,10 @@
 #define BOARD_SIZE (BOARD_WIDTH * BOARD_HEIGHT)
 #define WORLD_WIDTH BOARD_WIDTH *TILE_SIZE
 #define WORLD_HEIGHT BOARD_HEIGHT *TILE_SIZE
+#define BOARD_X_MIN 0
+#define BOARD_Y_MIN 0
+#define BOARD_X_MAX BOARD_WIDTH - 1
+#define BOARD_Y_MAX BOARD_HEIGHT - 1
 
 #define NO_TARGET_POSITION 65535
 #define NO_TARGET_ID 0
@@ -165,6 +169,7 @@ typedef struct {
 
 	uint16_t targetX, targetY;
 	UnitId targetId;
+	uint8_t blinkTime;
 
 	uint16_t reactionTime;
 	uint16_t reactionTimeCounter;

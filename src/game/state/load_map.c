@@ -54,8 +54,8 @@ void spawn_test_units(GameContext* context) {
 		tmpUnit.controller = (tmpUnit.controller + 1) % 2;
 		tmpUnit.type = (tmpUnit.type + 1) % 5;
 		do {
-			tmpUnit.x = (uint16_t) random_int(0, BOARD_WIDTH - 1);
-			tmpUnit.y = (uint16_t) random_int(0, BOARD_WIDTH - 1);
+			tmpUnit.x = (uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX);
+			tmpUnit.y = (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX);
 		} while(context->walkabilityGrid[tmpUnit.x][tmpUnit.y] != WALKABILITY_FREE);
 		game_unit_spawn(context, &tmpUnit);
 	}

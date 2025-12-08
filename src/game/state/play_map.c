@@ -17,18 +17,61 @@ int selectionStartY = -1;
 static char fpsText[16];
 int moveViewportCounter = 0;
 
-void handle_mouse_selection(GameContext *context, RenderQueue *renderQueue) {
+void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = mouse_get_x();
 	int mouseY = mouse_get_y();
-	
+
+	// Actions that must be inside the area
+
+
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
-		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX &&
-		context->mouse.isLeftDown && !context->mouse.wasLeftDown) {
-		selectionStartX = mouseX;
-		selectionStartY = mouseY;
-		context->mouse.isSelecting = TRUE;
+		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
+
+		if (context->mouse.isLeftDown && !context->mouse.wasLeftDown) {
+			selectionStartX = mouseX;
+			selectionStartY = mouseY;
+			context->mouse.isSelecting = TRUE;
+		}
+
+		// TODO handle autoactions, stop, defend
+
+		if (!context->mouse.isRightDown && context->mouse.wasRightDown) {
+			// Contextual action
+
+			// Get board situation
+			int boardXPosition = (context->xPosition + mouseX - VIEWPORT_X_OFFSET) / TILE_SIZE;
+			int boardYPosition = (context->yPosition + mouseY - VIEWPORT_Y_OFFSET) / TILE_SIZE;
+			boardXPosition = clamp(boardXPosition, BOARD_X_MIN, BOARD_X_MAX);
+			boardYPosition = clamp(boardYPosition, BOARD_Y_MIN, BOARD_Y_MAX);
+
+			UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
+
+			if (target < HANDLE_ID_THRESHOLD) {
+				// Resource => Work
+				// Free position, go there
+				// If cursor is in attack mode, move_attack, else move
+			} else {
+				GameUnit *targetUnit = game_unit_get_by_id(context, target);
+				if (targetUnit) {
+					if (targetUnit->controller == UNIT_CONTROLLER_AI) targetUnit->blinkTime = BLINK_TIME;
+
+					for (int i = 0; i < context->selectedUnitCount; i++) {
+						GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+						if(!unit) continue;
+						if (targetUnit->controller == UNIT_CONTROLLER_AI) {
+							// Todo assign target to selected units, move, attack
+							game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+						} else {
+							// Todo assign target to selected units, move
+							game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+						}
+					}
+				}
+			}
+		}
 	}
 
+	// Releasing actions that can be outside the area
 	if (!context->mouse.isLeftDown && context->mouse.wasLeftDown && context->mouse.isSelecting) {
 		context->mouse.isSelecting = FALSE;
 
@@ -39,7 +82,7 @@ void handle_mouse_selection(GameContext *context, RenderQueue *renderQueue) {
 		int dy = abs(selectionEndY - selectionStartY);
 
 		for (int i = 0; i < context->selectedUnitCount; i++) {
-			GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 			if (unit) {
 				unit->isSelected = FALSE;
 			}
@@ -81,11 +124,10 @@ void handle_mouse_selection(GameContext *context, RenderQueue *renderQueue) {
 			int tileMinY = worldBoxMinY / TILE_SIZE;
 			int tileMaxY = worldBoxMaxY / TILE_SIZE;
 
-			tileMinX = clamp(tileMinX, 0, BOARD_WIDTH - 1);
-			tileMaxX = clamp(tileMaxX, 0, BOARD_WIDTH - 1);
-			tileMinY = clamp(tileMinY, 0, BOARD_HEIGHT - 1);
-			tileMaxY = clamp(tileMaxY, 0, BOARD_HEIGHT - 1);
-			printf("Selecting in (%d-%d)-(%d-%d)\n", tileMinX, tileMinY, tileMaxX, tileMaxY);
+			tileMinX = clamp(tileMinX, BOARD_X_MIN, BOARD_X_MAX);
+			tileMaxX = clamp(tileMaxX, BOARD_X_MIN, BOARD_X_MAX);
+			tileMinY = clamp(tileMinY, BOARD_Y_MIN, BOARD_Y_MAX);
+			tileMaxY = clamp(tileMaxY, BOARD_Y_MIN, BOARD_Y_MAX);
 
 			unsigned char alreadySelected[MAX_GAME_UNITS];
 			memset(alreadySelected, 0, sizeof(alreadySelected));
@@ -119,7 +161,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	context->mouse.isRightDown = mouse_b & 2;
 	context->mouse.isLeftDown = mouse_b & 1;
 
-	handle_mouse_selection(context, renderQueue);
+	handle_units_area(context, renderQueue);
 
 	// If we click the mouse on the minimap, we should move the camera there
 	if (context->mouse.isLeftDown & !context->mouse.isSelecting) {
@@ -217,9 +259,9 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		int selectionEndX = clamp(mouse_get_x(), VIEWPORT_X_MIN, VIEWPORT_X_MAX);
 		int selectionEndY = clamp(mouse_get_y(), VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
 		render_queue_submit_rect(renderQueue,
-							MOUSE_Z_ORDER,
-							selectionStartX, selectionStartY, selectionEndX, selectionEndY,
-							PAL_COLOR_GREEN);
+								 MOUSE_Z_ORDER,
+								 selectionStartX, selectionStartY, selectionEndX, selectionEndY,
+								 PAL_COLOR_GREEN);
 	} else {
 		// Mouse cursor
 		render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);

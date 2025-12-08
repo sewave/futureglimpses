@@ -142,6 +142,7 @@ void game_animation_unit_set(GameUnit *unit) {
 }
 
 void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
+    if(unit->blinkTime) --unit->blinkTime;
     AnimationStatus* animationStatus = &unit->animationStatus;
     AnimationData *data = animationStatus->animation.data;
     AnimationFrame* frame = &data->frames[animationStatus->frame];

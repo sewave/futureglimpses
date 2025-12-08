@@ -17,7 +17,6 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		if (unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
-			// TODO print selection box if unit is selected
 			AnimationStatus *animationStatus = &unit->animationStatus;
 			AnimationProperties *prop = animationStatus->animation.prop;
 			int unitWorldX, unitWorldY;
@@ -52,6 +51,14 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
                     unitTileXCamera, unitTileYCamera,
                     unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
                     PAL_COLOR_GREEN);
+            }
+
+            if(unit->blinkTime % BLINK_MOD == BLINK_VALUE) {
+                render_queue_submit_rect(renderQueue,
+                    BACKGROUND_Z_ORDER + 100,
+                    unitTileXCamera, unitTileYCamera,
+                    unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
+                    PAL_COLOR_RED);                
             }
 
 			if (unit->health < unit->maxHealth && unit->state != UNIT_STATE_DIE) {

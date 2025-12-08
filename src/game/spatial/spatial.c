@@ -3,10 +3,10 @@
 uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uint16_t centerTileY, uint8_t tileRadius,
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
 								 GameUnit* foundUnits[], uint16_t maxResults) {
-	int tileMinX = clamp(centerTileX - tileRadius, 0, BOARD_WIDTH - 1);
-	int tileMaxX = clamp(centerTileX + tileRadius, 0, BOARD_WIDTH - 1);
-	int tileMinY = clamp(centerTileY - tileRadius, 0, BOARD_HEIGHT - 1);
-	int tileMaxY = clamp(centerTileY + tileRadius, 0, BOARD_HEIGHT - 1);
+	int tileMinX = clamp(centerTileX - tileRadius, BOARD_X_MIN, BOARD_X_MAX);
+	int tileMaxX = clamp(centerTileX + tileRadius, BOARD_X_MIN, BOARD_X_MAX);
+	int tileMinY = clamp(centerTileY - tileRadius, BOARD_Y_MIN, BOARD_Y_MAX);
+	int tileMaxY = clamp(centerTileY + tileRadius, BOARD_Y_MIN, BOARD_Y_MAX);
 
 	return game_spatial_query_grid_rectangle(context, 
 								tileMinX, tileMinY,
