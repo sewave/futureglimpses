@@ -183,6 +183,7 @@ typedef struct {
 	// Whenever the board is modified, we re-render the modified parts to this bitmap
 	BITMAP *renderedBoard;
 	BITMAP *renderedMinimap;
+	BITMAP *renderedMinimapUnits;
 	int xPosition, yPosition;// Top-left position of the viewport on the board
 	BITMAP *gameBack;
 	BITMAP *tileSet;

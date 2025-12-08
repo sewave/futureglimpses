@@ -65,12 +65,18 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
+	// TODO not each frame
+	clear_bitmap(context->renderedMinimapUnits);
+
 	// Process active units
 	GameUnit **activeUnits = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		game_animation_unit_advance(context, unit);
 		game_unit_ai_invoke(context, unit);
+		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		// TODO buildings size
+		putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
 	}
 
 	// If there are more ticks to draw, skip queue phase
@@ -89,6 +95,9 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// Minimap
 	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 11, context->renderedMinimap,
 									  MINIMAP_X_POS, MINIMAP_Y_POS);
+
+	render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 12, context->renderedMinimapUnits,
+									  MINIMAP_X_POS, MINIMAP_Y_POS, RND_FLAG_NORMAL);
 
 	// Minimap viewport window
 	render_queue_submit_rect(renderQueue,

@@ -17,7 +17,7 @@ static GameUnit tmpUnit = {
 		.x = 18,
 		.y = 12,
 		.attackRange = 1,
-		.sightRange = 10,
+		.sightRange = 64,
 		.health = 40,
 		.maxHealth = 40,
 		.minDamage = 3,
@@ -35,7 +35,7 @@ static GameUnit tmpUnit = {
 void spawn_test_units(GameContext* context) {
 	context->xPosition = 0 * TILE_SIZE;
 	context->yPosition = 0 * TILE_SIZE;
-	for(int i = 0; i < 128; i++) {
+	/*for(int i = 0; i < 128; i++) {
 		game_unit_spawn(context, &tmpUnit);
 		tmpUnit.controller = UNIT_CONTROLLER_AI;
 		tmpUnit.x += 5;
@@ -48,6 +48,16 @@ void spawn_test_units(GameContext* context) {
 			tmpUnit.y = 0;
 			tmpUnit.x += 15;
 		}
+	}*/
+
+	for(int i = 0; i < 256; i++) {
+		tmpUnit.controller = (tmpUnit.controller + 1) % 2;
+		tmpUnit.type = (tmpUnit.type + 1) % 5;
+		do {
+			tmpUnit.x = (uint16_t) random_int(0, BOARD_WIDTH - 1);
+			tmpUnit.y = (uint16_t) random_int(0, BOARD_WIDTH - 1);
+		} while(context->walkabilityGrid[tmpUnit.x][tmpUnit.y] != WALKABILITY_FREE);
+		game_unit_spawn(context, &tmpUnit);
 	}
 }
 
@@ -57,7 +67,6 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
 	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
-
 
 	// TODO this file path should be in context, selected in a filebrowser
 	MapData *map = game_map_load_data("assets/map/test.map");
@@ -81,6 +90,9 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	if (context->renderedMinimap) { destroy_bitmap(context->renderedMinimap); }
 	context->renderedMinimap = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
+
+	if (context->renderedMinimapUnits) { destroy_bitmap(context->renderedMinimapUnits); }
+	context->renderedMinimapUnits = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
 
 	if (context->tileSet) { destroy_bitmap(context->tileSet); }
 	context->tileSet = load_bitmap("assets/gfx/tileset.pcx", NULL);
