@@ -17,7 +17,7 @@ static GameUnit tmpUnit = {
 		.x = 18,
 		.y = 12,
 		.attackRange = 1,
-		.sightRange = 64,
+		.sightRange = 16,
 		.health = 40,
 		.maxHealth = 40,
 		.minDamage = 3,
@@ -63,6 +63,7 @@ void spawn_test_units(GameContext* context) {
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	
+	if (context->gameBack) { destroy_bitmap(context->gameBack); }
 	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
@@ -126,5 +127,12 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 			putpixel(context->renderedMinimap, x, y, minimapColors[tile]);
 		}
 	}
+
+	context->mouse.isLeftDown = FALSE;
+	context->mouse.isRightDown = FALSE;
+	context->mouse.wasLeftDown = FALSE;
+	context->mouse.wasLeftDown = FALSE;
+	context->mouse.isSelecting = FALSE;
+
 	return GAME_STATE_PLAY_MAP;
 }

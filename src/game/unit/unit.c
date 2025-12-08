@@ -28,6 +28,7 @@ void game_units_init(GameContext *context) {
 		unitGenerations[i] = FIRST_UNIT_GENERATION;
 	}
 	context->activeUnitCount = 0;
+	context->selectedUnitCount = 0;
 	nextFreeIndex = 0;
 }
 
@@ -54,6 +55,15 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 				break;
 			}
 		}
+		if (unit->isSelected) {
+			for (int i = 0; i < context->selectedUnitCount; i++) {
+				if (context->selectedUnits[i] == id) {
+					context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
+					break;
+				}
+			}
+			unit->isSelected = FALSE;
+		}
 	}
 }
 
@@ -66,6 +76,7 @@ GameUnit *game_unit_spawn(GameContext *context, GameUnit *unitToSpawn) {
 	memcpy(unit, unitToSpawn, sizeof(GameUnit));
 	unit->id = MAKE_ID(index, unitGenerations[index]);
 	unit->isActive = TRUE;
+	unit->isSelected = FALSE;
 	game_animation_unit_set(unit);
 	game_gfx_set_sprite_sheet(unit);
 	// Register unit in walkability

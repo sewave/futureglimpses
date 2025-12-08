@@ -16,7 +16,7 @@
 // --- ID GENERATION SETTINGS (16 bits index, 16 bits generation) ---
 #define ID_INDEX_MASK 0xFFFF// Lower 16 bits for Index
 #define ID_GEN_SHIFT 16     // Upper 16 bits for Generation
-#define HANDLE_ID_THRESHOLD (1 << ID_GEN_SHIFT)// 1024
+#define HANDLE_ID_THRESHOLD (1 << ID_GEN_SHIFT)
 
 #define GET_INDEX(id) (id & ID_INDEX_MASK)
 #define GET_GEN(id) ((id >> ID_GEN_SHIFT) & 0xFFFF)
@@ -193,6 +193,13 @@ typedef struct {
 	uint16_t activeUnitCount;
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
+	struct {
+		uint8_t isLeftDown;
+		uint8_t isRightDown;
+		uint8_t wasLeftDown;
+		uint8_t wasRightDown;
+		uint8_t isSelecting;
+	} mouse;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

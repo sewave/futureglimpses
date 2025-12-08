@@ -35,8 +35,10 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				unitWorldY = (unit->y * TILE_SIZE);
 			}
 
-			int unitXCamera = unitWorldX - context->xPosition - prop->xRepos + VIEWPORT_X_OFFSET;
-			int unitYCamera = unitWorldY - context->yPosition - prop->yRepos + VIEWPORT_Y_OFFSET;
+            int unitTileXCamera = unitWorldX - context->xPosition + VIEWPORT_X_OFFSET;
+            int unitTileYCamera = unitWorldY - context->yPosition + VIEWPORT_Y_OFFSET;
+			int unitXCamera = unitTileXCamera - prop->xRepos;
+			int unitYCamera = unitTileYCamera - prop->yRepos;
 			render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
 											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
 											   prop->yOffset,
@@ -44,6 +46,14 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											   unitYCamera,
 											   prop->width,
 											   prop->height);
+            if(unit->isSelected) {
+                render_queue_submit_rect(renderQueue,
+                    BACKGROUND_Z_ORDER + 100,
+                    unitTileXCamera, unitTileYCamera,
+                    unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
+                    PAL_COLOR_GREEN);
+            }
+
 			if (unit->health < unit->maxHealth && unit->state != UNIT_STATE_DIE) {
 				int healthBarColor = PAL_COLOR_GREEN;
 				if (unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) {
@@ -53,24 +63,24 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 					if (unit->health < unit->maxHealth / HEALTH_BAR_HALF) healthBarColor = PAL_COLOR_YELLOW;
 				}
 
-				int healthBarYInit = unitYCamera + prop->yRepos - HEALTH_BAR_Y_OFFSET;
-				int healthBarYEnd = unitYCamera + prop->yRepos - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
+				int healthBarYInit = unitTileYCamera - HEALTH_BAR_Y_OFFSET;
+				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
 				int healthBarLength = ((int) unit->health * TILE_SIZE) / unit->maxHealth;
 
 				render_queue_submit_rect_fill(
 						renderQueue,
 						UI_Z_ORDER + 1,
-						unitXCamera + prop->xRepos + HEALTH_BAR_BORDER,
+						unitTileXCamera + HEALTH_BAR_BORDER,
 						healthBarYInit,
-						unitXCamera + prop->xRepos + healthBarLength,
+						unitTileXCamera + healthBarLength,
 						healthBarYEnd,
 						healthBarColor);
 				render_queue_submit_rect_fill(
 						renderQueue,
 						UI_Z_ORDER,
-						unitXCamera + prop->xRepos + healthBarLength,
+						unitTileXCamera + healthBarLength,
 						healthBarYInit,
-						unitXCamera + prop->xRepos + TILE_SIZE - HEALTH_BAR_BORDER,
+						unitTileXCamera + TILE_SIZE - HEALTH_BAR_BORDER,
 						healthBarYEnd,
 						PAL_COLOR_BLACK);
 			}
