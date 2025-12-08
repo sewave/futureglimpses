@@ -97,10 +97,10 @@ void game_unit_face_target(GameUnit *unit, GameUnit *target) {
 				unit->direction = DIRECTION_SOUTH;
 			} else {
 				if (target->x < unit->x) {
-					unit->direction = DIRECTION_EAST;
+					unit->direction = DIRECTION_WEST;
 				} else {
 					if (target->x > unit->x) {
-						unit->direction = DIRECTION_WEST;
+						unit->direction = DIRECTION_EAST;
 					}
 				}
 			}

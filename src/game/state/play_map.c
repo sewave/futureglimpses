@@ -125,15 +125,10 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int worldBoxMinY = context->yPosition + minScreenY;
 			int worldBoxMaxY = context->yPosition + maxScreenY;
 
-			int tileMinX = worldBoxMinX / TILE_SIZE;
-			int tileMaxX = worldBoxMaxX / TILE_SIZE;
-			int tileMinY = worldBoxMinY / TILE_SIZE;
-			int tileMaxY = worldBoxMaxY / TILE_SIZE;
-
-			tileMinX = clamp(tileMinX, BOARD_X_MIN, BOARD_X_MAX);
-			tileMaxX = clamp(tileMaxX, BOARD_X_MIN, BOARD_X_MAX);
-			tileMinY = clamp(tileMinY, BOARD_Y_MIN, BOARD_Y_MAX);
-			tileMaxY = clamp(tileMaxY, BOARD_Y_MIN, BOARD_Y_MAX);
+			int tileMinX = clamp(worldBoxMinX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+			int tileMaxX = clamp(worldBoxMaxX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 
 			unsigned char alreadySelected[MAX_GAME_UNITS];
 			memset(alreadySelected, 0, sizeof(alreadySelected));
@@ -236,13 +231,15 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	render_queue_add_active_units(context, renderQueue);
 	// TODO queue effects, proyectiles, particles, etc
 
-	// Submit to render the viewport from the renderedBoard
-	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0, 320, 200);
-
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
 									  context->xPosition, context->yPosition,
 									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+
+	// Submit to render the viewport from the renderedBoard
+	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0,
+		context->gameBack->w, context->gameBack->h);
+
 	// Minimap
 	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 501, context->renderedMinimap,
 							  MINIMAP_X_POS, MINIMAP_Y_POS);
@@ -259,8 +256,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_WHITE);
 
-	// Selection rectangle
 	if (context->mouse.isSelecting) {
+		// Selection rectangle
 		int selectionEndX = clamp(mouse_get_x(), VIEWPORT_X_MIN, VIEWPORT_X_MAX);
 		int selectionEndY = clamp(mouse_get_y(), VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
 		render_queue_submit_rect(renderQueue,

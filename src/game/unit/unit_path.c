@@ -9,11 +9,11 @@
 static const int8_t unitMovements[UNIT_DIRS][UNIT_DIR_VARS] = {
 		{0, -1,  DIRECTION_NORTH},
 		{1, -1,  DIRECTION_NORTH},
-		{1,  0,  DIRECTION_WEST},
+		{1,  0,  DIRECTION_EAST},
 		{1,  1,  DIRECTION_SOUTH},
 		{0,  1,  DIRECTION_SOUTH},
 		{-1, 1,  DIRECTION_SOUTH},
-		{-1, 0,  DIRECTION_EAST},
+		{-1, 0,  DIRECTION_WEST},
 		{-1, -1, DIRECTION_NORTH}
 };
 

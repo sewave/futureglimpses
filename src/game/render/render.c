@@ -1,5 +1,6 @@
 #include "render.h"
 #include <allegro/color.h>
+#include <allegro/keyboard.h>
 
 #define MOVE_PRECISION 16384
 #define HEALTH_BAR_Y_OFFSET 6
@@ -7,6 +8,45 @@
 #define HEALTH_BAR_BORDER 1
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
+
+static char* getStateLetter(UnitStateEnum state) {
+    switch (state) {
+    case UNIT_STATE_IDLE:
+        return "I";
+    case UNIT_STATE_ATTACK:
+        return "A";
+    case UNIT_STATE_DEFEND:
+        return "D";
+    case UNIT_STATE_MOVE:
+        return "M";
+    case UNIT_STATE_MOVE_ANIM:
+        return "a";
+    case UNIT_STATE_MOVE_ATTACK:
+        return "m";
+    case UNIT_STATE_WORK:
+        return "W";
+    case UNIT_STATE_DIE:
+        return "d";
+    default:
+        return "X";
+    }
+    
+}
+
+static char* getDirectionLetter(DirectionEnum dir) {
+    switch (dir) {
+    case DIRECTION_NORTH:
+        return "N";
+	case DIRECTION_EAST:
+        return "E";
+	case DIRECTION_SOUTH:
+        return "S";
+	case DIRECTION_WEST:
+        return "W";
+    default:
+        return "X";
+    }    
+}
 
 void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue) {
 	uint16_t cameraMinX = context->xPosition / TILE_SIZE;
@@ -45,6 +85,29 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											   unitYCamera,
 											   prop->width,
 											   prop->height);
+            // Some debug stuff
+            if(key[KEY_G]) {
+                render_queue_submit_text(
+                    renderQueue,
+                    SPRITES_Z_ORDER + unit->y + 1,
+                    font,
+                    getStateLetter(unit->state),
+                    unitTileXCamera,
+                    unitTileYCamera + TILE_SIZE / 2,
+                    PAL_COLOR_WHITE, PAL_COLOR_BLACK
+                );
+                char* direction = getDirectionLetter(unit->direction);
+                render_queue_submit_text(
+                    renderQueue,
+                    SPRITES_Z_ORDER + unit->y + 1,
+                    font,
+                    direction,
+                    unitTileXCamera + TILE_SIZE / 2,
+                    unitTileYCamera + TILE_SIZE / 2,
+                    PAL_COLOR_WHITE, PAL_COLOR_BLACK
+                );
+            }
+            
 
             int rectColor = PAL_COLOR_TRANS;
 

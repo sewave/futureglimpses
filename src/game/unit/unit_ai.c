@@ -104,11 +104,12 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 
 static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	uint16_t targetX, targetY;
+	GameUnit *targetUnit;
 	if (unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION) {
 		targetX = unit->targetX;
 		targetY = unit->targetY;
 	} else {
-		GameUnit *targetUnit = game_unit_get_by_id(context, unit->targetId);
+		targetUnit = game_unit_get_by_id(context, unit->targetId);
 		if (!targetUnit) {
 			game_unit_command_idle(unit);
 			return;
@@ -122,8 +123,14 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 		return;
 	}
 
-	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE && game_spatial_target_in_range(unit, targetX, targetY, unit->attackRange)) {
-		game_unit_command_idle(unit);
+	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE &&
+			game_spatial_target_in_range(unit, targetX, targetY, unit->attackRange)) {
+		if(targetUnit) {
+			game_unit_command_attack(unit, targetUnit, UNIT_STATE_IDLE);
+		}
+		else {
+			game_unit_command_idle(unit);
+		}
 		return;
 	}
 
@@ -133,9 +140,7 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
-	if (game_animation_unit_finished(unit)) {
-		game_unit_destroy(context, unit->id);
-	}
+	if (game_animation_unit_finished(unit)) game_unit_destroy(context, unit->id);
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
