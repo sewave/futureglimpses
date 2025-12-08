@@ -2,8 +2,8 @@
 #define GAME_SOUND_H
 #include "../../common/sound/sound.h"
 
-#define MOD_VOICES 8
-#define GAME_VOICES 16
+#define MOD_VOICES 4
+#define GAME_VOICES 8
 
 typedef enum {
 	GAME_MUSIC_TITLE,
