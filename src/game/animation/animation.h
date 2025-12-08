@@ -4,8 +4,7 @@
 #define MOVABLE_UNITS 5
 
 #define BLINK_TIME 35
-#define BLINK_MOD 5
-#define BLINK_VALUE 1
+#define BLINK_MOD 2
 
 void game_animation_unit_set(GameUnit *unit);
 void game_animation_unit_reset(GameUnit* unit);

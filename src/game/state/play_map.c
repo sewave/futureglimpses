@@ -53,7 +53,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			} else {
 				GameUnit *targetUnit = game_unit_get_by_id(context, target);
 				if (targetUnit) {
-					if (targetUnit->controller == UNIT_CONTROLLER_AI) targetUnit->blinkTime = BLINK_TIME;
+					targetUnit->blinkTime = BLINK_TIME;
 
 					for (int i = 0; i < context->selectedUnitCount; i++) {
 						GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
@@ -149,7 +149,6 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					}
 				}
 			}
-			printf("%d units selected.\n", context->selectedUnitCount);
 		}
 	}
 }

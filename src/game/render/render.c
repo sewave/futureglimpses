@@ -45,20 +45,19 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											   unitYCamera,
 											   prop->width,
 											   prop->height);
-            if(unit->isSelected) {
-                render_queue_submit_rect(renderQueue,
-                    BACKGROUND_Z_ORDER + 100,
-                    unitTileXCamera, unitTileYCamera,
-                    unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
-                    PAL_COLOR_GREEN);
-            }
 
-            if(unit->blinkTime % BLINK_MOD == BLINK_VALUE) {
+            int rectColor = PAL_COLOR_TRANS;
+
+            if(unit->isSelected && !unit->blinkTime) rectColor = PAL_COLOR_GREEN;
+            if(unit->blinkTime % BLINK_MOD) {
+                rectColor = (unit->controller == UNIT_CONTROLLER_AI) ? PAL_COLOR_RED : PAL_COLOR_GREEN;
+            }
+            if(rectColor != PAL_COLOR_TRANS) {
                 render_queue_submit_rect(renderQueue,
                     BACKGROUND_Z_ORDER + 100,
                     unitTileXCamera, unitTileYCamera,
                     unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
-                    PAL_COLOR_RED);                
+                    rectColor);       
             }
 
 			if (unit->health < unit->maxHealth && unit->state != UNIT_STATE_DIE) {
