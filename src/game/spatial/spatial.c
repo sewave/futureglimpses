@@ -3,32 +3,44 @@
 uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uint16_t centerTileY, uint8_t tileRadius,
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
 								 GameUnit* foundUnits[], uint16_t maxResults) {
-    uint16_t resultCount = 0;
-
 	int tileMinX = clamp(centerTileX - tileRadius, 0, BOARD_WIDTH - 1);
 	int tileMaxX = clamp(centerTileX + tileRadius, 0, BOARD_WIDTH - 1);
 	int tileMinY = clamp(centerTileY - tileRadius, 0, BOARD_HEIGHT - 1);
 	int tileMaxY = clamp(centerTileY + tileRadius, 0, BOARD_HEIGHT - 1);
 
+	return game_spatial_query_grid_rectangle(context, 
+								tileMinX, tileMinY,
+								tileMaxX, tileMaxY,
+								 filterFunc, sourceUnit,
+								 foundUnits, maxResults);
+}
+
+uint16_t game_spatial_query_grid_rectangle(GameContext* context, 
+								uint16_t tileMinX, uint16_t tileMinY,
+								uint16_t tileMaxX, uint16_t tileMaxY,
+								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
+								 GameUnit* foundUnits[], uint16_t maxResults) {
+    uint16_t resultCount = 0;
+
 	unsigned char alreadyAdded[MAX_GAME_UNITS];
 	memset(alreadyAdded, FALSE, sizeof(alreadyAdded));
 
-	for (int row = tileMinY; row <= tileMaxY; row++) {
-		for (int col = tileMinX; col <= tileMaxX; col++) {
-			int id = context->walkabilityGrid[col][row];
+	for (int col = tileMinX; col <= tileMaxX; col++) {
+		for (int row = tileMinY; row <= tileMaxY; row++) {
+			UnitId id = context->walkabilityGrid[col][row];
 
 			// Only units
 			if (id < HANDLE_ID_THRESHOLD) continue;
 
 			GameUnit *foundUnit = game_unit_get_by_id(context, id);
 
-			if (foundUnit) {
+			if (foundUnit != sourceUnit) {
 				int entityIndex = GET_INDEX(id);
 
 				if (alreadyAdded[entityIndex]) continue;
 
 				if (col == foundUnit->x && row == foundUnit->y) {
-					if (filterFunc == NULL || filterFunc(NULL, sourceUnit, foundUnit)) {
+					if (filterFunc == NULL || filterFunc(context, sourceUnit, foundUnit)) {
 						if (resultCount < maxResults) {
 							foundUnits[resultCount++] = foundUnit;
 							alreadyAdded[entityIndex] = TRUE;

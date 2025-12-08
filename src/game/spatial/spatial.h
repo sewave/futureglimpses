@@ -13,6 +13,12 @@ uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uin
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
 								 GameUnit* foundUnits[], uint16_t maxResults);
 
+uint16_t game_spatial_query_grid_rectangle(GameContext* context, 
+								uint16_t tileMinX, uint16_t tileMinY,
+								uint16_t tileMaxX, uint16_t tileMaxY,
+								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
+								 GameUnit* foundUnits[], uint16_t maxResults);
+
 uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUnit *source, const GameUnit *found);
 
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range);

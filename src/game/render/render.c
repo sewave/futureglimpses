@@ -3,7 +3,7 @@
 
 #define MOVE_PRECISION 16384
 #define HEALTH_BAR_Y_OFFSET 6
-#define HEALTH_BAR_HEIGHT 2
+#define HEALTH_BAR_HEIGHT 1
 #define HEALTH_BAR_BORDER 1
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
@@ -24,7 +24,6 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			if (unit->state == UNIT_STATE_MOVE_ANIM) {
 				int t = (unit->moveTimeCounter * MOVE_PRECISION) / unit->moveTime;
 				t = clamp(t, 0, MOVE_PRECISION);
-
 				int startX = unit->prevX * TILE_SIZE;
 				int startY = unit->prevY * TILE_SIZE;
 				int finalX = unit->x * TILE_SIZE;

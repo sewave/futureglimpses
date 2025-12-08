@@ -22,21 +22,12 @@
 #define UNIVERSAL_PAL_FIRST_INDEX 32
 #define UNIVERSAL_PAL_LAST_INDEX 247
 
-#ifdef DOS
-    #define PAL_COLOR_TRANS 0
-    #define PAL_COLOR_WHITE 1
-    #define PAL_COLOR_BLACK 2
-    #define PAL_COLOR_GREEN 3
-    #define PAL_COLOR_YELLOW 4
-    #define PAL_COLOR_RED 5
-#else
-    #define PAL_COLOR_TRANS makecol(0, 0, 0)
-    #define PAL_COLOR_WHITE makecol(255, 255, 255)
-    #define PAL_COLOR_BLACK makecol(0, 0, 0)
-    #define PAL_COLOR_GREEN makecol(0, 255, 0)
-    #define PAL_COLOR_YELLOW makecol(255, 255, 0)
-    #define PAL_COLOR_RED makecol(255, 0, 0)
-#endif
+#define PAL_COLOR_TRANS 0
+#define PAL_COLOR_WHITE 1
+#define PAL_COLOR_BLACK 2
+#define PAL_COLOR_GREEN 3
+#define PAL_COLOR_YELLOW 4
+#define PAL_COLOR_RED 5
 
 InitializationStatusEnum game_video_load_universal_pal();
 
