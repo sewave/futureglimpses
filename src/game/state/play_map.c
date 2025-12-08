@@ -47,9 +47,17 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
 
 			if (target < HANDLE_ID_THRESHOLD) {
-				// Resource => Work
 				// Free position, go there
-				// If cursor is in attack mode, move_attack, else move
+				for (int i = 0; i < context->selectedUnitCount; i++) {
+					GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+					if(!unit) continue;
+					if(target == WALKABILITY_FREE) {
+						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+					}
+					else {
+						// TODO Resource => Work
+					}
+				}
 			} else {
 				GameUnit *targetUnit = game_unit_get_by_id(context, target);
 				if (targetUnit) {
@@ -59,10 +67,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 						GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 						if(!unit) continue;
 						if (targetUnit->controller == UNIT_CONTROLLER_AI) {
-							// Todo assign target to selected units, move, attack
 							game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 						} else {
-							// Todo assign target to selected units, move
 							game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 						}
 					}
@@ -91,8 +97,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 		if (dx < TILE_SIZE && dy < TILE_SIZE) {
 			// Simple Click unitary
-			int worldX = context->xPosition + selectionStartX;
-			int worldY = context->yPosition + selectionStartY;
+			int worldX = context->xPosition + selectionStartX - VIEWPORT_X_OFFSET;
+			int worldY = context->yPosition + selectionStartY - VIEWPORT_Y_OFFSET;
 			int tileX = worldX / TILE_SIZE;
 			int tileY = worldY / TILE_SIZE;
 
@@ -101,7 +107,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 				GameUnit *u = game_unit_get_by_id(context, id);
 
-				if (u) {
+				if (u && u->controller == UNIT_CONTROLLER_PLAYER) {
 					context->selectedUnits[0] = id;
 					context->selectedUnitCount = 1;
 					u->isSelected = TRUE;

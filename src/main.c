@@ -46,8 +46,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
-		printf("Error initializing sound.");
-		return PROGRAM_ERROR;
+		printf("Error initializing sound. Continuing without sound.");
 	}
 
 	install_timers();

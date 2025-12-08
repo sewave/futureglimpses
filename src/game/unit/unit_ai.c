@@ -34,6 +34,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 			else {
 				// We found nothing, so we change direction to make it "look" around
 				unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT; 
+				game_animation_unit_set(unit);
 			}
 		}
 	}
@@ -65,7 +66,7 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		game_unit_command_move_anim(unit, UNIT_STATE_MOVE);
+		game_unit_command_set_move_anim(unit, UNIT_STATE_MOVE);
 	}
 }
 
@@ -127,7 +128,7 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
-		game_unit_command_move_anim(unit, UNIT_STATE_MOVE_ATTACK);
+		game_unit_command_set_move_anim(unit, UNIT_STATE_MOVE_ATTACK);
 	}
 }
 
