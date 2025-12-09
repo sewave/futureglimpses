@@ -4,60 +4,13 @@
 #include <allegro.h>
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
-static GameUnit tmpUnit = {
-		.id = 0,
-		.isActive = FALSE,
-		.isBuilding = FALSE,
-		.isSelected = FALSE,
-		.type = UNIT_TYPE_SOLDIER,
-		.controller = UNIT_CONTROLLER_PLAYER,
-		.state = UNIT_STATE_IDLE,
-		.nextState = UNIT_STATE_IDLE,
-		.direction = DIRECTION_SOUTH,
-		.x = 18,
-		.y = 12,
-		.attackRange = 1,
-		.sightRange = 5,
-		.health = 40,
-		.maxHealth = 40,
-		.minDamage = 3,
-		.maxDamage = 5,
-		.tileSize = 1,
-		.targetX = NO_TARGET_POSITION,
-		.targetY = NO_TARGET_POSITION,
-		.targetId = NO_TARGET_ID,
-		.reactionTime = 15,
-		.reactionTimeCounter = 0,
-		.moveTime = 35,
-		.moveTimeCounter = 0,
-		.animationStatus = {.sheet = NULL, .animation = {}, .frame = 0, .frameTicks = 0, .totalTicks = 0}};
-
 void spawn_test_units(GameContext* context) {
 	context->xPosition = 0 * TILE_SIZE;
 	context->yPosition = 0 * TILE_SIZE;
-	/*for(int i = 0; i < 128; i++) {
-		game_unit_spawn(context, &tmpUnit);
-		tmpUnit.controller = UNIT_CONTROLLER_AI;
-		tmpUnit.x += 5;
-		game_unit_spawn(context, &tmpUnit);
-		tmpUnit.controller = UNIT_CONTROLLER_PLAYER;
-		tmpUnit.x -= 5;
-		tmpUnit.type = (tmpUnit.type + 1) % 5;
-		tmpUnit.y++;
-		if(tmpUnit.y > BOARD_HEIGHT) {
-			tmpUnit.y = 0;
-			tmpUnit.x += 15;
-		}
-	}*/
 
 	for(int i = 0; i < 256; i++) {
-		tmpUnit.controller = (tmpUnit.controller + 1) % 2;
-		tmpUnit.type = (tmpUnit.type + 1) % 5;
-		do {
-			tmpUnit.x = (uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX);
-			tmpUnit.y = (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX);
-		} while(context->walkabilityGrid[tmpUnit.x][tmpUnit.y] != WALKABILITY_FREE);
-		game_unit_spawn(context, &tmpUnit);
+		game_unit_spawn(context, i % 5 , i % 2,
+			(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX));
 	}
 }
 

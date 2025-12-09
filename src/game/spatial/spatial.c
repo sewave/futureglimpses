@@ -68,8 +68,6 @@ uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* targ
 }
 
 uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, uint16_t targetY, uint8_t range) {
-	uint32_t xDist = source->x - targetX;
-	uint32_t yDist = source->y - targetY;
-	return range * range >= (xDist * xDist + yDist * yDist);
+	return abs(((int) source->x) - targetX) <= range && abs(((int) source->y) - targetY) <= range;
 }
 

@@ -1,14 +1,16 @@
 #include "event.h"
 
-void game_event_process(GameContext* context, EventType eventType, GameUnit* unit, uint16_t data) {
-    switch(eventType) {
-        case EVENT_TYPE_DAMAGE:
-            GameUnit* target = game_unit_get_by_id(context, unit->targetId);
-            if(target && target->isActive) game_unit_damage(context, unit, target);
-        break;
-        case EVENT_TYPE_SOUND:
-            // TODO only if unit is visible
-            game_snd_play_sound((GameSound) data);
-        break;
-    }
+void game_event_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
+	switch (eventType) {
+		case EVENT_TYPE_DAMAGE:
+			GameUnit *target = game_unit_get_by_id(context, unit->targetId);
+			if (target && target->isActive) game_unit_damage(context, unit, target);
+			break;
+		case EVENT_TYPE_SOUND:
+			if (unit->x >= context->xPosition / TILE_SIZE && unit->x <= (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE &&
+				unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE) {
+				game_snd_play_sound((GameSound) data);
+			}
+			break;
+	}
 }

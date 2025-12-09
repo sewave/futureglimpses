@@ -107,7 +107,6 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
                     PAL_COLOR_WHITE, PAL_COLOR_BLACK
                 );
             }
-            
 
             int rectColor = PAL_COLOR_TRANS;
 

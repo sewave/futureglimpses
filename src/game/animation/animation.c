@@ -1,6 +1,5 @@
 #include "animation.h"
 
-#define SEC_TO_FRAMES(secs) (uint16_t) (secs * LOGIC_RATE_BPS)
 #define UNIT_FRAME_SIZE 32
 
 static AnimationProperties IDLE_PROPERTIES[DIRECTIONS_COUNT] = {
