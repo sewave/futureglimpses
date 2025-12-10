@@ -3,8 +3,8 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-#define MINIMAP_X_POS 3
-#define MINIMAP_Y_POS 6
+#define MINIMAP_X_POS 4
+#define MINIMAP_Y_POS 12
 
 #define MOUSE_X_GO_LEFT TILE_SIZE / 2
 #define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE / 2)
@@ -17,12 +17,73 @@ int selectionStartY = -1;
 static char fpsText[16];
 int moveViewportCounter = 0;
 
+typedef enum {
+	SELECTION_SET,
+	SELECTION_ADD,
+	SELECTION_REMOVE
+} SelectionModeEnum;
+
+static void clear_all_selections(GameContext *context) {
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+		if (unit) unit->isSelected = FALSE;
+	}
+	context->selectedUnitCount = 0;
+}
+
+static void remove_unit_from_selection(GameContext *context, GameUnit *unit) {
+	if (!unit->isSelected) return;
+	unit->isSelected = FALSE;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		if (context->selectedUnits[i] == unit->id) {
+			// Remove from selection, move last selected index to removed position directly
+			context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
+			return;
+		}
+	}
+}
+
+static void add_unit_to_selection(GameContext *context, GameUnit *unit) {
+	if (unit->isSelected) return;
+	unit->isSelected = TRUE;
+	context->selectedUnits[context->selectedUnitCount++] = unit->id;
+}
+
+// We will search for target on that position or a unit that was there with previous positions
+static UnitId get_in_position_or_previous(GameContext *context, int boardXPosition, int boardYPosition) {
+	UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
+	if (target == WALKABILITY_FREE) {
+		// Search on the sorrounding area for a unit that was there previously
+		for (int y = -1; y <= 1; y++) {
+			for (int x = -1; x <= 1; x++) {
+				if (x == 0 && y == 0) continue;
+				int checkX = boardXPosition + x;
+				int checkY = boardYPosition + y;
+				if (checkX < BOARD_X_MIN || checkX > BOARD_X_MAX ||
+					checkY < BOARD_Y_MIN || checkY > BOARD_Y_MAX) continue;
+				UnitId checkId = context->walkabilityGrid[checkX][checkY];
+				if (checkId < HANDLE_ID_THRESHOLD) continue;
+				GameUnit *checkUnit = game_unit_get_by_id(context, checkId);
+				if (!checkUnit) continue;
+				// If the unit was previously on the target position, we consider it the target
+				if (checkUnit->prevX == boardXPosition && checkUnit->prevY == boardYPosition) {
+					target = checkId;
+					break;
+				}
+			}
+			if (target != WALKABILITY_FREE) break;
+		}
+	}
+	return target;
+}
+
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = mouse_get_x();
 	int mouseY = mouse_get_y();
 
 	// Actions that must be inside the area
 
+	// TODO handle autoactions, stop, defend
 
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
@@ -33,8 +94,6 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			context->mouse.isSelecting = TRUE;
 		}
 
-		// TODO handle autoactions, stop, defend
-
 		if (!context->mouse.isRightDown && context->mouse.wasRightDown) {
 			// Contextual action
 
@@ -44,17 +103,16 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			boardXPosition = clamp(boardXPosition, BOARD_X_MIN, BOARD_X_MAX);
 			boardYPosition = clamp(boardYPosition, BOARD_Y_MIN, BOARD_Y_MAX);
 
-			UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
+			UnitId target = get_in_position_or_previous(context, boardXPosition, boardYPosition);
 
 			if (target < HANDLE_ID_THRESHOLD) {
-				// Free position, go there
+				// Not unit position, depending on the tile, we move or interact with resource
 				for (int i = 0; i < context->selectedUnitCount; i++) {
-					GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-					if(!unit) continue;
-					if(target == WALKABILITY_FREE) {
+					GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+					if (!unit) continue;
+					if (target == WALKABILITY_FREE) {
 						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
-					}
-					else {
+					} else {
 						// TODO Resource => Work
 					}
 				}
@@ -64,8 +122,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					targetUnit->blinkTime = BLINK_TIME;
 
 					for (int i = 0; i < context->selectedUnitCount; i++) {
-						GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-						if(!unit) continue;
+						GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+						if (!unit) continue;
 						if (targetUnit->controller == UNIT_CONTROLLER_AI) {
 							game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 						} else {
@@ -87,13 +145,13 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 		int dx = abs(selectionEndX - selectionStartX);
 		int dy = abs(selectionEndY - selectionStartY);
 
-		for (int i = 0; i < context->selectedUnitCount; i++) {
-			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-			if (unit) {
-				unit->isSelected = FALSE;
-			}
+		SelectionModeEnum selectionMode = SELECTION_SET;
+		if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) {
+			selectionMode = SELECTION_ADD;
+		} else if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
+			selectionMode = SELECTION_REMOVE;
 		}
-		context->selectedUnitCount = 0;
+		// TODO attack mode, move mode or selection mode
 
 		if (dx < TILE_SIZE && dy < TILE_SIZE) {
 			// Simple Click unitary
@@ -102,15 +160,24 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int tileX = worldX / TILE_SIZE;
 			int tileY = worldY / TILE_SIZE;
 
-			if (tileX >= 0 && tileX < BOARD_WIDTH && tileY >= 0 && tileY < BOARD_HEIGHT) {
-				int id = context->walkabilityGrid[tileX][tileY];
+			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
+				UnitId id = get_in_position_or_previous(context, tileX, tileY);
 
-				GameUnit *u = game_unit_get_by_id(context, id);
+				GameUnit *foundUnit = game_unit_get_by_id(context, id);
 
-				if (u && u->controller == UNIT_CONTROLLER_PLAYER) {
-					context->selectedUnits[0] = id;
-					context->selectedUnitCount = 1;
-					u->isSelected = TRUE;
+				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+					switch (selectionMode) {
+						case SELECTION_SET:
+							clear_all_selections(context);
+							add_unit_to_selection(context, foundUnit);
+							break;
+						case SELECTION_ADD:
+							add_unit_to_selection(context, foundUnit);
+							break;
+						case SELECTION_REMOVE:
+							remove_unit_from_selection(context, foundUnit);
+							break;
+					}
 				}
 			}
 		} else {
@@ -130,22 +197,18 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 
-			unsigned char alreadySelected[MAX_GAME_UNITS];
-			memset(alreadySelected, 0, sizeof(alreadySelected));
+			if(selectionMode == SELECTION_SET) clear_all_selections(context);
 
 			for (int row = tileMinY; row <= tileMaxY; row++) {
 				for (int col = tileMinX; col <= tileMaxX; col++) {
 					UnitId id = context->walkabilityGrid[col][row];
 					if (id < HANDLE_ID_THRESHOLD) continue;
-					GameUnit *u = game_unit_get_by_id(context, id);
-					if (u) {
-						int entityIndex = GET_INDEX(id);
-						if (u->controller == UNIT_CONTROLLER_PLAYER && !alreadySelected[entityIndex]) {
-							if (context->selectedUnitCount < MAX_GAME_UNITS) {
-								context->selectedUnits[context->selectedUnitCount++] = id;
-								u->isSelected = TRUE;
-								alreadySelected[entityIndex] = TRUE;
-							}
+					GameUnit *foundUnit = game_unit_get_by_id(context, id);
+					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+						if (selectionMode == SELECTION_REMOVE) {
+							remove_unit_from_selection(context, foundUnit);
+						} else {
+							add_unit_to_selection(context, foundUnit);
 						}
 					}
 				}
@@ -181,12 +244,12 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT] ||
 		 mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
 		 mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) &&
-		!(context->mouse.isLeftDown)) {
+		(!context->mouse.isLeftDown || context->mouse.isSelecting)) {
 		moveViewportCounter++;
 	} else {
 		moveViewportCounter = 0;
 	}
-	int cameraSpeed = 2;
+	int cameraSpeed = 4;
 
 	if (moveViewportCounter >= 1) {
 		if (key[KEY_UP] || mouseY < MOUSE_Y_GO_UP) {
@@ -238,7 +301,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	// Submit to render the viewport from the renderedBoard
 	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0,
-		context->gameBack->w, context->gameBack->h);
+									   context->gameBack->w, context->gameBack->h);
 
 	// Minimap
 	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 501, context->renderedMinimap,
