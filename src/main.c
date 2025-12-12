@@ -102,7 +102,7 @@ void main_loop(volatile long *logicTicks,
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
 	lastTickCount = *logicTicks;
-	mouse_initialize_status(&(context.mouseStatus));
+	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
 	while (!*closeButtonFlag && context.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
 			context.ticksToCatchup = *logicTicks - lastTickCount;

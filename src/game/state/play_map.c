@@ -51,6 +51,14 @@ static UnitId get_in_position_or_previous(GameContext *context, int boardXPositi
 	return target;
 }
 
+static uint16_t get_board_x_position(uint16_t cameraPosition, int cursorPosition) {
+	return clamp((cameraPosition + cursorPosition - VIEWPORT_X_OFFSET) / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+}
+
+static uint16_t get_board_y_position(uint16_t cameraPosition, int cursorPosition) {
+	return clamp((cameraPosition + cursorPosition - VIEWPORT_Y_OFFSET) / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+}
+
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
@@ -60,20 +68,46 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
 
-		if (context->mouseStatus.isLeftDown && !context->mouseStatus.wasLeftDown) {
+		if (context->mouseStatus.isLeftPressed) {
 			selectionStartX = mouseX;
 			selectionStartY = mouseY;
 			context->mouseStatus.isSelecting = TRUE;
 		}
 
-		if (!context->mouseStatus.isRightDown && context->mouseStatus.wasRightDown) {
+		if (context->mouseStatus.isLeftDoubleClick) {
+			// If we double click, select all units of the same type on screen
+			int tileX = get_board_x_position(context->xPosition, mouseX);
+			int tileY = get_board_y_position(context->yPosition, mouseY);
+			UnitId id = get_in_position_or_previous(context, tileX, tileY);
+			GameUnit *sourceUnit = game_unit_get_by_id(context, id);
+			if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
+				UnitTypeEnum targetType = sourceUnit->type;
+				game_selection_clear(context);
+				int tileMinX = clamp(context->xPosition / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+				int tileMaxX = tileMinX + VIEWPORT_WIDTH_TILES;
+				int tileMinY = clamp(context->yPosition / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+				int tileMaxY = tileMinY + VIEWPORT_HEIGHT_TILES;
+				for (int row = tileMinY; row <= tileMaxY; row++) {
+					for (int col = tileMinX; col <= tileMaxX; col++) {
+						UnitId id = context->walkabilityGrid[col][row];
+						if (id < HANDLE_ID_THRESHOLD) continue;
+						GameUnit *foundUnit = game_unit_get_by_id(context, id);
+						if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER && foundUnit->type == targetType) {
+							game_selection_add_unit(context, foundUnit);
+						}
+					}
+				}
+			}
+			context->mouseStatus.isSelecting = FALSE;
+		}
+
+		if (context->mouseStatus.isRightPressed) {
+			// TODO spawn mouse confirmation
 			// Contextual action
 
 			// Get board situation
-			int boardXPosition = (context->xPosition + mouseX - VIEWPORT_X_OFFSET) / TILE_SIZE;
-			int boardYPosition = (context->yPosition + mouseY - VIEWPORT_Y_OFFSET) / TILE_SIZE;
-			boardXPosition = clamp(boardXPosition, BOARD_X_MIN, BOARD_X_MAX);
-			boardYPosition = clamp(boardYPosition, BOARD_Y_MIN, BOARD_Y_MAX);
+			int boardXPosition = get_board_x_position(context->xPosition, mouseX);
+			int boardYPosition = get_board_y_position(context->yPosition, mouseY);
 
 			UnitId target = get_in_position_or_previous(context, boardXPosition, boardYPosition);
 
@@ -85,7 +119,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					if (target == WALKABILITY_FREE) {
 						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
 					} else {
-						// TODO Resource => Work
+						// TODO Resource => Work, if we are workers
 					}
 				}
 			} else {
@@ -107,78 +141,77 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	// Releasing actions that can be outside the area
-	if (!context->mouseStatus.isLeftDown && context->mouseStatus.wasLeftDown && context->mouseStatus.isSelecting) {
-		context->mouseStatus.isSelecting = FALSE;
+	if (!context->mouseStatus.isLeftDoubleClick) {
+		if (context->mouseStatus.isLeftReleased && context->mouseStatus.isSelecting) {
+			context->mouseStatus.isSelecting = FALSE;
 
-		int selectionEndX = mouseX;
-		int selectionEndY = mouseY;
+			int selectionEndX = mouseX;
+			int selectionEndY = mouseY;
 
-		int dx = abs(selectionEndX - selectionStartX);
-		int dy = abs(selectionEndY - selectionStartY);
+			int dx = abs(selectionEndX - selectionStartX);
+			int dy = abs(selectionEndY - selectionStartY);
 
-		SelectionModeEnum selectionMode = SELECTION_SET;
-		if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) {
-			selectionMode = SELECTION_ADD;
-		} else if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
-			selectionMode = SELECTION_REMOVE;
-		}
-		// TODO attack mode, move mode or selection mode
-
-		if (dx < TILE_SIZE && dy < TILE_SIZE) {
-			// Simple Click unitary
-			int worldX = context->xPosition + selectionStartX - VIEWPORT_X_OFFSET;
-			int worldY = context->yPosition + selectionStartY - VIEWPORT_Y_OFFSET;
-			int tileX = worldX / TILE_SIZE;
-			int tileY = worldY / TILE_SIZE;
-
-			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
-				UnitId id = get_in_position_or_previous(context, tileX, tileY);
-				GameUnit *foundUnit = game_unit_get_by_id(context, id);
-				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
-					switch (selectionMode) {
-						case SELECTION_SET:
-							game_selection_clear(context);
-							game_selection_add_unit(context, foundUnit);
-							break;
-						case SELECTION_ADD:
-							game_selection_add_unit(context, foundUnit);
-							break;
-						case SELECTION_REMOVE:
-							game_selection_remove_unit(context, foundUnit);
-							break;
-					}
-				}
+			SelectionModeEnum selectionMode = SELECTION_SET;
+			if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) {
+				selectionMode = SELECTION_ADD;
+			} else if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
+				selectionMode = SELECTION_REMOVE;
 			}
-		} else {
-			// Mass Selection (Bounding Box)
-			int minScreenX = min_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-			int maxScreenX = max_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-			int minScreenY = min_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
-			int maxScreenY = max_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+			// TODO attack mode, move mode or selection mode
 
-			int worldBoxMinX = context->xPosition + minScreenX;
-			int worldBoxMaxX = context->xPosition + maxScreenX;
-			int worldBoxMinY = context->yPosition + minScreenY;
-			int worldBoxMaxY = context->yPosition + maxScreenY;
+			if (dx < TILE_SIZE && dy < TILE_SIZE) {
+				// Simple Click unitary
+				int tileX = get_board_x_position(context->xPosition, selectionStartX);
+				int tileY = get_board_y_position(context->yPosition, selectionStartY);
 
-			int tileMinX = clamp(worldBoxMinX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-			int tileMaxX = clamp(worldBoxMaxX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
-			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
-
-			if(selectionMode == SELECTION_SET) game_selection_clear(context);
-
-			for (int row = tileMinY; row <= tileMaxY; row++) {
-				for (int col = tileMinX; col <= tileMaxX; col++) {
-					UnitId id = context->walkabilityGrid[col][row];
-					if (id < HANDLE_ID_THRESHOLD) continue;
+				if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
+					UnitId id = get_in_position_or_previous(context, tileX, tileY);
 					GameUnit *foundUnit = game_unit_get_by_id(context, id);
 					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
-						if (selectionMode == SELECTION_REMOVE) {
-							game_selection_remove_unit(context, foundUnit);
-						} else {
-							game_selection_add_unit(context, foundUnit);
+						switch (selectionMode) {
+							case SELECTION_SET:
+								game_selection_clear(context);
+								game_selection_add_unit(context, foundUnit);
+								break;
+							case SELECTION_ADD:
+								game_selection_add_unit(context, foundUnit);
+								break;
+							case SELECTION_REMOVE:
+								game_selection_remove_unit(context, foundUnit);
+								break;
+						}
+					}
+				}
+			} else {
+				// Mass Selection (Bounding Box)
+				int minScreenX = min_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
+				int maxScreenX = max_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
+				int minScreenY = min_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+				int maxScreenY = max_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+
+				int worldBoxMinX = context->xPosition + minScreenX;
+				int worldBoxMaxX = context->xPosition + maxScreenX;
+				int worldBoxMinY = context->yPosition + minScreenY;
+				int worldBoxMaxY = context->yPosition + maxScreenY;
+
+				int tileMinX = clamp(worldBoxMinX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+				int tileMaxX = clamp(worldBoxMaxX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+				int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+				int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+
+				if (selectionMode == SELECTION_SET) game_selection_clear(context);
+
+				for (int row = tileMinY; row <= tileMaxY; row++) {
+					for (int col = tileMinX; col <= tileMaxX; col++) {
+						UnitId id = context->walkabilityGrid[col][row];
+						if (id < HANDLE_ID_THRESHOLD) continue;
+						GameUnit *foundUnit = game_unit_get_by_id(context, id);
+						if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+							if (selectionMode == SELECTION_REMOVE) {
+								game_selection_remove_unit(context, foundUnit);
+							} else {
+								game_selection_add_unit(context, foundUnit);
+							}
 						}
 					}
 				}
@@ -188,33 +221,36 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 }
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+	// TODO menus
+	if (key[KEY_ESC]) return GAME_STATE_EXIT;
+
 	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 
 	if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
-		if(key[KEY_1]) game_selection_save_to_slot(context, SELECTION_SLOT_1);
-		if(key[KEY_2]) game_selection_save_to_slot(context, SELECTION_SLOT_2);
-		if(key[KEY_3]) game_selection_save_to_slot(context, SELECTION_SLOT_3);
-		if(key[KEY_4]) game_selection_save_to_slot(context, SELECTION_SLOT_4);
-		if(key[KEY_5]) game_selection_save_to_slot(context, SELECTION_SLOT_5);
-	}
-	else {
-		if(key[KEY_1]) game_selection_load_from_slot(context, SELECTION_SLOT_1);
-		if(key[KEY_2]) game_selection_load_from_slot(context, SELECTION_SLOT_2);
-		if(key[KEY_3]) game_selection_load_from_slot(context, SELECTION_SLOT_3);
-		if(key[KEY_4]) game_selection_load_from_slot(context, SELECTION_SLOT_4);
-		if(key[KEY_5]) game_selection_load_from_slot(context, SELECTION_SLOT_5);
+		if (key[KEY_1]) game_selection_save_to_slot(context, SELECTION_SLOT_1);
+		if (key[KEY_2]) game_selection_save_to_slot(context, SELECTION_SLOT_2);
+		if (key[KEY_3]) game_selection_save_to_slot(context, SELECTION_SLOT_3);
+		if (key[KEY_4]) game_selection_save_to_slot(context, SELECTION_SLOT_4);
+		if (key[KEY_5]) game_selection_save_to_slot(context, SELECTION_SLOT_5);
+	} else {
+		if (key[KEY_1]) game_selection_load_from_slot(context, SELECTION_SLOT_1);
+		if (key[KEY_2]) game_selection_load_from_slot(context, SELECTION_SLOT_2);
+		if (key[KEY_3]) game_selection_load_from_slot(context, SELECTION_SLOT_3);
+		if (key[KEY_4]) game_selection_load_from_slot(context, SELECTION_SLOT_4);
+		if (key[KEY_5]) game_selection_load_from_slot(context, SELECTION_SLOT_5);
 	}
 
 	handle_units_area(context, renderQueue);
 
 	// If we click the mouseStatus on the minimap, we should move the camera there
-	if (context->mouseStatus.isLeftDown & !context->mouseStatus.isSelecting) {
-		if (mouseX >= MINIMAP_X_POS &&
-			mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
-			mouseY >= MINIMAP_Y_POS &&
-			mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
+	if (mouseX >= MINIMAP_X_POS &&
+		mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
+		mouseY >= MINIMAP_Y_POS &&
+		mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
+		if (context->mouseStatus.isLeftDown & !context->mouseStatus.isSelecting) {
+			// TODO move and attack modes from minimap
 			context->xPosition = (mouseX - MINIMAP_X_POS - 8) * TILE_SIZE;
 			context->yPosition = (mouseY - MINIMAP_Y_POS - 6) * TILE_SIZE;
 			if (context->yPosition < 0) context->yPosition = 0;
@@ -313,7 +349,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	} else {
 		// Mouse cursor
 		render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
-		context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
+								   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
 	}
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());

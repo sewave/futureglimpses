@@ -6,7 +6,6 @@ const char* mouseCursorFilenames [NUM_MOUSE_CURSORS] = {
     "assets/mouse/idle.pcx",
     "assets/mouse/idle.pcx",
     "assets/mouse/idle.pcx",
-    "assets/mouse/idle.pcx",
     "assets/mouse/idle.pcx"
 };
 

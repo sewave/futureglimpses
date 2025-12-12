@@ -104,7 +104,7 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 
 static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	uint16_t targetX, targetY;
-	GameUnit *targetUnit;
+	GameUnit *targetUnit = NULL;
 	if (unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION) {
 		targetX = unit->targetX;
 		targetY = unit->targetY;

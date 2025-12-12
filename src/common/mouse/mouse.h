@@ -15,13 +15,16 @@ typedef struct {
     uint8_t isLeftReleased;
     uint8_t isRightReleased;
     uint8_t isSelecting;
+    uint8_t isLeftDoubleClick;
+    uint32_t leftClickTime;
+    uint32_t leftClickMaxTime;
 } MouseStatus;
 
 BITMAP *mouse_get_cursor_sprite();
 void mouse_set_cursor(uchar index);
 void mouse_destroy_cursors(void);
 InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouseCursorFilenames);
-void mouse_initialize_status(MouseStatus* status);
+void mouse_initialize_status(MouseStatus *status, uint32_t doubleClickMaxTime);
 void mouse_update_status(MouseStatus* status);
 
 #endif
