@@ -260,10 +260,11 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT] ||
-		 mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
-		 mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) &&
-		(!context->mouseStatus.isLeftDown || context->mouseStatus.isSelecting)) {
+	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT]) ||
+		 (
+			(mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
+		 mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) && !context->mouseStatus.isLeftDown)
+	) {
 		moveViewportCounter++;
 	} else {
 		moveViewportCounter = 0;
@@ -306,6 +307,14 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	context->mouseStatus.wasLeftDown = context->mouseStatus.isLeftDown;
 	context->mouseStatus.wasRightDown = context->mouseStatus.isRightDown;
+
+	// If active units are of only one controller, we go to load map again
+	int playerUnitsCount = 0;
+	for (int i = 0; i < context->activeUnitCount; i++) {
+		GameUnit *unit = context->activeUnits[i];
+		if (!unit || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
+	}
+	if (playerUnitsCount == context->activeUnitCount || playerUnitsCount == 0) return GAME_STATE_LOAD_MAP;
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;

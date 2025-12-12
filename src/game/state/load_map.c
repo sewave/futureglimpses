@@ -4,18 +4,20 @@
 #include <allegro.h>
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
-void spawn_test_units(GameContext* context) {
+void spawn_test_units(GameContext *context) {
 	context->xPosition = 0 * TILE_SIZE;
 	context->yPosition = 0 * TILE_SIZE;
 
-	for(int i = 0; i < 256; i++) {
-		game_unit_spawn(context, i % 5 , i % 2,
-			(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX));
+	for (int i = 0; i < MAX_GAME_UNITS; i++) {
+		while (!game_unit_spawn(context, i % 5, i % 2,
+								(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX))) {
+			// Try until we find a free position
+		}
 	}
 }
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
-	
+
 	if (context->gameBack) { destroy_bitmap(context->gameBack); }
 	context->gameBack = load_bitmap("assets/ui/back_2.pcx", NULL);
 
@@ -30,12 +32,15 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
 			uint16_t tile = map->tile_layers->tiles[x + y * BOARD_WIDTH];
 			context->board[x][y] = tile;
-			if(tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
+			if (tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
 			// TODO marcar en tabla de recursos, cada tipo tendrá la misma cantidad de recurso
 		}
 	}
 
 	game_map_free_data(map);
+
+	game_units_init(context);
+	game_selection_clear(context);
 
 	spawn_test_units(context);
 
