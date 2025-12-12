@@ -23,32 +23,6 @@ typedef enum {
 	SELECTION_REMOVE
 } SelectionModeEnum;
 
-static void clear_all_selections(GameContext *context) {
-	for (int i = 0; i < context->selectedUnitCount; i++) {
-		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-		if (unit) unit->isSelected = FALSE;
-	}
-	context->selectedUnitCount = 0;
-}
-
-static void remove_unit_from_selection(GameContext *context, GameUnit *unit) {
-	if (!unit->isSelected) return;
-	unit->isSelected = FALSE;
-	for (int i = 0; i < context->selectedUnitCount; i++) {
-		if (context->selectedUnits[i] == unit->id) {
-			// Remove from selection, move last selected index to removed position directly
-			context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
-			return;
-		}
-	}
-}
-
-static void add_unit_to_selection(GameContext *context, GameUnit *unit) {
-	if (unit->isSelected) return;
-	unit->isSelected = TRUE;
-	context->selectedUnits[context->selectedUnitCount++] = unit->id;
-}
-
 // We will search for target on that position or a unit that was there with previous positions
 static UnitId get_in_position_or_previous(GameContext *context, int boardXPosition, int boardYPosition) {
 	UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
@@ -162,20 +136,18 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
 				UnitId id = get_in_position_or_previous(context, tileX, tileY);
-
 				GameUnit *foundUnit = game_unit_get_by_id(context, id);
-
 				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
 					switch (selectionMode) {
 						case SELECTION_SET:
-							clear_all_selections(context);
-							add_unit_to_selection(context, foundUnit);
+							game_selection_clear(context);
+							game_selection_add_unit(context, foundUnit);
 							break;
 						case SELECTION_ADD:
-							add_unit_to_selection(context, foundUnit);
+							game_selection_add_unit(context, foundUnit);
 							break;
 						case SELECTION_REMOVE:
-							remove_unit_from_selection(context, foundUnit);
+							game_selection_remove_unit(context, foundUnit);
 							break;
 					}
 				}
@@ -197,7 +169,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 
-			if(selectionMode == SELECTION_SET) clear_all_selections(context);
+			if(selectionMode == SELECTION_SET) game_selection_clear(context);
 
 			for (int row = tileMinY; row <= tileMaxY; row++) {
 				for (int col = tileMinX; col <= tileMaxX; col++) {
@@ -206,9 +178,9 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					GameUnit *foundUnit = game_unit_get_by_id(context, id);
 					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
 						if (selectionMode == SELECTION_REMOVE) {
-							remove_unit_from_selection(context, foundUnit);
+							game_selection_remove_unit(context, foundUnit);
 						} else {
-							add_unit_to_selection(context, foundUnit);
+							game_selection_add_unit(context, foundUnit);
 						}
 					}
 				}
