@@ -20,7 +20,7 @@ void game_selection_clear_slots(GameContext *context) {
     }
 }
 
-void game_selection_save_to_slot(GameContext* context, uint8_t slotIndex) {
+void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
     if (slotIndex >= MAX_SELECTION_SLOTS) return;
 
     SelectionSlot* slot = &selectionSlots[slotIndex];
@@ -48,7 +48,7 @@ void game_selection_add_unit(GameContext *context, GameUnit *unit) {
 	context->selectedUnits[context->selectedUnitCount++] = unit->id;
 }
 
-void game_selection_load_from_slot(GameContext* context, uint8_t slotIndex) {
+void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
     if (slotIndex >= MAX_SELECTION_SLOTS) return;
 
     game_selection_clear(context);

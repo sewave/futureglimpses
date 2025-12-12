@@ -102,6 +102,7 @@ void main_loop(volatile long *logicTicks,
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
 	lastTickCount = *logicTicks;
+	mouse_initialize_status(&(context.mouseStatus));
 	while (!*closeButtonFlag && context.gameState != endState) {
 		if (*logicTicks > lastTickCount) {
 			context.ticksToCatchup = *logicTicks - lastTickCount;
@@ -114,7 +115,7 @@ void main_loop(volatile long *logicTicks,
 				render_queue_clear(&renderQueue);
 				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
 				poll_keyboard();
-				poll_mouse();
+				mouse_update_status(&context.mouseStatus);
 				context.gameState = game_execute_state(&context, &renderQueue);
 				lastTickCount++;
 			}

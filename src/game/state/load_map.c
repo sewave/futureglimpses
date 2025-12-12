@@ -80,12 +80,5 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 			putpixel(context->renderedMinimap, x, y, minimapColors[tile]);
 		}
 	}
-
-	context->mouse.isLeftDown = FALSE;
-	context->mouse.isRightDown = FALSE;
-	context->mouse.wasLeftDown = FALSE;
-	context->mouse.wasLeftDown = FALSE;
-	context->mouse.isSelecting = FALSE;
-
 	return GAME_STATE_PLAY_MAP;
 }

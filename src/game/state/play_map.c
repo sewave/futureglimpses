@@ -52,23 +52,21 @@ static UnitId get_in_position_or_previous(GameContext *context, int boardXPositi
 }
 
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
-	int mouseX = mouse_get_x();
-	int mouseY = mouse_get_y();
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
 
 	// Actions that must be inside the area
-
 	// TODO handle autoactions, stop, defend
-
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
 
-		if (context->mouse.isLeftDown && !context->mouse.wasLeftDown) {
+		if (context->mouseStatus.isLeftDown && !context->mouseStatus.wasLeftDown) {
 			selectionStartX = mouseX;
 			selectionStartY = mouseY;
-			context->mouse.isSelecting = TRUE;
+			context->mouseStatus.isSelecting = TRUE;
 		}
 
-		if (!context->mouse.isRightDown && context->mouse.wasRightDown) {
+		if (!context->mouseStatus.isRightDown && context->mouseStatus.wasRightDown) {
 			// Contextual action
 
 			// Get board situation
@@ -110,8 +108,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	// Releasing actions that can be outside the area
-	if (!context->mouse.isLeftDown && context->mouse.wasLeftDown && context->mouse.isSelecting) {
-		context->mouse.isSelecting = FALSE;
+	if (!context->mouseStatus.isLeftDown && context->mouseStatus.wasLeftDown && context->mouseStatus.isSelecting) {
+		context->mouseStatus.isSelecting = FALSE;
 
 		int selectionEndX = mouseX;
 		int selectionEndY = mouseY;
@@ -191,15 +189,28 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
-	int mouseX = mouse_get_x();
-	int mouseY = mouse_get_y();
-	context->mouse.isRightDown = mouse_b & 2;
-	context->mouse.isLeftDown = mouse_b & 1;
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
+
+	if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
+		if(key[KEY_1]) game_selection_save_to_slot(context, SELECTION_SLOT_1);
+		if(key[KEY_2]) game_selection_save_to_slot(context, SELECTION_SLOT_2);
+		if(key[KEY_3]) game_selection_save_to_slot(context, SELECTION_SLOT_3);
+		if(key[KEY_4]) game_selection_save_to_slot(context, SELECTION_SLOT_4);
+		if(key[KEY_5]) game_selection_save_to_slot(context, SELECTION_SLOT_5);
+	}
+	else {
+		if(key[KEY_1]) game_selection_load_from_slot(context, SELECTION_SLOT_1);
+		if(key[KEY_2]) game_selection_load_from_slot(context, SELECTION_SLOT_2);
+		if(key[KEY_3]) game_selection_load_from_slot(context, SELECTION_SLOT_3);
+		if(key[KEY_4]) game_selection_load_from_slot(context, SELECTION_SLOT_4);
+		if(key[KEY_5]) game_selection_load_from_slot(context, SELECTION_SLOT_5);
+	}
 
 	handle_units_area(context, renderQueue);
 
-	// If we click the mouse on the minimap, we should move the camera there
-	if (context->mouse.isLeftDown & !context->mouse.isSelecting) {
+	// If we click the mouseStatus on the minimap, we should move the camera there
+	if (context->mouseStatus.isLeftDown & !context->mouseStatus.isSelecting) {
 		if (mouseX >= MINIMAP_X_POS &&
 			mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
 			mouseY >= MINIMAP_Y_POS &&
@@ -216,7 +227,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT] ||
 		 mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
 		 mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) &&
-		(!context->mouse.isLeftDown || context->mouse.isSelecting)) {
+		(!context->mouseStatus.isLeftDown || context->mouseStatus.isSelecting)) {
 		moveViewportCounter++;
 	} else {
 		moveViewportCounter = 0;
@@ -257,8 +268,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
 	}
 
-	context->mouse.wasLeftDown = context->mouse.isLeftDown;
-	context->mouse.wasRightDown = context->mouse.isRightDown;
+	context->mouseStatus.wasLeftDown = context->mouseStatus.isLeftDown;
+	context->mouseStatus.wasRightDown = context->mouseStatus.isRightDown;
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
@@ -291,17 +302,18 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_WHITE);
 
-	if (context->mouse.isSelecting) {
+	if (context->mouseStatus.isSelecting) {
 		// Selection rectangle
-		int selectionEndX = clamp(mouse_get_x(), VIEWPORT_X_MIN, VIEWPORT_X_MAX);
-		int selectionEndY = clamp(mouse_get_y(), VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
+		int selectionEndX = clamp(context->mouseStatus.x, VIEWPORT_X_MIN, VIEWPORT_X_MAX);
+		int selectionEndY = clamp(context->mouseStatus.y, VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
 		render_queue_submit_rect(renderQueue,
 								 MOUSE_Z_ORDER,
 								 selectionStartX, selectionStartY, selectionEndX, selectionEndY,
 								 PAL_COLOR_GREEN);
 	} else {
 		// Mouse cursor
-		render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(), mouse_get_x() - mouse_x_focus, mouse_get_y() - mouse_y_focus, RND_FLAG_NORMAL);
+		render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
+		context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
 	}
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());

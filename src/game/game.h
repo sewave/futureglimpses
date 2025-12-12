@@ -198,13 +198,7 @@ typedef struct {
 	uint16_t activeUnitCount;
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
-	struct {
-		uint8_t isLeftDown;
-		uint8_t isRightDown;
-		uint8_t wasLeftDown;
-		uint8_t wasRightDown;
-		uint8_t isSelecting;
-	} mouse;
+	MouseStatus mouseStatus;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
