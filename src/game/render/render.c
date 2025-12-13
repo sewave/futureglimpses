@@ -111,7 +111,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
             int rectColor = PAL_COLOR_TRANS;
 
             if(unit->isSelected && !unit->blinkTime) rectColor = PAL_COLOR_GREEN;
-            if(unit->blinkTime % BLINK_MOD) {
+            if(unit->blinkTime && unit->blinkTime % BLINK_MOD < BLINK_FRAMES) {
                 rectColor = (unit->controller == UNIT_CONTROLLER_AI) ? PAL_COLOR_RED : PAL_COLOR_GREEN;
             }
             if(rectColor != PAL_COLOR_TRANS) {

@@ -31,9 +31,9 @@ static void start_slot_selection_time() {
 }
 
 static void update_slot_selection_time() {
-	if(lastSelectionSlotSelectedTime) {
+	if (lastSelectionSlotSelectedTime) {
 		lastSelectionSlotSelectedTime++;
-		if(lastSelectionSlotSelectedTime > selectionSlotCooldown) {
+		if (lastSelectionSlotSelectedTime > selectionSlotCooldown) {
 			lastSelectionSlotSelectedTime = 0;
 		}
 	}
@@ -219,7 +219,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 
-	if(keyboard_is_key_pressed(KEY_SPACE)) {
+	if (keyboard_is_key_pressed(KEY_SPACE)) {
 		game_selection_center_camera_on_selection(context);
 	}
 
@@ -252,7 +252,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 			game_selection_load_from_slot(context, SELECTION_SLOT_5);
 			start_slot_selection_time();
 		}
-		if(previousSlotTime > lastSelectionSlotSelectedTime && lastSelectionSlotSelectedTime == 1) {
+		if (previousSlotTime > lastSelectionSlotSelectedTime && lastSelectionSlotSelectedTime == 1) {
 			game_selection_center_camera_on_selection(context);
 		}
 	}
@@ -305,7 +305,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
-	// TODO not each frame
+	// TODO not each frame?
 	clear_bitmap(context->renderedMinimapUnits);
 
 	// Process active units
@@ -315,14 +315,21 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		game_animation_unit_advance(context, unit);
 		game_unit_ai_invoke(context, unit);
 		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
-		// TODO buildings size
-		putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
+		if (unit->tileSize == 1) {
+			putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
+		} else {
+			for (int dx = 0; dx < unit->tileSize; dx++) {
+				for (int dy = 0; dy < unit->tileSize; dy++) {
+					putpixel(context->renderedMinimapUnits, unit->x + dx, unit->y + dy, color);
+				}
+			}
+		}
 	}
 
 	context->mouseStatus.wasLeftDown = context->mouseStatus.isLeftDown;
 	context->mouseStatus.wasRightDown = context->mouseStatus.isRightDown;
 
-	// If active units are of only one controller, we go to load map again
+	// If active units are of only one controller, we go to load map again, TODO win/loss screen
 	int playerUnitsCount = 0;
 	for (int i = 0; i < context->activeUnitCount; i++) {
 		GameUnit *unit = context->activeUnits[i];
