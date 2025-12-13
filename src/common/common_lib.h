@@ -7,4 +7,5 @@
 #include "video/render_queue.h"
 #include "time/fps.h"
 #include "mouse/mouse.h"
+#include "keyboard/keyboard.h"
 #endif /* COMMON_LIB_H */

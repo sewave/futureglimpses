@@ -16,5 +16,7 @@ void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum sl
 void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum slotIndex);
 void game_selection_remove_unit(GameContext* context, GameUnit* unit);
 void game_selection_add_unit(GameContext* context, GameUnit* unit);
+void game_selection_center_camera_on_selection(GameContext* context);
+GameUnit* game_selection_get_in_position_or_previous(GameContext* context, int boardXPosition, int boardYPosition);
 
 #endif /* SELECTION_H */

@@ -23,32 +23,20 @@ typedef enum {
 	SELECTION_REMOVE
 } SelectionModeEnum;
 
-// We will search for target on that position or a unit that was there with previous positions
-static UnitId get_in_position_or_previous(GameContext *context, int boardXPosition, int boardYPosition) {
-	UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
-	if (target == WALKABILITY_FREE) {
-		// Search on the sorrounding area for a unit that was there previously
-		for (int y = -1; y <= 1; y++) {
-			for (int x = -1; x <= 1; x++) {
-				if (x == 0 && y == 0) continue;
-				int checkX = boardXPosition + x;
-				int checkY = boardYPosition + y;
-				if (checkX < BOARD_X_MIN || checkX > BOARD_X_MAX ||
-					checkY < BOARD_Y_MIN || checkY > BOARD_Y_MAX) continue;
-				UnitId checkId = context->walkabilityGrid[checkX][checkY];
-				if (checkId < HANDLE_ID_THRESHOLD) continue;
-				GameUnit *checkUnit = game_unit_get_by_id(context, checkId);
-				if (!checkUnit) continue;
-				// If the unit was previously on the target position, we consider it the target
-				if (checkUnit->prevX == boardXPosition && checkUnit->prevY == boardYPosition) {
-					target = checkId;
-					break;
-				}
-			}
-			if (target != WALKABILITY_FREE) break;
+static uint16_t lastSelectionSlotSelectedTime = 0;
+static const uint16_t selectionSlotCooldown = SEC_TO_FRAMES(0.3);
+
+static void start_slot_selection_time() {
+	lastSelectionSlotSelectedTime = 1;
+}
+
+static void update_slot_selection_time() {
+	if(lastSelectionSlotSelectedTime) {
+		lastSelectionSlotSelectedTime++;
+		if(lastSelectionSlotSelectedTime > selectionSlotCooldown) {
+			lastSelectionSlotSelectedTime = 0;
 		}
 	}
-	return target;
 }
 
 static uint16_t get_board_x_position(uint16_t cameraPosition, int cursorPosition) {
@@ -78,7 +66,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			// If we double click, select all units of the same type on screen
 			int tileX = get_board_x_position(context->xPosition, mouseX);
 			int tileY = get_board_y_position(context->yPosition, mouseY);
-			UnitId id = get_in_position_or_previous(context, tileX, tileY);
+			UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 			GameUnit *sourceUnit = game_unit_get_by_id(context, id);
 			if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
 				UnitTypeEnum targetType = sourceUnit->type;
@@ -109,7 +97,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int boardXPosition = get_board_x_position(context->xPosition, mouseX);
 			int boardYPosition = get_board_y_position(context->yPosition, mouseY);
 
-			UnitId target = get_in_position_or_previous(context, boardXPosition, boardYPosition);
+			UnitId target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
 
 			if (target < HANDLE_ID_THRESHOLD) {
 				// Not unit position, depending on the tile, we move or interact with resource
@@ -152,10 +140,12 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			int dy = abs(selectionEndY - selectionStartY);
 
 			SelectionModeEnum selectionMode = SELECTION_SET;
-			if (key[KEY_LSHIFT] || key[KEY_RSHIFT]) {
+			if (keyboard_is_key_down(KEY_LSHIFT) || keyboard_is_key_down(KEY_RSHIFT)) {
 				selectionMode = SELECTION_ADD;
-			} else if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
-				selectionMode = SELECTION_REMOVE;
+			} else {
+				if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
+					selectionMode = SELECTION_REMOVE;
+				}
 			}
 			// TODO attack mode, move mode or selection mode
 
@@ -165,7 +155,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 				int tileY = get_board_y_position(context->yPosition, selectionStartY);
 
 				if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
-					UnitId id = get_in_position_or_previous(context, tileX, tileY);
+					UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 					GameUnit *foundUnit = game_unit_get_by_id(context, id);
 					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
 						switch (selectionMode) {
@@ -220,26 +210,51 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	}
 }
 
+
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO menus
-	if (key[KEY_ESC]) return GAME_STATE_EXIT;
+	if (keyboard_is_key_down(KEY_ESC)) return GAME_STATE_EXIT;
 
 	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 
-	if (key[KEY_LCONTROL] || key[KEY_RCONTROL]) {
-		if (key[KEY_1]) game_selection_save_to_slot(context, SELECTION_SLOT_1);
-		if (key[KEY_2]) game_selection_save_to_slot(context, SELECTION_SLOT_2);
-		if (key[KEY_3]) game_selection_save_to_slot(context, SELECTION_SLOT_3);
-		if (key[KEY_4]) game_selection_save_to_slot(context, SELECTION_SLOT_4);
-		if (key[KEY_5]) game_selection_save_to_slot(context, SELECTION_SLOT_5);
+	if(keyboard_is_key_pressed(KEY_SPACE)) {
+		game_selection_center_camera_on_selection(context);
+	}
+
+	update_slot_selection_time();
+	if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
+		if (keyboard_is_key_pressed(KEY_1)) game_selection_save_to_slot(context, SELECTION_SLOT_1);
+		if (keyboard_is_key_pressed(KEY_2)) game_selection_save_to_slot(context, SELECTION_SLOT_2);
+		if (keyboard_is_key_pressed(KEY_3)) game_selection_save_to_slot(context, SELECTION_SLOT_3);
+		if (keyboard_is_key_pressed(KEY_4)) game_selection_save_to_slot(context, SELECTION_SLOT_4);
+		if (keyboard_is_key_pressed(KEY_5)) game_selection_save_to_slot(context, SELECTION_SLOT_5);
 	} else {
-		if (key[KEY_1]) game_selection_load_from_slot(context, SELECTION_SLOT_1);
-		if (key[KEY_2]) game_selection_load_from_slot(context, SELECTION_SLOT_2);
-		if (key[KEY_3]) game_selection_load_from_slot(context, SELECTION_SLOT_3);
-		if (key[KEY_4]) game_selection_load_from_slot(context, SELECTION_SLOT_4);
-		if (key[KEY_5]) game_selection_load_from_slot(context, SELECTION_SLOT_5);
+		uint16_t previousSlotTime = lastSelectionSlotSelectedTime;
+		if (keyboard_is_key_pressed(KEY_1)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_1);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_2)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_2);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_3)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_3);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_4)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_4);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_5)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_5);
+			start_slot_selection_time();
+		}
+		if(previousSlotTime > lastSelectionSlotSelectedTime && lastSelectionSlotSelectedTime == 1) {
+			game_selection_center_camera_on_selection(context);
+		}
 	}
 
 	handle_units_area(context, renderQueue);
@@ -261,10 +276,9 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT]) ||
-		 (
-			(mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
-		 mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) && !context->mouseStatus.isLeftDown)
-	) {
+		((mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
+		  mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) &&
+		 !context->mouseStatus.isLeftDown)) {
 		moveViewportCounter++;
 	} else {
 		moveViewportCounter = 0;

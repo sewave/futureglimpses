@@ -89,7 +89,6 @@ END_OF_MAIN()
 static long lastTickCount;
 static char redrawNeeded;
 static RenderQueue renderQueue;
-static char keyPrevious[KEY_MAX];
 static GameContext context;
 
 void main_loop(volatile long *logicTicks,
@@ -98,7 +97,6 @@ void main_loop(volatile long *logicTicks,
 			   int endState) {
 	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_LOAD_MAP;
-	memset(keyPrevious, FALSE, sizeof(keyPrevious));
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
 	lastTickCount = *logicTicks;
@@ -113,8 +111,7 @@ void main_loop(volatile long *logicTicks,
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
-				memcpy(keyPrevious, (char *) key, sizeof(keyPrevious));
-				poll_keyboard();
+				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
 				context.gameState = game_execute_state(&context, &renderQueue);
 				lastTickCount++;

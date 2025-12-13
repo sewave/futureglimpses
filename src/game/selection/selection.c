@@ -6,6 +6,17 @@ typedef struct {
 
 SelectionSlot selectionSlots[MAX_SELECTION_SLOTS];
 
+static GameUnit* get_first_selected_unit_active(GameContext* context) {
+    if(context->selectedUnitCount == 0) return NULL;
+    for (int i = 0; i < context->selectedUnitCount; i++) {
+        GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+        if (unit && unit->isActive) {
+            return unit;
+        }
+    }
+    return NULL;
+}
+
 void game_selection_clear(GameContext *context) {
     for (int i = 0; i < context->selectedUnitCount; i++) {
         GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
@@ -60,4 +71,43 @@ void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum 
             game_selection_add_unit(context, unit);
         }
     }
+}
+
+void game_selection_center_camera_on_selection(GameContext* context) {
+    GameUnit* firstUnit = get_first_selected_unit_active(context);
+    if (!firstUnit) return;
+
+    // Center camera on the first selected unit
+    int targetX = (firstUnit->x * TILE_SIZE) - (VIEWPORT_WIDTH / 2);
+    int targetY = (firstUnit->y * TILE_SIZE) - (VIEWPORT_HEIGHT / 2);
+
+    context->xPosition = clamp(targetX, 0, MAX_CAMERA_X_POSITION);
+    context->yPosition = clamp(targetY, 0, MAX_CAMERA_Y_POSITION);
+}
+
+GameUnit* game_selection_get_in_position_or_previous(GameContext* context, int boardXPosition, int boardYPosition) {
+    UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
+	if (target == WALKABILITY_FREE) {
+		// Search on the sorrounding area for a unit that was there previously
+		for (int y = -1; y <= 1; y++) {
+			for (int x = -1; x <= 1; x++) {
+				if (x == 0 && y == 0) continue;
+				int checkX = boardXPosition + x;
+				int checkY = boardYPosition + y;
+				if (checkX < BOARD_X_MIN || checkX > BOARD_X_MAX ||
+					checkY < BOARD_Y_MIN || checkY > BOARD_Y_MAX) continue;
+				UnitId checkId = context->walkabilityGrid[checkX][checkY];
+				if (checkId < HANDLE_ID_THRESHOLD) continue;
+				GameUnit *checkUnit = game_unit_get_by_id(context, checkId);
+				if (!checkUnit) continue;
+				// If the unit was previously on the target position, we consider it the target
+				if (checkUnit->prevX == boardXPosition && checkUnit->prevY == boardYPosition) {
+					target = checkId;
+					break;
+				}
+			}
+			if (target != WALKABILITY_FREE) break;
+		}
+	}
+	return target;
 }
