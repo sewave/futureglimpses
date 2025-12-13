@@ -85,7 +85,7 @@ void game_selection_center_camera_on_selection(GameContext* context) {
     context->yPosition = clamp(targetY, 0, MAX_CAMERA_Y_POSITION);
 }
 
-GameUnit* game_selection_get_in_position_or_previous(GameContext* context, int boardXPosition, int boardYPosition) {
+UnitId game_selection_get_in_position_or_previous(GameContext* context, int boardXPosition, int boardYPosition) {
     UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
 	if (target == WALKABILITY_FREE) {
 		// Search on the sorrounding area for a unit that was there previously
