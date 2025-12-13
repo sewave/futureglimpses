@@ -1,0 +1,58 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "base.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "FullTileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "base.tmx": {
+            "scale": 0.500048828125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 115.98867298115414,
+                "y": 104.98974709501022
+            }
+        },
+        "sin nombre.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 512,
+                "y": 714
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
+    "last.imagePath": "C:/dev/games/Fantasy Battle Pack/Tiles",
+    "map.height": 64,
+    "map.lastUsedExportFilter": "Simple Bin Exporter (*.map)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 64,
+    "openFiles": [
+        "base.tmx",
+        "FullTileset.tsx"
+    ],
+    "project": "rts.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "FullTileset.tsx",
+        "base.tmx",
+        "sin nombre.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.useTransparentColor": true
+}
