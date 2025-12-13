@@ -15,6 +15,7 @@ int selectionStartX = -1;
 int selectionStartY = -1;
 
 static char fpsText[16];
+static char activeText[32];
 int moveViewportCounter = 0;
 
 typedef enum {
@@ -384,6 +385,20 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, font, fpsText, 0, 190, PAL_COLOR_WHITE, -1);
+
+	int blue = 0;
+	int red = 0;
+	// Count active units by controller
+	for (int i = 0; i < context->activeUnitCount; i++) {
+		GameUnit *unit = context->activeUnits[i];
+		if (unit->controller == UNIT_CONTROLLER_PLAYER) {
+			blue++;
+		} else {
+			red++;
+		}
+	}
+	snprintf(activeText, sizeof(activeText), "T: %d B: %d R: %d", context->activeUnitCount, blue, red);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, font, activeText, 0, 1, PAL_COLOR_WHITE, -1);
 
 	return GAME_STATE_PLAY_MAP;
 }
