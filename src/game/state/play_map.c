@@ -15,7 +15,7 @@ int selectionStartX = -1;
 int selectionStartY = -1;
 
 static char fpsText[16];
-static char activeText[32];
+static char activeText[64];
 int moveViewportCounter = 0;
 
 typedef enum {

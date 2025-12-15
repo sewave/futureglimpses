@@ -15,4 +15,5 @@
 #include "render/render.h"
 #include "event/event.h"
 #include "selection/selection.h"
+#include "object/object.h"
 #endif /* GAME_LIB_H */

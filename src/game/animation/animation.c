@@ -151,8 +151,8 @@ void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
         AnimationEvent* event = data->events;
         for(uint8_t i = 0; i < data->numEvents; i++, event++) {
             if(event->fireTime == animationStatus->totalTicks) {
-                game_event_process(context, event->type, unit, event->data);
-            }
+				game_event_unit_process(context, event->type, unit, event->data);
+			}
         }
         if(animationStatus->frameTicks == frame->duration) {
             if(animationStatus->frame == data->lastFrameIndex) {

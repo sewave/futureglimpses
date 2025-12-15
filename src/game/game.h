@@ -70,7 +70,7 @@ typedef enum {
 typedef enum {
 	UNIT_CONTROLLER_PLAYER,
 	UNIT_CONTROLLER_AI
-} UnitControllerEnum;
+} ControllerEnum;
 
 typedef enum {
 	UNIT_STATE_IDLE,
@@ -95,8 +95,9 @@ typedef enum {
 typedef enum {
 	EVENT_TYPE_SOUND,
 	EVENT_TYPE_DAMAGE,
+	EVENT_TYPE_AREA_DAMAGE,
 	EVENT_TYPE_SPAWN_ARROW,
-	EVENT_TYPE_SPAWN_MAGIC,
+	EVENT_TYPE_SPAWN_FIREBALL,
 	EVENT_TYPE_WORK,
 } EventType;
 
@@ -154,7 +155,7 @@ typedef struct {
 	UnitId id;
 	uint8_t isActive, isSelected, isBuilding;
 	UnitTypeEnum type;
-	UnitControllerEnum controller;
+	ControllerEnum controller;
 	UnitStateEnum state;
 	UnitStateEnum nextState;
 	DirectionEnum direction;
@@ -178,6 +179,34 @@ typedef struct {
 	AnimationStatus animationStatus;
 } GameUnit;
 
+typedef enum {
+	OBJ_TYPE_ARROW,
+	OBJ_TYPE_FIREBALL,
+	OBJ_TYPE_NUMBER,
+} ObjectTypeEnum;
+
+typedef uint32_t ObjectId;
+
+typedef struct {
+	ObjectId id;
+	uint8_t isActive;
+	ObjectTypeEnum type;
+	ControllerEnum controller;
+	DirectionEnum direction;
+
+	uint16_t x, y;
+	uint16_t targetX, targetY;
+	UnitId targetId;
+
+	uint8_t damageRadius;
+	uint8_t minDamage;
+	uint8_t maxDamage;
+
+	uint16_t moveTime;
+	uint16_t moveTimeCounter;
+	AnimationStatus animationStatus;
+} Object;
+
 typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
@@ -199,6 +228,10 @@ typedef struct {
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
 	MouseStatus mouseStatus;
+
+	Object objects[MAX_GAME_UNITS];
+	Object *activeObjects[MAX_GAME_UNITS];
+	uint16_t activeObjectsCount;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

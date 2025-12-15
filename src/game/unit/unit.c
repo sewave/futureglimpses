@@ -153,7 +153,7 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	}
 }
 
-GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, UnitControllerEnum controller, uint16_t x, uint16_t y) {
+GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnum controller, uint16_t x, uint16_t y) {
 	if (context->walkabilityGrid[x][y] != WALKABILITY_FREE) return NULL;
 	int index = game_unit_find_free_index(context->units);
 	if (index == NO_FREE_UNIT_INDEX) return NULL;
@@ -221,9 +221,9 @@ void game_unit_face_target(GameUnit *unit, GameUnit *target) {
 	}
 }
 
-void game_unit_damage(GameContext* context, GameUnit* unit, GameUnit* target) {
-	if(!unit->isActive || !target->isActive || target->state == UNIT_STATE_DIE) return;
-	uint8_t damage = random_int(unit->minDamage, unit->maxDamage);
+void game_unit_damage(GameContext* context, uint8_t minDamage, uint8_t maxDamage, GameUnit* target) {
+	if(!target->isActive || target->state == UNIT_STATE_DIE) return;
+	uint8_t damage = random_int(minDamage, maxDamage);
 	if(target->health <= damage) {
 		target->health = 0;
 		target->state = UNIT_STATE_DIE;
@@ -231,5 +231,24 @@ void game_unit_damage(GameContext* context, GameUnit* unit, GameUnit* target) {
 	}
 	else {
 		target->health -= damage;
+	}
+}
+
+void game_unit_area_damage(GameContext* context, uint8_t minDamage, uint8_t maxDamage, uint16_t centerX, uint16_t centerY, uint8_t radius) {
+	for(int row = centerY - radius; row <= centerY + radius; row++) {
+		for(int col = centerX - radius; col <= centerX + radius; col++) {
+			if(col < BOARD_X_MIN || col > BOARD_X_MAX || row < BOARD_Y_MIN || row > BOARD_Y_MAX) continue;
+			UnitId id = context->walkabilityGrid[col][row];
+			if(id < HANDLE_ID_THRESHOLD) continue;
+			GameUnit *target = game_unit_get_by_id(context, id);
+			if(target) {
+				// Check distance
+				int dx = target->x - centerX;
+				int dy = target->y - centerY;
+				if((dx * dx + dy * dy) <= (radius * radius)) {
+					game_unit_damage(context, minDamage, maxDamage, target);
+				}
+			}
+		}
 	}
 }

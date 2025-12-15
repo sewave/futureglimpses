@@ -1,16 +1,49 @@
 #include "event.h"
 
-void game_event_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
+void game_event_unit_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
 	switch (eventType) {
 		case EVENT_TYPE_DAMAGE:
-			GameUnit *target = game_unit_get_by_id(context, unit->targetId);
-			if (target && target->isActive) game_unit_damage(context, unit, target);
+			GameUnit *damageTarget = game_unit_get_by_id(context, unit->targetId);
+			if (damageTarget) game_unit_damage(context, unit->minDamage, unit->maxDamage, damageTarget);
 			break;
 		case EVENT_TYPE_SOUND:
 			if (unit->x >= context->xPosition / TILE_SIZE && unit->x <= (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE &&
 				unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE) {
 				game_snd_play_sound((GameSound) data);
 			}
+			break;
+		case EVENT_TYPE_SPAWN_ARROW:
+			GameUnit *arrowTarget = game_unit_get_by_id(context, unit->targetId);
+			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			break;
+		case EVENT_TYPE_SPAWN_FIREBALL:
+			GameUnit *fireballTarget = game_unit_get_by_id(context, unit->targetId);
+			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit, NULL, fireballTarget->x, fireballTarget->y);
+			break;
+		case EVENT_TYPE_AREA_DAMAGE:
+			// Not usable for units
+		break;
+	}
+}
+
+void game_event_object_process(GameContext *context, EventType eventType, Object *object, uint16_t data) {
+	switch (eventType) {
+		case EVENT_TYPE_DAMAGE:
+			GameUnit *damageTarget = game_unit_get_by_id(context, object->targetId);
+			if (damageTarget) game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
+			break;
+		case EVENT_TYPE_AREA_DAMAGE:
+			game_unit_area_damage(context, object->minDamage, object->maxDamage, object->targetX, object->targetY, object->damageRadius);
+			break;
+		case EVENT_TYPE_SOUND:
+			if (object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
+				object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH)) {
+				game_snd_play_sound((GameSound) data);
+			}
+			break;
+		case EVENT_TYPE_SPAWN_ARROW:
+		case EVENT_TYPE_SPAWN_FIREBALL:
+			// Do nothing
 			break;
 	}
 }
