@@ -86,6 +86,21 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 		.numEvents = 2,
 };
 
+static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_ONCE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(0.7), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE},
+            {.duration = SEC_TO_FRAMES(0.5), .xOffset = UNIT_FRAME_SIZE * 2},
+            {.duration = SEC_TO_FRAMES(0.6), .xOffset = UNIT_FRAME_SIZE * 3},
+        },
+		.lastFrameIndex = 3,
+        // TODO shoot arrow sound
+		.events = { 
+                    {.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}},
+		.numEvents = 1,
+};
+
 static AnimationData COMMON_DIE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
@@ -119,6 +134,11 @@ static const AnimationPropsData WORKER_ATTACK = {
     .data = &WORKER_ATTACK_ANIMATION_DATA,
 };
 
+static const AnimationPropsData ARCHER_ATTACK = {
+    .props = ATTACK_PROPERTIES,
+    .data = &ARCHER_ATTACK_ANIMATION_DATA,
+};
+
 static const AnimationPropsData COMMON_DIE = {
     .props = DIE_PROPERTIES,
     .data = &COMMON_DIE_ANIMATION_DATA,
@@ -126,9 +146,12 @@ static const AnimationPropsData COMMON_DIE = {
 
 // UNIT_STATE_IDLE, UNIT_STATE_ATTACK, UNIT_STATE_DEFEND, UNIT_STATE_MOVE, UNIT_STATE_MOVE_ANIM, UNIT_STATE_MOVE_ATTACK, UNIT_STATE_WORK
 AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
+        // WORKER
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+        // SOLDIER
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
-		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+        // ARCHER
+		{COMMON_IDLE, ARCHER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
 };
@@ -173,8 +196,10 @@ static AnimationData ARROW_ANIMATION_DATA = {
 		},
 		.lastFrameIndex = 0,
         // TODO arrow hit sound
-		.events = {{.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.5)}},
-		.numEvents = 1,
+		.events = {
+            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.5)},
+            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.5)}},
+		.numEvents = 2,
 };
 
 static AnimationData FIREBALL_ANIMATION_DATA = {

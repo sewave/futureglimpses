@@ -18,8 +18,8 @@ static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
 	{ 
 		.type = OBJ_TYPE_ARROW,
 		.damageRadius = 0,
-		.minDamage = 2,
-		.maxDamage = 4,
+		.minDamage = 6,
+		.maxDamage = 10,
 		.moveTime = SEC_TO_FRAMES(0.5),
 	},
 	{
