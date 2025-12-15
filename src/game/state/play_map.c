@@ -341,7 +341,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
 	render_queue_add_active_units(context, renderQueue);
-	// TODO queue effects, proyectiles, particles, etc
+	render_queue_add_active_objects(context, renderQueue);
 
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
 									  context->xPosition, context->yPosition,

@@ -16,5 +16,6 @@
 #define VIEWPORT_Y_MAX VIEWPORT_Y_OFFSET + VIEWPORT_HEIGHT - 1
 
 void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue);
+void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQueue);
 
 #endif /* RENDER_H */

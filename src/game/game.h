@@ -93,6 +93,18 @@ typedef enum {
 } DirectionEnum;
 
 typedef enum {
+	OBJ_DIRECTION_NORTH,
+	OBJ_DIRECTION_NORTH_EAST,
+	OBJ_DIRECTION_EAST,
+	OBJ_DIRECTION_SOUTH_EAST,
+	OBJ_DIRECTION_SOUTH,
+	OBJ_DIRECTION_SOUTH_WEST,
+	OBJ_DIRECTION_WEST,
+	OBJ_DIRECTION_NORTH_WEST,
+	OBJ_DIRECTIONS_COUNT,
+} ObjectDirectionEnum;
+
+typedef enum {
 	EVENT_TYPE_SOUND,
 	EVENT_TYPE_DAMAGE,
 	EVENT_TYPE_AREA_DAMAGE,
@@ -193,7 +205,7 @@ typedef struct {
 	uint8_t isActive;
 	ObjectTypeEnum type;
 	ControllerEnum controller;
-	DirectionEnum direction;
+	ObjectDirectionEnum direction;
 
 	uint16_t x, y;
 	uint16_t currentX, currentY;

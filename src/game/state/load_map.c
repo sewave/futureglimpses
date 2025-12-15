@@ -44,6 +44,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	game_map_free_data(map);
 
 	game_units_init(context);
+	game_objects_init(context);
 	game_selection_clear(context);
 
 	spawn_test_units(context);

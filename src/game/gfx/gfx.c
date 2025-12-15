@@ -5,6 +5,7 @@
 
 static BITMAP* spriteSheetsBlue[UNIT_TYPE_NUMBER];
 static BITMAP* spriteSheetsRed[UNIT_TYPE_NUMBER];
+static BITMAP* spriteSheetsObject[OBJ_TYPE_NUMBER];
 
 static const char* spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/workerb.pcx",
@@ -34,6 +35,12 @@ static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/archerr.pcx",
 };
 
+static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {
+    "assets/gfx/object/arrow.pcx",
+    "assets/gfx/object/arrow.pcx",
+    "assets/gfx/object/arrow.pcx",
+};
+
 static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP* spriteSheets[], const char * spriteSheetFilenames[]) {
     if (index >= UNIT_TYPE_NUMBER) return FALSE;
     if (spriteSheets[index] != NULL) destroy_bitmap(spriteSheets[index]);
@@ -48,6 +55,9 @@ InitializationStatusEnum game_gfx_load_sprite_sheets() {
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsBlue, spriteSheetFilenamesBlue)) return INITIALIZATION_ERROR;
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsRed, spriteSheetFilenamesRed)) return INITIALIZATION_ERROR;
     }
+    for(int i = 0; i < OBJ_TYPE_NUMBER; i++) {
+        if(!game_gfx_load_sprite_sheet(i, spriteSheetsObject, objectSheetFilenames)) return INITIALIZATION_ERROR;
+    }
     return INITIALIZATION_OK;
 }
 
@@ -55,6 +65,9 @@ void game_gfx_destroy_sprite_sheets() {
     for(int i = 0; i < UNIT_TYPE_NUMBER; i++) {
         if (spriteSheetsBlue[i] != NULL) destroy_bitmap(spriteSheetsBlue[i]);
         if (spriteSheetsRed[i] != NULL) destroy_bitmap(spriteSheetsRed[i]);
+    }
+    for(int i = 0; i < OBJ_TYPE_NUMBER; i++) {
+        if (spriteSheetsObject[i] != NULL) destroy_bitmap(spriteSheetsObject[i]);
     }
 }
 
@@ -64,4 +77,8 @@ void game_gfx_set_sprite_sheet(GameUnit* unit) {
     } else {
         unit->animationStatus.sheet = spriteSheetsRed[unit->type];
     }
+}
+
+void game_gfx_set_object_sheet(Object* object) {
+    object->animationStatus.sheet = spriteSheetsObject[object->type];
 }

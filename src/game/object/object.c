@@ -15,27 +15,27 @@ typedef struct {
 } ObjectData;
 
 static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
-	{ 
-		.type = OBJ_TYPE_ARROW,
-		.damageRadius = 0,
-		.minDamage = 6,
-		.maxDamage = 10,
-		.moveTime = SEC_TO_FRAMES(0.5),
-	},
-	{
-		.type = OBJ_TYPE_FIREBALL,
-		.damageRadius = 0,
-		.minDamage = 0,
-		.maxDamage = 0,
-		.moveTime = SEC_TO_FRAMES(1.2),
-	},
-	{
-		.type = OBJ_TYPE_EXPLOSION,
-		.damageRadius = 1,
-		.minDamage = 10,
-		.maxDamage = 15,
-		.moveTime = SEC_TO_FRAMES(0.0),
-	},
+		{
+				.type = OBJ_TYPE_ARROW,
+				.damageRadius = 0,
+				.minDamage = 6,
+				.maxDamage = 10,
+				.moveTime = SEC_TO_FRAMES(0.3),
+		},
+		{
+				.type = OBJ_TYPE_FIREBALL,
+				.damageRadius = 0,
+				.minDamage = 0,
+				.maxDamage = 0,
+				.moveTime = SEC_TO_FRAMES(0.8),
+		},
+		{
+				.type = OBJ_TYPE_EXPLOSION,
+				.damageRadius = 1,
+				.minDamage = 10,
+				.maxDamage = 15,
+				.moveTime = SEC_TO_FRAMES(0.0),
+		},
 };
 
 static int game_object_find_free_index(Object objects[]) {
@@ -89,7 +89,7 @@ void game_object_destroy(GameContext *context, ObjectId id) {
 	}
 }
 
-Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerEnum controller, uint16_t sourceX, uint16_t sourceY, GameUnit* target, uint16_t targetX, uint16_t targetY) {
+Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerEnum controller, uint16_t sourceX, uint16_t sourceY, GameUnit *target, uint16_t targetX, uint16_t targetY) {
 	int index = game_object_find_free_index(context->objects);
 	if (index == NO_FREE_INDEX) return NULL;
 	Object *object = &context->objects[index];
@@ -103,7 +103,7 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 	object->currentY = object->y;
 	object->moveTimeCounter = 0;
 	object->isActive = TRUE;
-	if(target) {
+	if (target) {
 		object->targetId = target->id;
 		object->targetX = target->x * TILE_SIZE;
 		object->targetY = target->y * TILE_SIZE;
@@ -112,22 +112,37 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 		object->targetY = targetY * TILE_SIZE;
 	}
 	// Direction towards target
-	if(object->targetY < object->y) 
-		object->direction = DIRECTION_NORTH;
-	else {
-		if(object->targetY > object->y) 
-			object->direction = DIRECTION_SOUTH;
-		else {
-			if(object->targetX < object->x) 
-				object->direction = DIRECTION_WEST;
-			else {
-				if(object->targetX > object->x) 
-					object->direction = DIRECTION_EAST;
+	if (object->targetY < object->y) {
+		if (object->targetX == object->x) {
+			object->direction = OBJ_DIRECTION_NORTH;
+		} else {
+			if (object->targetX > object->x) {
+				object->direction = OBJ_DIRECTION_NORTH_EAST;
+			} else {
+				object->direction = OBJ_DIRECTION_NORTH_WEST;
+			}
+		}
+	} else {
+		if (object->targetY > object->y) {
+			if (object->targetX == object->x) {
+				object->direction = OBJ_DIRECTION_SOUTH;
+			} else {
+				if (object->targetX > object->x) {
+					object->direction = OBJ_DIRECTION_SOUTH_EAST;
+				} else {
+					object->direction = OBJ_DIRECTION_SOUTH_WEST;
+				}
+			}
+		} else {
+			if (object->targetX < object->x) {
+				object->direction = OBJ_DIRECTION_WEST;
+			} else {
+				object->direction = OBJ_DIRECTION_EAST;
 			}
 		}
 	}
-	
-	ObjectData* data = &objectsData[type];
+
+	ObjectData *data = &objectsData[type];
 	object->type = data->type;
 	object->damageRadius = data->damageRadius;
 	object->minDamage = data->minDamage;
@@ -135,8 +150,7 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 	object->moveTime = data->moveTime;
 
 	game_animation_object_set(object);
-	// TODO set sheet
-	/*game_gfx_set_sprite_sheet(object);*/
+	game_gfx_set_object_sheet(object);
 	// Add to active list
 	context->activeObjects[context->activeObjectsCount++] = object;
 	return object;
@@ -156,10 +170,10 @@ void game_objects_advance(GameContext *context) {
 				object->currentX = (object->x * (MOVE_PRECISION - t)) / MOVE_PRECISION + (object->targetX * t) / MOVE_PRECISION;
 				object->currentY = (object->y * (MOVE_PRECISION - t)) / MOVE_PRECISION + (object->targetY * t) / MOVE_PRECISION;
 			} else {
-				if(game_animation_finished(&object->animationStatus)) {					
-					if(object->type == OBJ_TYPE_FIREBALL) {
+				if (game_animation_finished(&object->animationStatus)) {
+					if (object->type == OBJ_TYPE_FIREBALL) {
 						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE,
-							NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
+										  NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
 					}
 					game_object_destroy(context, object->id);
 				}

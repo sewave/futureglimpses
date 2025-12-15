@@ -89,15 +89,15 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.7), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.5), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.6), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
         },
 		.lastFrameIndex = 3,
         // TODO shoot arrow sound
 		.events = { 
-                    {.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}},
+                    {.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.6)}},
 		.numEvents = 1,
 };
 
@@ -156,36 +156,60 @@ AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
 };
 
-static AnimationProperties ARROW_PROPERTIES[DIRECTIONS_COUNT] = {
+static AnimationProperties ARROW_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
 		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_EAST
+        // DIRECTION_NORTH_EAST
 		{.yOffset = 16, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_SOUTH
+		// DIRECTION_EAST
 		{.yOffset = 32, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_WEST
+		// DIRECTION_SOUTH_EAST
 		{.yOffset = 48, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_SOUTH
+		{.yOffset = 64, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_SOUTH_WEST
+		{.yOffset = 80, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_WEST
+		{.yOffset = 96, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_NORTH_WEST
+		{.yOffset = 112, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
 };
 
-static AnimationProperties FIREBALL_PROPERTIES[DIRECTIONS_COUNT] = {
+static AnimationProperties FIREBALL_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
 		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_EAST
+        // DIRECTION_NORTH_EAST
 		{.yOffset = 16, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_SOUTH
+		// DIRECTION_EAST
 		{.yOffset = 32, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
-		// DIRECTION_WEST
+		// DIRECTION_SOUTH_EAST
 		{.yOffset = 48, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_SOUTH
+		{.yOffset = 64, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_SOUTH_WEST
+		{.yOffset = 80, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_WEST
+		{.yOffset = 96, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		// DIRECTION_NORTH_WEST
+		{.yOffset = 112, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
 };
 
-static AnimationProperties EXPLOSION_PROPERTIES[DIRECTIONS_COUNT] = {
+static AnimationProperties EXPLOSION_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
+		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+        // DIRECTION_NORTH_EAST
 		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
 		// DIRECTION_EAST
 		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		// DIRECTION_SOUTH_EAST
+		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
 		// DIRECTION_SOUTH
 		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		// DIRECTION_SOUTH_WEST
+		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
 		// DIRECTION_WEST
+		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		// DIRECTION_NORTH_WEST
 		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
 };
 
@@ -197,8 +221,8 @@ static AnimationData ARROW_ANIMATION_DATA = {
 		.lastFrameIndex = 0,
         // TODO arrow hit sound
 		.events = {
-            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.5)},
-            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.5)}},
+            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.3)},
+            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.3)}},
 		.numEvents = 2,
 };
 
