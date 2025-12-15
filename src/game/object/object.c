@@ -34,7 +34,7 @@ static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
 				.damageRadius = 1,
 				.minDamage = 10,
 				.maxDamage = 15,
-				.moveTime = SEC_TO_FRAMES(0.0),
+				.moveTime = 0,
 		},
 };
 

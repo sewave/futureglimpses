@@ -33,7 +33,7 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 			if (damageTarget) game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
 			break;
 		case EVENT_TYPE_AREA_DAMAGE:
-			game_unit_area_damage(context, object->minDamage, object->maxDamage, object->targetX, object->targetY, object->damageRadius);
+			game_unit_area_damage(context, object->minDamage, object->maxDamage, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE, object->damageRadius);
 			break;
 		case EVENT_TYPE_SOUND:
 			if (object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&

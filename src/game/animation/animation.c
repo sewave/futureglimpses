@@ -101,6 +101,20 @@ static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.numEvents = 1,
 };
 
+static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_ONCE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.8), .xOffset = UNIT_FRAME_SIZE},
+            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE * 2},
+            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+        },
+		.lastFrameIndex = 3,
+		.events = { 
+                    {.type = EVENT_TYPE_SPAWN_FIREBALL, .data = 0, .fireTime = SEC_TO_FRAMES(0.9)}},
+		.numEvents = 1,
+};
+
 static AnimationData COMMON_DIE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
@@ -139,6 +153,11 @@ static const AnimationPropsData ARCHER_ATTACK = {
     .data = &ARCHER_ATTACK_ANIMATION_DATA,
 };
 
+static const AnimationPropsData MAGE_ATTACK = {
+    .props = ATTACK_PROPERTIES,
+    .data = &MAGE_ATTACK_ANIMATION_DATA,
+};
+
 static const AnimationPropsData COMMON_DIE = {
     .props = DIE_PROPERTIES,
     .data = &COMMON_DIE_ANIMATION_DATA,
@@ -152,8 +171,10 @@ AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
         // ARCHER
 		{COMMON_IDLE, ARCHER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+        // KNIGHT
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
-		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+        // MAGE
+		{COMMON_IDLE, MAGE_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
 };
 
 static AnimationProperties ARROW_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
@@ -232,7 +253,7 @@ static AnimationData FIREBALL_ANIMATION_DATA = {
 				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
 		},
 		.lastFrameIndex = 0,
-        // TODO explosion sound
+        // TODO flame sound
 		.events = {},
 		.numEvents = 0,
 };
@@ -246,7 +267,10 @@ static AnimationData EXPLOSION_ANIMATION_DATA = {
                 {.duration = SEC_TO_FRAMES(0.2), .xOffset = 144},
 		},
 		.lastFrameIndex = 3,
-		.events = {{.type = EVENT_TYPE_AREA_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}},
+        // TODO explosion sound
+		.events = {
+            {.type = EVENT_TYPE_AREA_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}
+        },
 		.numEvents = 1,
 };
 
