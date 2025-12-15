@@ -8,8 +8,8 @@
 #define BLINK_FRAMES 5
 
 void game_animation_unit_set(GameUnit *unit);
-void game_animation_unit_reset(GameUnit* unit);
+void game_animation_reset(AnimationStatus* animationStatus);
 void game_animation_unit_advance(GameContext* context, GameUnit* unit);
-uint8_t game_animation_unit_finished(GameUnit* unit);
+uint8_t game_animation_finished(AnimationStatus* animationStatus);
 
 #endif /* ANIMATION_H */

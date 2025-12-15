@@ -5,8 +5,8 @@
 
 //TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
 void spawn_test_units(GameContext *context) {
-	context->xPosition = 0 * TILE_SIZE;
-	context->yPosition = 0 * TILE_SIZE;
+	context->xPosition = BOARD_WIDTH / 2 - VIEWPORT_WIDTH_TILES / 2;
+	context->yPosition = BOARD_HEIGHT / 2 - VIEWPORT_HEIGHT_TILES / 2;
 
 	for (int i = 0; i < MAX_GAME_UNITS / 2; i++) {
 		while (!game_unit_spawn(context, i % 5, UNIT_CONTROLLER_AI,

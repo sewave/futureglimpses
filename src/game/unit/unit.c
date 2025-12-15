@@ -241,14 +241,7 @@ void game_unit_area_damage(GameContext* context, uint8_t minDamage, uint8_t maxD
 			UnitId id = context->walkabilityGrid[col][row];
 			if(id < HANDLE_ID_THRESHOLD) continue;
 			GameUnit *target = game_unit_get_by_id(context, id);
-			if(target) {
-				// Check distance
-				int dx = target->x - centerX;
-				int dy = target->y - centerY;
-				if((dx * dx + dy * dy) <= (radius * radius)) {
-					game_unit_damage(context, minDamage, maxDamage, target);
-				}
-			}
+			if(target) game_unit_damage(context, minDamage, maxDamage, target);
 		}
 	}
 }

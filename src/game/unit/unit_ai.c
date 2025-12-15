@@ -82,10 +82,10 @@ static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 
 static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 	GameUnit *target = game_unit_get_by_id(context, unit->targetId);
-	if (game_animation_unit_finished(unit) || !target || !target->isActive || target->state == UNIT_STATE_DIE) {
+	if (game_animation_finished(&unit->animationStatus) || !target || !target->isActive || target->state == UNIT_STATE_DIE) {
 		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
 			game_unit_face_target(unit, target);
-            game_animation_unit_reset(unit);
+			game_animation_reset(&unit->animationStatus);
 		} else {
 			unit->state = unit->nextState;
 			unit->nextState = UNIT_STATE_IDLE;
@@ -142,7 +142,7 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
-	if (game_animation_unit_finished(unit)) game_unit_destroy(context, unit->id);
+	if (game_animation_finished(&unit->animationStatus)) game_unit_destroy(context, unit->id);
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {

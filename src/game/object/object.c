@@ -132,3 +132,33 @@ Object *game_object_spawn(GameContext *context, UnitTypeEnum type, GameUnit* sou
 	return object;
 }
 
+void game_objects_advance(GameContext *context) {
+	for (int i = 0; i < context->activeObjectsCount; i++) {
+		Object *object = context->activeObjects[i];
+		if (object->isActive) {
+			if (object->moveTimeCounter < object->moveTime) {
+				object->moveTimeCounter++;
+				// Move towards target
+				int16_t dx = object->targetX - object->x;
+				int16_t dy = object->targetY - object->y;
+				if (dx != 0 || dy != 0) {
+					float moveFraction = (float)object->moveTimeCounter / (float)object->moveTime;
+					if (moveFraction > 1.0f) moveFraction = 1.0f;
+					object->x = object->x + (int16_t)(dx * moveFraction);
+					object->y = object->y + (int16_t)(dy * moveFraction);
+				}
+			} else {
+				// Reached target
+				// Process impact
+				if (object->damageRadius > 0) {
+					game_event_object_process(context, EVENT_TYPE_AREA_DAMAGE, object, 0);
+				}
+				else {
+					game_event_object_process(context, EVENT_TYPE_DAMAGE, object, 0);
+				}
+				// Destroy object
+				game_object_destroy(context, object->id);
+			}
+		}
+	}
+}

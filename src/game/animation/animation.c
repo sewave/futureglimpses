@@ -135,9 +135,18 @@ AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
 
 void game_animation_unit_set(GameUnit *unit) {
     AnimationPropsData propsData = MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state];
-	unit->animationStatus.animation.prop = &propsData.props[unit->direction];
-    unit->animationStatus.animation.data = propsData.data;
-	game_animation_unit_reset(unit);
+    AnimationStatus* animationStatus = &unit->animationStatus;
+	animationStatus->animation.prop = &propsData.props[unit->direction];
+    animationStatus->animation.data = propsData.data;
+	game_animation_reset(animationStatus);
+}
+
+void game_animation_object_set(Object *object) {
+    AnimationPropsData propsData = MOVABLE_UNIT_ANIMATIONS[object->type][0];
+    AnimationStatus* animationStatus = &object->animationStatus;
+	animationStatus->animation.prop = &propsData.props[object->direction];
+    animationStatus->animation.data = propsData.data;
+	game_animation_reset(animationStatus);
 }
 
 void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
@@ -156,8 +165,8 @@ void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
         }
         if(animationStatus->frameTicks == frame->duration) {
             if(animationStatus->frame == data->lastFrameIndex) {
-                if(data->type == ANIMATION_TYPE_CYCLE) game_animation_unit_reset(unit);
-            }
+				if (data->type == ANIMATION_TYPE_CYCLE) game_animation_reset(animationStatus);
+			}
             else {
                 ++animationStatus->frame;
                 animationStatus->frameTicks = 0;
@@ -166,17 +175,17 @@ void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
     }
 }
 
-uint8_t game_animation_unit_finished(GameUnit* unit) {
-	AnimationData *data = unit->animationStatus.animation.data;
+uint8_t game_animation_finished(AnimationStatus* animationStatus) {
+	AnimationData *data = animationStatus->animation.data;
 	// Looping animations are always finished
     if(data->type != ANIMATION_TYPE_ONCE) return TRUE;
-    uint8_t frame = unit->animationStatus.frame;
+    uint8_t frame = animationStatus->frame;
     AnimationFrame* frameAnim = &data->frames[frame];
-	return frame == data->lastFrameIndex && unit->animationStatus.frameTicks >= frameAnim->duration;
+	return frame == data->lastFrameIndex && animationStatus->frameTicks >= frameAnim->duration;
 }
 
-void game_animation_unit_reset(GameUnit* unit) {
-	unit->animationStatus.frame = 0;
-	unit->animationStatus.frameTicks = 0;
-	unit->animationStatus.totalTicks = 0;
+void game_animation_reset(AnimationStatus* animationStatus) {
+	animationStatus->frame = 0;
+	animationStatus->frameTicks = 0;
+	animationStatus->totalTicks = 0;
 }
