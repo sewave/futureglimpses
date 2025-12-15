@@ -182,6 +182,7 @@ typedef struct {
 typedef enum {
 	OBJ_TYPE_ARROW,
 	OBJ_TYPE_FIREBALL,
+	OBJ_TYPE_EXPLOSION,
 	OBJ_TYPE_NUMBER,
 } ObjectTypeEnum;
 
@@ -195,6 +196,7 @@ typedef struct {
 	DirectionEnum direction;
 
 	uint16_t x, y;
+	uint16_t currentX, currentY;
 	uint16_t targetX, targetY;
 	UnitId targetId;
 

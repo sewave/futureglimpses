@@ -10,6 +10,8 @@
 void game_animation_unit_set(GameUnit *unit);
 void game_animation_reset(AnimationStatus* animationStatus);
 void game_animation_unit_advance(GameContext* context, GameUnit* unit);
+void game_animation_object_advance(GameContext* context, Object* object);
 uint8_t game_animation_finished(AnimationStatus* animationStatus);
+void game_animation_object_set(Object *object);
 
 #endif /* ANIMATION_H */

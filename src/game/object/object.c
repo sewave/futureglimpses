@@ -2,6 +2,7 @@
 
 #define FIRST_GENERATION 1
 #define NO_FREE_INDEX -1
+#define MOVE_PRECISION 16384
 static unsigned short objectGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 
@@ -23,11 +24,18 @@ static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
 	},
 	{
 		.type = OBJ_TYPE_FIREBALL,
+		.damageRadius = 0,
+		.minDamage = 0,
+		.maxDamage = 0,
+		.moveTime = SEC_TO_FRAMES(1.2),
+	},
+	{
+		.type = OBJ_TYPE_EXPLOSION,
 		.damageRadius = 1,
 		.minDamage = 10,
 		.maxDamage = 15,
-		.moveTime = SEC_TO_FRAMES(1.2),
-	}
+		.moveTime = SEC_TO_FRAMES(0.0),
+	},
 };
 
 static int game_object_find_free_index(Object objects[]) {
@@ -81,16 +89,18 @@ void game_object_destroy(GameContext *context, ObjectId id) {
 	}
 }
 
-Object *game_object_spawn(GameContext *context, UnitTypeEnum type, GameUnit* source, GameUnit* target, uint16_t targetX, uint16_t targetY) {
+Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerEnum controller, uint16_t sourceX, uint16_t sourceY, GameUnit* target, uint16_t targetX, uint16_t targetY) {
 	int index = game_object_find_free_index(context->objects);
 	if (index == NO_FREE_INDEX) return NULL;
 	Object *object = &context->objects[index];
 	objectGenerations[index]++;
 	object->id = MAKE_ID(index, objectGenerations[index]);
-	object->controller = source->controller;
+	object->controller = controller;
 	// Objects work in world coordinates
-	object->x = source->x * TILE_SIZE;
-	object->y = source->y * TILE_SIZE;
+	object->x = sourceX * TILE_SIZE;
+	object->y = sourceY * TILE_SIZE;
+	object->currentX = object->x;
+	object->currentY = object->y;
 	object->moveTimeCounter = 0;
 	object->isActive = TRUE;
 	if(target) {
@@ -124,40 +134,35 @@ Object *game_object_spawn(GameContext *context, UnitTypeEnum type, GameUnit* sou
 	object->maxDamage = data->maxDamage;
 	object->moveTime = data->moveTime;
 
-	// TODO set animation and sheet
-	/*game_animation_unit_set(object);
-	game_gfx_set_sprite_sheet(object);*/
+	game_animation_object_set(object);
+	// TODO set sheet
+	/*game_gfx_set_sprite_sheet(object);*/
 	// Add to active list
 	context->activeObjects[context->activeObjectsCount++] = object;
 	return object;
 }
 
 void game_objects_advance(GameContext *context) {
-	for (int i = 0; i < context->activeObjectsCount; i++) {
+	int initialActiveObjects = context->activeObjectsCount;
+	for (int i = 0; i < initialActiveObjects; i++) {
 		Object *object = context->activeObjects[i];
 		if (object->isActive) {
+			game_animation_object_advance(context, object);
 			if (object->moveTimeCounter < object->moveTime) {
 				object->moveTimeCounter++;
 				// Move towards target
-				int16_t dx = object->targetX - object->x;
-				int16_t dy = object->targetY - object->y;
-				if (dx != 0 || dy != 0) {
-					float moveFraction = (float)object->moveTimeCounter / (float)object->moveTime;
-					if (moveFraction > 1.0f) moveFraction = 1.0f;
-					object->x = object->x + (int16_t)(dx * moveFraction);
-					object->y = object->y + (int16_t)(dy * moveFraction);
-				}
+				int t = (object->moveTimeCounter * MOVE_PRECISION) / object->moveTime;
+				t = clamp(t, 0, MOVE_PRECISION);
+				object->currentX = (object->x * (MOVE_PRECISION - t)) / MOVE_PRECISION + (object->targetX * t) / MOVE_PRECISION;
+				object->currentY = (object->y * (MOVE_PRECISION - t)) / MOVE_PRECISION + (object->targetY * t) / MOVE_PRECISION;
 			} else {
-				// Reached target
-				// Process impact
-				if (object->damageRadius > 0) {
-					game_event_object_process(context, EVENT_TYPE_AREA_DAMAGE, object, 0);
+				if(game_animation_finished(&object->animationStatus)) {					
+					if(object->type == OBJ_TYPE_FIREBALL) {
+						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE,
+							NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
+					}
+					game_object_destroy(context, object->id);
 				}
-				else {
-					game_event_object_process(context, EVENT_TYPE_DAMAGE, object, 0);
-				}
-				// Destroy object
-				game_object_destroy(context, object->id);
 			}
 		}
 	}

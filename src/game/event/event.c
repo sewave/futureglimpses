@@ -14,11 +14,11 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			break;
 		case EVENT_TYPE_SPAWN_ARROW:
 			GameUnit *arrowTarget = game_unit_get_by_id(context, unit->targetId);
-			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit->controller, unit->x, unit->y, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
 		case EVENT_TYPE_SPAWN_FIREBALL:
 			GameUnit *fireballTarget = game_unit_get_by_id(context, unit->targetId);
-			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit, NULL, fireballTarget->x, fireballTarget->y);
+			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x, unit->y, NULL, fireballTarget->x, fireballTarget->y);
 			break;
 		case EVENT_TYPE_AREA_DAMAGE:
 			// Not usable for units

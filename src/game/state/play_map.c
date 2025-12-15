@@ -327,9 +327,6 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	context->mouseStatus.wasLeftDown = context->mouseStatus.isLeftDown;
-	context->mouseStatus.wasRightDown = context->mouseStatus.isRightDown;
-
 	// If active units are of only one controller, we go to load map again, TODO win/loss screen
 	int playerUnitsCount = 0;
 	for (int i = 0; i < context->activeUnitCount; i++) {
@@ -337,6 +334,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		if (!unit || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
 	}
 	if (playerUnitsCount == context->activeUnitCount || playerUnitsCount == 0) return GAME_STATE_LOAD_MAP;
+
+	game_objects_advance(context);
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
