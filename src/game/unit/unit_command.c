@@ -2,7 +2,7 @@
 
 static uint8_t game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitState) {
     if(unit->state == UNIT_STATE_DIE) return FALSE;
-	if (unit->state == UNIT_STATE_MOVE_ANIM) {
+	if (unit->state == UNIT_STATE_MOVE_ANIM || unit->state == UNIT_STATE_ATTACK) {
 		unit->nextState = unitState;
         return FALSE;
 	} else {
