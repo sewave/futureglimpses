@@ -172,7 +172,7 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
             int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
-			render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + object->y / TILE_SIZE, animationStatus->sheet,
+			render_queue_submit_masked_partial(renderQueue, OBJECTS_Z_ORDER + object->y / TILE_SIZE, animationStatus->sheet,
 											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
 											   prop->yOffset,
 											   unitXCamera,

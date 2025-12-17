@@ -37,8 +37,8 @@ static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
 
 static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {
     "assets/gfx/object/arrow.pcx",
-    "assets/gfx/object/arrow.pcx",
-    "assets/gfx/object/arrow.pcx",
+    "assets/gfx/object/fireball.pcx",
+    "assets/gfx/object/explode.pcx",
 };
 
 static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP* spriteSheets[], const char * spriteSheetFilenames[]) {
