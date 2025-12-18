@@ -246,6 +246,8 @@ typedef struct {
 	Object objects[MAX_GAME_UNITS];
 	Object *activeObjects[MAX_GAME_UNITS];
 	uint16_t activeObjectsCount;
+
+	FONT *gameFont;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

@@ -90,7 +90,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
                 render_queue_submit_text(
                     renderQueue,
                     SPRITES_Z_ORDER + unit->y + 1,
-                    font,
+                    context->gameFont,
                     getStateLetter(unit->state),
                     unitTileXCamera,
                     unitTileYCamera + TILE_SIZE / 2,
@@ -100,7 +100,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
                 render_queue_submit_text(
                     renderQueue,
                     SPRITES_Z_ORDER + unit->y + 1,
-                    font,
+                    context->gameFont,
                     direction,
                     unitTileXCamera + TILE_SIZE / 2,
                     unitTileYCamera + TILE_SIZE / 2,

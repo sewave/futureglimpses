@@ -18,7 +18,10 @@ void timer_handler() {
 }
 END_OF_FUNCTION(timer_handler);
 
-FONT *customFont = NULL;
+static long lastTickCount;
+static char redrawNeeded;
+static RenderQueue renderQueue;
+static GameContext context;
 
 void main_loop(volatile long* logicTicks, volatile int* closeButtonFlag, int maxCatchUpTicks, int endState);
 
@@ -76,6 +79,12 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
+	context.gameFont = load_font("assets/font/main.pcx", NULL, NULL);
+	if (context.gameFont == NULL) {
+		printf("Error loading game font.");
+		return PROGRAM_ERROR;
+	}
+
 	fps_init();
 	// mod music uses ~5 FPS
 	// game_snd_play_music(GAME_MUSIC_TITLE);
@@ -91,11 +100,6 @@ int main(int argc, char *argv[]) {
 	return PROGRAM_OK;
 }
 END_OF_MAIN()
-
-static long lastTickCount;
-static char redrawNeeded;
-static RenderQueue renderQueue;
-static GameContext context;
 
 void main_loop(volatile long *logicTicks,
 			   volatile int *closeButtonFlag,
