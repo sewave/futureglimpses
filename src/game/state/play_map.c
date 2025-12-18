@@ -396,8 +396,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 			red++;
 		}
 	}
-	snprintf(activeText, sizeof(activeText), "T: %d B: %d R: %d", context->activeUnitCount, blue, red);
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 0, 1, PAL_COLOR_WHITE, -1);
+	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
+	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 0, 1, PAL_COLOR_WHITE, -1);
 
 	return GAME_STATE_PLAY_MAP;
 }

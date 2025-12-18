@@ -146,6 +146,18 @@ void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char 
 	}
 }
 
+void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_TEXT_MULTICOLOR);
+	if (cmd) {
+		cmd->data.text.font = font;
+		cmd->data.text.text = text;
+		cmd->data.text.x = x;
+		cmd->data.text.y = y;
+		cmd->data.text.color = color;
+		cmd->data.text.background = background;
+	}
+}
+
 // --- Execution Function ---
 void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 	if (queue->count == 0) return;
@@ -193,10 +205,10 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 				break;
 			case RND_CMD_RECT:
 				rect(target,
-						 cmd->data.rect.x1, cmd->data.rect.y1,
-						 cmd->data.rect.x2, cmd->data.rect.y2,
-						 cmd->data.rect.color);
-				break;	
+					 cmd->data.rect.x1, cmd->data.rect.y1,
+					 cmd->data.rect.x2, cmd->data.rect.y2,
+					 cmd->data.rect.color);
+				break;
 			case RND_CMD_RECT_FILL:
 				rectfill(target,
 						 cmd->data.rectFill.x1, cmd->data.rectFill.y1,
@@ -211,6 +223,15 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 						   cmd->data.text.y,
 						   cmd->data.text.color,
 						   cmd->data.text.background);
+				break;
+			case RND_CMD_TEXT_MULTICOLOR:
+				text_out_multicolor(target,
+									cmd->data.text.font,
+									cmd->data.text.text,
+									cmd->data.text.x,
+									cmd->data.text.y,
+									cmd->data.text.color,
+									cmd->data.text.background);
 				break;
 		}
 		release_bitmap(target);

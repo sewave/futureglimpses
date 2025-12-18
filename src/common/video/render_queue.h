@@ -5,7 +5,7 @@
 #include <allegro/draw.h>
 #include <allegro/font.h>
 #include <allegro/text.h>
-#include "../common.h"
+#include "../common_lib.h"
 
 typedef enum {
 	RND_FLAG_NORMAL,
@@ -22,6 +22,7 @@ typedef enum {
 	RND_CMD_RECT,
 	RND_CMD_RECT_FILL,
 	RND_CMD_TEXT,
+	RND_CMD_TEXT_MULTICOLOR,
 	RND_CMD_SOLID_PARTIAL
 } RenderCommandType;
 
@@ -104,6 +105,7 @@ void render_queue_submit_rect_fill(RenderQueue* queue, int z, int x1, int y1, in
 void render_queue_submit_clear(RenderQueue* queue, int z, int color);
 void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, int y);
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
+void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
 void render_queue_execute(RenderQueue* queue, BITMAP* targetBmp);
 void render_queue_submit_solid_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int width, int height);
 void render_queue_submit_masked_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int width, int height);
