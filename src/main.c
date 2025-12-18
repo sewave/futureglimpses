@@ -71,6 +71,11 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
+	if(game_text_init_system(LANGUAGE_SPANISH) != INITIALIZATION_OK) {
+		printf("Error initializing text system.");
+		return PROGRAM_ERROR;
+	}
+
 	fps_init();
 	// mod music uses ~5 FPS
 	// game_snd_play_music(GAME_MUSIC_TITLE);
@@ -81,6 +86,7 @@ int main(int argc, char *argv[]) {
 	snd_stop_music();
 	snd_destroy_sounds();
 	mouse_destroy_cursors();
+	text_free_all();
 	allegro_exit();
 	return PROGRAM_OK;
 }

@@ -20,7 +20,7 @@ static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
 				.damageRadius = 0,
 				.minDamage = 6,
 				.maxDamage = 10,
-				.moveTime = SEC_TO_FRAMES(0.3),
+				.moveTime = SEC_TO_FRAMES(0.15),
 		},
 		{
 				.type = OBJ_TYPE_FIREBALL,

@@ -8,4 +8,5 @@
 #include "time/fps.h"
 #include "mouse/mouse.h"
 #include "keyboard/keyboard.h"
+#include "text/text.h"
 #endif /* COMMON_LIB_H */

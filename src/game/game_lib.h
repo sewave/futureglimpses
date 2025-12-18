@@ -16,4 +16,5 @@
 #include "event/event.h"
 #include "selection/selection.h"
 #include "object/object.h"
+#include "text/game_text.h"
 #endif /* GAME_LIB_H */
