@@ -42,6 +42,26 @@ typedef enum {
 } GameStateEnum;
 
 typedef enum {
+	RESOURCE_TYPE_GOLD,
+	RESOURCE_TYPE_WOOD,
+	RESOURCE_TYPES_COUNT
+} ResourceTypeEnum;
+
+typedef struct {
+	uint32_t quantity[RESOURCE_TYPES_COUNT];
+	uint32_t uiQuantity[RESOURCE_TYPES_COUNT];
+} Resources;
+
+typedef struct {
+	uint32_t unitsTrained;
+	uint32_t enemiesKilled;
+	uint32_t buildingsConstructed;
+	uint32_t buildingsDestroyed;
+	uint32_t resourcesSpent[RESOURCE_TYPES_COUNT];
+	uint32_t resourcesGathered[RESOURCE_TYPES_COUNT];
+} Stats;
+
+typedef enum {
 	BOARD_UNEXPLORED,
 	BOARD_EXPLORED
 } BoardExplorationEnum;
@@ -69,7 +89,8 @@ typedef enum {
 
 typedef enum {
 	UNIT_CONTROLLER_PLAYER,
-	UNIT_CONTROLLER_AI
+	UNIT_CONTROLLER_AI,
+	UNIT_CONTROLLERS_COUNT,
 } ControllerEnum;
 
 typedef enum {
@@ -248,6 +269,9 @@ typedef struct {
 	uint16_t activeObjectsCount;
 
 	FONT *gameFont;
+
+	Resources resources[UNIT_CONTROLLERS_COUNT];
+	Stats stats[UNIT_CONTROLLERS_COUNT];
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

@@ -183,3 +183,33 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 		}
 	}
 }
+
+static int RESOURCE_LOCATIONS_X[RESOURCE_TYPES_COUNT] = {
+	100, 150
+};
+static int RESOURCE_LOCATIONS_Y[RESOURCE_TYPES_COUNT] = {
+	2, 2
+};
+char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][6];
+
+void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
+	// TODO Other UI elements
+	// Selected unit info
+	// Command buttons
+
+	// Render resources
+	for (int i = 0; i < RESOURCE_TYPES_COUNT; i++) {
+		uint32_t quantity = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i];
+		snprintf(RESOURCE_BUFFERS[i], sizeof(RESOURCE_BUFFERS[i]), "%u", quantity);
+		render_queue_submit_text(
+			renderQueue,
+			UI_Z_ORDER + 600,
+			context->gameFont,
+			RESOURCE_BUFFERS[i],
+			RESOURCE_LOCATIONS_X[i],
+			RESOURCE_LOCATIONS_Y[i],
+			PAL_COLOR_WHITE,
+			-1
+		);
+	}
+}

@@ -211,8 +211,9 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	}
 }
 
-
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+	resource_update_ui_quantities(context);
+
 	// TODO menus
 	if (keyboard_is_key_down(KEY_ESC)) return GAME_STATE_EXIT;
 
@@ -337,6 +338,19 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	game_objects_advance(context);
 
+	if(keyboard_is_key_pressed(KEY_H)) {
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+	}
+	if(keyboard_is_key_pressed(KEY_J)) {
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+	}
+	if(keyboard_is_key_pressed(KEY_N)) {
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+	}
+	if(keyboard_is_key_pressed(KEY_M)) {
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+	}
+
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
@@ -398,6 +412,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
 	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 0, 1, PAL_COLOR_WHITE, -1);
+
+	render_queue_submit_ui(context, renderQueue);
 
 	return GAME_STATE_PLAY_MAP;
 }

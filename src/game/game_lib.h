@@ -17,4 +17,5 @@
 #include "selection/selection.h"
 #include "object/object.h"
 #include "text/game_text.h"
+#include "resource/resource.h"
 #endif /* GAME_LIB_H */
