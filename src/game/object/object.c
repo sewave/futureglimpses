@@ -89,10 +89,15 @@ void game_object_destroy(GameContext *context, ObjectId id) {
 	}
 }
 
-Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerEnum controller, uint16_t sourceX, uint16_t sourceY, GameUnit *target, uint16_t targetX, uint16_t targetY) {
+Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerEnum controller, uint16_t sourceX, uint16_t sourceY, GameUnit* source, GameUnit *target, uint16_t targetX, uint16_t targetY) {
 	int index = game_object_find_free_index(context->objects);
 	if (index == NO_FREE_INDEX) return NULL;
 	Object *object = &context->objects[index];
+	if(source) {
+		object->ownerId = source->id;
+	} else {
+		object->ownerId = NO_TARGET_ID;
+	}
 	objectGenerations[index]++;
 	object->id = MAKE_ID(index, objectGenerations[index]);
 	object->controller = controller;
@@ -172,8 +177,9 @@ void game_objects_advance(GameContext *context) {
 			} else {
 				if (game_animation_finished(&object->animationStatus)) {
 					if (object->type == OBJ_TYPE_FIREBALL) {
+						GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
 						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE,
-										  NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
+										  sourceUnit, NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
 					}
 					game_object_destroy(context, object->id);
 				}

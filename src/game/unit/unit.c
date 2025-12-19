@@ -234,14 +234,22 @@ void game_unit_damage(GameContext* context, uint8_t minDamage, uint8_t maxDamage
 	}
 }
 
-void game_unit_area_damage(GameContext* context, uint8_t minDamage, uint8_t maxDamage, uint16_t centerX, uint16_t centerY, uint8_t radius) {
-	for(int row = centerY - radius; row <= centerY + radius; row++) {
-		for(int col = centerX - radius; col <= centerX + radius; col++) {
+void game_unit_area_damage(GameContext* context, Object* object) {
+	uint16_t centerX = object->targetX / TILE_SIZE;
+	uint16_t centerY = object->targetY / TILE_SIZE;
+	for(int row = centerY - object->damageRadius; row <= centerY + object->damageRadius; row++) {
+		for(int col = centerX - object->damageRadius; col <= centerX + object->damageRadius; col++) {
 			if(col < BOARD_X_MIN || col > BOARD_X_MAX || row < BOARD_Y_MIN || row > BOARD_Y_MAX) continue;
 			UnitId id = context->walkabilityGrid[col][row];
 			if(id < HANDLE_ID_THRESHOLD) continue;
 			GameUnit *target = game_unit_get_by_id(context, id);
-			if(target) game_unit_damage(context, minDamage, maxDamage, target);
+			if(target) {
+				game_unit_damage(context, object->minDamage, object->maxDamage, target);
+				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
+				if(target->state == UNIT_STATE_IDLE && sourceUnit) {
+					game_unit_command_move_attack(target, sourceUnit, sourceUnit->x, sourceUnit->y);
+				}
+			}
 		}
 	}
 }

@@ -48,6 +48,71 @@ static uint16_t get_board_y_position(uint16_t cameraPosition, int cursorPosition
 	return clamp((cameraPosition + cursorPosition - VIEWPORT_Y_OFFSET) / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 }
 
+static void handle_viewport_contextual_action(GameContext *context, int mouseX, int mouseY) {
+	// TODO spawn mouse confirmation object
+	// Contextual action
+	// Get board situation
+	int boardXPosition = get_board_x_position(context->xPosition, mouseX);
+	int boardYPosition = get_board_y_position(context->yPosition, mouseY);
+
+	UnitId target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
+
+	if (target < HANDLE_ID_THRESHOLD) {
+		// Not unit position, depending on the tile, we move or interact with resource
+		for (int i = 0; i < context->selectedUnitCount; i++) {
+			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+			if (!unit) continue;
+			if (target == WALKABILITY_FREE) {
+				game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+			} else {
+				// TODO Resource => Work, if we are workers
+			}
+		}
+	} else {
+		GameUnit *targetUnit = game_unit_get_by_id(context, target);
+		if (targetUnit) {
+			targetUnit->blinkTime = BLINK_TIME;
+
+			for (int i = 0; i < context->selectedUnitCount; i++) {
+				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+				if (!unit) continue;
+				if (targetUnit->controller == UNIT_CONTROLLER_AI) {
+					game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				} else {
+					game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				}
+			}
+		}
+	}
+}
+
+static void handle_viewport_select_all_of_same_type(GameContext *context, int mouseX, int mouseY) {
+	// If we double click, select all units of the same type on screen
+	int tileX = get_board_x_position(context->xPosition, mouseX);
+	int tileY = get_board_y_position(context->yPosition, mouseY);
+	UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
+	GameUnit *sourceUnit = game_unit_get_by_id(context, id);
+	if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
+		UnitTypeEnum targetType = sourceUnit->type;
+		game_selection_clear(context);
+		int tileMinX = clamp(context->xPosition / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+		int tileMaxX = tileMinX + VIEWPORT_WIDTH_TILES;
+		int tileMinY = clamp(context->yPosition / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+		int tileMaxY = tileMinY + VIEWPORT_HEIGHT_TILES;
+		for (int row = tileMinY; row <= tileMaxY; row++) {
+			for (int col = tileMinX; col <= tileMaxX; col++) {
+				UnitId id = context->walkabilityGrid[col][row];
+				if (id < HANDLE_ID_THRESHOLD) continue;
+				GameUnit *foundUnit = game_unit_get_by_id(context, id);
+				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER && foundUnit->type == targetType) {
+					game_selection_add_unit(context, foundUnit);
+				}
+			}
+		}
+	}
+	context->mouseStatus.isSelecting = FALSE;
+}
+
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
@@ -56,81 +121,17 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	// TODO handle autoactions, stop, defend
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
-
 		if (context->mouseStatus.isLeftPressed) {
 			selectionStartX = mouseX;
 			selectionStartY = mouseY;
 			context->mouseStatus.isSelecting = TRUE;
 		}
-
-		if (context->mouseStatus.isLeftDoubleClick) {
-			// If we double click, select all units of the same type on screen
-			int tileX = get_board_x_position(context->xPosition, mouseX);
-			int tileY = get_board_y_position(context->yPosition, mouseY);
-			UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
-			GameUnit *sourceUnit = game_unit_get_by_id(context, id);
-			if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
-				UnitTypeEnum targetType = sourceUnit->type;
-				game_selection_clear(context);
-				int tileMinX = clamp(context->xPosition / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-				int tileMaxX = tileMinX + VIEWPORT_WIDTH_TILES;
-				int tileMinY = clamp(context->yPosition / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
-				int tileMaxY = tileMinY + VIEWPORT_HEIGHT_TILES;
-				for (int row = tileMinY; row <= tileMaxY; row++) {
-					for (int col = tileMinX; col <= tileMaxX; col++) {
-						UnitId id = context->walkabilityGrid[col][row];
-						if (id < HANDLE_ID_THRESHOLD) continue;
-						GameUnit *foundUnit = game_unit_get_by_id(context, id);
-						if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER && foundUnit->type == targetType) {
-							game_selection_add_unit(context, foundUnit);
-						}
-					}
-				}
-			}
-			context->mouseStatus.isSelecting = FALSE;
-		}
-
-		if (context->mouseStatus.isRightPressed) {
-			// TODO spawn mouse confirmation
-			// Contextual action
-
-			// Get board situation
-			int boardXPosition = get_board_x_position(context->xPosition, mouseX);
-			int boardYPosition = get_board_y_position(context->yPosition, mouseY);
-
-			UnitId target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
-
-			if (target < HANDLE_ID_THRESHOLD) {
-				// Not unit position, depending on the tile, we move or interact with resource
-				for (int i = 0; i < context->selectedUnitCount; i++) {
-					GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-					if (!unit) continue;
-					if (target == WALKABILITY_FREE) {
-						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
-					} else {
-						// TODO Resource => Work, if we are workers
-					}
-				}
-			} else {
-				GameUnit *targetUnit = game_unit_get_by_id(context, target);
-				if (targetUnit) {
-					targetUnit->blinkTime = BLINK_TIME;
-
-					for (int i = 0; i < context->selectedUnitCount; i++) {
-						GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-						if (!unit) continue;
-						if (targetUnit->controller == UNIT_CONTROLLER_AI) {
-							game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-						} else {
-							game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-						}
-					}
-				}
-			}
-		}
+		if (context->mouseStatus.isLeftDoubleClick) handle_viewport_select_all_of_same_type(context, mouseX, mouseY);
+		if (context->mouseStatus.isRightPressed) handle_viewport_contextual_action(context, mouseX, mouseY);
 	}
 
 	if (!context->mouseStatus.isLeftDoubleClick) {
+		// TODO attack mode, move mode or selection mode
 		if (context->mouseStatus.isLeftReleased && context->mouseStatus.isSelecting) {
 			context->mouseStatus.isSelecting = FALSE;
 
@@ -148,7 +149,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					selectionMode = SELECTION_REMOVE;
 				}
 			}
-			// TODO attack mode, move mode or selection mode
+			
 
 			if (dx < TILE_SIZE && dy < TILE_SIZE) {
 				// Simple Click unitary
@@ -338,16 +339,16 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	game_objects_advance(context);
 
-	if(keyboard_is_key_pressed(KEY_H)) {
+	if (keyboard_is_key_pressed(KEY_H)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if(keyboard_is_key_pressed(KEY_J)) {
+	if (keyboard_is_key_pressed(KEY_J)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
-	if(keyboard_is_key_pressed(KEY_N)) {
+	if (keyboard_is_key_pressed(KEY_N)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if(keyboard_is_key_pressed(KEY_M)) {
+	if (keyboard_is_key_pressed(KEY_M)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
 

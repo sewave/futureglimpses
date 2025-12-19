@@ -36,7 +36,7 @@ void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, i
 }
 
 void game_unit_command_move_attack(GameUnit *unit, GameUnit *target, int16_t targetX, int16_t targetY) {
-    unit->targetId = target->id;
+    if(target) unit->targetId = target->id;
     unit->targetX = targetX;
     unit->targetY = targetY;
     game_unit_set_state_or_next(unit, UNIT_STATE_MOVE_ATTACK);

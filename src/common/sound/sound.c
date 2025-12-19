@@ -27,6 +27,7 @@ void _snd_destroy_sound(int soundIndex) {
     Returns INITIALIZATION_OK on success, or INITIALIZATION_ERROR on failure.
 */
 InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, MusicType musicType) {
+	printf("Initializing sound system...");
 	remove_sound();
 	currentMusicType = musicType;
 	if (currentMusicType == MUSIC_TYPE_MIDI) {
@@ -38,6 +39,7 @@ InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, Music
 	if (currentMusicType == MUSIC_TYPE_MOD) {
 		if (install_mod(musicVoices) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	}
+	printf("OK\n");
 	return INITIALIZATION_OK;
 }
 

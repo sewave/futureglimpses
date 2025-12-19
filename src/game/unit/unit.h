@@ -8,6 +8,6 @@ void game_units_init(GameContext *context);
 GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnum controller, uint16_t x, uint16_t y);
 void game_unit_face_target(GameUnit* unit, GameUnit* target);
 void game_unit_damage(GameContext *gameContext, uint8_t minDamage, uint8_t maxDamage, GameUnit* target);
-void game_unit_area_damage(GameContext* context, uint8_t minDamage, uint8_t maxDamage, uint16_t centerX, uint16_t centerY, uint8_t radius);
+void game_unit_area_damage(GameContext* context, Object* object);
 
 #endif /* UNIT_H */

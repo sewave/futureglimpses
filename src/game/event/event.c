@@ -14,11 +14,11 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			break;
 		case EVENT_TYPE_SPAWN_ARROW:
 			GameUnit *arrowTarget = game_unit_get_by_id(context, unit->targetId);
-			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit->controller, unit->x, unit->y, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit->controller, unit->x, unit->y, unit, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
 		case EVENT_TYPE_SPAWN_FIREBALL:
 			GameUnit *fireballTarget = game_unit_get_by_id(context, unit->targetId);
-			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x, unit->y, NULL, fireballTarget->x, fireballTarget->y);
+			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x, unit->y, unit, fireballTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
 		case EVENT_TYPE_AREA_DAMAGE:
 			// Not usable for units
@@ -30,10 +30,15 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 	switch (eventType) {
 		case EVENT_TYPE_DAMAGE:
 			GameUnit *damageTarget = game_unit_get_by_id(context, object->targetId);
-			if (damageTarget) game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
+			if (damageTarget) {
+				game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
+				if(damageTarget->state == UNIT_STATE_IDLE) {
+					game_unit_command_move_attack(damageTarget, NULL, object->x / TILE_SIZE, object->y / TILE_SIZE);
+				}
+			}
 			break;
 		case EVENT_TYPE_AREA_DAMAGE:
-			game_unit_area_damage(context, object->minDamage, object->maxDamage, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE, object->damageRadius);
+			game_unit_area_damage(context, object);
 			break;
 		case EVENT_TYPE_SOUND:
 			if (object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&

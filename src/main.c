@@ -26,6 +26,7 @@ static GameContext context;
 void main_loop(volatile long* logicTicks, volatile int* closeButtonFlag, int maxCatchUpTicks, int endState);
 
 void install_timers() {
+	printf("Installing timers...");
 	/* Attach function to close button */
 	LOCK_VARIABLE(closeButtonPressed);
 	LOCK_FUNCTION(close_button_handler);
@@ -35,9 +36,11 @@ void install_timers() {
 	LOCK_VARIABLE(logic_ticks);
 	LOCK_FUNCTION(timer_handler);
 	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
+	printf("OK\n");
 }
 
 int main(int argc, char *argv[]) {
+	printf("Starting Future Glimpses...\n");
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(
 				MINIMAL_CPU_FAMILY,
@@ -49,7 +52,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
-		printf("Error initializing sound. Continuing without sound.");
+		printf("KO\nError initializing sound. Continuing without sound.");
 	}
 
 	install_timers();
@@ -58,14 +61,17 @@ int main(int argc, char *argv[]) {
 	set_mouse_sprite_focus(0, 0);
 
 	game_snd_load_sounds();
+	printf("Loading sprite sheets...");
 	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
 		game_gfx_destroy_sprite_sheets();
 		printf("Error loading sprite sheets.");
 		return PROGRAM_ERROR;
 	}
+	printf("OK\n");
 
+	printf("Initializing video...");
 	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
-		printf("Error initializing video.");
+		printf("KO\nError initializing video.");
 		return PROGRAM_ERROR;
 	}
 

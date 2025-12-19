@@ -243,7 +243,7 @@ static AnimationData ARROW_ANIMATION_DATA = {
         // TODO arrow hit sound
 		.events = {
             {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.3)},
-            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.3)}},
+            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.15)}},
 		.numEvents = 2,
 };
 
