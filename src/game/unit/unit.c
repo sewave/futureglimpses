@@ -8,7 +8,7 @@ static uint16_t nextFreeIndex;
 typedef struct {
 	UnitTypeEnum type;
 	uint8_t isBuilding;
-	uint8_t attackRange, sightRange;
+	uint8_t minAttackRange, maxAttackRange, sightRange;
 	uint16_t health, maxHealth;
 	uint8_t tileSize;
 	uint8_t minDamage;
@@ -21,7 +21,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 	{ 
 		.type = UNIT_TYPE_WORKER,
 		.isBuilding = FALSE,
-		.attackRange = 1,
+		.minAttackRange = 0,
+		.maxAttackRange = 1,
 		.sightRange = 5,
 		.health = 50,
 		.maxHealth = 50,
@@ -34,7 +35,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 	{
 		.type = UNIT_TYPE_SOLDIER,
 		.isBuilding = FALSE,
-		.attackRange = 1,
+		.minAttackRange = 0,
+		.maxAttackRange = 1,
 		.sightRange = 6,
 		.health = 100,
 		.maxHealth = 100,
@@ -47,7 +49,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 	{
 		.type = UNIT_TYPE_ARCHER,
 		.isBuilding = FALSE,
-		.attackRange = 5,
+		.minAttackRange = 1,
+		.maxAttackRange = 5,
 		.sightRange = 7,
 		.health = 75,
 		.maxHealth = 75,
@@ -60,7 +63,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 	{
 		.type = UNIT_TYPE_MOUNT,
 		.isBuilding = FALSE,
-		.attackRange = 1,
+		.minAttackRange = 0,
+		.maxAttackRange = 1,
 		.sightRange = 6,
 		.health = 120,
 		.maxHealth = 120,
@@ -73,7 +77,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 	{
 		.type = UNIT_TYPE_MAGE,
 		.isBuilding = FALSE,
-		.attackRange = 8,
+		.minAttackRange = 2,
+		.maxAttackRange = 8,
 		.sightRange = 10,
 		.health = 80,
 		.maxHealth = 80,
@@ -180,7 +185,8 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	UnitData* data = &unitsData[type];
 	unit->type = data->type;
 	unit->isBuilding = data->isBuilding;
-	unit->attackRange = data->attackRange;
+	unit->minAttackRange = data->minAttackRange;
+	unit->maxAttackRange = data->maxAttackRange;
 	unit->sightRange = data->sightRange;
 	unit->health = data->health;
 	unit->maxHealth = data->maxHealth;

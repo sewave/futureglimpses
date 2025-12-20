@@ -6,12 +6,19 @@ static GameUnit* foundUnits[MAX_FOUND_UNITS];
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 	if (++unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
-		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
+		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
 												  game_spatial_filter_enemy_units, unit, foundUnits,
 												  1);
 		// TODO Attack by priority?
 		if (foundUnitsCount > 0) {
-			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_IDLE);
+			for(int i = 0; i < foundUnitsCount; i++) {
+				GameUnit *target = foundUnits[i];
+				if (!game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
+					game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
+					return;
+				}
+			}
+			// TODO flee if we are ranged and target is too close?
 		} else {
 			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
 														game_spatial_filter_enemy_units, unit, foundUnits,
@@ -73,7 +80,7 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 	if (++unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
-		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->attackRange,
+		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
 												  game_spatial_filter_enemy_units, unit, foundUnits,
 												  1);
 		if (foundUnitsCount > 0) game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_DEFEND);
@@ -83,7 +90,8 @@ static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
 static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 	GameUnit *target = game_unit_get_by_id(context, unit->targetId);
 	if (game_animation_finished(&unit->animationStatus) || !target || !target->isActive || target->state == UNIT_STATE_DIE) {
-		if (target && game_spatial_unit_in_range(unit, target, unit->attackRange)) {
+		if (target && game_spatial_unit_in_range(unit, target, unit->maxAttackRange)
+	&& !game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
 			game_unit_face_target(unit, target);
 			game_animation_reset(&unit->animationStatus);
 		} else {
@@ -126,7 +134,8 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	}
 
 	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE &&
-			game_spatial_target_in_range(unit, targetX, targetY, unit->attackRange)) {
+			game_spatial_target_in_range(unit, targetX, targetY, unit->maxAttackRange)
+		&& !game_spatial_target_in_range(unit, targetX, targetY, unit->minAttackRange)) {
 		if(targetUnit) {
 			game_unit_command_attack(unit, targetUnit, UNIT_STATE_IDLE);
 		}

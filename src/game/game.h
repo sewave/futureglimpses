@@ -195,7 +195,7 @@ typedef struct {
 
 	uint16_t x, y;
 	uint16_t prevX, prevY;
-	uint8_t attackRange, sightRange;
+	uint8_t minAttackRange, maxAttackRange, sightRange;
 	uint16_t health, maxHealth;
 	uint8_t tileSize;
 	uint8_t minDamage;
