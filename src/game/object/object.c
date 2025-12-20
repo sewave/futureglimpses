@@ -36,6 +36,13 @@ static ObjectData objectsData[OBJ_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.moveTime = 0,
 		},
+		{
+			.type = OBJ_TYPE_ARROW_DAMAGE,
+			.damageRadius = 0,
+			.minDamage = 6,
+			.maxDamage = 10,
+			.moveTime = 0,
+		},
 };
 
 static int game_object_find_free_index(Object objects[]) {
@@ -152,7 +159,15 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 	object->damageRadius = data->damageRadius;
 	object->minDamage = data->minDamage;
 	object->maxDamage = data->maxDamage;
-	object->moveTime = data->moveTime;
+	if(source) {
+		uint16_t dx = object->targetX > object->x ? object->targetX / TILE_SIZE - object->x / TILE_SIZE : object->x / TILE_SIZE - object->targetX / TILE_SIZE; 
+		uint16_t dy = object->targetY > object->y ? object->targetY / TILE_SIZE - object->y / TILE_SIZE : object->y / TILE_SIZE - object->targetY / TILE_SIZE;
+		uint16_t maxDistance = source->maxAttackRange * source->maxAttackRange;
+		object->moveTime = (data->moveTime * (dx * dx + dy * dy) / maxDistance);
+	}
+	else {
+		object->moveTime = data->moveTime;
+	}
 
 	game_animation_object_set(object);
 	game_gfx_set_object_sheet(object);
@@ -180,6 +195,16 @@ void game_objects_advance(GameContext *context) {
 						GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
 						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE,
 										  sourceUnit, NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
+					}
+					else {
+						if (object->type == OBJ_TYPE_ARROW) {
+							GameUnit* targetUnit = game_unit_get_by_id(context, object->targetId);
+							if(targetUnit) {
+								GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
+								game_object_spawn(context, OBJ_TYPE_ARROW_DAMAGE, object->controller, targetUnit->x, targetUnit->y,
+												  sourceUnit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+							}
+						}
 					}
 					game_object_destroy(context, object->id);
 				}

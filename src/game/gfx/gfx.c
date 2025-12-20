@@ -39,6 +39,8 @@ static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {
     "assets/gfx/object/arrow.pcx",
     "assets/gfx/object/fireball.pcx",
     "assets/gfx/object/explode.pcx",
+    // TODO different sprite for arrow damage
+    "assets/gfx/object/arrow.pcx",
 };
 
 static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP* spriteSheets[], const char * spriteSheetFilenames[]) {

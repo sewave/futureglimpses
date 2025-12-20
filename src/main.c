@@ -69,9 +69,9 @@ int main(int argc, char *argv[]) {
 	}
 	printf("OK\n");
 
-	printf("Initializing video...");
+	printf("Initializing video...\n");
 	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
-		printf("KO\nError initializing video.");
+		printf("Error initializing video.");
 		return PROGRAM_ERROR;
 	}
 

@@ -240,11 +240,9 @@ static AnimationData ARROW_ANIMATION_DATA = {
 				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
 		},
 		.lastFrameIndex = 0,
-        // TODO arrow hit sound
-		.events = {
-            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.3)},
-            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.15)}},
-		.numEvents = 2,
+		//TODO arrow launched sound
+		.events = { },
+		.numEvents = 0,
 };
 
 static AnimationData FIREBALL_ANIMATION_DATA = {
@@ -274,6 +272,18 @@ static AnimationData EXPLOSION_ANIMATION_DATA = {
 		.numEvents = 1,
 };
 
+static AnimationData ARROW_HIT_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_ONCE,
+		.frames = {
+				{.duration = SEC_TO_FRAMES(0.15), .xOffset = 0},
+		},
+		.lastFrameIndex = 0,
+		.events = {
+            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.1)},
+            {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}},
+		.numEvents = 2,
+};
+
 static const AnimationPropsData ARROW_ANIM = {
     .props = ARROW_PROPERTIES,
     .data = &ARROW_ANIMATION_DATA,
@@ -289,8 +299,13 @@ static const AnimationPropsData EXPLOSION_ANIM = {
     .data = &EXPLOSION_ANIMATION_DATA,
 };
 
+static const AnimationPropsData ARROW_DAMAGE_ANIM = {
+	.props = ARROW_PROPERTIES,
+	.data = &ARROW_HIT_ANIMATION_DATA,
+};
+
 AnimationPropsData OBJECT_ANIMATIONS[OBJ_TYPE_NUMBER] = {
-        ARROW_ANIM, FIREBALL_ANIM, EXPLOSION_ANIM
+        ARROW_ANIM, FIREBALL_ANIM, EXPLOSION_ANIM, ARROW_DAMAGE_ANIM
 };
 
 void game_animation_unit_set(GameUnit *unit) {
