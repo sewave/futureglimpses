@@ -3,6 +3,9 @@
 #include "../common/common_lib.h"
 #include <allegro/gfx.h>
 
+#define DEFAULT_MUSIC_VOLUME 100
+#define DEFAULT_SFX_VOLUME 100
+
 #define BOARD_WIDTH 64
 #define BOARD_HEIGHT 64
 #define TILE_SIZE 16
@@ -246,6 +249,21 @@ typedef struct {
 	AnimationStatus animationStatus;
 } Object;
 
+typedef enum {
+	LIFE_BAR_ALWAYS,
+	LIFE_BAR_DAMAGED,
+	LIFE_BAR_NEVER,
+	LIFE_BAR_COUNT,
+} LifeBarEnum;
+
+#define DEFAULT_LIFE_BAR LIFE_BAR_DAMAGED
+
+typedef struct {
+	uint8_t musicVolume;
+	uint8_t sfxVolume;
+	LifeBarEnum lifeBar;
+} Config;
+
 typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
@@ -276,6 +294,7 @@ typedef struct {
 
 	Resources resources[UNIT_CONTROLLERS_COUNT];
 	Stats stats[UNIT_CONTROLLERS_COUNT];
+	Config config;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

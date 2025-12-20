@@ -51,6 +51,9 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
+	printf("Loading configuration...");
+	game_config_load_settings(&context.config);
+
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
 		printf("KO\nError initializing sound. Continuing without sound.");
 	}
@@ -102,6 +105,7 @@ int main(int argc, char *argv[]) {
 	snd_destroy_sounds();
 	mouse_destroy_cursors();
 	text_free_all();
+	game_config_save_settings(&context.config);
 	allegro_exit();
 	return PROGRAM_OK;
 }

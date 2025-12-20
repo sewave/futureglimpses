@@ -351,6 +351,9 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if (keyboard_is_key_pressed(KEY_M)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
+	if (keyboard_is_key_pressed(KEY_L)) {
+		context->config.lifeBar = (context->config.lifeBar + 1) % LIFE_BAR_COUNT;
+	}
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
@@ -398,7 +401,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 0, 190, PAL_COLOR_WHITE, -1);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);
 
 	int blue = 0;
 	int red = 0;
@@ -412,7 +415,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
-	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 0, 1, PAL_COLOR_WHITE, -1);
+	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
 
 	render_queue_submit_ui(context, renderQueue);
 

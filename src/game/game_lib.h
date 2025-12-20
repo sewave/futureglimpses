@@ -18,4 +18,5 @@
 #include "object/object.h"
 #include "text/game_text.h"
 #include "resource/resource.h"
+#include "config/config.h"
 #endif /* GAME_LIB_H */

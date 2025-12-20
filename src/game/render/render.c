@@ -8,44 +8,44 @@
 #define HEALTH_BAR_BORDER 1
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
+#define HEALTH_BAR_LENGTH (TILE_SIZE - 2 * HEALTH_BAR_BORDER)
 
-static char* getStateLetter(UnitStateEnum state) {
-    switch (state) {
-    case UNIT_STATE_IDLE:
-        return "I";
-    case UNIT_STATE_ATTACK:
-        return "A";
-    case UNIT_STATE_DEFEND:
-        return "D";
-    case UNIT_STATE_MOVE:
-        return "M";
-    case UNIT_STATE_MOVE_ANIM:
-        return "a";
-    case UNIT_STATE_MOVE_ATTACK:
-        return "m";
-    case UNIT_STATE_WORK:
-        return "W";
-    case UNIT_STATE_DIE:
-        return "d";
-    default:
-        return "X";
-    }
-    
+static char *getStateLetter(UnitStateEnum state) {
+	switch (state) {
+		case UNIT_STATE_IDLE:
+			return "I";
+		case UNIT_STATE_ATTACK:
+			return "A";
+		case UNIT_STATE_DEFEND:
+			return "D";
+		case UNIT_STATE_MOVE:
+			return "M";
+		case UNIT_STATE_MOVE_ANIM:
+			return "a";
+		case UNIT_STATE_MOVE_ATTACK:
+			return "m";
+		case UNIT_STATE_WORK:
+			return "W";
+		case UNIT_STATE_DIE:
+			return "d";
+		default:
+			return "X";
+	}
 }
 
-static char* getDirectionLetter(DirectionEnum dir) {
-    switch (dir) {
-    case DIRECTION_NORTH:
-        return "N";
-	case DIRECTION_EAST:
-        return "E";
-	case DIRECTION_SOUTH:
-        return "S";
-	case DIRECTION_WEST:
-        return "W";
-    default:
-        return "X";
-    }    
+static char *getDirectionLetter(DirectionEnum dir) {
+	switch (dir) {
+		case DIRECTION_NORTH:
+			return "N";
+		case DIRECTION_EAST:
+			return "E";
+		case DIRECTION_SOUTH:
+			return "S";
+		case DIRECTION_WEST:
+			return "W";
+		default:
+			return "X";
+	}
 }
 
 void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue) {
@@ -74,8 +74,8 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				unitWorldY = (unit->y * TILE_SIZE);
 			}
 
-            int unitTileXCamera = unitWorldX - context->xPosition + VIEWPORT_X_OFFSET;
-            int unitTileYCamera = unitWorldY - context->yPosition + VIEWPORT_Y_OFFSET;
+			int unitTileXCamera = unitWorldX - context->xPosition + VIEWPORT_X_OFFSET;
+			int unitTileYCamera = unitWorldY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
 			render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
@@ -85,70 +85,71 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											   unitYCamera,
 											   prop->width,
 											   prop->height);
-            // Some debug stuff
-            if(key[KEY_G]) {
-                render_queue_submit_text(
-                    renderQueue,
-                    SPRITES_Z_ORDER + unit->y + 1,
-                    context->gameFont,
-                    getStateLetter(unit->state),
-                    unitTileXCamera,
-                    unitTileYCamera + TILE_SIZE / 2,
-                    PAL_COLOR_WHITE, PAL_COLOR_BLACK
-                );
-                char* direction = getDirectionLetter(unit->direction);
-                render_queue_submit_text(
-                    renderQueue,
-                    SPRITES_Z_ORDER + unit->y + 1,
-                    context->gameFont,
-                    direction,
-                    unitTileXCamera + TILE_SIZE / 2,
-                    unitTileYCamera + TILE_SIZE / 2,
-                    PAL_COLOR_WHITE, PAL_COLOR_BLACK
-                );
-            }
+			// Some debug stuff
+			if (key[KEY_G]) {
+				render_queue_submit_text(
+						renderQueue,
+						SPRITES_Z_ORDER + unit->y + 1,
+						context->gameFont,
+						getStateLetter(unit->state),
+						unitTileXCamera,
+						unitTileYCamera + TILE_SIZE / 2,
+						PAL_COLOR_WHITE, PAL_COLOR_BLACK);
+				char *direction = getDirectionLetter(unit->direction);
+				render_queue_submit_text(
+						renderQueue,
+						SPRITES_Z_ORDER + unit->y + 1,
+						context->gameFont,
+						direction,
+						unitTileXCamera + TILE_SIZE / 2,
+						unitTileYCamera + TILE_SIZE / 2,
+						PAL_COLOR_WHITE, PAL_COLOR_BLACK);
+			}
 
-            int rectColor = PAL_COLOR_TRANS;
+			int rectColor = PAL_COLOR_TRANS;
 
-            if(unit->isSelected && !unit->blinkTime) rectColor = PAL_COLOR_GREEN;
-            if(unit->blinkTime && unit->blinkTime % BLINK_MOD < BLINK_FRAMES) {
-                rectColor = (unit->controller == UNIT_CONTROLLER_AI) ? PAL_COLOR_RED : PAL_COLOR_GREEN;
-            }
-            if(rectColor != PAL_COLOR_TRANS) {
-                render_queue_submit_rect(renderQueue,
-                    BACKGROUND_Z_ORDER + 100,
-                    unitTileXCamera, unitTileYCamera,
-                    unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
-                    rectColor);       
-            }
+			if (unit->isSelected && !unit->blinkTime) rectColor = PAL_COLOR_GREEN;
+			if (unit->blinkTime && unit->blinkTime % BLINK_MOD < BLINK_FRAMES) {
+				rectColor = (unit->controller == UNIT_CONTROLLER_AI) ? PAL_COLOR_RED : PAL_COLOR_GREEN;
+			}
+			if (rectColor != PAL_COLOR_TRANS) {
+				render_queue_submit_rect(renderQueue,
+										 BACKGROUND_Z_ORDER + 100,
+										 unitTileXCamera, unitTileYCamera,
+										 unitTileXCamera + TILE_SIZE, unitTileYCamera + TILE_SIZE,
+										 rectColor);
+			}
 
-			if (unit->health < unit->maxHealth && unit->state != UNIT_STATE_DIE) {
+			LifeBarEnum lifeBarSetting = context->config.lifeBar;
+
+			if (unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
+												   (lifeBarSetting == LIFE_BAR_ALWAYS || (lifeBarSetting == LIFE_BAR_DAMAGED && unit->health < unit->maxHealth))) ||
+												  keyboard_is_key_down(KEY_ALT))) {
 				int healthBarColor = PAL_COLOR_GREEN;
 				if (unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) {
-                    healthBarColor = PAL_COLOR_RED;
-                }
-				else {
+					healthBarColor = PAL_COLOR_RED;
+				} else {
 					if (unit->health < unit->maxHealth / HEALTH_BAR_HALF) healthBarColor = PAL_COLOR_YELLOW;
 				}
 
 				int healthBarYInit = unitTileYCamera - HEALTH_BAR_Y_OFFSET;
 				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
-				int healthBarLength = ((int) unit->health * TILE_SIZE) / unit->maxHealth;
+				int healthBarLength = ((int) unit->health * HEALTH_BAR_LENGTH) / unit->maxHealth;
 
 				render_queue_submit_rect_fill(
 						renderQueue,
 						UI_Z_ORDER + 1,
 						unitTileXCamera + HEALTH_BAR_BORDER,
 						healthBarYInit,
-						unitTileXCamera + healthBarLength,
+						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
 						healthBarYEnd,
 						healthBarColor);
 				render_queue_submit_rect_fill(
 						renderQueue,
 						UI_Z_ORDER,
-						unitTileXCamera + healthBarLength,
+						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
 						healthBarYInit,
-						unitTileXCamera + TILE_SIZE - HEALTH_BAR_BORDER,
+						unitTileXCamera + HEALTH_BAR_BORDER + HEALTH_BAR_LENGTH,
 						healthBarYEnd,
 						PAL_COLOR_BLACK);
 			}
@@ -168,8 +169,8 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 			AnimationStatus *animationStatus = &object->animationStatus;
 			AnimationProperties *prop = animationStatus->animation.prop;
 
-            int unitTileXCamera = object->currentX - context->xPosition + VIEWPORT_X_OFFSET;
-            int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
+			int unitTileXCamera = object->currentX - context->xPosition + VIEWPORT_X_OFFSET;
+			int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
 			render_queue_submit_masked_partial(renderQueue, OBJECTS_Z_ORDER + object->y / TILE_SIZE, animationStatus->sheet,
@@ -179,17 +180,14 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 											   unitYCamera,
 											   prop->width,
 											   prop->height);
-            
 		}
 	}
 }
 
 static int RESOURCE_LOCATIONS_X[RESOURCE_TYPES_COUNT] = {
-	100, 150
-};
+		100, 150};
 static int RESOURCE_LOCATIONS_Y[RESOURCE_TYPES_COUNT] = {
-	2, 2
-};
+		2, 2};
 char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][6];
 
 void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
@@ -202,14 +200,13 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 		uint32_t quantity = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i];
 		snprintf(RESOURCE_BUFFERS[i], sizeof(RESOURCE_BUFFERS[i]), "%u", quantity);
 		render_queue_submit_text(
-			renderQueue,
-			UI_Z_ORDER + 600,
-			context->gameFont,
-			RESOURCE_BUFFERS[i],
-			RESOURCE_LOCATIONS_X[i],
-			RESOURCE_LOCATIONS_Y[i],
-			PAL_COLOR_WHITE,
-			-1
-		);
+				renderQueue,
+				UI_Z_ORDER + 600,
+				context->gameFont,
+				RESOURCE_BUFFERS[i],
+				RESOURCE_LOCATIONS_X[i],
+				RESOURCE_LOCATIONS_Y[i],
+				PAL_COLOR_WHITE,
+				-1);
 	}
 }
