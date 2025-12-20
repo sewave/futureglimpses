@@ -165,7 +165,7 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 	Object **activeObjects = context->activeObjects;
 	for (int i = 0; i < context->activeObjectsCount; i++, activeObjects++) {
 		Object *object = *activeObjects;
-		if (object->x >= cameraMinX && object->x < cameraMaxX && object->y >= cameraMinY && object->y < cameraMaxY) {
+		if (object->currentX >= cameraMinX && object->currentX < cameraMaxX && object->currentY >= cameraMinY && object->currentY < cameraMaxY) {
 			AnimationStatus *animationStatus = &object->animationStatus;
 			AnimationProperties *prop = animationStatus->animation.prop;
 
@@ -173,7 +173,7 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 			int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
-			render_queue_submit_masked_partial(renderQueue, OBJECTS_Z_ORDER + object->y / TILE_SIZE, animationStatus->sheet,
+			render_queue_submit_masked_partial(renderQueue, OBJECTS_Z_ORDER + object->currentY / TILE_SIZE, animationStatus->sheet,
 											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
 											   prop->yOffset,
 											   unitXCamera,
