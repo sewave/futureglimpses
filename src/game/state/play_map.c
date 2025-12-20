@@ -354,6 +354,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if (keyboard_is_key_pressed(KEY_L)) {
 		context->config.lifeBar = (context->config.lifeBar + 1) % LIFE_BAR_COUNT;
 	}
+	game_strategy_ai_execute(context);
 
 	// If there are more ticks to draw, skip queue phase
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;

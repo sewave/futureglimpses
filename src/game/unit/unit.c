@@ -186,7 +186,10 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->isSelected = FALSE;
 	unit->targetX = NO_TARGET_POSITION;
 	unit->targetY = NO_TARGET_POSITION;
+	unit->prevTargetX = NO_TARGET_POSITION;
+	unit->prevTargetY = NO_TARGET_POSITION;	
 	unit->targetId = NO_TARGET_ID;
+	unit->prevTargetId = NO_TARGET_ID;
 	unit->blinkTime = 0;
 
 	UnitData *data = &unitsData[type];

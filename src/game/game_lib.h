@@ -19,4 +19,5 @@
 #include "text/game_text.h"
 #include "resource/resource.h"
 #include "config/config.h"
+#include "ai/strategy_ai.h"
 #endif /* GAME_LIB_H */

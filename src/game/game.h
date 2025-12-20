@@ -207,7 +207,8 @@ typedef struct {
 	uint8_t maxDamage;
 
 	uint16_t targetX, targetY;
-	UnitId targetId;
+	uint16_t prevTargetX, prevTargetY;
+	UnitId targetId, prevTargetId;
 	uint8_t blinkTime;
 
 	uint16_t reactionTime;
@@ -263,6 +264,14 @@ typedef struct {
 	uint8_t sfxVolume;
 	LifeBarEnum lifeBar;
 } Config;
+
+typedef enum {
+	STRATEGY_HARVEST,
+	STRATEGY_BUILD,
+	STRATEGY_TRAIN,
+	STRATEGY_ATTACK,
+	STRATEGY_COUNT,
+} ComputerStrategyEnum;
 
 typedef struct {
 	GameStateEnum gameState;
