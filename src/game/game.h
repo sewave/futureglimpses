@@ -93,6 +93,8 @@ typedef enum {
 	UNIT_CONTROLLERS_COUNT,
 } ControllerEnum;
 
+#define opponent_controller(controller) ((controller) == UNIT_CONTROLLER_PLAYER ? UNIT_CONTROLLER_AI : UNIT_CONTROLLER_PLAYER)
+
 typedef enum {
 	UNIT_STATE_IDLE,
 	UNIT_STATE_ATTACK,
