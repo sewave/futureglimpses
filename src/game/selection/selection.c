@@ -3,8 +3,32 @@ typedef struct {
     UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
 } SelectionSlot;
+typedef enum {
+    SELECTION_SLOT_1,
+    SELECTION_SLOT_2,
+    SELECTION_SLOT_3,
+    SELECTION_SLOT_4,
+    SELECTION_SLOT_5
+} SelectionSlotIndexEnum;
+#define MAX_SELECTION_SLOTS 5
 
 SelectionSlot selectionSlots[MAX_SELECTION_SLOTS];
+
+static uint16_t lastSelectionSlotSelectedTime = 0;
+static const uint16_t selectionSlotCooldown = SEC_TO_FRAMES(0.3);
+
+static void start_slot_selection_time() {
+	lastSelectionSlotSelectedTime = 1;
+}
+
+static void update_slot_selection_time() {
+	if (lastSelectionSlotSelectedTime) {
+		lastSelectionSlotSelectedTime++;
+		if (lastSelectionSlotSelectedTime > selectionSlotCooldown) {
+			lastSelectionSlotSelectedTime = 0;
+		}
+	}
+}
 
 static GameUnit* get_first_selected_unit_active(GameContext* context) {
     if(context->selectedUnitCount == 0) return NULL;
@@ -17,21 +41,7 @@ static GameUnit* get_first_selected_unit_active(GameContext* context) {
     return NULL;
 }
 
-void game_selection_clear(GameContext *context) {
-    for (int i = 0; i < context->selectedUnitCount; i++) {
-        GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-        if (unit) unit->isSelected = FALSE;
-    }
-    context->selectedUnitCount = 0;
-}
-
-void game_selection_clear_slots(GameContext *context) {
-    for (int slot = 0; slot < MAX_SELECTION_SLOTS; slot++) {
-        selectionSlots[slot].selectedUnitCount = 0;
-    }
-}
-
-void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
+static void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
     if (slotIndex >= MAX_SELECTION_SLOTS) return;
 
     SelectionSlot* slot = &selectionSlots[slotIndex];
@@ -39,6 +49,34 @@ void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum sl
     for (int i = 0; i < context->selectedUnitCount; i++) {
         slot->selectedUnits[i] = context->selectedUnits[i];
     }
+}
+
+static void game_selection_clear_slots(GameContext *context) {
+    for (int slot = 0; slot < MAX_SELECTION_SLOTS; slot++) {
+        selectionSlots[slot].selectedUnitCount = 0;
+    }
+}
+
+static void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
+    if (slotIndex >= MAX_SELECTION_SLOTS) return;
+
+    game_selection_clear(context);
+
+    SelectionSlot* slot = &selectionSlots[slotIndex];
+    for (int i = 0; i < slot->selectedUnitCount; i++) {
+        GameUnit* unit = game_unit_get_by_id(context, slot->selectedUnits[i]);
+        if (unit) {
+            game_selection_add_unit(context, unit);
+        }
+    }
+}
+
+void game_selection_clear(GameContext *context) {
+    for (int i = 0; i < context->selectedUnitCount; i++) {
+        GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+        if (unit) unit->isSelected = FALSE;
+    }
+    context->selectedUnitCount = 0;
 }
 
 void game_selection_remove_unit(GameContext *context, GameUnit *unit) {
@@ -57,20 +95,6 @@ void game_selection_add_unit(GameContext *context, GameUnit *unit) {
 	if (unit->isSelected) return;
 	unit->isSelected = TRUE;
 	context->selectedUnits[context->selectedUnitCount++] = unit->id;
-}
-
-void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
-    if (slotIndex >= MAX_SELECTION_SLOTS) return;
-
-    game_selection_clear(context);
-
-    SelectionSlot* slot = &selectionSlots[slotIndex];
-    for (int i = 0; i < slot->selectedUnitCount; i++) {
-        GameUnit* unit = game_unit_get_by_id(context, slot->selectedUnits[i]);
-        if (unit) {
-            game_selection_add_unit(context, unit);
-        }
-    }
 }
 
 void game_selection_center_camera_on_selection(GameContext* context) {
@@ -110,4 +134,40 @@ UnitId game_selection_get_in_position_or_previous(GameContext* context, int boar
 		}
 	}
 	return target;
+}
+
+void game_selection_handle_slots(GameContext* context) {
+    update_slot_selection_time();
+	if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
+		if (keyboard_is_key_pressed(KEY_1)) game_selection_save_to_slot(context, SELECTION_SLOT_1);
+		if (keyboard_is_key_pressed(KEY_2)) game_selection_save_to_slot(context, SELECTION_SLOT_2);
+		if (keyboard_is_key_pressed(KEY_3)) game_selection_save_to_slot(context, SELECTION_SLOT_3);
+		if (keyboard_is_key_pressed(KEY_4)) game_selection_save_to_slot(context, SELECTION_SLOT_4);
+		if (keyboard_is_key_pressed(KEY_5)) game_selection_save_to_slot(context, SELECTION_SLOT_5);
+	} else {
+		uint16_t previousSlotTime = lastSelectionSlotSelectedTime;
+		if (keyboard_is_key_pressed(KEY_1)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_1);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_2)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_2);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_3)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_3);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_4)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_4);
+			start_slot_selection_time();
+		}
+		if (keyboard_is_key_pressed(KEY_5)) {
+			game_selection_load_from_slot(context, SELECTION_SLOT_5);
+			start_slot_selection_time();
+		}
+		if (previousSlotTime > lastSelectionSlotSelectedTime && lastSelectionSlotSelectedTime == 1) {
+			game_selection_center_camera_on_selection(context);
+		}
+	}
 }

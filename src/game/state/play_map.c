@@ -11,22 +11,6 @@ typedef enum {
 	SELECTION_REMOVE
 } SelectionModeEnum;
 
-static uint16_t lastSelectionSlotSelectedTime = 0;
-static const uint16_t selectionSlotCooldown = SEC_TO_FRAMES(0.3);
-
-static void start_slot_selection_time() {
-	lastSelectionSlotSelectedTime = 1;
-}
-
-static void update_slot_selection_time() {
-	if (lastSelectionSlotSelectedTime) {
-		lastSelectionSlotSelectedTime++;
-		if (lastSelectionSlotSelectedTime > selectionSlotCooldown) {
-			lastSelectionSlotSelectedTime = 0;
-		}
-	}
-}
-
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
 	// TODO spawn mouse confirmation object
 	// Contextual action
@@ -237,39 +221,8 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	// Selection slot handling
-	update_slot_selection_time();
-	if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
-		if (keyboard_is_key_pressed(KEY_1)) game_selection_save_to_slot(context, SELECTION_SLOT_1);
-		if (keyboard_is_key_pressed(KEY_2)) game_selection_save_to_slot(context, SELECTION_SLOT_2);
-		if (keyboard_is_key_pressed(KEY_3)) game_selection_save_to_slot(context, SELECTION_SLOT_3);
-		if (keyboard_is_key_pressed(KEY_4)) game_selection_save_to_slot(context, SELECTION_SLOT_4);
-		if (keyboard_is_key_pressed(KEY_5)) game_selection_save_to_slot(context, SELECTION_SLOT_5);
-	} else {
-		uint16_t previousSlotTime = lastSelectionSlotSelectedTime;
-		if (keyboard_is_key_pressed(KEY_1)) {
-			game_selection_load_from_slot(context, SELECTION_SLOT_1);
-			start_slot_selection_time();
-		}
-		if (keyboard_is_key_pressed(KEY_2)) {
-			game_selection_load_from_slot(context, SELECTION_SLOT_2);
-			start_slot_selection_time();
-		}
-		if (keyboard_is_key_pressed(KEY_3)) {
-			game_selection_load_from_slot(context, SELECTION_SLOT_3);
-			start_slot_selection_time();
-		}
-		if (keyboard_is_key_pressed(KEY_4)) {
-			game_selection_load_from_slot(context, SELECTION_SLOT_4);
-			start_slot_selection_time();
-		}
-		if (keyboard_is_key_pressed(KEY_5)) {
-			game_selection_load_from_slot(context, SELECTION_SLOT_5);
-			start_slot_selection_time();
-		}
-		if (previousSlotTime > lastSelectionSlotSelectedTime && lastSelectionSlotSelectedTime == 1) {
-			game_selection_center_camera_on_selection(context);
-		}
-	}
+	game_selection_handle_slots(context);
+	
 
 	handle_units_selection(context, renderQueue);
 
