@@ -104,7 +104,7 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
-void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
+void handle_units_selection(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 	MouseCursorStateEnum mouseCursor = game_mouse_get_cursor_state();
@@ -212,21 +212,31 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 }
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
-	resource_update_ui_quantities(context);
+	// Inputs
 	game_mouse_handle_status_change(context);
 
 	// TODO menus
-	if (keyboard_is_key_down(KEY_F12)) return GAME_STATE_EXIT;
-	if (keyboard_is_key_down(KEY_F11)) return GAME_STATE_LOAD_MAP;
-
-	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
-	int mouseX = context->mouseStatus.x;
-	int mouseY = context->mouseStatus.y;
-
-	if (keyboard_is_key_pressed(KEY_SPACE)) {
-		game_selection_center_camera_on_selection(context);
+	if (keyboard_is_key_pressed(KEY_F12)) return GAME_STATE_EXIT;
+	if (keyboard_is_key_pressed(KEY_F11)) return GAME_STATE_LOAD_MAP;
+	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
+	// Resource debug keys
+	if (keyboard_is_key_pressed(KEY_Y)) {
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+	}
+	if (keyboard_is_key_pressed(KEY_U)) {
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+	}
+	if (keyboard_is_key_pressed(KEY_J)) {
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+	}
+	if (keyboard_is_key_pressed(KEY_K)) {
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+	}
+	if (keyboard_is_key_pressed(KEY_L)) {
+		context->config.lifeBar = (context->config.lifeBar + 1) % LIFE_BAR_COUNT;
 	}
 
+	// Selection slot handling
 	update_slot_selection_time();
 	if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
 		if (keyboard_is_key_pressed(KEY_1)) game_selection_save_to_slot(context, SELECTION_SLOT_1);
@@ -261,7 +271,10 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	handle_units_area(context, renderQueue);
+	handle_units_selection(context, renderQueue);
+
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
 
 	// If we click the mouseStatus on the minimap, we should move the camera or attack/move
 	if (mouseX >= MINIMAP_X_POS &&
@@ -278,7 +291,6 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 			if (context->xPosition > MAX_CAMERA_X_POSITION) context->xPosition = MAX_CAMERA_X_POSITION;
 			if (context->yPosition > MAX_CAMERA_Y_POSITION) context->yPosition = MAX_CAMERA_Y_POSITION;
 		}
-		//TODO target to center of mouse, not edge
 		if ((mouseState == MOUSE_CURSOR_ATTACK || mouseState == MOUSE_CURSOR_TARGET) && context->mouseStatus.isLeftReleased) {
 			uint16_t boardXPosition = clamp(mouseX - MINIMAP_X_POS, 0, BOARD_WIDTH);
 			uint16_t boardYPosition = clamp(mouseY - MINIMAP_Y_POS, 0, BOARD_HEIGHT);
@@ -292,6 +304,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
+	// Viewport moving
 	if ((key[KEY_UP] || key[KEY_DOWN] || key[KEY_LEFT] || key[KEY_RIGHT]) ||
 		((mouseX < MOUSE_X_GO_LEFT || mouseX > MOUSE_X_GO_RIGHT ||
 		  mouseY < MOUSE_Y_GO_UP || mouseY > MOUSE_Y_GO_DOWN) &&
@@ -322,27 +335,10 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
-	// TODO not each frame?
-	clear_bitmap(context->renderedMinimapUnits);
+	game_unit_process_all(context);
 
-	// Process active units
-	GameUnit **activeUnits = context->activeUnits;
-	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
-		GameUnit *unit = *activeUnits;
-		game_animation_unit_advance(context, unit);
-		game_unit_ai_invoke(context, unit);
-		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
-		if (unit->tileSize == 1) {
-			putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
-		} else {
-			for (int dx = 0; dx < unit->tileSize; dx++) {
-				for (int dy = 0; dy < unit->tileSize; dy++) {
-					putpixel(context->renderedMinimapUnits, unit->x + dx, unit->y + dy, color);
-				}
-			}
-		}
-	}
-
+	// Win condition
+	// TODO WIN Message + WIN SCREEN
 	// If active units are of only one controller, we go to load map again, TODO win/loss screen
 	int playerUnitsCount = 0;
 	for (int i = 0; i < context->activeUnitCount; i++) {
@@ -351,28 +347,18 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 	if (playerUnitsCount == context->activeUnitCount || playerUnitsCount == 0) return GAME_STATE_LOAD_MAP;
 
+
+	
+
+	// Logic
 	game_objects_advance(context);
-
-	if (keyboard_is_key_pressed(KEY_Y)) {
-		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
-	}
-	if (keyboard_is_key_pressed(KEY_U)) {
-		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
-	}
-	if (keyboard_is_key_pressed(KEY_J)) {
-		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
-	}
-	if (keyboard_is_key_pressed(KEY_K)) {
-		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
-	}
-	if (keyboard_is_key_pressed(KEY_L)) {
-		context->config.lifeBar = (context->config.lifeBar + 1) % LIFE_BAR_COUNT;
-	}
 	game_strategy_ai_execute(context);
+	resource_update_ui_quantities(context);
 
-	// If there are more ticks to draw, skip queue phase
+	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
+	// TODO should we have only one render function?
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);
 	render_queue_submit_mouse(context, renderQueue);

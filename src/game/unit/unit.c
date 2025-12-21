@@ -275,3 +275,26 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 		}
 	}
 }
+
+void game_unit_process_all(GameContext *context) {
+	// TODO performance - not updating minimap each frame?
+	// Minimap update
+	clear_bitmap(context->renderedMinimapUnits);
+	GameUnit **activeUnits = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *unit = *activeUnits;
+		game_animation_unit_advance(context, unit);
+		game_unit_ai_invoke(context, unit);
+		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		if (unit->tileSize == 1) {
+			putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
+		} else {
+			for (int dx = 0; dx < unit->tileSize; dx++) {
+				for (int dy = 0; dy < unit->tileSize; dy++) {
+					putpixel(context->renderedMinimapUnits, unit->x + dx, unit->y + dy, color);
+				}
+			}
+		}
+	}
+}
+

@@ -9,5 +9,6 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 void game_unit_face_target(GameUnit* unit, GameUnit* target);
 void game_unit_damage(GameContext *gameContext, uint8_t minDamage, uint8_t maxDamage, GameUnit* target);
 void game_unit_area_damage(GameContext* context, Object* object);
+void game_unit_process_all(GameContext *context);
 
 #endif /* UNIT_H */
