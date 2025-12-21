@@ -58,7 +58,6 @@ int main(int argc, char *argv[]) {
 	install_timers();
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-	set_mouse_sprite_focus(0, 0);
 
 	game_snd_load_sounds();
 	
