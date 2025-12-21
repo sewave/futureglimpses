@@ -1,14 +1,14 @@
 #include "selection.h"
 typedef struct {
-    UnitId selectedUnits[MAX_GAME_UNITS];
+	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
 } SelectionSlot;
 typedef enum {
-    SELECTION_SLOT_1,
-    SELECTION_SLOT_2,
-    SELECTION_SLOT_3,
-    SELECTION_SLOT_4,
-    SELECTION_SLOT_5
+	SELECTION_SLOT_1,
+	SELECTION_SLOT_2,
+	SELECTION_SLOT_3,
+	SELECTION_SLOT_4,
+	SELECTION_SLOT_5
 } SelectionSlotIndexEnum;
 #define MAX_SELECTION_SLOTS 5
 
@@ -36,39 +36,57 @@ static void update_slot_selection_time() {
 	}
 }
 
-static GameUnit* get_first_selected_unit_active(GameContext* context) {
-    if(context->selectedUnitCount == 0) return NULL;
-    for (int i = 0; i < context->selectedUnitCount; i++) {
-        GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-        if (unit && unit->isActive) {
-            return unit;
-        }
-    }
-    return NULL;
+static void game_selection_remove_unit(GameContext *context, GameUnit *unit) {
+	if (!unit->isSelected) return;
+	unit->isSelected = FALSE;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		if (context->selectedUnits[i] == unit->id) {
+			// Remove from selection, move last selected index to removed position directly
+			context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
+			return;
+		}
+	}
 }
 
-static void game_selection_save_to_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
-    if (slotIndex >= MAX_SELECTION_SLOTS) return;
-
-    SelectionSlot* slot = &selectionSlots[slotIndex];
-    slot->selectedUnitCount = context->selectedUnitCount;
-    for (int i = 0; i < context->selectedUnitCount; i++) {
-        slot->selectedUnits[i] = context->selectedUnits[i];
-    }
+static void game_selection_add_unit(GameContext *context, GameUnit *unit) {
+	if (unit->isSelected) return;
+	unit->isSelected = TRUE;
+	context->selectedUnits[context->selectedUnitCount++] = unit->id;
 }
 
-static void game_selection_load_from_slot(GameContext* context, SelectionSlotIndexEnum slotIndex) {
-    if (slotIndex >= MAX_SELECTION_SLOTS) return;
+static GameUnit *get_first_selected_unit_active(GameContext *context) {
+	if (context->selectedUnitCount == 0) return NULL;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+		if (unit && unit->isActive) {
+			return unit;
+		}
+	}
+	return NULL;
+}
 
-    game_selection_clear(context);
+static void game_selection_save_to_slot(GameContext *context, SelectionSlotIndexEnum slotIndex) {
+	if (slotIndex >= MAX_SELECTION_SLOTS) return;
 
-    SelectionSlot* slot = &selectionSlots[slotIndex];
-    for (int i = 0; i < slot->selectedUnitCount; i++) {
-        GameUnit* unit = game_unit_get_by_id(context, slot->selectedUnits[i]);
-        if (unit) {
-            game_selection_add_unit(context, unit);
-        }
-    }
+	SelectionSlot *slot = &selectionSlots[slotIndex];
+	slot->selectedUnitCount = context->selectedUnitCount;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		slot->selectedUnits[i] = context->selectedUnits[i];
+	}
+}
+
+static void game_selection_load_from_slot(GameContext *context, SelectionSlotIndexEnum slotIndex) {
+	if (slotIndex >= MAX_SELECTION_SLOTS) return;
+
+	game_selection_clear(context);
+
+	SelectionSlot *slot = &selectionSlots[slotIndex];
+	for (int i = 0; i < slot->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, slot->selectedUnits[i]);
+		if (unit) {
+			game_selection_add_unit(context, unit);
+		}
+	}
 }
 
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
@@ -149,17 +167,17 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 }
 
 static void game_selection_clear_slots(GameContext *context) {
-    for (int slot = 0; slot < MAX_SELECTION_SLOTS; slot++) {
-        selectionSlots[slot].selectedUnitCount = 0;
-    }
+	for (int slot = 0; slot < MAX_SELECTION_SLOTS; slot++) {
+		selectionSlots[slot].selectedUnitCount = 0;
+	}
 }
 
 void game_selection_clear(GameContext *context) {
-    for (int i = 0; i < context->selectedUnitCount; i++) {
-        GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-        if (unit) unit->isSelected = FALSE;
-    }
-    context->selectedUnitCount = 0;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+		if (unit) unit->isSelected = FALSE;
+	}
+	context->selectedUnitCount = 0;
 }
 
 void game_selection_init(GameContext *context) {
@@ -167,38 +185,20 @@ void game_selection_init(GameContext *context) {
 	game_selection_clear_slots(context);
 }
 
-void game_selection_remove_unit(GameContext *context, GameUnit *unit) {
-	if (!unit->isSelected) return;
-	unit->isSelected = FALSE;
-	for (int i = 0; i < context->selectedUnitCount; i++) {
-		if (context->selectedUnits[i] == unit->id) {
-			// Remove from selection, move last selected index to removed position directly
-			context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
-			return;
-		}
-	}
+void game_selection_center_camera_on_selection(GameContext *context) {
+	GameUnit *firstUnit = get_first_selected_unit_active(context);
+	if (!firstUnit) return;
+
+	// Center camera on the first selected unit
+	int targetX = (firstUnit->x * TILE_SIZE) - (VIEWPORT_WIDTH / 2);
+	int targetY = (firstUnit->y * TILE_SIZE) - (VIEWPORT_HEIGHT / 2);
+
+	context->xPosition = clamp(targetX, 0, MAX_CAMERA_X_POSITION);
+	context->yPosition = clamp(targetY, 0, MAX_CAMERA_Y_POSITION);
 }
 
-void game_selection_add_unit(GameContext *context, GameUnit *unit) {
-	if (unit->isSelected) return;
-	unit->isSelected = TRUE;
-	context->selectedUnits[context->selectedUnitCount++] = unit->id;
-}
-
-void game_selection_center_camera_on_selection(GameContext* context) {
-    GameUnit* firstUnit = get_first_selected_unit_active(context);
-    if (!firstUnit) return;
-
-    // Center camera on the first selected unit
-    int targetX = (firstUnit->x * TILE_SIZE) - (VIEWPORT_WIDTH / 2);
-    int targetY = (firstUnit->y * TILE_SIZE) - (VIEWPORT_HEIGHT / 2);
-
-    context->xPosition = clamp(targetX, 0, MAX_CAMERA_X_POSITION);
-    context->yPosition = clamp(targetY, 0, MAX_CAMERA_Y_POSITION);
-}
-
-UnitId game_selection_get_in_position_or_previous(GameContext* context, int boardXPosition, int boardYPosition) {
-    UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
+UnitId game_selection_get_in_position_or_previous(GameContext *context, int boardXPosition, int boardYPosition) {
+	UnitId target = context->walkabilityGrid[boardXPosition][boardYPosition];
 	if (target == WALKABILITY_FREE) {
 		// Search on the sorrounding area for a unit that was there previously
 		for (int y = -1; y <= 1; y++) {
@@ -224,8 +224,8 @@ UnitId game_selection_get_in_position_or_previous(GameContext* context, int boar
 	return target;
 }
 
-void game_selection_handle_slots(GameContext* context) {
-    update_slot_selection_time();
+void game_selection_handle_slots(GameContext *context) {
+	update_slot_selection_time();
 	if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
 		if (keyboard_is_key_pressed(KEY_1)) game_selection_save_to_slot(context, SELECTION_SLOT_1);
 		if (keyboard_is_key_pressed(KEY_2)) game_selection_save_to_slot(context, SELECTION_SLOT_2);
@@ -260,8 +260,8 @@ void game_selection_handle_slots(GameContext* context) {
 	}
 }
 
-void game_selection_handle_input(GameContext* context) {
-int mouseX = context->mouseStatus.x;
+void game_selection_handle_input(GameContext *context) {
+	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 	MouseCursorStateEnum mouseCursor = game_mouse_get_cursor_state();
 
