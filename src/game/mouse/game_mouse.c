@@ -2,7 +2,7 @@
 
 static MouseCursorStateEnum mouseCursorState = MOUSE_CURSOR_IDLE;
 
-const char *mouseCursorFilenames[NUM_MOUSE_CURSORS] = {
+static const char *mouseCursorFilenames[NUM_MOUSE_CURSORS] = {
 		"assets/mouse/idle.pcx",
 		"assets/mouse/look.pcx",
 		"assets/mouse/none.pcx",
@@ -11,9 +11,15 @@ const char *mouseCursorFilenames[NUM_MOUSE_CURSORS] = {
 		"assets/mouse/none.pcx",
 };
 
-static void game_mouse_go_attack_or_move() {
-	if (keyboard_is_key_pressed(KEY_A)) game_mouse_set_cursor_state(MOUSE_CURSOR_ATTACK);
-	if (keyboard_is_key_pressed(KEY_M)) game_mouse_set_cursor_state(MOUSE_CURSOR_TARGET);
+static const int8_t cursorFocus[NUM_MOUSE_CURSORS][2] = {
+	{0, 0}, {8, 8}, {0, 0}, {8, 8}, {8, 8}, {0, 0},
+};
+
+static void game_mouse_go_attack_or_move(GameContext* context) {
+	if(context->selectedUnitCount > 0) {
+		if (keyboard_is_key_pressed(KEY_A)) game_mouse_set_cursor_state(MOUSE_CURSOR_ATTACK);
+		if (keyboard_is_key_pressed(KEY_M)) game_mouse_set_cursor_state(MOUSE_CURSOR_TARGET);
+	}
 }
 
 InitializationStatusEnum game_mouse_init_cursors() {
@@ -24,6 +30,7 @@ InitializationStatusEnum game_mouse_init_cursors() {
 
 void game_mouse_set_cursor_state(MouseCursorStateEnum state) {
 	mouseCursorState = state;
+	set_mouse_sprite_focus(cursorFocus[mouseCursorState][0], cursorFocus[mouseCursorState][1]);
 	mouse_set_cursor(mouseCursorState);
 }
 
@@ -49,12 +56,14 @@ void game_mouse_handle_status_change(GameContext *context) {
 	// TODO: based on active command buttons
 	switch (mouseCursorState) {
 		case MOUSE_CURSOR_IDLE:
-			if (sourceUnit) game_mouse_set_cursor_state(MOUSE_CURSOR_LOOK);
-			game_mouse_go_attack_or_move();
+			if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
+				game_mouse_set_cursor_state(MOUSE_CURSOR_LOOK);
+			}
+			game_mouse_go_attack_or_move(context);
 			break;
 		case MOUSE_CURSOR_LOOK:
 			if (!sourceUnit) game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-			game_mouse_go_attack_or_move();
+			game_mouse_go_attack_or_move(context);
 			break;
 		case MOUSE_CURSOR_ATTACK:
 		case MOUSE_CURSOR_TARGET:
