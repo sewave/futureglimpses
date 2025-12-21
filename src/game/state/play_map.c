@@ -110,7 +110,7 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 			}
 		}
 	}
-	context->mouseStatus.isSelecting = FALSE;
+	game_mouse_set_cursor_state(MOUSE_CURSOR_SELECT);
 }
 
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
@@ -121,19 +121,22 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	// TODO handle autoactions, stop, defend
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
-		if (context->mouseStatus.isLeftPressed) {
-			selectionStartX = mouseX;
-			selectionStartY = mouseY;
-			context->mouseStatus.isSelecting = TRUE;
+		MouseCursorStateEnum mouseCursor = game_mouse_get_cursor_state();
+		if (mouseCursor == MOUSE_CURSOR_IDLE || mouseCursor == MOUSE_CURSOR_LOOK) {
+			if (context->mouseStatus.isLeftPressed) {
+				selectionStartX = mouseX;
+				selectionStartY = mouseY;
+				game_mouse_set_cursor_state(MOUSE_CURSOR_SELECT);
+			}
+			if (context->mouseStatus.isLeftDoubleClick) handle_viewport_select_all_of_same_type(context, mouseX, mouseY);
+			if (context->mouseStatus.isRightPressed) handle_viewport_contextual_action(context, mouseX, mouseY);
 		}
-		if (context->mouseStatus.isLeftDoubleClick) handle_viewport_select_all_of_same_type(context, mouseX, mouseY);
-		if (context->mouseStatus.isRightPressed) handle_viewport_contextual_action(context, mouseX, mouseY);
 	}
 
 	if (!context->mouseStatus.isLeftDoubleClick) {
 		// TODO attack mode, move mode or selection mode
-		if (context->mouseStatus.isLeftReleased && context->mouseStatus.isSelecting) {
-			context->mouseStatus.isSelecting = FALSE;
+		if (context->mouseStatus.isLeftReleased && game_mouse_get_cursor_state() == MOUSE_CURSOR_SELECT) {
+			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
 			int selectionEndX = mouseX;
 			int selectionEndY = mouseY;
@@ -149,7 +152,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 					selectionMode = SELECTION_REMOVE;
 				}
 			}
-			
+
 
 			if (dx < TILE_SIZE && dy < TILE_SIZE) {
 				// Simple Click unitary
@@ -267,7 +270,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
 		mouseY >= MINIMAP_Y_POS &&
 		mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
-		if (context->mouseStatus.isLeftDown & !context->mouseStatus.isSelecting) {
+		if (context->mouseStatus.isLeftDown && game_mouse_get_cursor_state() != MOUSE_CURSOR_SELECT) {
 			// TODO move and attack modes from minimap
 			context->xPosition = (mouseX - MINIMAP_X_POS - 8) * TILE_SIZE;
 			context->yPosition = (mouseY - MINIMAP_Y_POS - 6) * TILE_SIZE;
@@ -387,18 +390,22 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_WHITE);
 
-	if (context->mouseStatus.isSelecting) {
-		// Selection rectangle
-		int selectionEndX = clamp(context->mouseStatus.x, VIEWPORT_X_MIN, VIEWPORT_X_MAX);
-		int selectionEndY = clamp(context->mouseStatus.y, VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
-		render_queue_submit_rect(renderQueue,
-								 MOUSE_Z_ORDER,
-								 selectionStartX, selectionStartY, selectionEndX, selectionEndY,
-								 PAL_COLOR_GREEN);
-	} else {
-		// Mouse cursor
-		render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
-								   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
+	switch (game_mouse_get_cursor_state()) {
+		case MOUSE_CURSOR_SELECT:
+			// Selection rectangle
+			int selectionEndX = clamp(context->mouseStatus.x, VIEWPORT_X_MIN, VIEWPORT_X_MAX);
+			int selectionEndY = clamp(context->mouseStatus.y, VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
+			render_queue_submit_rect(renderQueue,
+									 MOUSE_Z_ORDER,
+									 selectionStartX, selectionStartY, selectionEndX, selectionEndY,
+									 PAL_COLOR_GREEN);
+			break;
+		default:
+			// Mouse cursor
+			render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
+									   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
+
+			break;
 	}
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());

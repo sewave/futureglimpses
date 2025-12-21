@@ -5,8 +5,10 @@ MouseCursorStateEnum mouseCursorState = MOUSE_CURSOR_IDLE;
 const char* mouseCursorFilenames [NUM_MOUSE_CURSORS] = {
     "assets/mouse/idle.pcx",
     "assets/mouse/idle.pcx",
+    "assets/mouse/none.pcx",
     "assets/mouse/idle.pcx",
-    "assets/mouse/idle.pcx"
+    "assets/mouse/idle.pcx",
+    "assets/mouse/none.pcx",
 };
 
 InitializationStatusEnum game_mouse_init_cursors() {

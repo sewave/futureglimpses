@@ -97,5 +97,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 500);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 300);
 
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+
 	return GAME_STATE_PLAY_MAP;
 }

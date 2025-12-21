@@ -14,7 +14,6 @@ typedef struct {
     uint8_t isRightPressed;
     uint8_t isLeftReleased;
     uint8_t isRightReleased;
-    uint8_t isSelecting;
     uint8_t isLeftDoubleClick;
     uint32_t leftClickTime;
     uint32_t leftClickMaxTime;

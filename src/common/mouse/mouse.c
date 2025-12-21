@@ -72,7 +72,6 @@ void mouse_initialize_status(MouseStatus *status, uint32_t doubleClickMaxTime) {
 	status->isRightPressed = FALSE;
 	status->isLeftReleased = FALSE;
 	status->isRightReleased = FALSE;
-	status->isSelecting = FALSE;
 	status->isLeftDoubleClick = FALSE;
 	status->leftClickTime = 0;
 	status->leftClickMaxTime = doubleClickMaxTime;
