@@ -3,11 +3,6 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-int selectionStartX = -1;
-int selectionStartY = -1;
-
-static char fpsText[16];
-static char activeText[64];
 int moveViewportCounter = 0;
 
 typedef enum {
@@ -119,8 +114,7 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
 		if (mouseCursor == MOUSE_CURSOR_IDLE || mouseCursor == MOUSE_CURSOR_LOOK || mouseCursor == MOUSE_CURSOR_SELECT) {
 			if (context->mouseStatus.isLeftPressed) {
-				selectionStartX = mouseX;
-				selectionStartY = mouseY;
+				game_mouse_start_selection(mouseX, mouseY);
 				game_mouse_set_cursor_state(MOUSE_CURSOR_SELECT);
 			}
 			if (context->mouseStatus.isLeftDoubleClick) handle_viewport_select_all_of_same_type(context, mouseX, mouseY);
@@ -145,8 +139,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 		int selectionEndX = mouseX;
 		int selectionEndY = mouseY;
 
-		int dx = abs(selectionEndX - selectionStartX);
-		int dy = abs(selectionEndY - selectionStartY);
+		int dx = abs(selectionEndX - game_mouse_get_selection_start_x());
+		int dy = abs(selectionEndY - game_mouse_get_selection_start_y());
 
 		SelectionModeEnum selectionMode = SELECTION_SET;
 		if (keyboard_is_key_down(KEY_LSHIFT) || keyboard_is_key_down(KEY_RSHIFT)) {
@@ -159,8 +153,8 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 		if (dx < TILE_SIZE && dy < TILE_SIZE) {
 			// Simple Click unitary
-			int tileX = game_spatial_get_board_x_position(context->xPosition, selectionStartX);
-			int tileY = game_spatial_get_board_y_position(context->yPosition, selectionStartY);
+			int tileX = game_spatial_get_board_x_position(context->xPosition, game_mouse_get_selection_start_x());
+			int tileY = game_spatial_get_board_y_position(context->yPosition, game_mouse_get_selection_start_y());
 
 			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
 				UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
@@ -182,10 +176,10 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 			}
 		} else {
 			// Mass Selection (Bounding Box)
-			int minScreenX = min_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-			int maxScreenX = max_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-			int minScreenY = min_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
-			int maxScreenY = max_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+			int minScreenX = min_val(game_mouse_get_selection_start_x(), selectionEndX) - VIEWPORT_X_OFFSET;
+			int maxScreenX = max_val(game_mouse_get_selection_start_x(), selectionEndX) - VIEWPORT_X_OFFSET;
+			int minScreenY = min_val(game_mouse_get_selection_start_y(), selectionEndY) - VIEWPORT_Y_OFFSET;
+			int maxScreenY = max_val(game_mouse_get_selection_start_y(), selectionEndY) - VIEWPORT_Y_OFFSET;
 
 			int worldBoxMinX = context->xPosition + minScreenX;
 			int worldBoxMaxX = context->xPosition + maxScreenX;
@@ -381,51 +375,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);
-
-	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
-									  context->xPosition, context->yPosition,
-									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
-									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-
-	// Submit to render the viewport from the renderedBoard
-	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0,
-									   context->gameBack->w, context->gameBack->h);
-
-	// Minimap
-	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 501, context->renderedMinimap,
-							  MINIMAP_X_POS, MINIMAP_Y_POS);
-
-	render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 502, context->renderedMinimapUnits,
-							   MINIMAP_X_POS, MINIMAP_Y_POS, RND_FLAG_NORMAL);
-
-	// Minimap viewport window
-	render_queue_submit_rect(renderQueue,
-							 UI_Z_ORDER + 503,
-							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
-							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
-							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
-							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
-							 PAL_COLOR_WHITE);
-
-	game_mouse_queue_draw(context, renderQueue, selectionStartX, selectionStartY);
-
-	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);
-
-	int blue = 0;
-	int red = 0;
-	// Count active units by controller
-	for (int i = 0; i < context->activeUnitCount; i++) {
-		GameUnit *unit = context->activeUnits[i];
-		if (unit->controller == UNIT_CONTROLLER_PLAYER) {
-			blue++;
-		} else {
-			red++;
-		}
-	}
-	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
-	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
-
+	render_queue_submit_mouse(context, renderQueue);
 	render_queue_submit_ui(context, renderQueue);
 
 	return GAME_STATE_PLAY_MAP;

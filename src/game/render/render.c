@@ -10,6 +10,22 @@
 #define HEALTH_BAR_HALF 2
 #define HEALTH_BAR_LENGTH (TILE_SIZE - 2 * HEALTH_BAR_BORDER)
 
+#define X_OFFSETS 3
+#define Y_OFFSETS 3
+#define ARROW_DATA 3
+#define ARROW_DATA_F_OFF 0
+#define ARROW_DATA_X_OFF 1
+#define ARROW_DATA_Y_OFF 2
+#define CURSOR_SIZE 16
+
+static char fpsText[16];
+static char activeText[64];
+static const int8_t cursorEdges[Y_OFFSETS][X_OFFSETS][ARROW_DATA] = {
+		{{0, 0, 0}, {16, 0, 0}, {32, -14, 0}},
+		{{112, 0, 0}, {0, 0, 0}, {48, -14, 0}},
+		{{96, 0, -14}, {80, 0, -14}, {64, -14, -14}},
+};
+
 static char *getStateLetter(UnitStateEnum state) {
 	switch (state) {
 		case UNIT_STATE_IDLE:
@@ -194,6 +210,47 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 	// TODO Other UI elements
 	// Selected unit info
 	// Command buttons
+	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
+									  context->xPosition, context->yPosition,
+									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
+									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+
+	// Submit to render the viewport from the renderedBoard
+	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0,
+									   context->gameBack->w, context->gameBack->h);
+
+	// Minimap
+	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 501, context->renderedMinimap,
+							  MINIMAP_X_POS, MINIMAP_Y_POS);
+
+	render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 502, context->renderedMinimapUnits,
+							   MINIMAP_X_POS, MINIMAP_Y_POS, RND_FLAG_NORMAL);
+
+	// Minimap viewport window
+	render_queue_submit_rect(renderQueue,
+							 UI_Z_ORDER + 503,
+							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
+							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
+							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
+							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
+							 PAL_COLOR_WHITE);
+
+	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);
+
+	int blue = 0;
+	int red = 0;
+	// Count active units by controller
+	for (int i = 0; i < context->activeUnitCount; i++) {
+		GameUnit *unit = context->activeUnits[i];
+		if (unit->controller == UNIT_CONTROLLER_PLAYER) {
+			blue++;
+		} else {
+			red++;
+		}
+	}
+	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
+	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
 
 	// Render resources
 	for (int i = 0; i < RESOURCE_TYPES_COUNT; i++) {
@@ -208,5 +265,44 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 				RESOURCE_LOCATIONS_Y[i],
 				PAL_COLOR_WHITE,
 				-1);
+	}
+}
+
+void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
+	switch (game_mouse_get_cursor_state()) {
+		case MOUSE_CURSOR_SELECT:
+			// Selection rectangle
+			int selectionEndX = clamp(context->mouseStatus.x, VIEWPORT_X_MIN, VIEWPORT_X_MAX);
+			int selectionEndY = clamp(context->mouseStatus.y, VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
+			render_queue_submit_rect(renderQueue,
+									 MOUSE_Z_ORDER,
+									 game_mouse_get_selection_start_x(), game_mouse_get_selection_start_y(),
+									 selectionEndX, selectionEndY,
+									 PAL_COLOR_GREEN);
+			break;
+		default:
+			uint8_t mouseEdgeX = 1;
+			uint8_t mouseEdgeY = 1;
+			if (context->mouseStatus.x < MOUSE_X_GO_LEFT) mouseEdgeX = 0;
+			if (context->mouseStatus.x > MOUSE_X_GO_RIGHT) mouseEdgeX = 2;
+			if (context->mouseStatus.y < MOUSE_Y_GO_UP) mouseEdgeY = 0;
+			if (context->mouseStatus.y > MOUSE_Y_GO_DOWN) mouseEdgeY = 2;
+			//If we are on the screen edges, we use the arrow sprites
+
+			if (mouseEdgeX == 1 && mouseEdgeY == 1) {
+				// Mouse cursor
+				render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
+										   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus,
+										   RND_FLAG_NORMAL);
+			} else {
+				// Arrow cursor
+				render_queue_submit_masked_partial(
+						renderQueue, MOUSE_Z_ORDER, game_mouse_get_arrow_cursors_sheet(),
+						cursorEdges[mouseEdgeY][mouseEdgeX][ARROW_DATA_F_OFF], 0,
+						context->mouseStatus.x + cursorEdges[mouseEdgeY][mouseEdgeX][ARROW_DATA_X_OFF],
+						context->mouseStatus.y + cursorEdges[mouseEdgeY][mouseEdgeX][ARROW_DATA_Y_OFF],
+						CURSOR_SIZE, CURSOR_SIZE);
+			}
+			break;
 	}
 }

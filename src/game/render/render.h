@@ -18,5 +18,6 @@
 void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueue);
 void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQueue);
 void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue);
+void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue);
 
 #endif /* RENDER_H */
