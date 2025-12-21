@@ -37,7 +37,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 			uint16_t tile = map->tile_layers->tiles[x + y * BOARD_WIDTH];
 			context->board[x][y] = tile;
 			if (tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
-			// TODO marcar en tabla de recursos, cada tipo tendrá la misma cantidad de recurso
+			// TODO mark un resources table
 		}
 	}
 
@@ -45,7 +45,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	game_units_init(context);
 	game_objects_init(context);
-	game_selection_clear(context);
+	game_selection_init(context);
 
 	spawn_test_units(context);
 
