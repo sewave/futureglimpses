@@ -2,6 +2,7 @@
 #include "video.h"
 
 int video_init_system(int width, int height, int depth) {
+	printf("Initializing video...");
 	set_color_depth(depth);
 #ifdef DOS
 	if (set_gfx_mode(GFX_AUTODETECT, width, height, 0, 0) != ALLEGRO_INIT_OK) {
@@ -13,6 +14,7 @@ int video_init_system(int width, int height, int depth) {
 #ifdef DOS
 	}
 #endif
+	printOK();
 	return INITIALIZATION_OK;
 }
 

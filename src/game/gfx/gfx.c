@@ -53,13 +53,17 @@ static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP* spriteSheets[], c
 }
 
 InitializationStatusEnum game_gfx_load_sprite_sheets() {
+    printf("Loading units gfx...");
     for(int i = 0; i < UNIT_TYPE_NUMBER; i++) {
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsBlue, spriteSheetFilenamesBlue)) return INITIALIZATION_ERROR;
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsRed, spriteSheetFilenamesRed)) return INITIALIZATION_ERROR;
     }
+    printOK();
+    printf("Loading objects gfx...");
     for(int i = 0; i < OBJ_TYPE_NUMBER; i++) {
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsObject, objectSheetFilenames)) return INITIALIZATION_ERROR;
     }
+    printOK();
     return INITIALIZATION_OK;
 }
 

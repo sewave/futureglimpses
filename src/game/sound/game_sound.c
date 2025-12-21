@@ -1,5 +1,6 @@
 #include <allegro/sound.h>
 #include "game_sound.h"
+#include <stdio.h>
 
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
 		"assets/music/menu.s3m"
@@ -14,7 +15,9 @@ const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
 };
 
 void game_snd_load_sounds() {
+    printf("Loading game sounds...");
     snd_init_sounds(GAME_SOUNDS_COUNT, gameSoundFilenames);
+    printOK();
 }
 
 void game_snd_play_music(GameMusic gameMusic) {

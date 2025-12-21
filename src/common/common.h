@@ -26,5 +26,7 @@ char common_init_basic(
 		const char *unsupportedCpuMessage,
 		int requiredRamMb,
 		int (*mouse_init_func)(void));
+void printOK();
+void printKO();
 
 #endif /* COMMON_H */

@@ -36,26 +36,23 @@ void install_timers() {
 	LOCK_VARIABLE(logic_ticks);
 	LOCK_FUNCTION(timer_handler);
 	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
-	printf("OK\n");
+	printOK();
 }
 
 int main(int argc, char *argv[]) {
-	printf("Starting Future Glimpses...\n");
+	printf("Starting Future Glimpses v%s...\n", VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
-	if (common_init_basic(
-				MINIMAL_CPU_FAMILY,
-				REQUIRED_CPU_CAPABILITIES,
-				UNSUPPORTED_CPU_MESSAGE,
-				PROGRAM_REQUIRED_RAM_MB,
+	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
+				UNSUPPORTED_CPU_MESSAGE, PROGRAM_REQUIRED_RAM_MB,
 				&game_mouse_init_cursors) != PROGRAM_OK) {
 		return PROGRAM_ERROR;
 	}
 
-	printf("Loading configuration...");
 	game_config_load_settings(&context.config);
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
-		printf("KO\nError initializing sound. Continuing without sound.");
+		printKO();
+		printf("Error initializing sound. Continuing without sound.");
 	}
 
 	install_timers();
@@ -64,39 +61,53 @@ int main(int argc, char *argv[]) {
 	set_mouse_sprite_focus(0, 0);
 
 	game_snd_load_sounds();
-	printf("Loading sprite sheets...");
+	
 	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
 		game_gfx_destroy_sprite_sheets();
-		printf("Error loading sprite sheets.");
+		printKO();
+		printf("Error loading sprite sheets.\n");
 		return PROGRAM_ERROR;
 	}
-	printf("OK\n");
 
-	printf("Initializing video...\n");
+	if (game_text_init_system(LANGUAGE_SPANISH) != INITIALIZATION_OK) {
+		printKO();
+		printf("Error initializing text system.");
+		return PROGRAM_ERROR;
+	}
+	printOK();
+
+	printf("Loading game font...");
+	context.gameFont = load_font("assets/font/main.pcx", NULL, NULL);
+	if (context.gameFont == NULL) {
+		printKO();
+		printf("Error loading game font.");
+		return PROGRAM_ERROR;
+	}
+	printOK();
+
+	printf("\n***Press any key/Pulsa cualquier tecla***\n\n");
+	while (keypressed()) {
+		readkey();
+	}
+	readkey();
+
 	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
-		printf("Error initializing video.");
+		printKO();
+		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}
 
 	if (game_video_load_universal_pal() != INITIALIZATION_OK) {
-		printf("Error loading game pal.");
-		return PROGRAM_ERROR;
-	}
-
-	if(game_text_init_system(LANGUAGE_SPANISH) != INITIALIZATION_OK) {
-		printf("Error initializing text system.");
-		return PROGRAM_ERROR;
-	}
-
-	context.gameFont = load_font("assets/font/main.pcx", NULL, NULL);
-	if (context.gameFont == NULL) {
-		printf("Error loading game font.");
+		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+		printf("Error loading universal game pal.");
 		return PROGRAM_ERROR;
 	}
 
 	fps_init();
 	// mod music uses ~5 FPS
 	// game_snd_play_music(GAME_MUSIC_TITLE);
+
+	printf("\n***Starting game loop***\n\n");
 
 	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 

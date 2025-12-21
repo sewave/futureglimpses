@@ -3,6 +3,8 @@
 #include "../common/common_lib.h"
 #include <allegro/gfx.h>
 
+#define VERSION "1.00"
+
 #define DEFAULT_MUSIC_VOLUME 100
 #define DEFAULT_SFX_VOLUME 100
 
@@ -318,6 +320,6 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 #define PROGRAM_REQUIRED_RAM_MB 7
 #define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
 #define REQUIRED_CPU_CAPABILITIES CPU_FPU
-#define UNSUPPORTED_CPU_MESSAGE "KO\nError: CPU not supported. A 486 or better with FPU is required."
+#define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
 
 #endif /* GAME_H */

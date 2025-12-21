@@ -9,10 +9,12 @@
 #define CONFIG_KEY_LIFE_BAR "life_bar"
 
 void game_config_load_settings(Config* config) {
+    printf("Loading configuration...");
     set_config_file(CONFIG_FILE_PATH);
     config->musicVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME);
     config->sfxVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, DEFAULT_SFX_VOLUME);
-    config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);    
+    config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);
+    printOK(); 
 }
 
 void game_config_save_settings(Config* config) {
