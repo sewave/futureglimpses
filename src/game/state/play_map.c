@@ -40,20 +40,13 @@ static void update_slot_selection_time() {
 	}
 }
 
-static uint16_t get_board_x_position(uint16_t cameraPosition, int cursorPosition) {
-	return clamp((cameraPosition + cursorPosition - VIEWPORT_X_OFFSET) / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-}
-
-static uint16_t get_board_y_position(uint16_t cameraPosition, int cursorPosition) {
-	return clamp((cameraPosition + cursorPosition - VIEWPORT_Y_OFFSET) / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
-}
-
-static void handle_viewport_contextual_action(GameContext *context, int mouseX, int mouseY) {
+static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
 	// TODO spawn mouse confirmation object
 	// Contextual action
 	// Get board situation
-	int boardXPosition = get_board_x_position(context->xPosition, mouseX);
-	int boardYPosition = get_board_y_position(context->yPosition, mouseY);
+	int boardXPosition = game_spatial_get_board_x_position(context->xPosition, mouseX);
+	int boardYPosition = game_spatial_get_board_y_position(context->yPosition, mouseY);
+	MouseCursorStateEnum mouseState = game_mouse_get_cursor_state();
 
 	UnitId target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
 
@@ -63,7 +56,12 @@ static void handle_viewport_contextual_action(GameContext *context, int mouseX, 
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 			if (!unit) continue;
 			if (target == WALKABILITY_FREE) {
-				game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+				if (isContextual) {
+					game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+				} else {
+					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
+					if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+				}
 			} else {
 				// TODO Resource => Work, if we are workers
 			}
@@ -76,20 +74,26 @@ static void handle_viewport_contextual_action(GameContext *context, int mouseX, 
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 				if (!unit) continue;
-				if (targetUnit->controller == UNIT_CONTROLLER_AI) {
-					game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				if (isContextual) {
+					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
+						game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					} else {
+						game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					}
 				} else {
-					game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 				}
 			}
 		}
 	}
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
 static void handle_viewport_select_all_of_same_type(GameContext *context, int mouseX, int mouseY) {
 	// If we double click, select all units of the same type on screen
-	int tileX = get_board_x_position(context->xPosition, mouseX);
-	int tileY = get_board_y_position(context->yPosition, mouseY);
+	int tileX = game_spatial_get_board_x_position(context->xPosition, mouseX);
+	int tileY = game_spatial_get_board_y_position(context->yPosition, mouseY);
 	UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 	GameUnit *sourceUnit = game_unit_get_by_id(context, id);
 	if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
@@ -110,103 +114,109 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 			}
 		}
 	}
-	game_mouse_set_cursor_state(MOUSE_CURSOR_SELECT);
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
 void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
-
+	MouseCursorStateEnum mouseCursor = game_mouse_get_cursor_state();
+	
 	// Actions that must be inside the area
-	// TODO handle autoactions, stop, defend
 	if (mouseY > VIEWPORT_Y_MIN && mouseY < VIEWPORT_Y_MAX &&
 		mouseX > VIEWPORT_X_MIN && mouseX < VIEWPORT_X_MAX) {
-		MouseCursorStateEnum mouseCursor = game_mouse_get_cursor_state();
-		if (mouseCursor == MOUSE_CURSOR_IDLE || mouseCursor == MOUSE_CURSOR_LOOK) {
+		if (mouseCursor == MOUSE_CURSOR_IDLE || mouseCursor == MOUSE_CURSOR_LOOK || mouseCursor == MOUSE_CURSOR_SELECT) {
 			if (context->mouseStatus.isLeftPressed) {
 				selectionStartX = mouseX;
 				selectionStartY = mouseY;
 				game_mouse_set_cursor_state(MOUSE_CURSOR_SELECT);
 			}
 			if (context->mouseStatus.isLeftDoubleClick) handle_viewport_select_all_of_same_type(context, mouseX, mouseY);
-			if (context->mouseStatus.isRightPressed) handle_viewport_contextual_action(context, mouseX, mouseY);
+		}
+		if (context->mouseStatus.isRightPressed & (mouseCursor == MOUSE_CURSOR_IDLE || mouseCursor == MOUSE_CURSOR_LOOK)) handle_viewport_mouse_action(context, mouseX, mouseY, TRUE);
+		if (context->mouseStatus.isLeftPressed) {
+			switch (mouseCursor) {
+				case MOUSE_CURSOR_ATTACK:
+				case MOUSE_CURSOR_TARGET:
+					handle_viewport_mouse_action(context, mouseX, mouseY, FALSE);
+					break;
+				default:
+					// Nothing else
+					break;
+			}
 		}
 	}
 
-	if (!context->mouseStatus.isLeftDoubleClick) {
-		// TODO attack mode, move mode or selection mode
-		if (context->mouseStatus.isLeftReleased && game_mouse_get_cursor_state() == MOUSE_CURSOR_SELECT) {
-			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+	if (!context->mouseStatus.isLeftDoubleClick && context->mouseStatus.isLeftReleased && mouseCursor == MOUSE_CURSOR_SELECT) {
+		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
-			int selectionEndX = mouseX;
-			int selectionEndY = mouseY;
+		int selectionEndX = mouseX;
+		int selectionEndY = mouseY;
 
-			int dx = abs(selectionEndX - selectionStartX);
-			int dy = abs(selectionEndY - selectionStartY);
+		int dx = abs(selectionEndX - selectionStartX);
+		int dy = abs(selectionEndY - selectionStartY);
 
-			SelectionModeEnum selectionMode = SELECTION_SET;
-			if (keyboard_is_key_down(KEY_LSHIFT) || keyboard_is_key_down(KEY_RSHIFT)) {
-				selectionMode = SELECTION_ADD;
-			} else {
-				if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
-					selectionMode = SELECTION_REMOVE;
-				}
+		SelectionModeEnum selectionMode = SELECTION_SET;
+		if (keyboard_is_key_down(KEY_LSHIFT) || keyboard_is_key_down(KEY_RSHIFT)) {
+			selectionMode = SELECTION_ADD;
+		} else {
+			if (keyboard_is_key_down(KEY_LCONTROL) || keyboard_is_key_down(KEY_RCONTROL)) {
+				selectionMode = SELECTION_REMOVE;
 			}
+		}
 
+		if (dx < TILE_SIZE && dy < TILE_SIZE) {
+			// Simple Click unitary
+			int tileX = game_spatial_get_board_x_position(context->xPosition, selectionStartX);
+			int tileY = game_spatial_get_board_y_position(context->yPosition, selectionStartY);
 
-			if (dx < TILE_SIZE && dy < TILE_SIZE) {
-				// Simple Click unitary
-				int tileX = get_board_x_position(context->xPosition, selectionStartX);
-				int tileY = get_board_y_position(context->yPosition, selectionStartY);
-
-				if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
-					UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
-					GameUnit *foundUnit = game_unit_get_by_id(context, id);
-					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
-						switch (selectionMode) {
-							case SELECTION_SET:
-								game_selection_clear(context);
-								game_selection_add_unit(context, foundUnit);
-								break;
-							case SELECTION_ADD:
-								game_selection_add_unit(context, foundUnit);
-								break;
-							case SELECTION_REMOVE:
-								game_selection_remove_unit(context, foundUnit);
-								break;
-						}
+			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
+				UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
+				GameUnit *foundUnit = game_unit_get_by_id(context, id);
+				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+					switch (selectionMode) {
+						case SELECTION_SET:
+							game_selection_clear(context);
+							game_selection_add_unit(context, foundUnit);
+							break;
+						case SELECTION_ADD:
+							game_selection_add_unit(context, foundUnit);
+							break;
+						case SELECTION_REMOVE:
+							game_selection_remove_unit(context, foundUnit);
+							break;
 					}
 				}
-			} else {
-				// Mass Selection (Bounding Box)
-				int minScreenX = min_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-				int maxScreenX = max_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
-				int minScreenY = min_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
-				int maxScreenY = max_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+			}
+		} else {
+			// Mass Selection (Bounding Box)
+			int minScreenX = min_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
+			int maxScreenX = max_val(selectionStartX, selectionEndX) - VIEWPORT_X_OFFSET;
+			int minScreenY = min_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
+			int maxScreenY = max_val(selectionStartY, selectionEndY) - VIEWPORT_Y_OFFSET;
 
-				int worldBoxMinX = context->xPosition + minScreenX;
-				int worldBoxMaxX = context->xPosition + maxScreenX;
-				int worldBoxMinY = context->yPosition + minScreenY;
-				int worldBoxMaxY = context->yPosition + maxScreenY;
+			int worldBoxMinX = context->xPosition + minScreenX;
+			int worldBoxMaxX = context->xPosition + maxScreenX;
+			int worldBoxMinY = context->yPosition + minScreenY;
+			int worldBoxMaxY = context->yPosition + maxScreenY;
 
-				int tileMinX = clamp(worldBoxMinX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-				int tileMaxX = clamp(worldBoxMaxX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
-				int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
-				int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+			int tileMinX = clamp(worldBoxMinX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+			int tileMaxX = clamp(worldBoxMaxX / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 
-				if (selectionMode == SELECTION_SET) game_selection_clear(context);
+			if (selectionMode == SELECTION_SET) game_selection_clear(context);
 
-				for (int row = tileMinY; row <= tileMaxY; row++) {
-					for (int col = tileMinX; col <= tileMaxX; col++) {
-						UnitId id = context->walkabilityGrid[col][row];
-						if (id < HANDLE_ID_THRESHOLD) continue;
-						GameUnit *foundUnit = game_unit_get_by_id(context, id);
-						if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
-							if (selectionMode == SELECTION_REMOVE) {
-								game_selection_remove_unit(context, foundUnit);
-							} else {
-								game_selection_add_unit(context, foundUnit);
-							}
+			for (int row = tileMinY; row <= tileMaxY; row++) {
+				for (int col = tileMinX; col <= tileMaxX; col++) {
+					UnitId id = context->walkabilityGrid[col][row];
+					if (id < HANDLE_ID_THRESHOLD) continue;
+					GameUnit *foundUnit = game_unit_get_by_id(context, id);
+					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+						if (selectionMode == SELECTION_REMOVE) {
+							game_selection_remove_unit(context, foundUnit);
+						} else {
+							game_selection_add_unit(context, foundUnit);
 						}
 					}
 				}
@@ -217,9 +227,11 @@ void handle_units_area(GameContext *context, RenderQueue *renderQueue) {
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	resource_update_ui_quantities(context);
+	game_mouse_handle_status_change(context);
 
 	// TODO menus
-	if (keyboard_is_key_down(KEY_ESC)) return GAME_STATE_EXIT;
+	if (keyboard_is_key_down(KEY_F12)) return GAME_STATE_EXIT;
+	if (keyboard_is_key_down(KEY_F11)) return GAME_STATE_LOAD_MAP;
 
 	// TODO change cursor style based on position UP-LEFT, UP-RIGHT, DOWN-LEFT, DOWN-RIGHT, LEFT, RIGHT, UP, DOWN
 	int mouseX = context->mouseStatus.x;
@@ -265,19 +277,32 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	handle_units_area(context, renderQueue);
 
-	// If we click the mouseStatus on the minimap, we should move the camera there
+	// If we click the mouseStatus on the minimap, we should move the camera or attack/move
 	if (mouseX >= MINIMAP_X_POS &&
 		mouseX <= MINIMAP_X_POS + BOARD_WIDTH &&
 		mouseY >= MINIMAP_Y_POS &&
 		mouseY <= MINIMAP_Y_POS + BOARD_HEIGHT) {
-		if (context->mouseStatus.isLeftDown && game_mouse_get_cursor_state() != MOUSE_CURSOR_SELECT) {
-			// TODO move and attack modes from minimap
+		MouseCursorStateEnum mouseState = game_mouse_get_cursor_state();
+
+		if (context->mouseStatus.isLeftDown && mouseState == MOUSE_CURSOR_IDLE) {
 			context->xPosition = (mouseX - MINIMAP_X_POS - 8) * TILE_SIZE;
 			context->yPosition = (mouseY - MINIMAP_Y_POS - 6) * TILE_SIZE;
 			if (context->yPosition < 0) context->yPosition = 0;
 			if (context->xPosition < 0) context->xPosition = 0;
 			if (context->xPosition > MAX_CAMERA_X_POSITION) context->xPosition = MAX_CAMERA_X_POSITION;
 			if (context->yPosition > MAX_CAMERA_Y_POSITION) context->yPosition = MAX_CAMERA_Y_POSITION;
+		}
+		//TODO target to center of mouse, not edge
+		if ((mouseState == MOUSE_CURSOR_ATTACK || mouseState == MOUSE_CURSOR_TARGET) && context->mouseStatus.isLeftReleased) {
+			uint16_t boardXPosition = clamp(mouseX - MINIMAP_X_POS, 0, BOARD_WIDTH);
+			uint16_t boardYPosition = clamp(mouseY - MINIMAP_Y_POS, 0, BOARD_HEIGHT);
+			for (int i = 0; i < context->selectedUnitCount; i++) {
+				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+				if (!unit) continue;
+				if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
+				if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+			}
+			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 		}
 	}
 
@@ -342,16 +367,16 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	game_objects_advance(context);
 
-	if (keyboard_is_key_pressed(KEY_H)) {
+	if (keyboard_is_key_pressed(KEY_Y)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_J)) {
+	if (keyboard_is_key_pressed(KEY_U)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_N)) {
+	if (keyboard_is_key_pressed(KEY_J)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_M)) {
+	if (keyboard_is_key_pressed(KEY_K)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
 	if (keyboard_is_key_pressed(KEY_L)) {
@@ -390,23 +415,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_WHITE);
 
-	switch (game_mouse_get_cursor_state()) {
-		case MOUSE_CURSOR_SELECT:
-			// Selection rectangle
-			int selectionEndX = clamp(context->mouseStatus.x, VIEWPORT_X_MIN, VIEWPORT_X_MAX);
-			int selectionEndY = clamp(context->mouseStatus.y, VIEWPORT_Y_MIN, VIEWPORT_Y_MAX);
-			render_queue_submit_rect(renderQueue,
-									 MOUSE_Z_ORDER,
-									 selectionStartX, selectionStartY, selectionEndX, selectionEndY,
-									 PAL_COLOR_GREEN);
-			break;
-		default:
-			// Mouse cursor
-			render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
-									   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus, RND_FLAG_NORMAL);
-
-			break;
-	}
+	game_mouse_queue_draw(context, renderQueue, selectionStartX, selectionStartY);
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);

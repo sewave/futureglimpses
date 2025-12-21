@@ -15,5 +15,7 @@ typedef enum {
 InitializationStatusEnum game_mouse_init_cursors();
 void game_mouse_set_cursor_state(MouseCursorStateEnum state);
 MouseCursorStateEnum game_mouse_get_cursor_state();
+void game_mouse_handle_status_change(GameContext *context);
+void game_mouse_queue_draw(GameContext *context, RenderQueue* renderQueue, int selectionStartX, int selectionStartY);
 
 #endif

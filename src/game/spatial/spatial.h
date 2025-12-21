@@ -25,4 +25,8 @@ uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* targ
 
 uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, uint16_t targetY, uint8_t range);
 
+uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPosition);
+
+uint16_t game_spatial_get_board_y_position(uint16_t cameraPosition, int cursorPosition);
+
 #endif /* SPATIAL_H */

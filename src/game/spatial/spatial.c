@@ -71,3 +71,10 @@ uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, 
 	return abs(((int) source->x) - targetX) <= range && abs(((int) source->y) - targetY) <= range;
 }
 
+uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPosition) {
+	return clamp((cameraPosition + cursorPosition - VIEWPORT_X_OFFSET) / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
+}
+
+uint16_t game_spatial_get_board_y_position(uint16_t cameraPosition, int cursorPosition) {
+	return clamp((cameraPosition + cursorPosition - VIEWPORT_Y_OFFSET) / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
+}
