@@ -3,14 +3,6 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-#define MINIMAP_X_POS 4
-#define MINIMAP_Y_POS 12
-
-#define MOUSE_X_GO_LEFT TILE_SIZE / 2
-#define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE / 2)
-#define MOUSE_Y_GO_UP TILE_SIZE / 2
-#define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE / 2)
-
 int selectionStartX = -1;
 int selectionStartY = -1;
 

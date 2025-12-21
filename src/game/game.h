@@ -321,5 +321,12 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 #define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
 #define REQUIRED_CPU_CAPABILITIES CPU_FPU
 #define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
+#define MINIMAP_X_POS 4
+#define MINIMAP_Y_POS 12
+
+#define MOUSE_X_GO_LEFT TILE_SIZE / 8
+#define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE / 8)
+#define MOUSE_Y_GO_UP TILE_SIZE / 8
+#define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE / 8)
 
 #endif /* GAME_H */

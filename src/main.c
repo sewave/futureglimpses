@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 	game_gfx_destroy_sprite_sheets();
 	snd_stop_music();
 	snd_destroy_sounds();
-	mouse_destroy_cursors();
+	game_mouse_destroy_cursors();
 	text_free_all();
 	game_config_save_settings(&context.config);
 	allegro_exit();
