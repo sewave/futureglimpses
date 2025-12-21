@@ -5,8 +5,6 @@
 
 int moveViewportCounter = 0;
 
-
-
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// Inputs
 	game_mouse_handle_status_change(context);
@@ -97,7 +95,11 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		moveViewportCounter = 0;
 	}
 
+	// Logic
 	game_unit_process_all(context);
+	game_objects_advance(context);
+	game_strategy_ai_execute(context);
+	resource_update_ui_quantities(context);
 
 	// Win condition
 	// TODO WIN Message + WIN SCREEN
@@ -109,10 +111,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 	if (playerUnitsCount == context->activeUnitCount || playerUnitsCount == 0) return GAME_STATE_LOAD_MAP;
 
-	// Logic
-	game_objects_advance(context);
-	game_strategy_ai_execute(context);
-	resource_update_ui_quantities(context);
+
 
 	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;

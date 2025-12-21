@@ -5,25 +5,24 @@
 #define CONTROL_LENGTH (strlen(CONTROL_SEQUENCE) + COLOR_CODE_LENGTH)
 
 static char **texts = NULL;
-static uint16_t textsCount = 0;
+static uint16_t totalTexts = 0;
 
 static void text_free_texts() {
 	if (texts != NULL) {
-		for (uint16_t i = 0; i < textsCount; i++) {
+		for (uint16_t i = 0; i < totalTexts; i++) {
 			if (texts[i] != NULL) {
 				free(texts[i]);
 				texts[i] = NULL;
 			}
 		}
-		textsCount = 0;
 	}
 }
 
 InitializationStatusEnum text_init_system(uint16_t numberOfTexts) {
 	texts = (char **) malloc(sizeof(char *) * numberOfTexts);
 	if (texts == NULL) return INITIALIZATION_ERROR;
-	textsCount = numberOfTexts;
-	for (uint16_t i = 0; i < textsCount; i++) texts[i] = NULL;
+	totalTexts = numberOfTexts;
+	for (uint16_t i = 0; i < totalTexts; i++) texts[i] = NULL;
 	return INITIALIZATION_OK;
 }
 
@@ -32,12 +31,12 @@ void text_free_all() {
 	if (texts != NULL) {
 		free(texts);
 		texts = NULL;
-		textsCount = 0;
+		totalTexts = 0;
 	}
 }
 
 const char *text_get_by_id(uint16_t textId) {
-	if (texts == NULL || textId >= textsCount) return NULL;
+	if (texts == NULL || textId >= totalTexts) return NULL;
 	return texts[textId];
 }
 
@@ -49,7 +48,7 @@ InitializationStatusEnum text_load_texts_from_file(const char *filename) {
 	char buffer[2048];
 	uint16_t currentTextId = 0;
 
-	while (fgets(buffer, sizeof(buffer), file) != NULL && currentTextId < textsCount) {
+	while (fgets(buffer, sizeof(buffer), file) != NULL && currentTextId < totalTexts) {
 		size_t len = strlen(buffer);
 		if (len > 0 && buffer[len - 1] == '\n') {
 			buffer[len - 1] = '\0';
