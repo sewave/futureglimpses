@@ -4,9 +4,11 @@
 #define CONFIG_FILE_PATH "config.cfg"
 #define CONFIG_SECTION_AUDIO "audio"
 #define CONFIG_SECTION_GAMEPLAY "gameplay"
+#define CONFIG_SECTION_UI "ui"
 #define CONFIG_KEY_MUSIC_VOLUME "music_volume"
 #define CONFIG_KEY_SFX_VOLUME "sfx_volume"
 #define CONFIG_KEY_LIFE_BAR "life_bar"
+#define CONFIG_KEY_LANGUAGE "language"
 
 void game_config_load_settings(Config* config) {
     printf("Loading configuration...");
@@ -14,6 +16,7 @@ void game_config_load_settings(Config* config) {
     config->musicVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME);
     config->sfxVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, DEFAULT_SFX_VOLUME);
     config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);
+    config->language = (GameLanguageEnum) get_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, DEFAULT_LANGUAGE);
     printOK(); 
 }
 
@@ -22,5 +25,6 @@ void game_config_save_settings(Config* config) {
     set_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_MUSIC_VOLUME, config->musicVolume);
     set_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, config->sfxVolume);
     set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, config->lifeBar);
+    set_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, config->language);
     flush_config_file();
 }

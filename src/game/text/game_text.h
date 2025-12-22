@@ -7,10 +7,7 @@ typedef enum {
     GAME_TEXT_ID_NUMBER_OF_TEXTS
 } GameTextIdEnum;
 
-typedef enum {
-    LANGUAGE_SPANISH = 0,
-    LANGUAGE_ENGLISH = 1,
-} GameLanguageEnum;
+#define DEFAULT_LANGUAGE LANGUAGE_SPANISH
 
 InitializationStatusEnum game_text_init_system(GameLanguageEnum language);
 InitializationStatusEnum game_text_set_language(GameLanguageEnum language);

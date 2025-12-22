@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
 	game_snd_load_sounds();
+	set_volume(context.config.sfxVolume, context.config.musicVolume);
 	
 	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
 		game_gfx_destroy_sprite_sheets();
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]) {
 		return PROGRAM_ERROR;
 	}
 
-	if (game_text_init_system(LANGUAGE_SPANISH) != INITIALIZATION_OK) {
+	if (game_text_init_system(context.config.language) != INITIALIZATION_OK) {
 		printKO();
 		printf("Error initializing text system.");
 		return PROGRAM_ERROR;

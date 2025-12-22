@@ -261,10 +261,16 @@ typedef enum {
 
 #define DEFAULT_LIFE_BAR LIFE_BAR_DAMAGED
 
+typedef enum {
+    LANGUAGE_SPANISH = 0,
+    LANGUAGE_ENGLISH = 1,
+} GameLanguageEnum;
+
 typedef struct {
 	uint8_t musicVolume;
 	uint8_t sfxVolume;
 	LifeBarEnum lifeBar;
+	GameLanguageEnum language;
 } Config;
 
 typedef enum {
@@ -274,6 +280,10 @@ typedef enum {
 	STRATEGY_ATTACK,
 	STRATEGY_COUNT,
 } ComputerStrategyEnum;
+
+#define CMD_BAR_BUTTONS 6
+typedef struct {
+} CommandBarButton;
 
 typedef struct {
 	GameStateEnum gameState;
