@@ -2,6 +2,7 @@
 #define GAME_H
 #include "../common/common_lib.h"
 #include <allegro/gfx.h>
+#include "text/game_text_enum.h"
 
 #define VERSION "1.00"
 
@@ -31,13 +32,6 @@
 #define GET_GEN(id) ((id >> ID_GEN_SHIFT) & 0xFFFF)
 #define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
 #define NULL_HANDLE 0
-
-typedef struct {
-	int startCol;
-	int endCol;
-	int startRow;
-	int endRow;
-} GridRect;
 
 typedef enum {
 	GAME_STATE_LOAD_MAP,
@@ -282,7 +276,23 @@ typedef enum {
 } ComputerStrategyEnum;
 
 #define CMD_BAR_BUTTONS 6
+typedef enum {
+	CMD_BAR_BTN_ACTION,
+	CMD_BAR_BTN_BUILDING_SELECT,
+	CMD_BAR_BTN_BUILD,
+	CMD_BAR_BTN_TRAIN,
+	CMD_BAR_BTN_CANCEL,	
+} CommandBarButtonEnum;
+
+typedef void (*CommandBarButtonFunction)(void *, uint8_t);
+
 typedef struct {
+	CommandBarButtonEnum type;
+	CommandBarButtonFunction action;
+	uint8_t hotkeyIndex;
+	GameTextIdEnum hoverTextId;
+	uint8_t fixedParam;
+	uint16_t sheetOffsetX;
 } CommandBarButton;
 
 typedef struct {
@@ -299,6 +309,7 @@ typedef struct {
 	int xPosition, yPosition;// Top-left position of the viewport on the board
 	BITMAP *gameBack;
 	BITMAP *tileSet;
+	BITMAP *cmdButtons;
 	long ticksToCatchup;
 
 	GameUnit *activeUnits[MAX_GAME_UNITS];
@@ -316,6 +327,7 @@ typedef struct {
 	Resources resources[UNIT_CONTROLLERS_COUNT];
 	Stats stats[UNIT_CONTROLLERS_COUNT];
 	Config config;
+	CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS];
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

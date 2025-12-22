@@ -87,6 +87,8 @@ static void game_selection_load_from_slot(GameContext *context, SelectionSlotInd
 			game_selection_add_unit(context, unit);
 		}
 	}
+
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {

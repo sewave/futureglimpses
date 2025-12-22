@@ -17,6 +17,7 @@ void game_free_context(GameContext *context) {
 	destroy_bitmap(context->renderedMinimap);
 	destroy_bitmap(context->renderedMinimapUnits);
 	destroy_bitmap(context->tileSet);
+	destroy_bitmap(context->cmdButtons);
 	destroy_font(context->gameFont);
 }
 

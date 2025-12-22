@@ -2,6 +2,7 @@
 
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1
+#define AREA_DAMAGE_REDUCTION 4
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 
@@ -265,7 +266,12 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 			if (id < HANDLE_ID_THRESHOLD) continue;
 			GameUnit *target = game_unit_get_by_id(context, id);
 			if (target) {
-				game_unit_damage(context, object->minDamage, object->maxDamage, target);
+				if(col == centerX || row == centerY) {
+					game_unit_damage(context, object->minDamage, object->maxDamage, target);
+				}
+				else {
+					game_unit_damage(context, object->minDamage / AREA_DAMAGE_REDUCTION, object->maxDamage / AREA_DAMAGE_REDUCTION, target);
+				}
 				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 				if (target->state == UNIT_STATE_IDLE && sourceUnit
 					&& sourceUnit->controller != target->controller) {

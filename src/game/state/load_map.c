@@ -25,6 +25,9 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	if (context->gameBack) { destroy_bitmap(context->gameBack); }
 	context->gameBack = load_bitmap("assets/ui/back_2.pcx", NULL);
 
+	if (context->cmdButtons) { destroy_bitmap(context->cmdButtons); }
+	context->cmdButtons = load_bitmap("assets/ui/cmdbtns.pcx", NULL);
+
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
 	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
 
