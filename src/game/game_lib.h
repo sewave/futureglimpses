@@ -20,4 +20,5 @@
 #include "resource/resource.h"
 #include "config/config.h"
 #include "ai/strategy_ai.h"
+#include "cmd_bar/cmd_bar.h"
 #endif /* GAME_LIB_H */

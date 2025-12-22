@@ -1,1 +1,6 @@
 %d units
+^004M^001ove unit
+^004S^001top unit
+^004A^001ttack with unit
+^004D^001efend with unit
+Cancel action (^004ESC^001)

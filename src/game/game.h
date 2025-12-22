@@ -277,12 +277,20 @@ typedef enum {
 
 #define CMD_BAR_BUTTONS 6
 typedef enum {
+	CMD_BAR_BTN_NONE,
 	CMD_BAR_BTN_ACTION,
 	CMD_BAR_BTN_BUILDING_SELECT,
 	CMD_BAR_BTN_BUILD,
 	CMD_BAR_BTN_TRAIN,
 	CMD_BAR_BTN_CANCEL,	
 } CommandBarButtonEnum;
+
+typedef enum {
+	CMD_BAR_BTN_STATE_IDLE,
+	CMD_BAR_BTN_STATE_HOVER,
+	CMD_BAR_BTN_STATE_DOWN,
+	CMD_BAR_BTN_STATE_RELEASED,
+} CommandBarButtonStateEnum;
 
 typedef void (*CommandBarButtonFunction)(void *, uint8_t);
 
@@ -292,7 +300,9 @@ typedef struct {
 	uint8_t hotkeyIndex;
 	GameTextIdEnum hoverTextId;
 	uint8_t fixedParam;
-	uint16_t sheetOffsetX;
+	uint16_t sheetOffsetX, sheetOffsetY;
+	uint16_t x, y;
+	CommandBarButtonStateEnum state;
 } CommandBarButton;
 
 typedef struct {
@@ -309,7 +319,7 @@ typedef struct {
 	int xPosition, yPosition;// Top-left position of the viewport on the board
 	BITMAP *gameBack;
 	BITMAP *tileSet;
-	BITMAP *cmdButtons;
+	BITMAP *cmdBarButtonsGfx;
 	long ticksToCatchup;
 
 	GameUnit *activeUnits[MAX_GAME_UNITS];
@@ -350,5 +360,8 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 #define MOUSE_X_GO_RIGHT (GAME_INTERNAL_WIDTH - TILE_SIZE / 8)
 #define MOUSE_Y_GO_UP TILE_SIZE / 8
 #define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE / 8)
+
+#define HOVER_MESSAGE_X 72
+#define HOVER_MESSAGE_Y 190
 
 #endif /* GAME_H */
