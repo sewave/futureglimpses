@@ -39,7 +39,7 @@ static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {
     "assets/gfx/object/arrow.pcx",
     "assets/gfx/object/fireball.pcx",
     "assets/gfx/object/explode.pcx",
-    // TODO different sprite for arrow damage
+    // TODO different sprite for arrow damage or null
     "assets/gfx/object/arrow.pcx",
 };
 
@@ -53,17 +53,20 @@ static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP* spriteSheets[], c
 }
 
 InitializationStatusEnum game_gfx_load_sprite_sheets() {
-    printf("Loading units gfx...");
+    printf("Loading units gfx [");
     for(int i = 0; i < UNIT_TYPE_NUMBER; i++) {
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsBlue, spriteSheetFilenamesBlue)) return INITIALIZATION_ERROR;
+        printInitStep();
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsRed, spriteSheetFilenamesRed)) return INITIALIZATION_ERROR;
+        printInitStep();
     }
-    printOK();
-    printf("Loading objects gfx...");
+    printOKSteps();
+    printf("Loading objects gfx [");
     for(int i = 0; i < OBJ_TYPE_NUMBER; i++) {
         if(!game_gfx_load_sprite_sheet(i, spriteSheetsObject, objectSheetFilenames)) return INITIALIZATION_ERROR;
+        printInitStep();
     }
-    printOK();
+    printOKSteps();
     return INITIALIZATION_OK;
 }
 

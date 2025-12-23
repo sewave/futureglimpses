@@ -5,6 +5,14 @@
 
 #define CMD_BAR_BUTTON_SEPARATION_WIDTH 34
 #define CMD_BAR_BUTTON_SEPARATION_HEIGHT 24
+#define CMD_BAR_BUTTON_LINE_WIDTH CMD_BAR_BUTTON_WIDTH - 2
+#define CMD_BAR_BUTTON_LINE_HEIGTH CMD_BAR_BUTTON_HEIGHT - 2
+
+
+#define CMD_BUTTON_Z UI_Z_ORDER + 505
+#define CMD_BUTTON_HOVER_Z UI_Z_ORDER + 505
+#define CMD_BUTTON_DOWN_RECT_Z UI_Z_ORDER + 506
+#define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
 
 static void handle_cancel_button(void *ctxVoid, uint8_t fixedDat) {
     game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
@@ -150,20 +158,41 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
 		CommandBarButton *button = &context->cmdBarButtons[i];
         if(button->type == CMD_BAR_BTN_NONE) continue;
-        render_queue_submit_masked_partial(
-                renderQueue, UI_Z_ORDER + 505, context->cmdBarButtonsGfx,
-                button->sheetOffsetX, button->sheetOffsetY,
-                button->x, button->y,
-                CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);
-        if(button->state == CMD_BAR_BTN_STATE_HOVER) {
-            render_queue_submit_rect(renderQueue,
-                            UI_Z_ORDER + 506,
-                            button->x, button->y,
-                            button->x + CMD_BAR_BUTTON_WIDTH - 1, button->y + CMD_BAR_BUTTON_HEIGHT - 1,
-                            PAL_COLOR_GREEN);
-            render_queue_submit_text_multicolor(
-                renderQueue, UI_Z_ORDER + 505, context->gameFont, text_get_by_id(button->hoverTextId),
-                HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE , -1);
-        }
+		int xPos = button->x;
+		int yPos = button->y;
+		if (button->state == CMD_BAR_BTN_STATE_DOWN) {
+			xPos++;
+			yPos++;
+			render_queue_submit_line(renderQueue,
+									 CMD_BUTTON_DOWN_LINE_Z,
+									 xPos, yPos,
+									 xPos + CMD_BAR_BUTTON_LINE_WIDTH, yPos,
+									 PAL_COLOR_GRAY);
+			render_queue_submit_line(renderQueue,
+									 CMD_BUTTON_DOWN_LINE_Z,
+									 xPos, yPos,
+									 xPos, yPos + CMD_BAR_BUTTON_LINE_HEIGTH,
+									 PAL_COLOR_GRAY);
+			render_queue_submit_rect(renderQueue,
+									 CMD_BUTTON_DOWN_RECT_Z,
+									 xPos, yPos,
+									 xPos + CMD_BAR_BUTTON_WIDTH - 1, yPos + CMD_BAR_BUTTON_HEIGHT - 1,
+									 PAL_COLOR_WHITE);
+		}
+		render_queue_submit_masked_partial(
+				renderQueue, CMD_BUTTON_Z, context->cmdBarButtonsGfx,
+				button->sheetOffsetX, button->sheetOffsetY,
+				xPos, yPos,
+				CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);
+		if (button->state == CMD_BAR_BTN_STATE_HOVER) {
+			render_queue_submit_rect(renderQueue,
+									 CMD_BUTTON_HOVER_Z,
+									 xPos - 1, yPos - 1,
+									 xPos + CMD_BAR_BUTTON_WIDTH, yPos + CMD_BAR_BUTTON_HEIGHT,
+									 PAL_COLOR_BLACK);
+			render_queue_submit_text_multicolor(
+					renderQueue, UI_Z_ORDER + 505, context->gameFont, text_get_by_id(button->hoverTextId),
+					HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
 	}
 }

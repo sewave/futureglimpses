@@ -29,6 +29,7 @@
 #define PAL_COLOR_GREEN 3
 #define PAL_COLOR_YELLOW 4
 #define PAL_COLOR_RED 5
+#define PAL_COLOR_GRAY 6
 
 InitializationStatusEnum game_video_load_universal_pal();
 

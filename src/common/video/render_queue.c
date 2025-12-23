@@ -123,6 +123,17 @@ void render_queue_submit_rect_fill(RenderQueue *queue, int z, int x1, int y1, in
 	}
 }
 
+void render_queue_submit_line(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_LINE);
+	if (cmd) {
+		cmd->data.line.x1 = x1;
+		cmd->data.line.y1 = y1;
+		cmd->data.line.x2 = x2;
+		cmd->data.line.y2 = y2;
+		cmd->data.line.color = color;
+	}
+}
+
 void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_RECT);
 	if (cmd) {
@@ -203,11 +214,17 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 							cmd->data.maskedPartial.width,
 							cmd->data.maskedPartial.height);
 				break;
-			case RND_CMD_RECT:
-				rect(target,
+			case RND_CMD_LINE:
+				line(target,
 					 cmd->data.rect.x1, cmd->data.rect.y1,
 					 cmd->data.rect.x2, cmd->data.rect.y2,
 					 cmd->data.rect.color);
+				break;
+			case RND_CMD_RECT:
+				rect(target,
+					 cmd->data.line.x1, cmd->data.line.y1,
+					 cmd->data.line.x2, cmd->data.line.y2,
+					 cmd->data.line.color);
 				break;
 			case RND_CMD_RECT_FILL:
 				rectfill(target,

@@ -3,6 +3,7 @@
 #include <allegro/datafile.h>
 #include "mouse.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static BITMAP **mouseCursors = NULL;
 static uchar numMouseCursors = 0;
@@ -39,6 +40,7 @@ InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char **mouse
 		BITMAP *cursorBitmap = load_bitmap(mouseCursorFilenames[i], NULL);
 		if (cursorBitmap == NULL) return INITIALIZATION_ERROR;
 		mouse_load_cursor(i, cursorBitmap);
+		printInitStep();
 	}
 	return INITIALIZATION_OK;
 }

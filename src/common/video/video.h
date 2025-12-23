@@ -8,6 +8,8 @@ typedef struct RGB_FILE_ENTRY {
     unsigned char r, g, b;
 } RGB_FILE_ENTRY;
 
+#define TRANSPARENT_INDEX -1
+
 #define PALETTE_ENTRIES 256
 
 int video_init_system(int width, int height, int depth);

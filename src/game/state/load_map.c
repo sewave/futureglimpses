@@ -23,7 +23,7 @@ void spawn_test_units(GameContext *context) {
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	if (context->gameBack) { destroy_bitmap(context->gameBack); }
-	context->gameBack = load_bitmap("assets/ui/back_2.pcx", NULL);
+	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
 
 	if (context->cmdBarButtonsGfx) { destroy_bitmap(context->cmdBarButtonsGfx); }
 	context->cmdBarButtonsGfx = load_bitmap("assets/ui/cmdbtns.pcx", NULL);

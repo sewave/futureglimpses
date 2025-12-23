@@ -19,6 +19,7 @@ typedef enum {
 	RND_CMD_SOLID,
 	RND_CMD_SPRITE,
 	RND_CMD_MASKED_PARTIAL,
+    RND_CMD_LINE,
 	RND_CMD_RECT,
 	RND_CMD_RECT_FILL,
 	RND_CMD_TEXT,
@@ -65,6 +66,12 @@ typedef struct {
 typedef struct {
     int x1, y1, x2, y2;
     int color;
+} RenderLineCommand;
+
+
+typedef struct {
+    int x1, y1, x2, y2;
+    int color;
 } RenderRectCommand;
 
 typedef struct {
@@ -82,6 +89,7 @@ typedef struct {
         RenderSpriteCommand sprite;
 		RenderMaskedPartialCommand maskedPartial;
 		RenderRectFillCommand rectFill;
+        RenderLineCommand line;
 		RenderRectCommand rect;
         RenderTextCommand text;
         RenderClearCommand clear;
@@ -100,6 +108,7 @@ typedef struct {
 void render_queue_init(RenderQueue* queue);
 void render_queue_clear(RenderQueue* queue);
 void render_queue_submit_sprite(RenderQueue* queue, int z, BITMAP* bmp, int x, int y, int flags);
+void render_queue_submit_line(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_rect_fill(RenderQueue* queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_clear(RenderQueue* queue, int z, int color);

@@ -1,6 +1,6 @@
 %d unidades
 ^004M^001over unidad
-Parar unidad (^004M^001)
+Parar unidad (^004S^001)
 ^004A^001tacar con unidad
 ^004D^001efender con unidad
 Cancelar acción (^004ESC^001)

@@ -83,6 +83,7 @@ void snd_init_sounds(int numSounds, const char **soundFilenames) {
 	for (int i = 0; i < totalSounds; i++) {
 		_snd_destroy_sound(i);
 		sounds[i] = load_sample(soundFilenames[i]);
+		printInitStep();
 	}
 }
 

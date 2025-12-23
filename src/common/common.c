@@ -50,7 +50,7 @@ char common_init_basic(
 	}
 	printOK();
 
-	printf("Initializing mouse...");
+	printf("Initializing mouse [");
 	if (mouse_init_func != NULL) {
 		if (mouse_init_func() != INITIALIZATION_OK) {
 			printKO();
@@ -58,7 +58,7 @@ char common_init_basic(
 			return PROGRAM_ERROR;
 		}
 	}
-	printOK();
+	printOKSteps();
 
 	printf("Seeding random number generator...");
 	srand(time(NULL));
@@ -73,6 +73,15 @@ void printOK() {
 	printf("OK\n");
 }
 
+void printOKSteps() {
+	printf("] OK\n");
+}
+
 void printKO() {
 	printf("KO\n");
+}
+
+void printInitStep() {
+	printf("*");
+	fflush(stdout);
 }

@@ -15,9 +15,9 @@ const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
 };
 
 void game_snd_load_sounds() {
-    printf("Loading game sounds...");
+    printf("Loading game sounds [");
     snd_init_sounds(GAME_SOUNDS_COUNT, gameSoundFilenames);
-    printOK();
+    printOKSteps();
 }
 
 void game_snd_play_music(GameMusic gameMusic) {
