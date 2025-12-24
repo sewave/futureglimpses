@@ -44,5 +44,8 @@ uint8_t game_unit_path_find(GameContext *context, GameUnit *unit, uint16_t targe
 	unit->y += unitMovements[dir][UNIT_DIR_Y];
 	context->walkabilityGrid[unit->x][unit->y] = unit->id;
 	unit->direction = unitMovements[dir][UNIT_DIR_DIR];
+	unit->moveTimeAnim = unit->moveTime;
+	// Diagonal movement, slower
+	if(dir != NO_DIRECTION && dir % 2) unit->moveTimeAnim = (unit->moveTimeAnim * 14) / 10;
 	return TRUE;
 }

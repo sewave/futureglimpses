@@ -80,7 +80,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			AnimationProperties *prop = animationStatus->animation.prop;
 			int unitWorldX, unitWorldY;
 			if (unit->state == UNIT_STATE_MOVE_ANIM) {
-				int t = (unit->moveTimeCounter * MOVE_PRECISION) / unit->moveTime;
+				int t = (unit->moveTimeCounter * MOVE_PRECISION) / unit->moveTimeAnim;
 				t = clamp(t, 0, MOVE_PRECISION);
 				int startX = unit->prevX * TILE_SIZE;
 				int startY = unit->prevY * TILE_SIZE;

@@ -210,6 +210,7 @@ typedef struct {
 	uint16_t reactionTime;
 	uint16_t reactionTimeCounter;
 	uint16_t moveTime;
+	uint16_t moveTimeAnim;
 	uint16_t moveTimeCounter;
 	AnimationStatus animationStatus;
 } GameUnit;

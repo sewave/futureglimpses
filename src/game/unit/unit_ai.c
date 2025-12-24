@@ -106,7 +106,7 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
-	if (++unit->moveTimeCounter > unit->moveTime) {
+	if (++unit->moveTimeCounter > unit->moveTimeAnim) {
 		unit->prevX = unit->x;
 		unit->prevY = unit->y;
 		unit->state = unit->nextState;
