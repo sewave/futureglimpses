@@ -1,5 +1,9 @@
 #include "unit_path.h"
 
+#define DIAGONAL_MULTIPLIER 14
+#define DIAGONAL_DIVIDER 10
+#define DIAGONAL_DIR_MOD 2
+
 #define NO_DIRECTION -1
 #define UNIT_DIRS 8
 #define UNIT_DIR_VARS 3
@@ -16,6 +20,11 @@ static const int8_t unitMovements[UNIT_DIRS][UNIT_DIR_VARS] = {
 		{-1, 0,  DIRECTION_WEST},
 		{-1, -1, DIRECTION_NORTH}
 };
+
+#define NO_PARENT -1
+#define MAX_NODES BOARD_WIDTH * BOARD_HEIGHT
+#define MAX_PATH 64
+#define OCCUPIED_TILE_MIN 128
 
 static int8_t game_unit_path_get_best_direction(GameContext *context, GameUnit *unit, int targetX, int targetY) {
 	int8_t bestDir = NO_DIRECTION;
@@ -44,8 +53,12 @@ uint8_t game_unit_path_find(GameContext *context, GameUnit *unit, uint16_t targe
 	unit->y += unitMovements[dir][UNIT_DIR_Y];
 	context->walkabilityGrid[unit->x][unit->y] = unit->id;
 	unit->direction = unitMovements[dir][UNIT_DIR_DIR];
-	unit->moveTimeAnim = unit->moveTime;
-	// Diagonal movement, slower
-	if(dir != NO_DIRECTION && dir % 2) unit->moveTimeAnim = (unit->moveTimeAnim * 14) / 10;
+	if(dir % DIAGONAL_DIR_MOD) {
+		// Diagonal movement, slower
+		unit->moveTimeAnim = (unit->moveTime * DIAGONAL_MULTIPLIER) / DIAGONAL_DIVIDER;
+	}
+	else {
+		unit->moveTimeAnim = unit->moveTime;
+	}
 	return TRUE;
 }

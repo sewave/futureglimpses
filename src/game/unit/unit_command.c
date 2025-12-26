@@ -32,6 +32,7 @@ void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, i
     if(target) unit->targetId = target->id; else unit->targetId = NO_TARGET_ID;
     unit->targetX = targetX;
     unit->targetY = targetY;
+    // TODO do the pathfinding?
     game_unit_set_state_or_next(unit, UNIT_STATE_MOVE);
 }
 

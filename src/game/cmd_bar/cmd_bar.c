@@ -46,6 +46,7 @@ static const CommandBarButton MOVE_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_ACTION,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_M,
+		.hotkey = "M",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_MOVE,
 		.fixedParam = UNIT_STATE_MOVE,
 		.sheetOffsetX = 0,
@@ -58,6 +59,7 @@ static const CommandBarButton STOP_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_ACTION,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_S,
+		.hotkey = "S",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_STOP,
 		.fixedParam = UNIT_STATE_IDLE,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH,
@@ -70,6 +72,7 @@ static const CommandBarButton ATTACK_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_ACTION,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_A,
+		.hotkey = "A",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_ATTACK,
 		.fixedParam = UNIT_STATE_ATTACK,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
@@ -82,6 +85,7 @@ static const CommandBarButton DEFEND_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_ACTION,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_D,
+		.hotkey = "D",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_DEFEND,
 		.fixedParam = UNIT_STATE_DEFEND,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
@@ -94,6 +98,7 @@ static const CommandBarButton CANCEL_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_ACTION,
 		.action = handle_cancel_button,
 		.hotkeyIndex = KEY_ESC,
+		.hotkey = "ESC",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
 		.fixedParam = 0,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
@@ -184,6 +189,11 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 				button->sheetOffsetX, button->sheetOffsetY,
 				xPos, yPos,
 				CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);
+		
+		render_queue_submit_text(
+			renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
+			xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX
+		);
 		if (button->state == CMD_BAR_BTN_STATE_HOVER) {
 			render_queue_submit_rect(renderQueue,
 									 CMD_BUTTON_HOVER_Z,

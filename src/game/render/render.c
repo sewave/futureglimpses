@@ -210,7 +210,7 @@ static int RESOURCE_LOCATIONS_Y[RESOURCE_TYPES_COUNT] = {
 char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][6];
 
 void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
-	// TODO Other UI elements
+	// TODO Building / single unit data
 	// Selected unit info
 	// Command buttons
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,

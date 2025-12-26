@@ -299,6 +299,7 @@ typedef struct {
 	CommandBarButtonEnum type;
 	CommandBarButtonFunction action;
 	uint8_t hotkeyIndex;
+	char* hotkey;
 	GameTextIdEnum hoverTextId;
 	uint8_t fixedParam;
 	uint16_t sheetOffsetX, sheetOffsetY;
