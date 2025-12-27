@@ -1,4 +1,18 @@
 %d units
+%d/%d HP
+Damage: %d - %d
+Range: %d - %d
+Trabajador
+Soldado
+Arquero
+Caballero
+Mago
+Alcaldía
+Granja
+Cuarteles
+Herrería
+Establos
+Torre
 ^004M^001ove unit
 ^004S^001top unit
 ^004A^001ttack with unit

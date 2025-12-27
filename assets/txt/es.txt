@@ -1,4 +1,18 @@
 %d unidades
+%d/%d PV
+Daño: %d - %d
+Rango: %d - %d
+Trabajador
+Soldado
+Arquero
+Caballero
+Mago
+Alcaldía
+Granja
+Cuarteles
+Herrería
+Establos
+Torre
 ^004M^001over unidad
 Parar unidad (^004S^001)
 ^004A^001tacar con unidad

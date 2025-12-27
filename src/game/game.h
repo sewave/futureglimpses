@@ -368,4 +368,7 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 #define HOVER_MESSAGE_X 72
 #define HOVER_MESSAGE_Y 190
 
+#define HEALTH_BAR_QUARTER 4
+#define HEALTH_BAR_HALF 2
+
 #endif /* GAME_H */

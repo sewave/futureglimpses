@@ -160,13 +160,77 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	}
 }
 
+#define UNIT_SHEET_COL_ONE_X 5
+#define UNIT_SHEET_ROW_ONE_Y 80
+#define UNIT_SHEET_ROW_TWO_Y 90
+#define UNIT_SHEET_ROW_THREE_Y 104
+#define UNIT_SHEET_ROW_FOUR_Y 116
+#define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
+#define UNIT_SHEET_HP_BAR_LENGTH 58
+#define UNIT_SHEET_HP_BAR_HEIGHT 10
+#define UNIT_SHEET_HP_BAR_TEXT_Y_OFF 2
+#define UNIT_SHEET_Z_ORDER_BACKGROUND UI_Z_ORDER + 505
+#define UNIT_SHEET_Z_ORDER_HP_BAR UI_Z_ORDER + 509
+#define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
+#define UNIT_SHEET_Z_ORDER_HP_BAR_RECT UI_Z_ORDER + 511
+static char unitHpText[16];
+static char unitDamageText[32];
+static char unitAtRangeText[32];
+
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {
 	if(context->selectedUnitCount == 1) {
-		// TODO unit stats
+		GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+		if(unit) {
+			// TODO unit sheet background
+
+			// Unit name
+			render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont,
+				text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type),
+				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+			// Unit HP bar
+			snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
+			int hpLength = text_length(context->gameFont, unitHpText);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitHpText, 
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH / 2 - hpLength / 2, 
+				UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+			int color = PAL_COLOR_GREEN;
+			if(unit->health < unit->maxHealth / HEALTH_BAR_HALF) color = PAL_COLOR_YELLOW;
+			if(unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) color = PAL_COLOR_RED;
+			hpLength = (unit->health * UNIT_SHEET_HP_BAR_LENGTH) / unit->maxHealth;
+			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
+				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + hpLength, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				color
+			);
+			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
+				UNIT_SHEET_HP_BAR_X + hpLength, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				PAL_COLOR_GRAY
+			);
+			render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR_RECT,
+				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				PAL_COLOR_WHITE
+			);
+
+			// Unit data
+			snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText, 
+				UNIT_SHEET_COL_ONE_X, 
+				UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+			snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText, 
+				UNIT_SHEET_COL_ONE_X, 
+				UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
 	}
 	if(context->selectedUnitCount > 1) {
 		snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
-		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, unitsText, 8, 85, PAL_COLOR_WHITE, -1);
+		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 
 	// Render buttons
