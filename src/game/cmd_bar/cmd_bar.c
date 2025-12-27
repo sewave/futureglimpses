@@ -177,6 +177,33 @@ static char unitHpText[16];
 static char unitDamageText[32];
 static char unitAtRangeText[32];
 
+static void game_cmd_bar_queue_hp_bar(RenderQueue* renderQueue, FONT* font, int value, int maxValue, char* innerText) {
+			int textLength = text_length(font, innerText);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, unitHpText, 
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH / 2 - textLength / 2, 
+				UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+			int barColor = PAL_COLOR_GREEN;
+			if(value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
+			if(value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
+			textLength = (value * UNIT_SHEET_HP_BAR_LENGTH) / maxValue;
+			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
+				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + textLength, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				barColor
+			);
+			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
+				UNIT_SHEET_HP_BAR_X + textLength, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				PAL_COLOR_GRAY
+			);
+			render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR_RECT,
+				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
+				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+				PAL_COLOR_WHITE
+			);
+}
+
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {
 	if(context->selectedUnitCount == 1) {
 		GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[0]);
@@ -190,30 +217,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 
 			// Unit HP bar
 			snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
-			int hpLength = text_length(context->gameFont, unitHpText);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitHpText, 
-				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH / 2 - hpLength / 2, 
-				UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-
-			int color = PAL_COLOR_GREEN;
-			if(unit->health < unit->maxHealth / HEALTH_BAR_HALF) color = PAL_COLOR_YELLOW;
-			if(unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) color = PAL_COLOR_RED;
-			hpLength = (unit->health * UNIT_SHEET_HP_BAR_LENGTH) / unit->maxHealth;
-			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
-				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
-				UNIT_SHEET_HP_BAR_X + hpLength, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
-				color
-			);
-			render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
-				UNIT_SHEET_HP_BAR_X + hpLength, UNIT_SHEET_ROW_TWO_Y,
-				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
-				PAL_COLOR_GRAY
-			);
-			render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR_RECT,
-				UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
-				UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
-				PAL_COLOR_WHITE
-			);
+			game_cmd_bar_queue_hp_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText);
 
 			// Unit data
 			snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
@@ -231,6 +235,18 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 		snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
 		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+		int currentHealth = 0;
+		int maxHealth = 0;
+		for (int i = 0; i < context->selectedUnitCount; i++) {
+			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+			if (unit) {
+				currentHealth += unit->health;
+				maxHealth += unit->maxHealth;
+			}
+		}
+		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP_PERCENT), (currentHealth * 100) / maxHealth);
+		game_cmd_bar_queue_hp_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText);
 	}
 
 	// Render buttons

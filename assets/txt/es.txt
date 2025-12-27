@@ -1,5 +1,6 @@
 %d unidades
 %d/%d PV
+%d %%
 Daño: %d - %d
 Rango: %d - %d
 Trabajador

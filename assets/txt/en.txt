@@ -1,5 +1,6 @@
 %d units
 %d/%d HP
+%d %%
 Damage: %d - %d
 Range: %d - %d
 Trabajador
