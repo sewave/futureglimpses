@@ -40,13 +40,14 @@ void install_timers() {
 }
 
 int main(int argc, char *argv[]) {
-	printf("Starting Future Glimpses v%s...\n", VERSION);
+	printf("Starting %s v%s...\n", GAME_TITLE, VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
 				UNSUPPORTED_CPU_MESSAGE, PROGRAM_REQUIRED_RAM_MB,
 				&game_mouse_init_cursors) != PROGRAM_OK) {
 		return PROGRAM_ERROR;
 	}
+	set_window_title(GAME_TITLE);
 
 	game_config_load_settings(&context.config);
 

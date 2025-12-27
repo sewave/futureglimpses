@@ -5,6 +5,7 @@
 #include "text/game_text_enum.h"
 
 #define VERSION "1.00"
+#define GAME_TITLE "Future Glimpses"
 
 #define DEFAULT_MUSIC_VOLUME 100
 #define DEFAULT_SFX_VOLUME 100
