@@ -177,8 +177,6 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 
 	RenderCommand *cmd = &queue->commands[0];
 	for (int i = 0; i < queue->count; ++i, ++cmd) {
-		acquire_bitmap(target);
-
 		switch (cmd->type) {
 			case RND_CMD_CLEAR:
 				clear_to_color(target, cmd->data.clear.color);
@@ -251,7 +249,6 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 									cmd->data.text.background);
 				break;
 		}
-		release_bitmap(target);
 	}
 
 	render_queue_clear(queue);

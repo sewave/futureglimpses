@@ -58,6 +58,11 @@ uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUn
 	return source->isActive && found->isActive && source->controller != found->controller && found->state != UNIT_STATE_DIE;
 }
 
+uint8_t game_spatial_filter_enemy_units_in_attack_range(const GameContext* context, const GameUnit *source, const GameUnit *found) {
+	return source->isActive && found->isActive && source->controller != found->controller
+	&& found->state != UNIT_STATE_DIE && !game_spatial_unit_in_range(source, found, source->minAttackRange);
+}
+
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range) {
 	uint8_t sourceTileRadius = source->tileSize / 2;
 	uint8_t targetTileRadius = target->tileSize / 2;
