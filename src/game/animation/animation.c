@@ -1,6 +1,8 @@
 #include "animation.h"
 
 #define UNIT_FRAME_SIZE 32
+#define BIG_BUILDING_SIZE 48
+#define SMALL_BUILDING_SIZE 32
 
 static AnimationProperties IDLE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
@@ -163,8 +165,73 @@ static const AnimationPropsData COMMON_DIE = {
     .data = &COMMON_DIE_ANIMATION_DATA,
 };
 
+static AnimationProperties BIG_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
+        // DIRECTION_NORTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_EAST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_SOUTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_WEST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+};
+
+static AnimationProperties SMALL_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
+        // DIRECTION_NORTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_EAST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_SOUTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_WEST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+};
+
+static AnimationData BUILDING_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_CYCLE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(60), .xOffset = 0},
+        },
+		.lastFrameIndex = 0,
+		.events = {},
+		.numEvents = 0,
+};
+
+static AnimationData BUILDING_DESTROY_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_ONCE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
+        },
+		.lastFrameIndex = 0,
+		.events = {
+			// TODO building destroy sound
+			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.1)},
+		},
+		.numEvents = 0,
+};
+
+static const AnimationPropsData B_BUILD_IDLE = {
+    .props = BIG_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
+static const AnimationPropsData S_BUILD_IDLE = {
+    .props = SMALL_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
+static const AnimationPropsData B_BUILD_DESTROY = {
+    .props = BIG_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
+static const AnimationPropsData S_BUILD_DESTROY = {
+    .props = SMALL_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
 // UNIT_STATE_IDLE, UNIT_STATE_ATTACK, UNIT_STATE_DEFEND, UNIT_STATE_MOVE, UNIT_STATE_MOVE_ANIM, UNIT_STATE_MOVE_ATTACK, UNIT_STATE_WORK
-AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
+static AnimationPropsData UNIT_ANIMATIONS[UNIT_TYPE_NUMBER][UNIT_STATES_COUNT] = {
         // WORKER
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
         // SOLDIER
@@ -175,6 +242,18 @@ AnimationPropsData MOVABLE_UNIT_ANIMATIONS[MOVABLE_UNITS][UNIT_STATES_COUNT] = {
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
         // MAGE
 		{COMMON_IDLE, MAGE_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+        // UNIT_TYPE_CITY_HALL
+		{B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_DESTROY},
+		// UNIT_TYPE_FARM
+		{S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_DESTROY},
+		// UNIT_TYPE_BARRACKS
+		{B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_DESTROY},
+		// UNIT_TYPE_BLACKSMITH
+		{S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_DESTROY},
+		// UNIT_TYPE_STABLES
+		{B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_IDLE, B_BUILD_DESTROY},
+		// UNIT_TYPE_TOWER
+		{S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_IDLE, S_BUILD_DESTROY},
 };
 
 static AnimationProperties ARROW_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
@@ -308,79 +387,11 @@ AnimationPropsData OBJECT_ANIMATIONS[OBJ_TYPE_NUMBER] = {
         ARROW_ANIM, FIREBALL_ANIM, EXPLOSION_ANIM, ARROW_DAMAGE_ANIM
 };
 
-#define BIG_BUILDING_SIZE 48
-#define SMALL_BUILDING_SIZE 32
-
-static AnimationProperties BIG_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
-        // DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
-        // DIRECTION_EAST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
-        // DIRECTION_SOUTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
-        // DIRECTION_WEST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
-};
-
-static AnimationProperties SMALL_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
-        // DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
-        // DIRECTION_EAST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
-        // DIRECTION_SOUTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
-        // DIRECTION_WEST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
-};
-
-static AnimationData BUILDING_ANIMATION_DATA = {
-		.type = ANIMATION_TYPE_CYCLE,
-		.frames = {
-            {.duration = SEC_TO_FRAMES(60), .xOffset = 0},
-        },
-		.lastFrameIndex = 0,
-		.events = {},
-		.numEvents = 0,
-};
-
-static const AnimationPropsData BIG_BUILDING_ANIM_PROP = {
-    .props = BIG_BUILDING_PROPERTIES,
-    .data = &BUILDING_ANIMATION_DATA,
-};
-
-static const AnimationPropsData SMALL_BUILDING_ANIM_PROP = {
-    .props = SMALL_BUILDING_PROPERTIES,
-    .data = &BUILDING_ANIMATION_DATA,
-};
-
-AnimationPropsData BUILDING_UNIT_ANIMATIONS[BUILDING_UNITS] = {
-        // UNIT_TYPE_CITY_HALL
-		BIG_BUILDING_ANIM_PROP,
-		// UNIT_TYPE_FARM
-		SMALL_BUILDING_ANIM_PROP,
-		// UNIT_TYPE_BARRACKS
-		BIG_BUILDING_ANIM_PROP,
-		// UNIT_TYPE_BLACKSMITH
-		SMALL_BUILDING_ANIM_PROP,
-		// UNIT_TYPE_STABLES
-		BIG_BUILDING_ANIM_PROP,
-		// UNIT_TYPE_TOWER
-		SMALL_BUILDING_ANIM_PROP,
-};
-
 void game_animation_unit_set(GameUnit *unit) {
-    AnimationPropsData propsData;
-	
-	if(unit->isBuilding) {
-		propsData = BUILDING_UNIT_ANIMATIONS[unit->type - UNIT_TYPE_CITY_HALL];
-	}
-	else {
-		propsData = MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state];
-	}
-	
+    AnimationPropsData* propsData = &UNIT_ANIMATIONS[unit->type][unit->state];
     AnimationStatus* animationStatus = &unit->animationStatus;
-	animationStatus->animation.prop = &propsData.props[unit->direction];
-    animationStatus->animation.data = propsData.data;
+	animationStatus->animation.prop = &propsData->props[unit->direction];
+    animationStatus->animation.data = propsData->data;
 	game_animation_reset(animationStatus);
 }
 

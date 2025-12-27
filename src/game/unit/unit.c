@@ -227,6 +227,10 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->reactionTime = data->reactionTime;
 	unit->moveTime = data->moveTime;
 
+	if(unit->isBuilding) {
+		unit->typed.buildingData.isTraining = FALSE;
+	}
+
 	game_animation_unit_set(unit);
 	game_gfx_set_sprite_sheet(unit);
 	// Register unit in walkability

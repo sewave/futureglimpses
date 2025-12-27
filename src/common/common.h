@@ -18,6 +18,10 @@ typedef enum {
 #define uchar   unsigned char
 #endif
 
+typedef struct {
+	int x, y;
+} Position;
+
 #define RESOLUTION_MULTIPLIER 3
 
 char common_init_basic(

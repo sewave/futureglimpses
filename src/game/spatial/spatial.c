@@ -34,7 +34,7 @@ uint16_t game_spatial_query_grid_rectangle(GameContext* context,
 
 			GameUnit *foundUnit = game_unit_get_by_id(context, id);
 
-			if (foundUnit != sourceUnit) {
+			if (foundUnit && foundUnit != sourceUnit) {
 				int entityIndex = GET_INDEX(id);
 
 				if (alreadyAdded[entityIndex]) continue;

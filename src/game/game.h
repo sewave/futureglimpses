@@ -187,6 +187,14 @@ typedef struct {
 typedef uint32_t UnitId;
 
 typedef struct {
+	uint8_t isTraining;
+	uint16_t currentTrainTicks;
+	uint16_t targetTrainTicks;
+	UnitTypeEnum trainUnit;
+	// TODO queue
+} BuildingData;
+
+typedef struct {
 	UnitId id;
 	uint8_t isActive, isSelected, isBuilding;
 	UnitTypeEnum type;
@@ -214,6 +222,9 @@ typedef struct {
 	uint16_t moveTimeAnim;
 	uint16_t moveTimeCounter;
 	AnimationStatus animationStatus;
+	union {
+		BuildingData buildingData;
+	} typed;
 } GameUnit;
 
 typedef enum {
