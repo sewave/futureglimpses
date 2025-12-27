@@ -1,5 +1,5 @@
 %d units
-%d/%d HP
+%d/%d
 %d %%
 Damage: %d - %d
 Range: %d - %d
@@ -19,3 +19,14 @@ Torre
 ^004A^001ttack with unit
 ^004D^001efend with unit
 Cancel action (^004ESC^001)
+Train Trabajador (^004W^001)
+Train ^004S^001oldado
+Train ^004A^001rquero
+Train ^004C^001aballero
+Train ^004M^001ago
+Build ^004C^001ity Hall
+Build ^004F^001arm
+Build ^004B^001arracks
+Build Blacks^004m^001ith
+Build ^004S^001tables
+Build ^004T^001ower

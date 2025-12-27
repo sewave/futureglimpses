@@ -13,12 +13,12 @@ static const char* spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/archerb.pcx",
     "assets/gfx/unit/knightb.pcx",
     "assets/gfx/unit/wizardb.pcx",
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
-    "assets/gfx/unit/archerb.pcx",
+    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/challb.pcx",
 };
 
 static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
@@ -27,12 +27,12 @@ static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/archerr.pcx",
     "assets/gfx/unit/knightr.pcx",
     "assets/gfx/unit/wizardr.pcx",
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
-    "assets/gfx/unit/archerr.pcx",
+    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/challr.pcx",
 };
 
 static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {

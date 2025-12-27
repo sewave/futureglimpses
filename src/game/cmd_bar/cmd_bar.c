@@ -13,7 +13,33 @@
 #define CMD_BUTTON_DOWN_RECT_Z UI_Z_ORDER + 506
 #define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
 
+#define UNIT_SHEET_COL_ONE_X 5
+#define UNIT_SHEET_ROW_ONE_Y 80
+#define UNIT_SHEET_ROW_TWO_Y 90
+#define UNIT_SHEET_ROW_THREE_Y 104
+#define UNIT_SHEET_ROW_FOUR_Y 116
+#define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
+#define UNIT_SHEET_HP_BAR_LENGTH 58
+#define UNIT_SHEET_HP_BAR_HEIGHT 10
+#define UNIT_SHEET_HP_BAR_TEXT_Y_OFF 2
+#define UNIT_SHEET_Z_ORDER_BACKGROUND UI_Z_ORDER + 505
+#define UNIT_SHEET_Z_ORDER_HP_BAR UI_Z_ORDER + 509
+#define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
+#define UNIT_SHEET_Z_ORDER_HP_BAR_RECT UI_Z_ORDER + 511
+static char unitHpText[16];
+static char unitDamageText[32];
+static char unitAtRangeText[32];
 static char unitsText[32];
+
+static void handle_train_unit(void *ctxVoid, uint8_t fixedDat) {
+	GameContext *context = (GameContext *) ctxVoid;
+	if(context->selectedUnitCount == 1) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+		if (unit) {
+			// TODO call function to add worker to unit production queue
+		}
+	}
+}
 
 static void handle_cancel_button(void *ctxVoid, uint8_t fixedDat) {
     game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
@@ -108,6 +134,29 @@ static const CommandBarButton CANCEL_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TRAIN,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_W,
+		.hotkey = "W",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_WORKER,
+		.fixedParam = UNIT_TYPE_WORKER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 0,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit* building) {
+	switch(building->type) {
+		case UNIT_TYPE_CITY_HALL:
+			context->cmdBarButtons[0] = TRAIN_WORKER_CMD_BUTTON;
+		break;
+		default:
+		break;
+	}
+}
+
 void game_cmd_bar_handle_buttons(GameContext *context) {
 	// Clear all buttons
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
@@ -123,10 +172,29 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
         context->cmdBarButtons[0] = CANCEL_CMD_BUTTON;
     }
     else {
-        context->cmdBarButtons[0] = MOVE_CMD_BUTTON;
-        context->cmdBarButtons[1] = STOP_CMD_BUTTON;
-        context->cmdBarButtons[2] = ATTACK_CMD_BUTTON;
-        context->cmdBarButtons[3] = DEFEND_CMD_BUTTON;
+		if(context->selectedUnitCount == 1) {
+			GameUnit* unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+			if(unit) {
+				if(unit->isBuilding) {
+					game_cmd_bar_handle_building_buttons(context, unit);
+				}
+				else {
+					context->cmdBarButtons[0] = MOVE_CMD_BUTTON;
+					context->cmdBarButtons[1] = STOP_CMD_BUTTON;
+					context->cmdBarButtons[2] = ATTACK_CMD_BUTTON;
+					context->cmdBarButtons[3] = DEFEND_CMD_BUTTON;
+					// TODO count workers and add buttons
+				}
+			}
+		}
+		else {
+			context->cmdBarButtons[0] = MOVE_CMD_BUTTON;
+			context->cmdBarButtons[1] = STOP_CMD_BUTTON;
+			context->cmdBarButtons[2] = ATTACK_CMD_BUTTON;
+			context->cmdBarButtons[3] = DEFEND_CMD_BUTTON;
+			// TODO count workers and add buttons
+		}
+
     }
 
 	int mouseX = context->mouseStatus.x;
@@ -160,22 +228,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	}
 }
 
-#define UNIT_SHEET_COL_ONE_X 5
-#define UNIT_SHEET_ROW_ONE_Y 80
-#define UNIT_SHEET_ROW_TWO_Y 90
-#define UNIT_SHEET_ROW_THREE_Y 104
-#define UNIT_SHEET_ROW_FOUR_Y 116
-#define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
-#define UNIT_SHEET_HP_BAR_LENGTH 58
-#define UNIT_SHEET_HP_BAR_HEIGHT 10
-#define UNIT_SHEET_HP_BAR_TEXT_Y_OFF 2
-#define UNIT_SHEET_Z_ORDER_BACKGROUND UI_Z_ORDER + 505
-#define UNIT_SHEET_Z_ORDER_HP_BAR UI_Z_ORDER + 509
-#define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
-#define UNIT_SHEET_Z_ORDER_HP_BAR_RECT UI_Z_ORDER + 511
-static char unitHpText[16];
-static char unitDamageText[32];
-static char unitAtRangeText[32];
+
 
 static void game_cmd_bar_queue_hp_bar(RenderQueue* renderQueue, FONT* font, int value, int maxValue, char* innerText) {
 			int textLength = text_length(font, innerText);
@@ -220,15 +273,19 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 			game_cmd_bar_queue_hp_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText);
 
 			// Unit data
-			snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText, 
-				UNIT_SHEET_COL_ONE_X, 
-				UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			if(unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
+				snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
+				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText, 
+					UNIT_SHEET_COL_ONE_X, 
+					UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			}
 
-			snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText, 
-				UNIT_SHEET_COL_ONE_X, 
-				UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			if(unit->minDamage > 0 || unit->maxDamage > 0) {
+				snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
+				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText, 
+					UNIT_SHEET_COL_ONE_X, 
+					UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			}
 		}
 	}
 	if(context->selectedUnitCount > 1) {

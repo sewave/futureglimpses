@@ -8,12 +8,12 @@ void spawn_test_units(GameContext *context) {
 	context->xPosition = BOARD_WIDTH / 2 - VIEWPORT_WIDTH_TILES / 2;
 	context->yPosition = BOARD_HEIGHT / 2 - VIEWPORT_HEIGHT_TILES / 2;
 
-	for (int i = 0; i < MAX_GAME_UNITS / 2; i++) {
+	for (int i = 0; i < 32; i++) {
 		while (!game_unit_spawn(context, i % 5, UNIT_CONTROLLER_AI,
 								(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX))) {
 			// Try until we find a free position
 		}
-		while (!game_unit_spawn(context, i % 5, UNIT_CONTROLLER_PLAYER,
+		while (!game_unit_spawn(context, UNIT_TYPE_CITY_HALL, UNIT_CONTROLLER_PLAYER,
 								(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX))) {
 			// Try until we find a free position
 		}

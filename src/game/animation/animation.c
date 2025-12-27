@@ -308,8 +308,76 @@ AnimationPropsData OBJECT_ANIMATIONS[OBJ_TYPE_NUMBER] = {
         ARROW_ANIM, FIREBALL_ANIM, EXPLOSION_ANIM, ARROW_DAMAGE_ANIM
 };
 
+#define BIG_BUILDING_SIZE 48
+#define SMALL_BUILDING_SIZE 32
+
+static AnimationProperties BIG_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
+        // DIRECTION_NORTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_EAST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_SOUTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+        // DIRECTION_WEST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+};
+
+static AnimationProperties SMALL_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
+        // DIRECTION_NORTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_EAST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_SOUTH
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+        // DIRECTION_WEST
+		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+};
+
+static AnimationData BUILDING_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_CYCLE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(60), .xOffset = 0},
+        },
+		.lastFrameIndex = 0,
+		.events = {},
+		.numEvents = 0,
+};
+
+static const AnimationPropsData BIG_BUILDING_ANIM_PROP = {
+    .props = BIG_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
+static const AnimationPropsData SMALL_BUILDING_ANIM_PROP = {
+    .props = SMALL_BUILDING_PROPERTIES,
+    .data = &BUILDING_ANIMATION_DATA,
+};
+
+AnimationPropsData BUILDING_UNIT_ANIMATIONS[BUILDING_UNITS] = {
+        // UNIT_TYPE_CITY_HALL
+		BIG_BUILDING_ANIM_PROP,
+		// UNIT_TYPE_FARM
+		SMALL_BUILDING_ANIM_PROP,
+		// UNIT_TYPE_BARRACKS
+		BIG_BUILDING_ANIM_PROP,
+		// UNIT_TYPE_BLACKSMITH
+		SMALL_BUILDING_ANIM_PROP,
+		// UNIT_TYPE_STABLES
+		BIG_BUILDING_ANIM_PROP,
+		// UNIT_TYPE_TOWER
+		SMALL_BUILDING_ANIM_PROP,
+};
+
 void game_animation_unit_set(GameUnit *unit) {
-    AnimationPropsData propsData = MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state];
+    AnimationPropsData propsData;
+	
+	if(unit->isBuilding) {
+		propsData = BUILDING_UNIT_ANIMATIONS[unit->type - UNIT_TYPE_CITY_HALL];
+	}
+	else {
+		propsData = MOVABLE_UNIT_ANIMATIONS[unit->type][unit->state];
+	}
+	
     AnimationStatus* animationStatus = &unit->animationStatus;
 	animationStatus->animation.prop = &propsData.props[unit->direction];
     animationStatus->animation.data = propsData.data;

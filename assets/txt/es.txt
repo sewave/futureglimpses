@@ -1,5 +1,5 @@
 %d unidades
-%d/%d PV
+%d/%d
 %d %%
 Daño: %d - %d
 Rango: %d - %d
@@ -19,3 +19,14 @@ Parar unidad (^004S^001)
 ^004A^001tacar con unidad
 ^004D^001efender con unidad
 Cancelar acción (^004ESC^001)
+Entrenar Trabajador (^004W^001)
+Entrenar ^004S^001oldado
+Entrenar ^004A^001rquero
+Entrenar ^004C^001aballero
+Entrenar ^004M^001ago
+Construir Alcaldía (^004H^001)
+Construir Granja (^004F^001)
+Construir Cuarteles (^004B^001)
+Construir Herrería (^004M^001)
+Construir Establos (^004S^001)
+Construir Torre (^004T^001)

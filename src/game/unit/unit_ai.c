@@ -176,6 +176,7 @@ static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
 }
 
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
+	if(unit->isBuilding) return;
 	switch (unit->state) {
 		case UNIT_STATE_IDLE:
 			game_unit_ai_idle(context, unit);
