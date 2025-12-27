@@ -340,6 +340,7 @@ typedef struct {
 	Stats stats[UNIT_CONTROLLERS_COUNT];
 	Config config;
 	CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS];
+	uint8_t isDebugEnabled;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

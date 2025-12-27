@@ -22,7 +22,6 @@
 
 static char fpsText[16];
 static char activeText[64];
-static char unitsText[32];
 static const int8_t cursorEdges[Y_OFFSETS][X_OFFSETS][ARROW_DATA] = {
 		{{0, 0, 0}, {16, 0, 0}, {32, -14, 0}},
 		{{112, 0, 0}, {0, 0, 0}, {48, -14, 0}},
@@ -105,7 +104,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											   prop->width,
 											   prop->height);
 			// Some debug stuff
-			if (key[KEY_G]) {
+			if (context->isDebugEnabled) {
 				render_queue_submit_text(
 						renderQueue,
 						SPRITES_Z_ORDER + unit->y + 1,
@@ -241,23 +240,20 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);
 
-	int blue = 0;
-	int red = 0;
-	// Count active units by controller
-	for (int i = 0; i < context->activeUnitCount; i++) {
-		GameUnit *unit = context->activeUnits[i];
-		if (unit->controller == UNIT_CONTROLLER_PLAYER) {
-			blue++;
-		} else {
-			red++;
+	if (context->isDebugEnabled) {
+		int blue = 0;
+		int red = 0;
+		// Count active units by controller
+		for (int i = 0; i < context->activeUnitCount; i++) {
+			GameUnit *unit = context->activeUnits[i];
+			if (unit->controller == UNIT_CONTROLLER_PLAYER) {
+				blue++;
+			} else {
+				red++;
+			}
 		}
-	}
-	snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
-	render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
-
-	if(context->selectedUnitCount > 0) {
-		snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
-		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, unitsText, 8, 85, PAL_COLOR_WHITE, -1);
+		snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
+		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
 	}
 
 	// Render resources

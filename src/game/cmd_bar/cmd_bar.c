@@ -8,11 +8,12 @@
 #define CMD_BAR_BUTTON_LINE_WIDTH CMD_BAR_BUTTON_WIDTH - 2
 #define CMD_BAR_BUTTON_LINE_HEIGTH CMD_BAR_BUTTON_HEIGHT - 2
 
-
 #define CMD_BUTTON_Z UI_Z_ORDER + 505
 #define CMD_BUTTON_HOVER_Z UI_Z_ORDER + 505
 #define CMD_BUTTON_DOWN_RECT_Z UI_Z_ORDER + 506
 #define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
+
+static char unitsText[32];
 
 static void handle_cancel_button(void *ctxVoid, uint8_t fixedDat) {
     game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
@@ -160,6 +161,15 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 }
 
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {
+	if(context->selectedUnitCount == 1) {
+		// TODO unit stats
+	}
+	if(context->selectedUnitCount > 1) {
+		snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
+		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, unitsText, 8, 85, PAL_COLOR_WHITE, -1);
+	}
+
+	// Render buttons
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
 		CommandBarButton *button = &context->cmdBarButtons[i];
         if(button->type == CMD_BAR_BTN_NONE) continue;

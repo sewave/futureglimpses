@@ -6,6 +6,10 @@
 int moveViewportCounter = 0;
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+	if(keyboard_is_key_pressed(KEY_G)) {
+		context->isDebugEnabled ^= TRUE;
+	}
+
 	// Inputs
 	game_mouse_handle_status_change(context);
 
