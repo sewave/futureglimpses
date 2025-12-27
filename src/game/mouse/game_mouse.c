@@ -26,14 +26,6 @@ static const int8_t cursorFocus[NUM_MOUSE_CURSORS][2] = {
 
 #define ARROWS_FILENAME "assets/mouse/arrows.pcx"
 
-static void game_mouse_go_attack_or_move(GameContext *context) {
-	if (context->selectedUnitCount > 0) {
-		// TODO: based on active command buttons
-		if (keyboard_is_key_pressed(KEY_A)) game_mouse_set_cursor_state(MOUSE_CURSOR_ATTACK);
-		if (keyboard_is_key_pressed(KEY_M)) game_mouse_set_cursor_state(MOUSE_CURSOR_TARGET);
-	}
-}
-
 InitializationStatusEnum game_mouse_init_cursors() {
 	if (mouse_init_cursors(NUM_MOUSE_CURSORS, mouseCursorFilenames) != INITIALIZATION_OK) return INITIALIZATION_ERROR;
 	arrowCursors = load_bitmap(ARROWS_FILENAME, NULL);
@@ -72,18 +64,13 @@ void game_mouse_handle_status_change(GameContext *context) {
 			if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
 				game_mouse_set_cursor_state(MOUSE_CURSOR_LOOK);
 			}
-			game_mouse_go_attack_or_move(context);
 			break;
 		case MOUSE_CURSOR_LOOK:
 			if (!sourceUnit) game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-			game_mouse_go_attack_or_move(context);
 			break;
 		case MOUSE_CURSOR_ATTACK:
 		case MOUSE_CURSOR_TARGET:
-			// If we cancel or have no selected units
-			if (keyboard_is_key_pressed(KEY_ESC) || context->selectedUnitCount == 0) {
-				game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-			}
+			if (context->selectedUnitCount == 0) game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 			break;
 		default:
 			// Nothin else
