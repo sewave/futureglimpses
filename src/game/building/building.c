@@ -9,25 +9,25 @@ static UnitResourcesData UNIT_RESOURCES[UNIT_TYPE_NUMBER] = {
 		// WORKER
 		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// SOLDIER
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {2, 0}, .time = SEC_TO_FRAMES(1)},
 		// ARCHER
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {2, 1}, .time = SEC_TO_FRAMES(1)},
 		// KNIGHT
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {3, 1}, .time = SEC_TO_FRAMES(1)},
 		// MAGE
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {4, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_CITY_HALL
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_FARM
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_BARRACKS
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_BLACKSMITH
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_STABLES
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// UNIT_TYPE_TOWER
-		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 };
 
 void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitTypeEnum unitType) {

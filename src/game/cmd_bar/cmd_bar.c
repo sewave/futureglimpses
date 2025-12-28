@@ -147,10 +147,74 @@ static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton TRAIN_SOLDIER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TRAIN,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_S,
+		.hotkey = "S",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_SOLDIER,
+		.fixedParam = UNIT_TYPE_SOLDIER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 1,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_ARCHER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TRAIN,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_A,
+		.hotkey = "A",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_ARCHER,
+		.fixedParam = UNIT_TYPE_ARCHER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_KNIGHT_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TRAIN,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_K,
+		.hotkey = "K",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_KNIGHT,
+		.fixedParam = UNIT_TYPE_KNIGHT,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_MAGE_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TRAIN,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_M,
+		.hotkey = "M",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_MAGE,
+		.fixedParam = UNIT_TYPE_MAGE,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
 	switch (building->type) {
 		case UNIT_TYPE_CITY_HALL:
 			context->cmdBarButtons[0] = TRAIN_WORKER_CMD_BUTTON;
+			break;
+		case UNIT_TYPE_BARRACKS:
+			context->cmdBarButtons[0] = TRAIN_SOLDIER_CMD_BUTTON;
+			break;
+		case UNIT_TYPE_BLACKSMITH:
+			context->cmdBarButtons[0] = TRAIN_ARCHER_CMD_BUTTON;
+			break;
+		case UNIT_TYPE_STABLES:
+			context->cmdBarButtons[0] = TRAIN_KNIGHT_CMD_BUTTON;
+			break;
+		case UNIT_TYPE_TOWER:
+			context->cmdBarButtons[0] = TRAIN_MAGE_CMD_BUTTON;
 			break;
 		default:
 			break;
