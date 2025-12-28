@@ -109,11 +109,11 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	// Logic
+	game_cmd_bar_handle_buttons(context);
 	game_unit_process_all(context);
 	game_objects_advance(context);
 	game_strategy_ai_execute(context);
 	resource_update_ui_quantities(context);
-	game_cmd_bar_handle_buttons(context);
 	message_update();
 
 	// Win condition

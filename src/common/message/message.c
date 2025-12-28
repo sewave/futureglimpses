@@ -41,12 +41,14 @@ void message_add_to_queue(const char *message, uint16_t showTime, int color, int
 }
 
 void message_render_queue_submit(RenderQueue *renderQueue, FONT *font) {
-	int yPos = messageStartY;
-	Message *currentMessage = messageLog;
-	for (int i = 0; i < nextSlotIndex; i++, currentMessage++, yPos += messageYInc) {
-		render_queue_submit_text_multicolor(renderQueue, messageZ, font,
-											currentMessage->messageText, messageX, yPos, currentMessage->color,
-											currentMessage->background);
+	if(nextSlotIndex) {
+		int yPos = messageStartY;
+		Message *currentMessage = &messageLog[nextSlotIndex - 1];
+		for (int i = 0; i < nextSlotIndex; i++, currentMessage--, yPos += messageYInc) {
+			render_queue_submit_text_multicolor(renderQueue, messageZ, font,
+												currentMessage->messageText, messageX, yPos, currentMessage->color,
+												currentMessage->background);
+		}
 	}
 }
 
