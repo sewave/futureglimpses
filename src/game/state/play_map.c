@@ -10,6 +10,15 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 		context->isDebugEnabled ^= TRUE;
 	}
 
+	if(context->isDebugEnabled) {
+		if(keyboard_is_key_pressed(KEY_F1)) {
+			message_add_to_queue("Test message 1", SEC_TO_FRAMES(5), PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+
+		if(keyboard_is_key_pressed(KEY_F2)) {
+			message_add_to_queue("Test ^004m^005e^006ssage 2", SEC_TO_FRAMES(5), PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+	}
 	// Inputs
 	game_mouse_handle_status_change(context);
 
@@ -105,6 +114,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	game_strategy_ai_execute(context);
 	resource_update_ui_quantities(context);
 	game_cmd_bar_handle_buttons(context);
+	message_update();
 
 	// Win condition
 	// TODO WIN Message + WIN SCREEN
@@ -119,12 +129,12 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
-	// TODO should we have only one render function?
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);
 	render_queue_submit_mouse(context, renderQueue);
 	render_queue_submit_ui(context, renderQueue);
 	game_cmd_bar_render_queue_submit(context, renderQueue);
+	message_render_queue_submit(renderQueue, context->gameFont);
 
 	return GAME_STATE_PLAY_MAP;
 }

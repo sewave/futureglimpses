@@ -319,7 +319,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 	if (context->selectedUnitCount == 1) {
 		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 		if (unit) {
-			// TODO unit sheet background
+			// TODO unit stats background
 
 			// Unit name
 			render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont,
@@ -355,8 +355,6 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 										 UNIT_SHEET_COL_ONE_X,
 										 UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 			}
-
-			// TODO if we are a building and are training, show % of completition
 		}
 	}
 	if (context->selectedUnitCount > 1) {

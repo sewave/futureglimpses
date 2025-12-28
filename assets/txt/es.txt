@@ -30,3 +30,17 @@ Construir Cuarteles (^004B^001)
 Construir Herrería (^004M^001)
 Construir Establos (^004S^001)
 Construir Torre (^004T^001)
+Oro insuficiente, recolecta más oro.
+Madera insuficiente, tala más árboles.
+Comida insuficiente, construye más granjas.
+Obrero entrenado.
+Soldado entrenado.
+Arquero entrenado.
+Caballero entrenado.
+Mago entrenado.
+Alcaldía construida.
+Granja construida.
+Cuarteles construidos.
+Herrería construida.
+Establos construidos.
+Torre construida.

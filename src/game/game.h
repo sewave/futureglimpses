@@ -191,7 +191,7 @@ typedef struct {
 	uint16_t currentTrainTicks;
 	uint16_t targetTrainTicks;
 	UnitTypeEnum trainUnit;
-	// TODO queue
+	// TODO train queue
 } BuildingData;
 
 typedef struct {

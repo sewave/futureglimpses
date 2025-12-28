@@ -30,3 +30,17 @@ Build ^004B^001arracks
 Build Blacks^004m^001ith
 Build ^004S^001tables
 Build ^004T^001ower
+Not enough gold, harvest more gold.
+Not enough wood, chop more trees.
+Not enough food, build more farms.
+Worker trained.
+Soldier trained.
+Archer trained.
+Knight trained.
+Mage trained.
+City Hall built.
+Farm built.
+Barracks built.
+Blacksmith built.
+Stables built.
+Tower built.

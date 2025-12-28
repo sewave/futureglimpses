@@ -3,6 +3,11 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
+#define MESSAGES_X 74
+#define MESSAGES_Y 180
+#define MESSAGES_Y_INC -20
+#define MESSAGES_Z UI_Z_ORDER + 900
+
 // TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
 void spawn_test_units(GameContext *context) {
 	context->xPosition = BOARD_WIDTH / 2 - VIEWPORT_WIDTH_TILES / 2;
@@ -40,7 +45,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 			uint16_t tile = map->tile_layers->tiles[x + y * BOARD_WIDTH];
 			context->board[x][y] = tile;
 			if (tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
-			// TODO mark un resources table
+			// TODO mark in resources table
 		}
 	}
 
@@ -95,11 +100,12 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	resource_reset(context);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 500);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 300);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 500);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 300);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 5);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 3);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 5000);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 3000);
 	context->isDebugEnabled = FALSE;
+	message_init(MESSAGES_X, MESSAGES_Y, MESSAGES_Y_INC, MESSAGES_Z);
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 

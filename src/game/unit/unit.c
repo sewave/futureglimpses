@@ -3,6 +3,7 @@
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1
 #define AREA_DAMAGE_REDUCTION 4
+#define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 
@@ -245,10 +246,10 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 }
 
 GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnum controller, uint16_t x, uint16_t y) {
-	// TODO check context->tileSize availability
 	UnitData* unitData = &unitsData[type];
 	for(int i = x; i < x + unitData->tileSize; i++) {
 		for(int j = y; j < y + unitData->tileSize; j++) {
+			if(i > BOARD_X_MAX || j > BOARD_Y_MAX) return NULL;
 			if (context->walkabilityGrid[i][j] != WALKABILITY_FREE) return NULL;
 		}
 	}
@@ -313,6 +314,12 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	} else {
 		context->stats[controller].unitsTrained++;
 	}
+
+	if(unit->controller == UNIT_CONTROLLER_PLAYER) {
+		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
+		SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+	}
+
 	return unit;
 }
 

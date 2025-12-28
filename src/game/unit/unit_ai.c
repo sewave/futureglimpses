@@ -236,7 +236,7 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 				game_unit_ai_move_attack(context, unit);
 				break;
 			case UNIT_STATE_WORK:
-				// TODO
+				// TODO retrieve resources
 				break;
 			case UNIT_STATE_DIE:
 				game_unit_ai_die(context, unit);

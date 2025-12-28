@@ -9,4 +9,5 @@
 #include "mouse/mouse.h"
 #include "keyboard/keyboard.h"
 #include "text/text.h"
+#include "message/message.h"
 #endif /* COMMON_LIB_H */
