@@ -14,11 +14,11 @@ static const char* spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/knightb.pcx",
     "assets/gfx/unit/wizardb.pcx",
     "assets/gfx/building/challb.pcx",
-    "assets/gfx/building/challb.pcx",
-    "assets/gfx/building/challb.pcx",
-    "assets/gfx/building/challb.pcx",
-    "assets/gfx/building/challb.pcx",
-    "assets/gfx/building/challb.pcx",
+    "assets/gfx/building/farmb.pcx",
+    "assets/gfx/building/barrackb.pcx",
+    "assets/gfx/building/blasmib.pcx",
+    "assets/gfx/building/stablesb.pcx",
+    "assets/gfx/building/towerb.pcx",
 };
 
 static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
@@ -28,11 +28,11 @@ static const char* spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
     "assets/gfx/unit/knightr.pcx",
     "assets/gfx/unit/wizardr.pcx",
     "assets/gfx/building/challr.pcx",
-    "assets/gfx/building/challr.pcx",
-    "assets/gfx/building/challr.pcx",
-    "assets/gfx/building/challr.pcx",
-    "assets/gfx/building/challr.pcx",
-    "assets/gfx/building/challr.pcx",
+    "assets/gfx/building/farmr.pcx",
+    "assets/gfx/building/barrackr.pcx",
+    "assets/gfx/building/blasmir.pcx",
+    "assets/gfx/building/stablesr.pcx",
+    "assets/gfx/building/towerr.pcx",
 };
 
 static const char* objectSheetFilenames[OBJ_TYPE_NUMBER] = {

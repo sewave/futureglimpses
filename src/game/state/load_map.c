@@ -13,7 +13,7 @@ void spawn_test_units(GameContext *context) {
 								(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX))) {
 			// Try until we find a free position
 		}
-		while (!game_unit_spawn(context, UNIT_TYPE_CITY_HALL, UNIT_CONTROLLER_PLAYER,
+		while (!game_unit_spawn(context, UNIT_TYPE_CITY_HALL + i % 6, UNIT_CONTROLLER_PLAYER,
 								(uint16_t) random_int(BOARD_X_MIN, BOARD_X_MAX), (uint16_t) random_int(BOARD_Y_MIN, BOARD_Y_MAX))) {
 			// Try until we find a free position
 		}
