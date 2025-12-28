@@ -319,7 +319,7 @@ static AnimationData ARROW_ANIMATION_DATA = {
 				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
 		},
 		.lastFrameIndex = 0,
-		//TODO arrow launched sound
+		// TODO arrow launched sound
 		.events = { },
 		.numEvents = 0,
 };

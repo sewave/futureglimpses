@@ -1,6 +1,6 @@
 #include "game.h"
 
-//TODO: Do an initial load of all the assets (shouldn't be much)
+// TODO: Do an initial load of all the assets (shouldn't be much)
 
 extern GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue);
 extern GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue);

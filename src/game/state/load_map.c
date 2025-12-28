@@ -3,7 +3,7 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-//TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
+// TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
 void spawn_test_units(GameContext *context) {
 	context->xPosition = BOARD_WIDTH / 2 - VIEWPORT_WIDTH_TILES / 2;
 	context->yPosition = BOARD_HEIGHT / 2 - VIEWPORT_HEIGHT_TILES / 2;
