@@ -17,7 +17,7 @@
 #define UNIT_SHEET_ROW_ONE_Y 80
 #define UNIT_SHEET_ROW_TWO_Y 90
 #define UNIT_SHEET_ROW_THREE_Y 104
-#define UNIT_SHEET_ROW_FOUR_Y 116
+#define UNIT_SHEET_ROW_FOUR_Y 114
 #define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
 #define UNIT_SHEET_TRAIN_BAR_X UNIT_SHEET_COL_ONE_X + 1
 
@@ -332,13 +332,18 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 								   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
 
 			// If we are a building training show bar
-			if(unit->isBuilding && unit->typed.buildingData.isTraining) {
+			if(unit->isBuilding) {
 				BuildingData *buildingData = &unit->typed.buildingData;
+				snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
+				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+										UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
-				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
-					buildingData->currentTrainTicks, buildingData->targetTrainTicks, 
-					text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
-					UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
+				if(buildingData->isTraining) {
+					game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+						buildingData->currentTrainTicks, buildingData->targetTrainTicks, 
+						text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
+						UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_FOUR_Y, FALSE);
+				}
 			} 
 
 			// Unit data

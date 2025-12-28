@@ -295,6 +295,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 
 	if(unit->isBuilding) {
 		unit->typed.buildingData.isTraining = FALSE;
+		unit->typed.buildingData.queueNextIndex = 0;
 	}
 
 	game_animation_unit_set(unit);

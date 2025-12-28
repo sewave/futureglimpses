@@ -44,3 +44,5 @@ Cuarteles construidos.
 Herrería construida.
 Establos construidos.
 Torre construida.
+Cola llena.
+En cola: %d

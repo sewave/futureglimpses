@@ -153,7 +153,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 
 				int healthBarYInit = unitTileYCamera - HEALTH_BAR_Y_OFFSET;
 				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
-				int healthBarLength = ((int) (unit->health * (HEALTH_BAR_LENGTH * unit->tileSize - 2 * HEALTH_BAR_BORDER))) / unit->maxHealth;
+				int healthBarLength = ((int) (unit->health * (HEALTH_BAR_LENGTH * unit->tileSize - 3 * HEALTH_BAR_BORDER))) / unit->maxHealth;
 
 				render_queue_submit_rect_fill(
 						renderQueue,

@@ -186,12 +186,14 @@ typedef struct {
 
 typedef uint32_t UnitId;
 
+#define MAX_BUILDING_QUEUE 8
 typedef struct {
 	uint8_t isTraining;
 	uint16_t currentTrainTicks;
 	uint16_t targetTrainTicks;
 	UnitTypeEnum trainUnit;
-	// TODO train queue
+	uint8_t queueNextIndex;
+	UnitTypeEnum queue[MAX_BUILDING_QUEUE];
 } BuildingData;
 
 typedef struct {

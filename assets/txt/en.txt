@@ -44,3 +44,5 @@ Barracks built.
 Blacksmith built.
 Stables built.
 Tower built.
+Queue full.
+In queue: %d

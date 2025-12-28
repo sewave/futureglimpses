@@ -27,16 +27,16 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if (keyboard_is_key_pressed(KEY_F11)) return GAME_STATE_LOAD_MAP;
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
-	if (keyboard_is_key_pressed(KEY_Y)) {
+	if (keyboard_is_key_pressed(KEY_6)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_U)) {
+	if (keyboard_is_key_pressed(KEY_7)) {
 		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_J)) {
+	if (keyboard_is_key_pressed(KEY_8)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
 	}
-	if (keyboard_is_key_pressed(KEY_K)) {
+	if (keyboard_is_key_pressed(KEY_9)) {
 		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	}
 	if (keyboard_is_key_pressed(KEY_L)) {
