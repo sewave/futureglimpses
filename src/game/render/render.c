@@ -144,7 +144,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			if (unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
 												   (lifeBarSetting == LIFE_BAR_ALWAYS || (lifeBarSetting == LIFE_BAR_DAMAGED && unit->health < unit->maxHealth))) ||
 												  keyboard_is_key_down(KEY_ALT))) {
-				int healthBarColor = PAL_COLOR_GREEN;
+				int healthBarColor = PAL_COLOR_DARK_GREEN;
 				if (unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) {
 					healthBarColor = PAL_COLOR_RED;
 				} else {

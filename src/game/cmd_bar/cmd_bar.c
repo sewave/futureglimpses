@@ -295,7 +295,7 @@ static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int val
 							 x + UNIT_SHEET_BAR_LENGTH / 2 - textLength / 2,
 							 y + UNIT_SHEET_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
-	int barColor = PAL_COLOR_GREEN;
+	int barColor = PAL_COLOR_DARK_GREEN;
 	if (isHp) {
 		if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
 		if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
