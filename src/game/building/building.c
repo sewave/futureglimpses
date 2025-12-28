@@ -7,7 +7,7 @@ typedef struct {
 
 static UnitResourcesData UNIT_RESOURCES[UNIT_TYPE_NUMBER] = {
 		// WORKER
-		{.resources = {400, 0}, .time = SEC_TO_FRAMES(0.1)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(0.1)},
 		// SOLDIER
 		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
 		// ARCHER
@@ -53,6 +53,6 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 		buildingData->isTraining = TRUE;
 		buildingData->trainUnit = unitType;
         buildingData->currentTrainTicks = 0;
-        buildingData->targetTrainTicks = UNIT_RESOURCES[building->type].time;
+        buildingData->targetTrainTicks = UNIT_RESOURCES[unitType].time;
 	}
 }

@@ -124,7 +124,7 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-				if (!unit) continue;
+				if (!unit || unit->isBuilding) continue;
 				if (isContextual) {
 					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
 						game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
@@ -147,7 +147,7 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 	int tileY = game_spatial_get_board_y_position(context->yPosition, mouseY);
 	UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 	GameUnit *sourceUnit = game_unit_get_by_id(context, id);
-	if (sourceUnit && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
+	if (sourceUnit && !sourceUnit->isBuilding && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
 		UnitTypeEnum targetType = sourceUnit->type;
 		game_selection_clear(context);
 		int tileMinX = clamp(context->xPosition / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
@@ -356,7 +356,7 @@ void game_selection_handle_input(GameContext *context) {
 					UnitId id = context->walkabilityGrid[col][row];
 					if (id < HANDLE_ID_THRESHOLD) continue;
 					GameUnit *foundUnit = game_unit_get_by_id(context, id);
-					if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+					if (foundUnit && !foundUnit->isBuilding && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
 						if (selectionMode == SELECTION_REMOVE) {
 							game_selection_remove_unit(context, foundUnit);
 						} else {

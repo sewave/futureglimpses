@@ -16,7 +16,7 @@
 #define ARROW_DATA_Y_OFF 2
 #define CURSOR_SIZE 16
 #define SELECT_CUBE_OFF 1
-#define SELECT_CUBE_SIZE 14
+#define SELECT_CUBE_SIZE 16
 
 static char fpsText[16];
 static char activeText[64];
@@ -132,7 +132,8 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				render_queue_submit_rect(renderQueue,
 										 BACKGROUND_Z_ORDER + 100,
 										 unitTileXCamera + SELECT_CUBE_OFF, unitTileYCamera + SELECT_CUBE_OFF,
-										 unitTileXCamera + SELECT_CUBE_SIZE, unitTileYCamera + SELECT_CUBE_SIZE,
+										 unitTileXCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 2 * SELECT_CUBE_OFF,
+										 unitTileYCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 2 * SELECT_CUBE_OFF,
 										 rectColor);
 			}
 

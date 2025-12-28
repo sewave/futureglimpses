@@ -182,18 +182,20 @@ static Position game_building_get_spawn_position(GameContext *context, GameUnit 
 	// Starting at unit (-1, -1) we spiral right, down, left, up
 	int x = building->x - 1;
 	int y = building->y - 1;
-	for (int spiralSide = building->tileSize;; spiralSide++) {
+	for (int spiralSide = building->tileSize + 1;; spiralSide += 2) {
 		for (int spiralDir = 0; spiralDir < SPIRAL_DIRECTIONS; spiralDir++) {
 			for (int spiralInc = 0; spiralInc < spiralSide; spiralInc++) {
 				int clampX = clamp(x, BOARD_X_MIN, BOARD_X_MAX);
-				int clampY = clamp(x, BOARD_Y_MIN, BOARD_Y_MAX);
+				int clampY = clamp(y, BOARD_Y_MIN, BOARD_Y_MAX);
 				if (context->walkabilityGrid[clampX][clampY] == WALKABILITY_FREE) {
 					return (Position) {clampX, clampY};
 				}
+				x += spiralDirections[spiralDir].x;
+				y += spiralDirections[spiralDir].y;
 			}
 		}
 		x--;
-		y -= 2;
+		y--;
 	}
 }
 
