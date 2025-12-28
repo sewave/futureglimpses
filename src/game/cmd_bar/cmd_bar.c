@@ -19,13 +19,15 @@
 #define UNIT_SHEET_ROW_THREE_Y 104
 #define UNIT_SHEET_ROW_FOUR_Y 116
 #define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
-#define UNIT_SHEET_HP_BAR_LENGTH 58
-#define UNIT_SHEET_HP_BAR_HEIGHT 10
-#define UNIT_SHEET_HP_BAR_TEXT_Y_OFF 2
+#define UNIT_SHEET_TRAIN_BAR_X UNIT_SHEET_COL_ONE_X + 1
+
+#define UNIT_SHEET_BAR_LENGTH 58
+#define UNIT_SHEET_BAR_HEIGHT 10
+#define UNIT_SHEET_BAR_TEXT_Y_OFF 2
 #define UNIT_SHEET_Z_ORDER_BACKGROUND UI_Z_ORDER + 505
-#define UNIT_SHEET_Z_ORDER_HP_BAR UI_Z_ORDER + 509
+#define UNIT_SHEET_Z_ORDER_BAR UI_Z_ORDER + 509
 #define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
-#define UNIT_SHEET_Z_ORDER_HP_BAR_RECT UI_Z_ORDER + 511
+#define UNIT_SHEET_Z_ORDER_BAR_RECT UI_Z_ORDER + 511
 static char unitHpText[16];
 static char unitDamageText[32];
 static char unitAtRangeText[32];
@@ -222,27 +224,30 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	}
 }
 
-static void game_cmd_bar_queue_hp_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, char *innerText) {
+static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, const char *innerText,
+								   int x, int y, uint8_t isHp) {
 	int textLength = text_length(font, innerText);
-	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, unitHpText,
-							 UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH / 2 - textLength / 2,
-							 UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, innerText,
+							 x + UNIT_SHEET_BAR_LENGTH / 2 - textLength / 2,
+							 y + UNIT_SHEET_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
 	int barColor = PAL_COLOR_GREEN;
-	if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
-	if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
-	textLength = (value * UNIT_SHEET_HP_BAR_LENGTH) / maxValue;
-	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
-								  UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
-								  UNIT_SHEET_HP_BAR_X + textLength, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+	if (isHp) {
+		if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
+		if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
+	}
+	textLength = (value * UNIT_SHEET_BAR_LENGTH) / maxValue;
+	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
+								  x, y,
+								  x + textLength, y + UNIT_SHEET_BAR_HEIGHT,
 								  barColor);
-	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR,
-								  UNIT_SHEET_HP_BAR_X + textLength, UNIT_SHEET_ROW_TWO_Y,
-								  UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
+								  x + textLength, y,
+								  x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
 								  PAL_COLOR_GRAY);
-	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_HP_BAR_RECT,
-							 UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y,
-							 UNIT_SHEET_HP_BAR_X + UNIT_SHEET_HP_BAR_LENGTH, UNIT_SHEET_ROW_TWO_Y + UNIT_SHEET_HP_BAR_HEIGHT,
+	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BAR_RECT,
+							 x, y,
+							 x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
 							 PAL_COLOR_WHITE);
 }
 
@@ -259,7 +264,18 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 
 			// Unit HP bar
 			snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
-			game_cmd_bar_queue_hp_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText);
+			game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
+								   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
+
+			// If we are a building training show bar
+			if(unit->isBuilding && unit->typed.buildingData.isTraining) {
+				BuildingData *buildingData = &unit->typed.buildingData;
+
+				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+					buildingData->currentTrainTicks, buildingData->targetTrainTicks, 
+					text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
+					UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
+			} 
 
 			// Unit data
 			if (unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
@@ -294,7 +310,8 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 			}
 		}
 		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP_PERCENT), (currentHealth * 100) / maxHealth);
-		game_cmd_bar_queue_hp_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText);
+		game_cmd_bar_queue_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText,
+							   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
 	}
 
 	// Render buttons

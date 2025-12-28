@@ -3,27 +3,27 @@
 %d %%
 Damage: %d - %d
 Range: %d - %d
-Trabajador
-Soldado
-Arquero
-Caballero
-Mago
-Alcaldía
-Granja
-Cuarteles
-Herrería
-Establos
-Torre
+Worker
+Soldier
+Archer
+Knight
+Mage
+City Hall
+Farm
+Barracks
+Blacksmith
+Stables
+Tower
 ^004M^001ove unit
 ^004S^001top unit
 ^004A^001ttack with unit
 ^004D^001efend with unit
 Cancel action (^004ESC^001)
-Train Trabajador (^004W^001)
-Train ^004S^001oldado
-Train ^004A^001rquero
-Train ^004C^001aballero
-Train ^004M^001ago
+Train Worker (^004W^001)
+Train ^004S^001oldier
+Train ^004A^001rcher
+Train ^004K^001night
+Train ^004M^001age
 Build ^004C^001ity Hall
 Build ^004F^001arm
 Build ^004B^001arracks

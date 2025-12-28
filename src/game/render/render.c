@@ -6,7 +6,7 @@
 #define HEALTH_BAR_Y_OFFSET 6
 #define HEALTH_BAR_HEIGHT 1
 #define HEALTH_BAR_BORDER 1
-#define HEALTH_BAR_LENGTH (TILE_SIZE - 2 * HEALTH_BAR_BORDER)
+#define HEALTH_BAR_LENGTH TILE_SIZE
 
 #define X_OFFSETS 3
 #define Y_OFFSETS 3
@@ -72,7 +72,9 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 	GameUnit **activeUnits = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
-		if (unit->x >= cameraMinX && unit->x <= cameraMaxX && unit->y >= cameraMinY && unit->y <= cameraMaxY) {
+		int unitSize = unit->tileSize * TILE_SIZE;
+		if (unit->y <= cameraMaxY && unit->x <= cameraMaxX &&
+			unit->x >= cameraMinX - unitSize && unit->y >= cameraMinY - unitSize) {
 			AnimationStatus *animationStatus = &unit->animationStatus;
 			AnimationProperties *prop = animationStatus->animation.prop;
 			int unitWorldX, unitWorldY;
@@ -151,7 +153,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 
 				int healthBarYInit = unitTileYCamera - HEALTH_BAR_Y_OFFSET;
 				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
-				int healthBarLength = ((int) unit->health * HEALTH_BAR_LENGTH * unit->tileSize) / unit->maxHealth;
+				int healthBarLength = ((int) (unit->health * (HEALTH_BAR_LENGTH * unit->tileSize - 2 * HEALTH_BAR_BORDER))) / unit->maxHealth;
 
 				render_queue_submit_rect_fill(
 						renderQueue,
@@ -166,7 +168,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 						UI_Z_ORDER,
 						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
 						healthBarYInit,
-						unitTileXCamera + HEALTH_BAR_BORDER + HEALTH_BAR_LENGTH * unit->tileSize,
+						unitTileXCamera + HEALTH_BAR_BORDER + HEALTH_BAR_LENGTH * unit->tileSize - 3 * HEALTH_BAR_BORDER,
 						healthBarYEnd,
 						PAL_COLOR_BLACK);
 			}

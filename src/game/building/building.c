@@ -7,7 +7,7 @@ typedef struct {
 
 static UnitResourcesData UNIT_RESOURCES[UNIT_TYPE_NUMBER] = {
 		// WORKER
-		{.resources = {1, 0}, .time = SEC_TO_FRAMES(0.1)},
+		{.resources = {1, 0}, .time = SEC_TO_FRAMES(1)},
 		// SOLDIER
 		{.resources = {0, 0}, .time = SEC_TO_FRAMES(10)},
 		// ARCHER

@@ -62,7 +62,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.moveTime = SEC_TO_FRAMES(0.45),
 		},
 		{
-				.type = UNIT_TYPE_MOUNT,
+				.type = UNIT_TYPE_KNIGHT,
 				.isBuilding = FALSE,
 				.minAttackRange = 0,
 				.maxAttackRange = 1,
