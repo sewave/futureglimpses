@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
 	game_config_load_settings(&context.config);
 
-	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MOD) != INITIALIZATION_OK) {
+	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
 		printKO();
 		printf("Error initializing sound. Continuing without sound.");
 	}
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 	printOK();
 
 	printf("Loading game font...");
-	context.gameFont = load_font("assets/font/main.pcx", NULL, NULL);
+	context.gameFont = load_font("assets/font/bitrimus.pcx", NULL, NULL);
 	if (context.gameFont == NULL) {
 		printKO();
 		printf("Error loading game font.");

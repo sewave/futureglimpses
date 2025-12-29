@@ -4,8 +4,8 @@
 #include <allegro.h>
 
 #define MESSAGES_X 74
-#define MESSAGES_Y 180
-#define MESSAGES_Y_INC -20
+#define MESSAGES_Y 175
+#define MESSAGES_Y_INC -14
 #define MESSAGES_Z UI_Z_ORDER + 900
 
 // TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
