@@ -8,7 +8,7 @@ const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
         "assets/music/none.mid",
         "assets/music/none.mid",
         "assets/music/none.mid",
-        "assets/music/none.mid",
+        "assets/music/map1.mid",
         "assets/music/none.mid",
         "assets/music/none.mid",
 };
@@ -16,11 +16,11 @@ const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
 // TODO add sounds
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
 		"assets/sound/click.wav",
-        "assets/sound/click2.wav",
-        "assets/sound/click2.wav",
+        "assets/sound/click.wav",
+        "assets/sound/ironhit.wav",
         "assets/sound/click.wav",
         "assets/sound/click.wav",
-        "assets/sound/click.wav",
+        "assets/sound/arrowthr.wav",
         "assets/sound/click.wav",
         "assets/sound/click.wav",
         "assets/sound/click.wav",

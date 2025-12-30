@@ -639,6 +639,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 			render_queue_submit_text_multicolor(
 					renderQueue, UI_Z_ORDER + 505, context->gameFont, text_get_by_id(button->hoverTextId),
 					HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			// TODO draw resource costs
 		}
 	}
 }

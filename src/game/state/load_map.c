@@ -107,6 +107,8 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
+	game_snd_play_music(GAME_MUSIC_MAP_1);
+
 	spawn_test_units(context);
 
 	return GAME_STATE_PLAY_MAP;
