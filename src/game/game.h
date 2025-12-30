@@ -291,14 +291,6 @@ typedef enum {
 } ComputerStrategyEnum;
 
 #define CMD_BAR_BUTTONS 6
-typedef enum {
-	CMD_BAR_BTN_NONE,
-	CMD_BAR_BTN_ACTION,
-	CMD_BAR_BTN_BUILDING_SELECT,
-	CMD_BAR_BTN_BUILD,
-	CMD_BAR_BTN_TRAIN,
-	CMD_BAR_BTN_CANCEL,	
-} CommandBarButtonEnum;
 
 typedef enum {
 	CMD_BAR_BTN_STATE_IDLE,
@@ -310,7 +302,7 @@ typedef enum {
 typedef void (*CommandBarButtonFunction)(void *, uint8_t);
 
 typedef struct {
-	CommandBarButtonEnum type;
+	uint8_t isActive;
 	CommandBarButtonFunction action;
 	uint8_t hotkeyIndex;
 	char* hotkey;
@@ -320,6 +312,17 @@ typedef struct {
 	uint16_t x, y;
 	CommandBarButtonStateEnum state;
 } CommandBarButton;
+
+typedef enum {
+	CMD_BAR_BUILD_STATE_NONE,
+	CMD_BAR_BUILD_STATE_SELECT,
+	CMD_BAR_BUILD_STATE_PLACE,
+} BuildingStateEnum;
+
+typedef struct {
+	BuildingStateEnum state;
+	UnitTypeEnum building;
+} BuildPlacing;
 
 typedef struct {
 	GameStateEnum gameState;
@@ -355,6 +358,7 @@ typedef struct {
 	Config config;
 	CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS];
 	uint8_t isDebugEnabled;
+	BuildPlacing buildPlacing;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

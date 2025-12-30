@@ -19,6 +19,9 @@ Tower
 ^004A^001ttack with unit
 ^004D^001efend with unit
 Cancel action (^004ESC^001)
+Build (^004B^001)
+^004R^001epair
+^004H^001arvest
 Train Worker (^004W^001)
 Train ^004S^001oldier
 Train ^004A^001rcher
