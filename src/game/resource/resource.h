@@ -8,5 +8,7 @@ uint8_t resource_has_enough(GameContext *context, ControllerEnum controller, Res
 void resource_add_amount(GameContext *context, ControllerEnum controller, ResourceTypeEnum type, uint32_t amount);
 void resource_deduct_amount(GameContext *context, ControllerEnum controller, ResourceTypeEnum type, uint32_t amount);
 void resource_update_ui_quantities(GameContext *context);
+void resource_add_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided);
+void resource_deduct_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided);
 
 #endif /* RESOURCE_H */

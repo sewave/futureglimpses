@@ -55,8 +55,6 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	game_objects_init(context);
 	game_selection_init(context);
 
-	spawn_test_units(context);
-
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
 
@@ -100,14 +98,16 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	resource_reset(context);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 5);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 3);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 5000);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 3000);
 	context->isDebugEnabled = FALSE;
 	message_init(MESSAGES_X, MESSAGES_Y, MESSAGES_Y_INC, MESSAGES_Z);
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+
+	spawn_test_units(context);
 
 	return GAME_STATE_PLAY_MAP;
 }

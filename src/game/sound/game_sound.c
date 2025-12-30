@@ -2,16 +2,32 @@
 #include "game_sound.h"
 #include <stdio.h>
 
+// TODO add music
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
-		"assets/music/menu.s3m"
+		"assets/music/none.mid",
+        "assets/music/none.mid",
+        "assets/music/none.mid",
+        "assets/music/none.mid",
+        "assets/music/none.mid",
+        "assets/music/none.mid",
+        "assets/music/none.mid",
 };
 
+// TODO add sounds
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
 		"assets/sound/click.wav",
         "assets/sound/click2.wav",
         "assets/sound/click2.wav",
         "assets/sound/click.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
         "assets/sound/die.wav",
+        "assets/sound/click.wav",
+        "assets/sound/click.wav",
 };
 
 void game_snd_load_sounds() {

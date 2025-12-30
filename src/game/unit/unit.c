@@ -17,6 +17,8 @@ typedef struct {
 	uint8_t maxDamage;
 	uint16_t reactionTime;
 	uint16_t moveTime;
+	uint8_t foodUsage;
+	uint8_t foodProvided;
 } UnitData;
 
 UnitData unitsData[UNIT_TYPE_NUMBER] = {
@@ -33,6 +35,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
 				.moveTime = SEC_TO_FRAMES(0.5),
+				.foodUsage = 1,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_SOLDIER,
@@ -47,6 +51,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.4),
+				.foodUsage = 1,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_ARCHER,
@@ -61,6 +67,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.45),
+				.foodUsage = 1,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_KNIGHT,
@@ -75,6 +83,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
+				.foodUsage = 1,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -89,6 +99,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.5),
+				.foodUsage = 1,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
@@ -103,6 +115,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 5,
 		},
 		{
 				.type = UNIT_TYPE_FARM,
@@ -117,6 +131,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 4,
 		},
 		{
 				.type = UNIT_TYPE_BARRACKS,
@@ -131,6 +147,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -145,6 +163,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_STABLES,
@@ -159,6 +179,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 0,
 		},
 		{
 				.type = UNIT_TYPE_TOWER,
@@ -173,6 +195,8 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.foodUsage = 0,
+				.foodProvided = 0,
 		},
 };
 
@@ -241,7 +265,8 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 		} else {
 			context->stats[opponentController].enemiesKilled++;
 		}
-		// TODO drop food used for controller
+		UnitData *data = &unitsData[unit->type];
+		resource_deduct_food(context, unit->controller, data->foodUsage, data->foodProvided);
 	}
 }
 
@@ -315,6 +340,8 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	} else {
 		context->stats[controller].unitsTrained++;
 	}
+
+	resource_add_food(context, controller, data->foodUsage, data->foodProvided);
 
 	if(unit->controller == UNIT_CONTROLLER_PLAYER) {
 		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),

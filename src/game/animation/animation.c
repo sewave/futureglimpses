@@ -83,7 +83,7 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
             {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
         },
 		.lastFrameIndex = 3,
-		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.7)},
+		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_IRON_HIT, .fireTime = SEC_TO_FRAMES(0.7)},
                     {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.8)}},
 		.numEvents = 2,
 };
@@ -91,16 +91,17 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
-        },
+				{.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
+				{.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
+				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
+				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+		},
 		.lastFrameIndex = 3,
-        // TODO shoot arrow sound
-		.events = { 
-                    {.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.6)}},
-		.numEvents = 1,
+		.events = {
+				{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_THROW_ARROW, .fireTime = SEC_TO_FRAMES(0.5)},
+				{.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.6)}
+		},
+		.numEvents = 2,
 };
 
 static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
@@ -112,9 +113,10 @@ static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
             {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
         },
 		.lastFrameIndex = 3,
-		.events = { 
-                    {.type = EVENT_TYPE_SPAWN_FIREBALL, .data = 0, .fireTime = SEC_TO_FRAMES(0.9)}},
-		.numEvents = 1,
+		.events = {
+			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_FIREBALL_LAUNCH, .fireTime = SEC_TO_FRAMES(0.9)},
+			{.type = EVENT_TYPE_SPAWN_FIREBALL, .data = 0, .fireTime = SEC_TO_FRAMES(0.9)}},
+		.numEvents = 2,
 };
 
 static AnimationData COMMON_DIE_ANIMATION_DATA = {
@@ -204,10 +206,9 @@ static AnimationData BUILDING_DESTROY_ANIMATION_DATA = {
         },
 		.lastFrameIndex = 0,
 		.events = {
-			// TODO building destroy sound
-			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.1)},
+			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_BUILDING_CRUMBLE, .fireTime = SEC_TO_FRAMES(0.1)},
 		},
-		.numEvents = 0,
+		.numEvents = 1,
 };
 
 static const AnimationPropsData B_BUILD_IDLE = {
@@ -319,7 +320,6 @@ static AnimationData ARROW_ANIMATION_DATA = {
 				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
 		},
 		.lastFrameIndex = 0,
-		// TODO arrow launched sound
 		.events = { },
 		.numEvents = 0,
 };
@@ -330,7 +330,6 @@ static AnimationData FIREBALL_ANIMATION_DATA = {
 				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
 		},
 		.lastFrameIndex = 0,
-        // TODO flame sound
 		.events = {},
 		.numEvents = 0,
 };
@@ -344,11 +343,11 @@ static AnimationData EXPLOSION_ANIMATION_DATA = {
                 {.duration = SEC_TO_FRAMES(0.2), .xOffset = 144},
 		},
 		.lastFrameIndex = 3,
-        // TODO explosion sound
 		.events = {
-            {.type = EVENT_TYPE_AREA_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}
+            {.type = EVENT_TYPE_AREA_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)},
+			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_FIREBALL_EXPLOSION, .fireTime = SEC_TO_FRAMES(0.1)}
         },
-		.numEvents = 1,
+		.numEvents = 2,
 };
 
 static AnimationData ARROW_HIT_ANIMATION_DATA = {
@@ -358,7 +357,7 @@ static AnimationData ARROW_HIT_ANIMATION_DATA = {
 		},
 		.lastFrameIndex = 0,
 		.events = {
-            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_HIT, .fireTime = SEC_TO_FRAMES(0.1)},
+            {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_ARROW_HIT, .fireTime = SEC_TO_FRAMES(0.1)},
             {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.1)}},
 		.numEvents = 2,
 };

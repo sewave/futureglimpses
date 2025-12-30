@@ -368,8 +368,8 @@ static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit 
 			break;
 		case UNIT_TYPE_BARRACKS:
 			context->cmdBarButtons[buttonIndex++] = TRAIN_SOLDIER_CMD_BUTTON;
-			if (unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = TRAIN_ARCHER_CMD_BUTTON;
-			if (unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TRAIN_KNIGHT_CMD_BUTTON;
+			if (unitCount[UNIT_TYPE_BLACKSMITH] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_ARCHER_CMD_BUTTON;
+			if (unitCount[UNIT_TYPE_STABLES] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_KNIGHT_CMD_BUTTON;
 			break;
 		case UNIT_TYPE_TOWER:
 			context->cmdBarButtons[buttonIndex++] = TRAIN_MAGE_CMD_BUTTON;
@@ -426,19 +426,19 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 					game_cmd_bar_handle_building_buttons(context, unit);
 				} else {
 					if (unit->type == UNIT_TYPE_WORKER) {
-						switch(context->buildPlacing.state) {
+						switch (context->buildPlacing.state) {
 							case CMD_BAR_BUILD_STATE_SELECT:
 								game_cmd_bar_handle_building_select_buttons(context);
-							break;
+								break;
 							case CMD_BAR_BUILD_STATE_PLACE:
 								context->cmdBarButtons[buttonIndex++] = CANCEL_PLACE_BUILDING_CMD_BUTTON;
-							break;
+								break;
 							case CMD_BAR_BUILD_STATE_NONE:
 								game_cmd_bar_add_common(context->cmdBarButtons);
 								context->cmdBarButtons[buttonIndex++] = BUILD_CMD_BUTTON;
 								context->cmdBarButtons[buttonIndex++] = REPAIR_CMD_BUTTON;
 								context->cmdBarButtons[buttonIndex++] = HARVEST_CMD_BUTTON;
-							break;
+								break;
 						}
 					} else {
 						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
@@ -472,28 +472,32 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
 		CommandBarButton *button = &context->cmdBarButtons[i];
 		if (!button->isActive) continue;
+		uint8_t buttonPress = FALSE;
 		button->state = CMD_BAR_BTN_STATE_IDLE;
-		// Check hotkeys
+
 		if (keyboard_is_key_down(button->hotkeyIndex)) {
+			buttonPress = keyboard_is_key_pressed(button->hotkeyIndex);
 			button->state = CMD_BAR_BTN_STATE_DOWN;
 		} else {
 			if (keyboard_is_key_released(button->hotkeyIndex)) {
 				button->state = CMD_BAR_BTN_STATE_RELEASED;
-			}
-		}
-
-		if (button->state == CMD_BAR_BTN_STATE_IDLE && mouseX >= button->x && mouseX < button->x + CMD_BAR_BUTTON_WIDTH && mouseY >= button->y && mouseY < button->y + CMD_BAR_BUTTON_HEIGHT) {
-			if (context->mouseStatus.isLeftDown || keyboard_is_key_down(button->hotkeyIndex)) {
-				button->state = CMD_BAR_BTN_STATE_DOWN;
 			} else {
-				if (context->mouseStatus.isLeftReleased || keyboard_is_key_released(button->hotkeyIndex)) {
-					button->state = CMD_BAR_BTN_STATE_RELEASED;
-				} else {
-					button->state = CMD_BAR_BTN_STATE_HOVER;
+				if (mouseX >= button->x && mouseX < button->x + CMD_BAR_BUTTON_WIDTH && mouseY >= button->y && mouseY < button->y + CMD_BAR_BUTTON_HEIGHT) {
+					if (context->mouseStatus.isLeftDown) {
+						buttonPress = context->mouseStatus.isLeftPressed;
+						button->state = CMD_BAR_BTN_STATE_DOWN;
+					} else {
+						if (context->mouseStatus.isLeftReleased) {
+							button->state = CMD_BAR_BTN_STATE_RELEASED;
+						} else {
+							button->state = CMD_BAR_BTN_STATE_HOVER;
+						}
+					}
 				}
 			}
 		}
 
+		if (buttonPress) game_snd_play_sound(GAME_SOUND_CLICK);
 		if (button->state == CMD_BAR_BTN_STATE_RELEASED) button->action(context, button->fixedParam);
 	}
 }
@@ -550,7 +554,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 										   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
 										   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 				}
-				if(buildingData->queueNextIndex > 0) {
+				if (buildingData->queueNextIndex > 0) {
 					snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
 					render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 											 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
@@ -626,7 +630,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 		render_queue_submit_text(
 				renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
 				xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX);
-		if (button->state == CMD_BAR_BTN_STATE_HOVER) {
+		if (button->state != CMD_BAR_BTN_STATE_IDLE) {
 			render_queue_submit_rect(renderQueue,
 									 CMD_BUTTON_HOVER_Z,
 									 xPos - 1, yPos - 1,
