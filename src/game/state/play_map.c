@@ -29,16 +29,16 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
 	if (keyboard_is_key_pressed(KEY_6)) {
-		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 1000);
 	}
 	if (keyboard_is_key_pressed(KEY_7)) {
-		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+		resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 	}
 	if (keyboard_is_key_pressed(KEY_8)) {
-		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 1000);
 	}
 	if (keyboard_is_key_pressed(KEY_9)) {
-		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+		resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 	}
 	if (keyboard_is_key_pressed(KEY_L)) {
 		context->config.lifeBar = (context->config.lifeBar + 1) % LIFE_BAR_COUNT;

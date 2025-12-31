@@ -80,8 +80,8 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	resource_reset(context);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 10000);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 10000);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 5000);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 3000);
 	context->isDebugEnabled = FALSE;

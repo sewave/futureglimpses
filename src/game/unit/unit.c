@@ -23,7 +23,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
 				.moveTime = SEC_TO_FRAMES(0.5),
-				{.used = {1, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {400, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_SOLDIER,
@@ -38,7 +38,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.4),
-				{.used = {2, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_ARCHER,
@@ -53,7 +53,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.45),
-				{.used = {2, 1, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_KNIGHT,
@@ -68,7 +68,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
-				{.used = {3, 1, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {800, 100, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -82,8 +82,8 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 10,
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
-				.moveTime = SEC_TO_FRAMES(0.5),
-				{.used = {4, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				.moveTime = SEC_TO_FRAMES(0.8),
+				{.used = {900, 300, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
