@@ -10,5 +10,6 @@ void resource_deduct_amount(GameContext *context, ControllerEnum controller, Res
 void resource_update_ui_quantities(GameContext *context);
 void resource_add_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided);
 void resource_deduct_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided);
+void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQueue);
 
 #endif /* RESOURCE_H */

@@ -203,25 +203,15 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 	}
 }
 
-#define BASIC_RESOURCES 2
-#define PRINTED_RESOURCES 3
-
-static int RESOURCE_LOCATIONS_X[PRINTED_RESOURCES] = {
-		100, 150, 200};
-static int RESOURCE_LOCATIONS_Y[PRINTED_RESOURCES] = {
-		2, 2, 2};
-char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][16];
-
 void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 	// Selected unit info
-	// Command buttons
 	render_queue_submit_solid_partial(renderQueue, BACKGROUND_Z_ORDER, context->renderedBoard,
 									  context->xPosition, context->yPosition,
 									  VIEWPORT_X_OFFSET, VIEWPORT_Y_OFFSET,
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 
 	// Submit to render the viewport from the renderedBoard
-	BITMAP* frame = game_gfx_get_frame();
+	BITMAP *frame = game_gfx_get_frame();
 	render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 500, frame, 0, 0, RND_FLAG_NORMAL);
 
 	// Minimap
@@ -255,40 +245,11 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 				red++;
 			}
 		}
-		snprintf(activeText, sizeof(activeText), "T: %d ^004B: %d ^005R: %d", context->activeUnitCount, blue, red);
+		snprintf(activeText, sizeof(activeText), "T:%d ^004B:%d ^005R:%d", context->activeUnitCount, blue, red);
 		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
 	}
 
-	// TODO resource icons
-
-	// Render resources
-	for (int i = 0; i < BASIC_RESOURCES; i++) {
-		uint32_t quantity = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i];
-		snprintf(RESOURCE_BUFFERS[i], sizeof(RESOURCE_BUFFERS[i]), "%u", quantity);
-		render_queue_submit_text(
-				renderQueue,
-				UI_Z_ORDER + 600,
-				context->gameFont,
-				RESOURCE_BUFFERS[i],
-				RESOURCE_LOCATIONS_X[i],
-				RESOURCE_LOCATIONS_Y[i],
-				PAL_COLOR_WHITE,
-				-1);
-	}
-
-	// Render food usage
-	snprintf(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD]),
-		"%u/%u", context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD],
-		context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD]);
-	render_queue_submit_text(
-			renderQueue,
-			UI_Z_ORDER + 600,
-			context->gameFont,
-			RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD],
-			RESOURCE_LOCATIONS_X[RESOURCE_TYPE_AVAILABLE_FOOD],
-			RESOURCE_LOCATIONS_Y[RESOURCE_TYPE_AVAILABLE_FOOD],
-			PAL_COLOR_WHITE,
-			-1);
+	resource_render_queue_submit_ui(context, renderQueue);
 }
 
 void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {

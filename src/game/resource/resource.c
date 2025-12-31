@@ -1,6 +1,22 @@
 #include "resource.h"
 
-#define UI_RESOURCE_UPDATE_RATE 4// QUantity to update of ui resource per call
+#define UI_RESOURCE_UPDATE_RATE 4 // Quantity to update of ui resource per call
+#define BASIC_RESOURCES 2
+#define PRINTED_RESOURCES 3
+#define RESOURCES_Z UI_Z_ORDER + 600
+#define BASE_TEN_NUMER 10
+#define FOOD_USE_FORMAT "%u/%u"
+
+static int RESOURCE_TEXT_LOCATIONS[PRINTED_RESOURCES][2] = {
+		{89, 2},
+		{136, 2},
+		{186, 2}};
+static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
+		{79, 2},
+		{126, 2},
+		{176, 2}};
+
+char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][16];
 
 void resource_reset(GameContext *context) {
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
@@ -86,4 +102,32 @@ void resource_update_ui_quantities(GameContext *context) {
 			}
 		}
 	}
+}
+
+void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQueue) {
+	// Resource icons
+	for (int i = 0; i < PRINTED_RESOURCES; i++) {
+		render_queue_submit_sprite(
+				renderQueue, RESOURCES_Z, game_gfx_get_icon(i), RESOURCE_ICONS_LOCATIONS[i][0],
+				RESOURCE_ICONS_LOCATIONS[i][1], RND_FLAG_NORMAL);
+	}
+
+	// Render resources
+	for (int i = 0; i < BASIC_RESOURCES; i++) {
+		itoa(context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i], RESOURCE_BUFFERS[i], BASE_TEN_NUMER);
+		render_queue_submit_text(renderQueue, RESOURCES_Z,
+				context->gameFont, RESOURCE_BUFFERS[i],
+				RESOURCE_TEXT_LOCATIONS[i][0], RESOURCE_TEXT_LOCATIONS[i][1],
+				PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+	}
+
+	// Render food usage
+	snprintf(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD]),
+			 FOOD_USE_FORMAT, context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD],
+			 context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD]);
+	render_queue_submit_text(renderQueue, RESOURCES_Z, context->gameFont,
+			RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD],
+			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][0],
+			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][1],
+			PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 }

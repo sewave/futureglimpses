@@ -7,6 +7,9 @@
 #define FRAME_FILE "assets/ui/back.pcx"
 #define TILESET_FILE "assets/gfx/tileset.pcx"
 #define TILESET_COLORS_FILE "assets/gfx/tilesetm.pcx"
+#define ICONS_FILE "assets/ui/icons.pcx"
+#define ICON_WIDTH 8
+#define ICON_HEIGHT 8
 
 static BITMAP *spriteSheetsBlue[UNIT_TYPE_NUMBER];
 static BITMAP *spriteSheetsRed[UNIT_TYPE_NUMBER];
@@ -96,7 +99,14 @@ InitializationStatusEnum game_gfx_load_all() {
 	if (!tileSetColors) return INITIALIZATION_ERROR;
 	printInitStep();
 
-	// TODO load icons
+    BITMAP* allIcons = load_bitmap(ICONS_FILE, NULL);
+    if (!allIcons) return INITIALIZATION_ERROR;
+    for(int i = 0; i < GAME_ICON_COUNT; i++) {
+        icons[i] = create_bitmap(ICON_WIDTH, ICON_HEIGHT);
+        blit(allIcons, icons[i], i * ICON_WIDTH, 0, 0, 0, ICON_WIDTH, ICON_HEIGHT);
+        printInitStep();
+    }
+    destroy_bitmap(allIcons);
 
 	printOKSteps();
 
