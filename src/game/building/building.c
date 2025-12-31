@@ -2,39 +2,7 @@
 
 #define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
-#define UNIT_USED_RESOURCES 3
 #define UNIT_NORMAL_RESOURCES 2
-
-typedef struct {
-	uint16_t resources[UNIT_USED_RESOURCES];
-	uint16_t time;
-} UnitResourcesData;
-
-static UnitResourcesData UNIT_RESOURCES[UNIT_TYPE_NUMBER] = {
-		// WORKER
-		{.resources = {1, 0, 1}, .time = SEC_TO_FRAMES(1)},
-		// SOLDIER
-		{.resources = {2, 0, 1}, .time = SEC_TO_FRAMES(1)},
-		// ARCHER
-		{.resources = {2, 1, 1}, .time = SEC_TO_FRAMES(1)},
-		// KNIGHT
-		{.resources = {3, 1, 1}, .time = SEC_TO_FRAMES(1)},
-		// MAGE
-		{.resources = {4, 0, 1}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_CITY_HALL
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_FARM
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_BARRACKS
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_BLACKSMITH
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_STABLES
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-		// UNIT_TYPE_TOWER
-		{.resources = {1, 0, 0}, .time = SEC_TO_FRAMES(1)},
-};
-
 #define SPIRAL_DIRECTIONS 4
 
 static Position spiralDirections[SPIRAL_DIRECTIONS] = {
@@ -76,7 +44,7 @@ static void building_start_training(GameUnit *building, UnitTypeEnum unitType) {
 	buildingData->isTraining = TRUE;
 	buildingData->trainUnit = unitType;
 	buildingData->currentTrainTicks = 0;
-	buildingData->targetTrainTicks = UNIT_RESOURCES[unitType].time;
+	buildingData->targetTrainTicks = game_unit_get_resources(unitType)->time;
 }
 
 void building_update(GameContext *context, GameUnit *building) {
@@ -85,7 +53,7 @@ void building_update(GameContext *context, GameUnit *building) {
 		buildingData->currentTrainTicks++;
 		if (buildingData->currentTrainTicks >= buildingData->targetTrainTicks) {
             if(resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
-                    UNIT_RESOURCES[buildingData->trainUnit].resources[RESOURCE_TYPE_AVAILABLE_FOOD])) {
+                    game_unit_get_resources(buildingData->trainUnit)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
                 Position spawn = game_building_get_spawn_position(context, building);
 			    game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
 			    buildingData->isTraining = FALSE;
@@ -108,8 +76,9 @@ void building_update(GameContext *context, GameUnit *building) {
 
 void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitTypeEnum unitType) {
 	// Check funds and food
+    UnitResourcesData* unitResources = game_unit_get_resources(unitType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
-		if (!resource_has_enough(context, building->controller, i, UNIT_RESOURCES[unitType].resources[i])) {
+		if (!resource_has_enough(context, building->controller, i, unitResources->used[i])) {
 			message_add_to_queue(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
 								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
 			return;
@@ -119,7 +88,7 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 	if (building_queue_training(building, unitType)) {
 		// Deduct resources but not food
 		for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
-			resource_deduct_amount(context, building->controller, i, UNIT_RESOURCES[unitType].resources[i]);
+			resource_deduct_amount(context, building->controller, i, unitResources->used[i]);
 		}
 	} else {
 		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),

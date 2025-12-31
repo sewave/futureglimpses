@@ -7,21 +7,9 @@
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 
-typedef struct {
-	UnitTypeEnum type;
-	uint8_t isBuilding;
-	uint8_t minAttackRange, maxAttackRange, sightRange;
-	uint16_t health, maxHealth;
-	uint8_t tileSize;
-	uint8_t minDamage;
-	uint8_t maxDamage;
-	uint16_t reactionTime;
-	uint16_t moveTime;
-	uint8_t foodUsage;
-	uint8_t foodProvided;
-} UnitData;
 
-UnitData unitsData[UNIT_TYPE_NUMBER] = {
+
+static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 		{
 				.type = UNIT_TYPE_WORKER,
 				.isBuilding = FALSE,
@@ -35,8 +23,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
 				.moveTime = SEC_TO_FRAMES(0.5),
-				.foodUsage = 1,
-				.foodProvided = 0,
+				{.used = {1, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_SOLDIER,
@@ -51,8 +38,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.4),
-				.foodUsage = 1,
-				.foodProvided = 0,
+				{.used = {2, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_ARCHER,
@@ -67,8 +53,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.45),
-				.foodUsage = 1,
-				.foodProvided = 0,
+				{.used = {2, 1, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_KNIGHT,
@@ -83,8 +68,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
-				.foodUsage = 1,
-				.foodProvided = 0,
+				{.used = {3, 1, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -99,8 +83,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.5),
-				.foodUsage = 1,
-				.foodProvided = 0,
+				{.used = {4, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
@@ -115,8 +98,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 5,
+				{.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 5},
 		},
 		{
 				.type = UNIT_TYPE_FARM,
@@ -131,8 +113,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 4,
+				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 4},
 		},
 		{
 				.type = UNIT_TYPE_BARRACKS,
@@ -147,8 +128,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 0,
+				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -163,8 +143,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 0,
+				{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_STABLES,
@@ -179,8 +158,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 0,
+				{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_TOWER,
@@ -195,8 +173,7 @@ UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				.foodUsage = 0,
-				.foodProvided = 0,
+				{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
 		},
 };
 
@@ -266,7 +243,7 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 			context->stats[opponentController].enemiesKilled++;
 		}
 		UnitData *data = &unitsData[unit->type];
-		resource_deduct_food(context, unit->controller, data->foodUsage, data->foodProvided);
+		resource_deduct_food(context, unit->controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD], data->resources.foodProvided);
 	}
 }
 
@@ -341,7 +318,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		context->stats[controller].unitsTrained++;
 	}
 
-	resource_add_food(context, controller, data->foodUsage, data->foodProvided);
+	resource_add_food(context, controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD], data->resources.foodProvided);
 
 	if(unit->controller == UNIT_CONTROLLER_PLAYER) {
 		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
@@ -432,3 +409,10 @@ void game_unit_process_all(GameContext *context) {
 	}
 }
 
+UnitResourcesData* game_unit_get_resources(UnitTypeEnum type) {
+	return &unitsData[type].resources;
+}
+
+UnitData* game_unit_get_data(UnitTypeEnum type) {
+	return &unitsData[type];
+}

@@ -29,12 +29,25 @@
 #define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
 #define UNIT_SHEET_Z_ORDER_BAR_RECT UI_Z_ORDER + 511
 
+#define UNIT_RESOURCES 3
+#define BUILDING_RESOURCES 2
+#define RESOURCES_Z UI_Z_ORDER + 600
+#define BASE_TEN_NUMER 10
+#define RESOURCE_LOCATIONS_TEXT_X_OFF 10
+#define BUILDING_RESOURCE_X_OFF 28
+
+static int RESOURCE_LOCATIONS[UNIT_RESOURCES][2] = {
+		{220, 190},
+		{258, 190},
+		{295, 190}};
+
 static uint8_t buttonIndex;
 static uint8_t unitCount[UNIT_TYPE_NUMBER] = {0};
 static char unitHpText[16];
 static char unitDamageText[32];
 static char unitAtRangeText[32];
 static char unitsText[32];
+static char resourceBuffers[RESOURCE_TYPES_COUNT][8];
 
 static void handle_train_unit(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
@@ -102,6 +115,7 @@ static void handle_action_button(void *ctxVoid, uint8_t fixedDat) {
 }
 
 static const CommandBarButton MOVE_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_M,
@@ -115,6 +129,7 @@ static const CommandBarButton MOVE_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton STOP_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_S,
@@ -128,6 +143,7 @@ static const CommandBarButton STOP_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton ATTACK_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_A,
@@ -141,6 +157,7 @@ static const CommandBarButton ATTACK_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton DEFEND_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_action_button,
 		.hotkeyIndex = KEY_D,
@@ -154,6 +171,7 @@ static const CommandBarButton DEFEND_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton CANCEL_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_cancel_button,
 		.hotkeyIndex = KEY_ESC,
@@ -166,72 +184,8 @@ static const CommandBarButton CANCEL_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
-static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
-		.isActive = TRUE,
-		.action = handle_train_unit,
-		.hotkeyIndex = KEY_W,
-		.hotkey = "W",
-		.hoverTextId = GAME_TEXT_ID_TRAIN_WORKER,
-		.fixedParam = UNIT_TYPE_WORKER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 0,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
-static const CommandBarButton TRAIN_SOLDIER_CMD_BUTTON = {
-		.isActive = TRUE,
-		.action = handle_train_unit,
-		.hotkeyIndex = KEY_S,
-		.hotkey = "S",
-		.hoverTextId = GAME_TEXT_ID_TRAIN_SOLDIER,
-		.fixedParam = UNIT_TYPE_SOLDIER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 1,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
-static const CommandBarButton TRAIN_ARCHER_CMD_BUTTON = {
-		.isActive = TRUE,
-		.action = handle_train_unit,
-		.hotkeyIndex = KEY_A,
-		.hotkey = "A",
-		.hoverTextId = GAME_TEXT_ID_TRAIN_ARCHER,
-		.fixedParam = UNIT_TYPE_ARCHER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
-static const CommandBarButton TRAIN_KNIGHT_CMD_BUTTON = {
-		.isActive = TRUE,
-		.action = handle_train_unit,
-		.hotkeyIndex = KEY_K,
-		.hotkey = "K",
-		.hoverTextId = GAME_TEXT_ID_TRAIN_KNIGHT,
-		.fixedParam = UNIT_TYPE_KNIGHT,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
-static const CommandBarButton TRAIN_MAGE_CMD_BUTTON = {
-		.isActive = TRUE,
-		.action = handle_train_unit,
-		.hotkeyIndex = KEY_M,
-		.hotkey = "M",
-		.hoverTextId = GAME_TEXT_ID_TRAIN_MAGE,
-		.fixedParam = UNIT_TYPE_MAGE,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
 static const CommandBarButton BUILD_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_building_select_button,
 		.hotkeyIndex = KEY_B,
@@ -245,6 +199,7 @@ static const CommandBarButton BUILD_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton REPAIR_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_repair_button,
 		.hotkeyIndex = KEY_R,
@@ -258,6 +213,7 @@ static const CommandBarButton REPAIR_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton HARVEST_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_harvest_button,
 		.hotkeyIndex = KEY_H,
@@ -271,6 +227,7 @@ static const CommandBarButton HARVEST_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton CANCEL_SELECT_BUILDING_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_build_select_cancel_button,
 		.hotkeyIndex = KEY_ESC,
@@ -284,6 +241,7 @@ static const CommandBarButton CANCEL_SELECT_BUILDING_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton CANCEL_PLACE_BUILDING_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_build_place_cancel_button,
 		.hotkeyIndex = KEY_ESC,
@@ -296,7 +254,78 @@ static const CommandBarButton CANCEL_PLACE_BUILDING_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_W,
+		.hotkey = "W",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_WORKER,
+		.fixedParam = UNIT_TYPE_WORKER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 0,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_SOLDIER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_S,
+		.hotkey = "S",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_SOLDIER,
+		.fixedParam = UNIT_TYPE_SOLDIER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 1,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_ARCHER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_A,
+		.hotkey = "A",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_ARCHER,
+		.fixedParam = UNIT_TYPE_ARCHER,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_KNIGHT_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_K,
+		.hotkey = "K",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_KNIGHT,
+		.fixedParam = UNIT_TYPE_KNIGHT,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton TRAIN_MAGE_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_M,
+		.hotkey = "M",
+		.hoverTextId = GAME_TEXT_ID_TRAIN_MAGE,
+		.fixedParam = UNIT_TYPE_MAGE,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
+		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static const CommandBarButton FARM_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
 		.action = handle_build_place_button,
 		.hotkeyIndex = KEY_F,
@@ -310,6 +339,7 @@ static const CommandBarButton FARM_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton BARRACKS_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
 		.action = handle_build_place_button,
 		.hotkeyIndex = KEY_B,
@@ -323,6 +353,7 @@ static const CommandBarButton BARRACKS_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton BLACKSMITH_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
 		.action = handle_build_place_button,
 		.hotkeyIndex = KEY_M,
@@ -336,6 +367,7 @@ static const CommandBarButton BLACKSMITH_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton STABLES_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
 		.action = handle_build_place_button,
 		.hotkeyIndex = KEY_S,
@@ -349,6 +381,7 @@ static const CommandBarButton STABLES_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton TOWER_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
 		.action = handle_build_place_button,
 		.hotkeyIndex = KEY_T,
@@ -392,6 +425,128 @@ static void game_cmd_bar_handle_building_select_buttons(GameContext *context) {
 	if (unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = STABLES_CMD_BUTTON;
 	if (unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TOWER_CMD_BUTTON;
 	context->cmdBarButtons[buttonIndex++] = CANCEL_SELECT_BUILDING_CMD_BUTTON;
+}
+
+
+static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, const char *innerText,
+								   int x, int y, uint8_t isHp) {
+	int textLength = text_length(font, innerText);
+	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, innerText,
+							 x + UNIT_SHEET_BAR_LENGTH / 2 - textLength / 2,
+							 y + UNIT_SHEET_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+	int barColor = PAL_COLOR_DARK_GREEN;
+	if (isHp) {
+		if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
+		if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
+	}
+	textLength = (value * UNIT_SHEET_BAR_LENGTH) / maxValue;
+	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
+								  x, y,
+								  x + textLength, y + UNIT_SHEET_BAR_HEIGHT,
+								  barColor);
+	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
+								  x + textLength, y,
+								  x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
+								  PAL_COLOR_GRAY);
+	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BAR_RECT,
+							 x, y,
+							 x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
+							 PAL_COLOR_WHITE);
+}
+
+static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, RenderQueue *renderQueue) {
+	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+	if (unit) {
+		// TODO unit stats background
+
+		// Unit name
+		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont,
+								 text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type),
+								 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+		// Unit HP bar
+		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
+		game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
+							   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
+
+		// If we are a building training show bar
+		if (unit->isBuilding) {
+			BuildingData *buildingData = &unit->typed.buildingData;
+			if (buildingData->isTraining) {
+				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+									   buildingData->currentTrainTicks, buildingData->targetTrainTicks,
+									   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
+									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
+			}
+			if (buildingData->queueNextIndex > 0) {
+				snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
+				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+										 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			}
+		}
+
+		// Unit data
+		if (unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
+			snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText,
+									 UNIT_SHEET_COL_ONE_X,
+									 UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+
+		if (unit->minDamage > 0 || unit->maxDamage > 0) {
+			snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
+									 UNIT_SHEET_COL_ONE_X,
+									 UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+	}
+}
+
+static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {
+	snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
+	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+							 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+	int currentHealth = 0;
+	int maxHealth = 0;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+		if (unit) {
+			currentHealth += unit->health;
+			maxHealth += unit->maxHealth;
+		}
+	}
+	snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP_PERCENT), (currentHealth * 100) / maxHealth);
+	game_cmd_bar_queue_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText,
+						   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
+}
+
+static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, FONT* font, CommandBarButton *button) {
+	render_queue_submit_text_multicolor(
+			renderQueue, UI_Z_ORDER + 505, font, text_get_by_id(button->hoverTextId),
+			HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+
+	if (button->type == CMD_BAR_BTN_TYPE_CREATE) {
+		UnitTypeEnum unitType = (UnitTypeEnum) button->fixedParam;
+		UnitData *unitData = game_unit_get_data(unitType);
+		int totalResources = UNIT_RESOURCES;
+		int xOff = 0;
+		if(unitData->isBuilding) {
+			xOff = BUILDING_RESOURCE_X_OFF;
+			totalResources = BUILDING_RESOURCES;
+		}
+		for (int i = 0; i < totalResources; i++) {
+			render_queue_submit_sprite(
+					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), RESOURCE_LOCATIONS[i][0] + xOff,
+					RESOURCE_LOCATIONS[i][1], RND_FLAG_NORMAL);
+			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMER);
+			render_queue_submit_text(renderQueue, RESOURCES_Z,
+									 font, resourceBuffers[i],
+									 RESOURCE_LOCATIONS[i][0] + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,
+									 RESOURCE_LOCATIONS[i][1], PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+	}
 }
 
 void game_cmd_bar_handle_buttons(GameContext *context) {
@@ -502,99 +657,9 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	}
 }
 
-static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, const char *innerText,
-								   int x, int y, uint8_t isHp) {
-	int textLength = text_length(font, innerText);
-	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, innerText,
-							 x + UNIT_SHEET_BAR_LENGTH / 2 - textLength / 2,
-							 y + UNIT_SHEET_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-
-	int barColor = PAL_COLOR_DARK_GREEN;
-	if (isHp) {
-		if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
-		if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
-	}
-	textLength = (value * UNIT_SHEET_BAR_LENGTH) / maxValue;
-	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
-								  x, y,
-								  x + textLength, y + UNIT_SHEET_BAR_HEIGHT,
-								  barColor);
-	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
-								  x + textLength, y,
-								  x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
-								  PAL_COLOR_GRAY);
-	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BAR_RECT,
-							 x, y,
-							 x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
-							 PAL_COLOR_WHITE);
-}
-
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {
-	if (context->selectedUnitCount == 1) {
-		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
-		if (unit) {
-			// TODO unit stats background
-
-			// Unit name
-			render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont,
-									 text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type),
-									 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-
-			// Unit HP bar
-			snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
-			game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
-								   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
-
-			// If we are a building training show bar
-			if (unit->isBuilding) {
-				BuildingData *buildingData = &unit->typed.buildingData;
-				if (buildingData->isTraining) {
-					game_cmd_bar_queue_bar(renderQueue, context->gameFont,
-										   buildingData->currentTrainTicks, buildingData->targetTrainTicks,
-										   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
-										   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
-				}
-				if (buildingData->queueNextIndex > 0) {
-					snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
-					render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
-											 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-				}
-			}
-
-			// Unit data
-			if (unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
-				snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
-				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText,
-										 UNIT_SHEET_COL_ONE_X,
-										 UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-			}
-
-			if (unit->minDamage > 0 || unit->maxDamage > 0) {
-				snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
-				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
-										 UNIT_SHEET_COL_ONE_X,
-										 UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-			}
-		}
-	}
-	if (context->selectedUnitCount > 1) {
-		snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
-		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
-								 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-
-		int currentHealth = 0;
-		int maxHealth = 0;
-		for (int i = 0; i < context->selectedUnitCount; i++) {
-			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-			if (unit) {
-				currentHealth += unit->health;
-				maxHealth += unit->maxHealth;
-			}
-		}
-		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP_PERCENT), (currentHealth * 100) / maxHealth);
-		game_cmd_bar_queue_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText,
-							   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
-	}
+	if (context->selectedUnitCount == 1) game_cmd_bar_render_queue_submit_single_unit(context, renderQueue);
+	if (context->selectedUnitCount > 1) game_cmd_bar_render_queue_submit_multi_unit(context, renderQueue);
 
 	// Render buttons
 	BITMAP* buttons = game_gfx_get_cmd_bar_buttons();
@@ -627,7 +692,6 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 				button->sheetOffsetX, button->sheetOffsetY,
 				xPos, yPos,
 				CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);
-
 		render_queue_submit_text(
 				renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
 				xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX);
@@ -637,10 +701,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 									 xPos - 1, yPos - 1,
 									 xPos + CMD_BAR_BUTTON_WIDTH, yPos + CMD_BAR_BUTTON_HEIGHT,
 									 PAL_COLOR_BLACK);
-			render_queue_submit_text_multicolor(
-					renderQueue, UI_Z_ORDER + 505, context->gameFont, text_get_by_id(button->hoverTextId),
-					HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-			// TODO draw resource costs
+			game_cmd_bar_render_queue_submit_btn_info(renderQueue, context->gameFont, button);
 		}
 	}
 }

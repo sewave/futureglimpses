@@ -231,7 +231,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 							 PAL_COLOR_WHITE);
 
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 270, 190, PAL_COLOR_WHITE, -1);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
 
 	if (context->isDebugEnabled) {
 		int blue = 0;

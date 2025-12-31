@@ -16,7 +16,7 @@ static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{126, 2},
 		{176, 2}};
 
-char RESOURCE_BUFFERS[RESOURCE_TYPES_COUNT][16];
+static char resourceBuffers[RESOURCE_TYPES_COUNT][16];
 
 void resource_reset(GameContext *context) {
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
@@ -114,19 +114,19 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 
 	// Render resources
 	for (int i = 0; i < BASIC_RESOURCES; i++) {
-		itoa(context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i], RESOURCE_BUFFERS[i], BASE_TEN_NUMER);
+		itoa(context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i], resourceBuffers[i], BASE_TEN_NUMER);
 		render_queue_submit_text(renderQueue, RESOURCES_Z,
-				context->gameFont, RESOURCE_BUFFERS[i],
+				context->gameFont, resourceBuffers[i],
 				RESOURCE_TEXT_LOCATIONS[i][0], RESOURCE_TEXT_LOCATIONS[i][1],
 				PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 
 	// Render food usage
-	snprintf(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD]),
+	snprintf(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD]),
 			 FOOD_USE_FORMAT, context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD],
 			 context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD]);
 	render_queue_submit_text(renderQueue, RESOURCES_Z, context->gameFont,
-			RESOURCE_BUFFERS[RESOURCE_TYPE_AVAILABLE_FOOD],
+			resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD],
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][0],
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][1],
 			PAL_COLOR_WHITE, TRANSPARENT_INDEX);

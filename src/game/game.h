@@ -304,7 +304,13 @@ typedef enum {
 
 typedef void (*CommandBarButtonFunction)(void *, uint8_t);
 
+typedef enum {
+	CMD_BAR_BTN_TYPE_ACTION,
+	CMD_BAR_BTN_TYPE_CREATE,
+} CommandBarButtonTypeEnum;
+
 typedef struct {
+	CommandBarButtonTypeEnum type;
 	uint8_t isActive;
 	CommandBarButtonFunction action;
 	uint8_t hotkeyIndex;
