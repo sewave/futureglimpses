@@ -468,3 +468,16 @@ void game_animation_object_set(Object *object) {
     animationStatus->animation.data = propsData.data;
 	game_animation_reset(animationStatus);
 }
+
+AnimationFramePosition game_animation_unit_get_frame_position(UnitTypeEnum type, UnitStateEnum state, DirectionEnum direction, int frame) {
+	AnimationPropsData *aniPropsData = &UNIT_ANIMATIONS[type][state];
+	AnimationFrame *aniFrame = &aniPropsData->data->frames[frame];
+	AnimationProperties *props = aniPropsData->props;
+
+	return (AnimationFramePosition) {
+		.x = aniFrame->xOffset,
+		.y = props->yOffset,
+		.width = props->width,
+		.height = props->height
+	};
+}

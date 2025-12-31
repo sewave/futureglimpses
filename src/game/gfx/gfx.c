@@ -161,3 +161,11 @@ BITMAP *game_gfx_get_tileset() {
 BITMAP *game_gfx_get_tileset_colors() {
 	return tileSetColors;
 }
+
+BITMAP *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller) {
+	if (controller == UNIT_CONTROLLER_PLAYER) {
+		return spriteSheetsBlue[type];
+	} else {
+		return spriteSheetsRed[type];
+	}
+}

@@ -5,11 +5,17 @@
 #define BLINK_MOD 10
 #define BLINK_FRAMES 5
 
+typedef struct {
+    int x, y;
+    int width, height;
+} AnimationFramePosition;
+
 void game_animation_unit_set(GameUnit *unit);
 void game_animation_reset(AnimationStatus* animationStatus);
 void game_animation_unit_advance(GameContext* context, GameUnit* unit);
 void game_animation_object_advance(GameContext* context, Object* object);
 uint8_t game_animation_finished(AnimationStatus* animationStatus);
 void game_animation_object_set(Object *object);
+AnimationFramePosition game_animation_unit_get_frame_position(UnitTypeEnum type, UnitStateEnum state, DirectionEnum direction, int frame);
 
 #endif /* ANIMATION_H */

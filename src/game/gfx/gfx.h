@@ -18,5 +18,6 @@ BITMAP *game_gfx_get_icon(GameIconEnum gameIcon);
 BITMAP *game_gfx_get_cmd_bar_buttons();
 BITMAP *game_gfx_get_tileset();
 BITMAP *game_gfx_get_tileset_colors();
+BITMAP *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller);
 
 #endif /* GAME_GFX_H */
