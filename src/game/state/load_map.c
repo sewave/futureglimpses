@@ -8,7 +8,6 @@
 #define MESSAGES_Y_INC -14
 #define MESSAGES_Z UI_Z_ORDER + 900
 
-// TODO loading back, tileset and sprite sheets could be done on a previous init state and remain all game loaded
 void spawn_test_units(GameContext *context) {
 	context->xPosition = BOARD_WIDTH / 2 - VIEWPORT_WIDTH_TILES / 2;
 	context->yPosition = BOARD_HEIGHT / 2 - VIEWPORT_HEIGHT_TILES / 2;
@@ -26,13 +25,6 @@ void spawn_test_units(GameContext *context) {
 }
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
-
-	if (context->gameBack) { destroy_bitmap(context->gameBack); }
-	context->gameBack = load_bitmap("assets/ui/back.pcx", NULL);
-
-	if (context->cmdBarButtonsGfx) { destroy_bitmap(context->cmdBarButtonsGfx); }
-	context->cmdBarButtonsGfx = load_bitmap("assets/ui/cmdbtns.pcx", NULL);
-
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
 	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
 
@@ -64,31 +56,21 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	if (context->renderedMinimapUnits) { destroy_bitmap(context->renderedMinimapUnits); }
 	context->renderedMinimapUnits = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
 
-	if (context->tileSet) { destroy_bitmap(context->tileSet); }
-	context->tileSet = load_bitmap("assets/gfx/tileset.pcx", NULL);
-	if (context->tileSet == NULL) {
-		printf("Error loading tileset.");
-		return GAME_STATE_EXIT;
-	}
 	// Generate the LUT for the tileset pixel colors
-	BITMAP *minimapImage = load_bitmap("assets/gfx/tilesetm.pcx", NULL);
-	if (context->tileSet == NULL) {
-		printf("Error loading tileset minimap colors.");
-		return GAME_STATE_EXIT;
-	}
+	BITMAP *minimapImage = game_gfx_get_tileset_colors();
 	int minimapColors[256];
 	for (int x = 0; x < 16; x++) {
 		for (int y = 0; y < 16; y++) {
 			minimapColors[x + y * 16] = getpixel(minimapImage, x, y);
 		}
 	}
-	destroy_bitmap(minimapImage);
 
+	BITMAP* tileSet = game_gfx_get_tileset();
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
 			int tile = context->board[x][y];
 			blit(
-					context->tileSet,
+					tileSet,
 					context->renderedBoard,
 					(tile % TILE_SIZE) * TILE_SIZE, (tile / TILE_SIZE) * TILE_SIZE,
 					x * TILE_SIZE, y * TILE_SIZE,

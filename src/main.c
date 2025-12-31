@@ -62,11 +62,11 @@ int main(int argc, char *argv[]) {
 
 	game_snd_load_sounds();
 	set_volume(context.config.sfxVolume, context.config.musicVolume);
-	
-	if(game_gfx_load_sprite_sheets() != INITIALIZATION_OK) {
-		game_gfx_destroy_sprite_sheets();
-		printKO();
-		printf("Error loading sprite sheets.\n");
+
+	if (game_gfx_load_all() != INITIALIZATION_OK) {
+		game_gfx_destroy_all();
+		printOKSteps();
+		printf("Error loading gfx.\n");
 		return PROGRAM_ERROR;
 	}
 
@@ -105,14 +105,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	fps_init();
-	// mod music uses ~5 FPS
-	// game_snd_play_music(GAME_MUSIC_TITLE);
-
-	printf("\n***Starting game loop***\n\n");
 
 	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
 
-	game_gfx_destroy_sprite_sheets();
+	game_gfx_destroy_all();
 	snd_stop_music();
 	snd_destroy_sounds();
 	game_mouse_destroy_cursors();

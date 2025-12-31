@@ -597,6 +597,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 	}
 
 	// Render buttons
+	BITMAP* buttons = game_gfx_get_cmd_bar_buttons();
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
 		CommandBarButton *button = &context->cmdBarButtons[i];
 		if (!button->isActive) continue;
@@ -622,7 +623,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 									 PAL_COLOR_WHITE);
 		}
 		render_queue_submit_masked_partial(
-				renderQueue, CMD_BUTTON_Z, context->cmdBarButtonsGfx,
+				renderQueue, CMD_BUTTON_Z, buttons,
 				button->sheetOffsetX, button->sheetOffsetY,
 				xPos, yPos,
 				CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);

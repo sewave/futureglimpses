@@ -221,8 +221,8 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 									  VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 
 	// Submit to render the viewport from the renderedBoard
-	render_queue_submit_masked_partial(renderQueue, UI_Z_ORDER + 500, context->gameBack, 0, 0, 0, 0,
-									   context->gameBack->w, context->gameBack->h);
+	BITMAP* frame = game_gfx_get_frame();
+	render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 500, frame, 0, 0, RND_FLAG_NORMAL);
 
 	// Minimap
 	render_queue_submit_solid(renderQueue, UI_Z_ORDER + 501, context->renderedMinimap,

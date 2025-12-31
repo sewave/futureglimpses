@@ -12,12 +12,9 @@ StateFunction gameStateTable[NUM_GAME_STATES] = {
 };
 
 void game_free_context(GameContext *context) {
-	destroy_bitmap(context->gameBack);
 	destroy_bitmap(context->renderedBoard);
 	destroy_bitmap(context->renderedMinimap);
 	destroy_bitmap(context->renderedMinimapUnits);
-	destroy_bitmap(context->tileSet);
-	destroy_bitmap(context->cmdBarButtonsGfx);
 	destroy_font(context->gameFont);
 }
 

@@ -339,9 +339,6 @@ typedef struct {
 	BITMAP *renderedMinimap;
 	BITMAP *renderedMinimapUnits;
 	int xPosition, yPosition;// Top-left position of the viewport on the board
-	BITMAP *gameBack;
-	BITMAP *tileSet;
-	BITMAP *cmdBarButtonsGfx;
 	long ticksToCatchup;
 
 	GameUnit *activeUnits[MAX_GAME_UNITS];
