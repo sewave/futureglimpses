@@ -219,7 +219,12 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	GameUnit *unit = game_unit_get_by_id(context, id);
 	if (unit && unit->isActive) {
 		unit->isActive = FALSE;
-		context->walkabilityGrid[unit->x][unit->y] = WALKABILITY_FREE;
+		for(int i = unit->x; i < unit->x + unit->tileSize; i++) {
+			for(int j = unit->y; j < unit->y + unit->tileSize; j++) {
+				context->walkabilityGrid[i][j] = WALKABILITY_FREE;
+			}
+		}
+		
 		GameUnit **activeList = context->activeUnits;
 		for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 			if (*activeList == unit) {
