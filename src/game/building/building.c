@@ -74,16 +74,22 @@ void building_update(GameContext *context, GameUnit *building) {
 	}
 }
 
-void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitTypeEnum unitType) {
-	// Check funds and food
+static UnitResourcesData* building_check_unit_resources(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType) {
     UnitResourcesData* unitResources = game_unit_get_resources(unitType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
-		if (!resource_has_enough(context, building->controller, i, unitResources->used[i])) {
+		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
 			message_add_to_queue(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
 								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
-			return;
+			return NULL;
 		}
 	}
+    return unitResources;
+}
+
+void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitTypeEnum unitType) {
+	// Check funds and food
+    UnitResourcesData* unitResources = building_check_unit_resources(context, building->controller, unitType);
+    if(!unitResources) return;
 
 	if (building_queue_training(building, unitType)) {
 		// Deduct resources but not food
@@ -95,3 +101,34 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 							 QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
 	}
 }
+
+void building_handle_placing_input(GameContext *context) {
+    if(context->buildPlacing.state != CMD_BAR_BUILD_STATE_PLACE) return;
+
+    if(context->mouseStatus.isRightPressed) {
+        context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
+        
+    }
+    else {
+        if(context->mouseStatus.isLeftPressed) {
+            // Check resources
+            UnitResourcesData* unitResources = building_check_unit_resources(context, UNIT_CONTROLLER_PLAYER,
+                context->buildPlacing.building);
+            if(!unitResources) return;
+            // Deduct resources or message and exit
+            for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
+                resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
+            }
+            // Spawn building
+            GameUnit* building = game_unit_spawn(context, context->buildPlacing.building, UNIT_CONTROLLER_PLAYER,
+                context->buildPlacing.x, context->buildPlacing.y);
+            if(building) {
+                context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+                // TODO building placed sound
+                // TODO building in build state
+                // TODO send worker to build
+            }
+        }
+    }
+}
+

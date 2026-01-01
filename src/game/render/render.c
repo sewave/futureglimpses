@@ -294,22 +294,20 @@ void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
 							buildX, buildY,
 							framePos.width, framePos.height);
 					int quadX = buildX;
+					BITMAP* buildOkBitmap = game_gfx_get_overtile(GAME_OVERTILE_OK);
+					BITMAP* buildKoBitmap = game_gfx_get_overtile(GAME_OVERTILE_KO);
 					for(int xOff = 0; xOff < context->buildPlacing.size; xOff++, quadX += TILE_SIZE) {
 						int quadY = buildY;
 						for(int yOff = 0; yOff < context->buildPlacing.size; yOff++) {
-							// TODO semitransparent tiles
-							int color;
+							BITMAP* overtile;
 							if(context->buildPlacing.placeResult[xOff][yOff]) {
-								color = PAL_COLOR_GREEN;
+								overtile = buildOkBitmap;
 							}
 							else {
-								color = PAL_COLOR_RED;
+								overtile = buildKoBitmap;
 							}
-							render_queue_submit_line(
-									renderQueue, OBJECTS_Z_ORDER + 901,
-									quadX, quadY,
-									quadX + TILE_SIZE, quadY + TILE_SIZE,
-									color);
+							render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 1, overtile,
+								quadX, quadY, RND_FLAG_NORMAL);
 							quadY += TILE_SIZE;
 						}
 					}

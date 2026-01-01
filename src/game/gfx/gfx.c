@@ -8,6 +8,7 @@
 #define TILESET_FILE "assets/gfx/tileset.pcx"
 #define TILESET_COLORS_FILE "assets/gfx/tilesetm.pcx"
 #define ICONS_FILE "assets/ui/icons.pcx"
+#define OVERTILES_FILE "assets/ui/otiles.pcx"
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
 
@@ -17,6 +18,7 @@ static BITMAP *spriteSheetsObject[OBJ_TYPE_NUMBER];
 static BITMAP *frame;
 static BITMAP *cmdBarButtons;
 static BITMAP *icons[GAME_ICON_COUNT];
+static BITMAP *overtiles[GAME_OVERTILE_COUNT];
 static BITMAP *tileSet;
 static BITMAP *tileSetColors;
 
@@ -108,6 +110,15 @@ InitializationStatusEnum game_gfx_load_all() {
     }
     destroy_bitmap(allIcons);
 
+    BITMAP* allOvertiles = load_bitmap(OVERTILES_FILE, NULL);
+    if (!allOvertiles) return INITIALIZATION_ERROR;
+    for(int i = 0; i < GAME_OVERTILE_COUNT; i++) {
+        overtiles[i] = create_bitmap(TILE_SIZE, TILE_SIZE);
+        blit(allOvertiles, overtiles[i], i * TILE_SIZE, 0, 0, 0, TILE_SIZE, TILE_SIZE);
+        printInitStep();
+    }
+    destroy_bitmap(allOvertiles);
+
 	printOKSteps();
 
 	return INITIALIZATION_OK;
@@ -127,6 +138,9 @@ void game_gfx_destroy_all() {
 	if (tileSetColors) destroy_bitmap(tileSetColors);
 	for (int i = 0; i < GAME_ICON_COUNT; i++) {
 		if (icons[i] != NULL) destroy_bitmap(icons[i]);
+	}
+	for (int i = 0; i < GAME_OVERTILE_COUNT; i++) {
+		if (overtiles[i] != NULL) destroy_bitmap(overtiles[i]);
 	}
 }
 
@@ -168,4 +182,8 @@ BITMAP *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller) {
 	} else {
 		return spriteSheetsRed[type];
 	}
+}
+
+BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile) {
+	return overtiles[overtile];
 }

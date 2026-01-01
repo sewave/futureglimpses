@@ -7,6 +7,8 @@ int moveViewportCounter = 0;
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// Inputs
+	// Command bar has related inputs so must be first
+	game_cmd_bar_handle_buttons(context);
 	game_mouse_handle_status_change(context);
 
 	if(keyboard_is_key_pressed(KEY_G)) {
@@ -45,8 +47,15 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	game_selection_handle_slots(context);
-	game_selection_handle_input(context);
 
+	// We are in building mode
+	if(context->buildPlacing.showBuilding) {
+		building_handle_placing_input(context);
+	}
+	else {
+		game_selection_handle_input(context);
+	}
+	
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 
@@ -110,8 +119,6 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	// Logic
-	// Command bar has related inputs so must be first
-	game_cmd_bar_handle_buttons(context);
 	game_unit_process_all(context);
 	game_objects_advance(context);
 	game_strategy_ai_execute(context);

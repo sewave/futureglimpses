@@ -1,6 +1,6 @@
 #include "resource.h"
 
-#define UI_RESOURCE_UPDATE_RATE 4 // Quantity to update of ui resource per call
+#define UI_RESOURCE_UPDATE_RATE 20 // Quantity to update of ui resource per call
 #define BASIC_RESOURCES 2
 #define PRINTED_RESOURCES 3
 #define RESOURCES_Z UI_Z_ORDER + 600
