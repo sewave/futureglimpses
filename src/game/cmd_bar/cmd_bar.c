@@ -49,6 +49,11 @@ static char unitAtRangeText[32];
 static char unitsText[32];
 static char resourceBuffers[RESOURCE_TYPES_COUNT][8];
 
+static void game_cmd_bar_clear_build_placing(BuildPlacing *buildPlacing) {
+	buildPlacing->state = CMD_BAR_BUILD_STATE_NONE;
+	buildPlacing->showBuilding = FALSE;
+}
+
 static void handle_train_unit(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
 	if (context->selectedUnitCount == 1) {
@@ -82,7 +87,7 @@ static void handle_build_place_button(void *ctxVoid, uint8_t fixedDat) {
 
 static void handle_build_select_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
-	context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+	game_cmd_bar_clear_build_placing(&context->buildPlacing);
 }
 
 static void handle_build_place_cancel_button(void *ctxVoid, uint8_t fixedDat) {
@@ -549,6 +554,37 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 	}
 }
 
+static void game_cmd_bar_handle_placing(GameContext *context) {
+	if(context->buildPlacing.state == CMD_BAR_BUILD_STATE_PLACE &&
+					context->mouseStatus.y > VIEWPORT_Y_MIN && context->mouseStatus.y < VIEWPORT_Y_MAX &&
+					context->mouseStatus.x > VIEWPORT_X_MIN && context->mouseStatus.x < VIEWPORT_X_MAX) {
+		context->buildPlacing.showBuilding = TRUE;
+		UnitData* unitData = game_unit_get_data(context->buildPlacing.building);
+		context->buildPlacing.size = unitData->tileSize;
+
+		uint16_t x = game_spatial_get_board_x_position(context->xPosition, context->mouseStatus.x);
+		uint16_t y = game_spatial_get_board_y_position(context->yPosition, context->mouseStatus.y);
+
+		context->buildPlacing.canBuild = TRUE;
+		for(int xOff = 0; xOff < context->buildPlacing.size; xOff++) {
+			for(int yOff = 0; yOff < context->buildPlacing.size; yOff++) {
+				if(context->walkabilityGrid[x + xOff][y + yOff] == WALKABILITY_FREE) {
+					context->buildPlacing.placeResult[xOff][yOff] = TRUE;
+				}
+				else {
+					context->buildPlacing.placeResult[xOff][yOff] = FALSE;
+					context->buildPlacing.canBuild = FALSE;
+				}
+			}
+		}
+		context->buildPlacing.x = x;
+		context->buildPlacing.y = y;
+	}
+	else {
+		context->buildPlacing.showBuilding = FALSE;
+	}
+}
+
 void game_cmd_bar_handle_buttons(GameContext *context) {
 	// Clear all buttons
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
@@ -560,7 +596,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	}
 
 	if (context->selectedUnitCount == 0) {
-		context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+		game_cmd_bar_clear_build_placing(&context->buildPlacing);
 		return;
 	}
 
@@ -577,7 +613,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 					if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) unitCount[unit->type]++;
 				}
 				if (unit->isBuilding) {
-					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+					game_cmd_bar_clear_build_placing(&context->buildPlacing);
 					game_cmd_bar_handle_building_buttons(context, unit);
 				} else {
 					if (unit->type == UNIT_TYPE_WORKER) {
@@ -596,14 +632,14 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 								break;
 						}
 					} else {
-						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+						game_cmd_bar_clear_build_placing(&context->buildPlacing);
 						game_cmd_bar_add_common(context->cmdBarButtons);
 						context->cmdBarButtons[buttonIndex++] = DEFEND_CMD_BUTTON;
 					}
 				}
 			}
 		} else {
-			context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+			game_cmd_bar_clear_build_placing(&context->buildPlacing);
 			game_cmd_bar_add_common(context->cmdBarButtons);
 			uint8_t therAreNonWorkers = FALSE;
 			for (int i = 0; i < context->selectedUnitCount; i++) {
@@ -655,6 +691,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		if (buttonPress) game_snd_play_sound(GAME_SOUND_CLICK);
 		if (button->state == CMD_BAR_BTN_STATE_RELEASED) button->action(context, button->fixedParam);
 	}
+	game_cmd_bar_handle_placing(context);
 }
 
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {

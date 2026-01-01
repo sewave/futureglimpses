@@ -278,6 +278,42 @@ void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
 				render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
 										   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus,
 										   RND_FLAG_NORMAL);
+				if (context->buildPlacing.showBuilding) {
+					AnimationFramePosition framePos = game_animation_unit_get_frame_position(
+							context->buildPlacing.building, UNIT_STATE_IDLE, DIRECTION_NORTH, 0);
+					BITMAP *buildingSheet = game_gfx_get_unit_sheet(context->buildPlacing.building, UNIT_CONTROLLER_PLAYER);
+
+					int mouseGridXOff = context->buildPlacing.x - context->xPosition / TILE_SIZE;
+					int mouseGridYOff = context->buildPlacing.y - context->yPosition / TILE_SIZE;
+					int buildX = mouseGridXOff * TILE_SIZE + VIEWPORT_X_OFFSET - context->xPosition % TILE_SIZE;
+					int buildY = mouseGridYOff * TILE_SIZE + VIEWPORT_Y_OFFSET - context->yPosition % TILE_SIZE;
+
+					render_queue_submit_masked_partial(
+							renderQueue, OBJECTS_Z_ORDER + 900, buildingSheet,
+							framePos.x, framePos.y,
+							buildX, buildY,
+							framePos.width, framePos.height);
+					int quadX = buildX;
+					for(int xOff = 0; xOff < context->buildPlacing.size; xOff++, quadX += TILE_SIZE) {
+						int quadY = buildY;
+						for(int yOff = 0; yOff < context->buildPlacing.size; yOff++) {
+							// TODO semitransparent tiles
+							int color;
+							if(context->buildPlacing.placeResult[xOff][yOff]) {
+								color = PAL_COLOR_GREEN;
+							}
+							else {
+								color = PAL_COLOR_RED;
+							}
+							render_queue_submit_line(
+									renderQueue, OBJECTS_Z_ORDER + 901,
+									quadX, quadY,
+									quadX + TILE_SIZE, quadY + TILE_SIZE,
+									color);
+							quadY += TILE_SIZE;
+						}
+					}
+				}
 			} else {
 				// Arrow cursor
 				render_queue_submit_masked_partial(

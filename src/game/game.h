@@ -20,6 +20,7 @@
 #define BOARD_Y_MIN 0
 #define BOARD_X_MAX BOARD_WIDTH - 1
 #define BOARD_Y_MAX BOARD_HEIGHT - 1
+#define MAX_BUILDING_SIZE 3
 
 #define NO_TARGET_POSITION 65535
 #define NO_TARGET_ID 0
@@ -331,6 +332,11 @@ typedef enum {
 typedef struct {
 	BuildingStateEnum state;
 	UnitTypeEnum building;
+	uint8_t showBuilding;
+	uint8_t canBuild;
+	uint16_t x, y;
+	uint8_t size;
+	uint8_t placeResult[MAX_BUILDING_SIZE][MAX_BUILDING_SIZE];
 } BuildPlacing;
 
 typedef struct {
