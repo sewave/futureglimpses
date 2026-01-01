@@ -95,6 +95,20 @@ static void handle_build_place_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
 }
 
+static void handle_build_cancel_button(void *ctxVoid, uint8_t fixedDat) {
+	GameContext *context = (GameContext *) ctxVoid;
+	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+	if (unit) {
+		// Return used resources
+		UnitResourcesData* unitResources = game_unit_get_resources(unit->type);
+		for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
+			resource_add_amount(context, unit->controller, i, unitResources->used[i]);
+		}
+		// Destroy the building
+		game_unit_destroy(context, unit->id);
+	}
+}
+
 static void handle_action_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
 	switch (fixedDat) {
@@ -259,6 +273,21 @@ static const CommandBarButton CANCEL_PLACE_BUILDING_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton CANCEL_BUILDING_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
+		.isActive = TRUE,
+		.action = handle_build_cancel_button,
+		.hotkeyIndex = KEY_ESC,
+		.hotkey = "ESC",
+		// TODO change text? Cancel building?
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
+		.fixedParam = 0,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
+		.sheetOffsetY = 0,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
@@ -400,20 +429,25 @@ static const CommandBarButton TOWER_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
-	switch (building->type) {
-		case UNIT_TYPE_CITY_HALL:
-			context->cmdBarButtons[buttonIndex++] = TRAIN_WORKER_CMD_BUTTON;
-			break;
-		case UNIT_TYPE_BARRACKS:
-			context->cmdBarButtons[buttonIndex++] = TRAIN_SOLDIER_CMD_BUTTON;
-			if (unitCount[UNIT_TYPE_BLACKSMITH] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_ARCHER_CMD_BUTTON;
-			if (unitCount[UNIT_TYPE_STABLES] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_KNIGHT_CMD_BUTTON;
-			break;
-		case UNIT_TYPE_TOWER:
-			context->cmdBarButtons[buttonIndex++] = TRAIN_MAGE_CMD_BUTTON;
-			break;
-		default:
-			break;
+	if(building->state == BUILDING_STATE_COMPLETED) {
+		switch (building->type) {
+			case UNIT_TYPE_CITY_HALL:
+				context->cmdBarButtons[buttonIndex++] = TRAIN_WORKER_CMD_BUTTON;
+				break;
+			case UNIT_TYPE_BARRACKS:
+				context->cmdBarButtons[buttonIndex++] = TRAIN_SOLDIER_CMD_BUTTON;
+				if (unitCount[UNIT_TYPE_BLACKSMITH] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_ARCHER_CMD_BUTTON;
+				if (unitCount[UNIT_TYPE_STABLES] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_KNIGHT_CMD_BUTTON;
+				break;
+			case UNIT_TYPE_TOWER:
+				context->cmdBarButtons[buttonIndex++] = TRAIN_MAGE_CMD_BUTTON;
+				break;
+			default:
+				break;
+		}
+	}
+	else {
+		context->cmdBarButtons[buttonIndex++] = CANCEL_BUILDING_CMD_BUTTON;
 	}
 }
 

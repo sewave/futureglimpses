@@ -7,7 +7,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 	if (++unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
 		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
-														   game_spatial_filter_enemy_units, unit, foundUnits,
+														   game_spatial_filter_enemy_units_in_attack_range, unit, foundUnits,
 														   1);
 		// TODO Attack by priority?
 		if (foundUnitsCount > 0) {
@@ -170,14 +170,11 @@ static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
 	if (game_animation_finished(&unit->animationStatus)) game_unit_destroy(context, unit->id);
 }
 
-static void game_building_idle(GameContext *context, GameUnit *building) {
-	building_update(context, building);
-}
-
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	if (unit->isBuilding) {
 		if (unit->state == UNIT_STATE_DIE) game_unit_ai_die(context, unit);
-		if (unit->state == UNIT_STATE_IDLE) game_building_idle(context, unit);
+		if (unit->state == BUILDING_STATE_COMPLETED) building_update(context, unit);
+		if (unit->state == BUILDING_STATE_CONSTRUCT) building_update_construct(context, unit);
 	} else {
 		switch (unit->state) {
 			case UNIT_STATE_IDLE:

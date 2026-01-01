@@ -80,6 +80,7 @@ static UnitResourcesData* building_check_unit_resources(GameContext *context, Co
 		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
 			message_add_to_queue(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
 								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+            // TODO not valid sound
 			return NULL;
 		}
 	}
@@ -110,25 +111,35 @@ void building_handle_placing_input(GameContext *context) {
         
     }
     else {
-        if(context->mouseStatus.isLeftPressed) {
+        if(context->mouseStatus.isLeftPressed && context->buildPlacing.canBuild) {
             // Check resources
             UnitResourcesData* unitResources = building_check_unit_resources(context, UNIT_CONTROLLER_PLAYER,
                 context->buildPlacing.building);
-            if(!unitResources) return;
-            // Deduct resources or message and exit
-            for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
-                resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
-            }
-            // Spawn building
-            GameUnit* building = game_unit_spawn(context, context->buildPlacing.building, UNIT_CONTROLLER_PLAYER,
-                context->buildPlacing.x, context->buildPlacing.y);
-            if(building) {
-                context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
-                // TODO building placed sound
-                // TODO building in build state
-                // TODO send worker to build
+            if(unitResources) {
+                // Deduct resources or message and exit
+                for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
+                    resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
+                }
+                // Spawn building
+                GameUnit* building = game_unit_spawn(context, context->buildPlacing.building,
+                    UNIT_CONTROLLER_PLAYER, context->buildPlacing.x, context->buildPlacing.y);
+                if(building) {
+                    context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+                    // TODO building placed sound
+                    building->state = BUILDING_STATE_CONSTRUCT;
+                    building->health = 1;
+                    // TODO init construction counters
+
+                    // TODO send worker to build
+                    // For now the building will autobuild itself
+                }
             }
         }
     }
+}
+
+void building_update_construct(GameContext *context, GameUnit *building) {
+    // TODO add temporal autobuild
+    // TODO if construction timers are meet, go to new state, reload animation
 }
 
