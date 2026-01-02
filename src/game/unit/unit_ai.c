@@ -68,6 +68,19 @@ static void game_unit_ai_idle_worker(GameContext *context, GameUnit *worker) {
 		}
 		else {
 			// TODO harvesting
+
+			uint16_t foundUnitsCount = game_spatial_query_grid(context, worker->x, worker->y, worker->maxAttackRange,
+														   game_spatial_filter_enemy_units_in_attack_range, worker, foundUnits,
+														   1);
+			if (foundUnitsCount > 0) {
+				for (int i = 0; i < foundUnitsCount; i++) {
+					GameUnit *target = foundUnits[i];
+					if (!game_spatial_unit_in_range(worker, target, worker->minAttackRange)) {
+						game_unit_command_attack(worker, target, UNIT_STATE_IDLE);
+						return;
+					}
+				}
+			}
 			// We found nothing, so we change direction to make it "look" around
 			worker->direction = (worker->direction + 1) % DIRECTIONS_COUNT;
 			game_animation_unit_set(worker);
@@ -204,7 +217,8 @@ static void game_unit_ai_work_worker(GameContext *context, GameUnit *worker) {
 		UnitId targetBuildingId = worker->typed.workerData.targetConstruction;
 		if(targetBuildingId != NO_TARGET_ID) {
 			GameUnit* targetBuilding = game_unit_get_by_id(context, targetBuildingId);
-			if(targetBuilding && targetBuilding->state == BUILDING_STATE_CONSTRUCT) {
+			if(targetBuilding &&
+				(targetBuilding->state == BUILDING_STATE_CONSTRUCT || targetBuilding->health < targetBuilding->maxHealth)) {
 				game_animation_reset(&worker->animationStatus);
 			}
 			else {

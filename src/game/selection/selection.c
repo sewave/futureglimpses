@@ -91,6 +91,17 @@ static void game_selection_load_from_slot(GameContext *context, SelectionSlotInd
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
+static void handle_target_selection(GameContext *context, GameUnit *unit, GameUnit *targetUnit) {
+	if (unit->type == UNIT_TYPE_WORKER && targetUnit->isBuilding) {
+		unit->typed.workerData.targetConstruction = targetUnit->id;
+		if (game_spatial_unit_around_position(context, targetUnit->id, unit->x, unit->y)) {
+			game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			return;
+		}
+	}
+	game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+}
+
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
 	// TODO spawn mouse confirmation object
 	// Contextual action
@@ -130,28 +141,11 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
 						game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 					} else {
-						if(unit->type == UNIT_TYPE_WORKER) {
-							if(targetUnit->isBuilding) {
-								unit->typed.workerData.targetConstruction = targetUnit->id;
-								if(game_spatial_unit_around_position(context, targetUnit->id, unit->x, unit->y)) {
-									game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-								}
-								else {
-									game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-								}
-							}
-							else {
-								// TODO handle harvest
-								game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);	
-							}
-						}
-						else {
-							game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-						}
+						handle_target_selection(context, unit, targetUnit);
 					}
 				} else {
 					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-					if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					if (mouseState == MOUSE_CURSOR_TARGET) handle_target_selection(context, unit, targetUnit);
 				}
 			}
 		}

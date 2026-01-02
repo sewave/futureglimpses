@@ -71,14 +71,6 @@ static void handle_building_select_button(void *ctxVoid, uint8_t fixedDat) {
 	context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
 }
 
-static void handle_repair_button(void *ctxVoid, uint8_t fixedDat) {
-	// TODO handle repair button
-}
-
-static void handle_harvest_button(void *ctxVoid, uint8_t fixedDat) {
-	// TODO handle harvest button
-}
-
 static void handle_build_place_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
 	context->buildPlacing.state = CMD_BAR_BUILD_STATE_PLACE;
@@ -220,11 +212,11 @@ static const CommandBarButton BUILD_CMD_BUTTON = {
 static const CommandBarButton REPAIR_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
-		.action = handle_repair_button,
+		.action = handle_action_button,
 		.hotkeyIndex = KEY_R,
 		.hotkey = "R",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_REPAIR,
-		.fixedParam = 0,
+		.fixedParam = UNIT_STATE_MOVE,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 6,
 		.sheetOffsetY = 0,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
@@ -234,11 +226,11 @@ static const CommandBarButton REPAIR_CMD_BUTTON = {
 static const CommandBarButton HARVEST_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
-		.action = handle_harvest_button,
+		.action = handle_action_button,
 		.hotkeyIndex = KEY_H,
 		.hotkey = "H",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_HARVEST,
-		.fixedParam = 0,
+		.fixedParam = UNIT_STATE_MOVE,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 7,
 		.sheetOffsetY = 0,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
