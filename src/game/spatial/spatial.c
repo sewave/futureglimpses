@@ -83,3 +83,19 @@ uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPo
 uint16_t game_spatial_get_board_y_position(uint16_t cameraPosition, int cursorPosition) {
 	return clamp((cameraPosition + cursorPosition - VIEWPORT_Y_OFFSET) / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 }
+
+#define POSITION_SORROUNDINGS 8
+
+static Position sorroundings[POSITION_SORROUNDINGS] = {
+	{-1, -1}, {0, -1}, {1, -1},
+	{-1, 0}, {1, 0}, 
+	{-1, 1}, {0, 1}, {1, 1},
+};
+
+uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, uint16_t x, uint16_t y) {
+	for(int i = 0; i < POSITION_SORROUNDINGS; i++) {
+		Position offsets = sorroundings[i];
+		if(context->walkabilityGrid[x + offsets.x][y +  offsets.y] == unitId) return TRUE;
+	}
+	return FALSE;
+}

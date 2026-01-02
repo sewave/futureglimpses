@@ -424,7 +424,18 @@ void game_unit_work(GameContext *context, GameUnit *worker) {
 	if (worker->type != UNIT_TYPE_WORKER) return;
 	GameUnit *workTarget = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
 	if (workTarget && workTarget->isBuilding) {
-		building_add_construction(context, workTarget);
+		if(workTarget->state == BUILDING_STATE_COMPLETED) {
+			if(workTarget->health < workTarget->maxHealth) {
+				building_repair(context, workTarget);
+			}
+			else {
+				worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+				game_unit_command_idle(worker);
+			}
+		}
+		else {
+			building_add_construction(context, workTarget);
+		}
 	} else {
 		worker->typed.workerData.targetConstruction = NO_TARGET_ID;
 		game_unit_command_idle(worker);

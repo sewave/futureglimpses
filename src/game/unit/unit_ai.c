@@ -46,6 +46,35 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 	}
 }
 
+static void game_unit_ai_idle_worker(GameContext *context, GameUnit *worker) {
+	if (++worker->reactionTimeCounter >= worker->reactionTime) {
+		worker->reactionTimeCounter = 0;
+		// If we have a targetWorkingBuilding, we must approach it
+		if(worker->typed.workerData.targetConstruction != NO_TARGET_ID) {
+			GameUnit* targetBuilding = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
+			if(targetBuilding) {
+				// Check sorroundings, if we are touching building, start working
+				if(game_spatial_unit_around_position(context, targetBuilding->id, worker->x, worker->y)) {
+					game_unit_command_work(worker, targetBuilding, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				}
+				else {
+					game_unit_command_move(worker, targetBuilding, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				}
+			}
+			else {
+				// Building no longer exists, cancel
+				worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+			}
+		}
+		else {
+			// TODO harvesting
+			// We found nothing, so we change direction to make it "look" around
+			worker->direction = (worker->direction + 1) % DIRECTIONS_COUNT;
+			game_animation_unit_set(worker);
+		}
+	}
+}
+
 static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 	uint16_t targetX, targetY;
 	if (unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION) {
@@ -170,16 +199,40 @@ static void game_unit_ai_die(GameContext *context, GameUnit *unit) {
 	if (game_animation_finished(&unit->animationStatus)) game_unit_destroy(context, unit->id);
 }
 
+static void game_unit_ai_work_worker(GameContext *context, GameUnit *worker) {
+	if (game_animation_finished(&worker->animationStatus)) {
+		UnitId targetBuildingId = worker->typed.workerData.targetConstruction;
+		if(targetBuildingId != NO_TARGET_ID) {
+			GameUnit* targetBuilding = game_unit_get_by_id(context, targetBuildingId);
+			if(targetBuilding && targetBuilding->state == BUILDING_STATE_CONSTRUCT) {
+				game_animation_reset(&worker->animationStatus);
+			}
+			else {
+				// Building no longer exists or is completed, cancel
+				worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+				game_unit_command_idle(worker);
+			}
+		}
+		else {
+			// TODO harvest resources
+			game_unit_command_idle(worker);
+		}
+	}
+}
+
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	if (unit->isBuilding) {
 		if (unit->state == UNIT_STATE_DIE) game_unit_ai_die(context, unit);
 		if (unit->state == BUILDING_STATE_COMPLETED) building_update(context, unit);
-		// TODO temporal, will be replaced with worker action
-		if (unit->state == BUILDING_STATE_CONSTRUCT) building_add_construction(context, unit);
 	} else {
 		switch (unit->state) {
 			case UNIT_STATE_IDLE:
-				game_unit_ai_idle(context, unit);
+				if(unit->type == UNIT_TYPE_WORKER) {
+					game_unit_ai_idle_worker(context, unit);
+				}
+				else {
+					game_unit_ai_idle(context, unit);
+				}
 				break;
 			case UNIT_STATE_ATTACK:
 				game_unit_ai_attack(context, unit);
@@ -197,7 +250,7 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 				game_unit_ai_move_attack(context, unit);
 				break;
 			case UNIT_STATE_WORK:
-				// TODO retrieve resources
+				if(unit->type == UNIT_TYPE_WORKER) game_unit_ai_work_worker(context, unit);
 				break;
 			case UNIT_STATE_DIE:
 				game_unit_ai_die(context, unit);

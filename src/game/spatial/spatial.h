@@ -30,4 +30,6 @@ uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPo
 
 uint16_t game_spatial_get_board_y_position(uint16_t cameraPosition, int cursorPosition);
 
+uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, uint16_t x, uint16_t y);
+
 #endif /* SPATIAL_H */

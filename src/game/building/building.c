@@ -159,3 +159,16 @@ void building_add_construction(GameContext *context, GameUnit *building) {
 		game_animation_unit_set(building);
 	}
 }
+
+void building_repair(GameContext *context, GameUnit *building) {
+    // TODO repair building
+	/*BuildingData *buildingData = &building->typed.buildingData;
+	buildingData->currentTicks += WORKER_TIME;
+
+	uint32_t newAddedHealth = ((uint32_t) buildingData->currentTicks * building->maxHealth) / buildingData->targetTicks;
+	uint32_t healthInc = newAddedHealth - buildingData->addedHealth;
+    buildingData->addedHealth = newAddedHealth;
+	building->health += healthInc;
+    if(building->health > building->maxHealth) building->health = building->maxHealth;
+*/
+}

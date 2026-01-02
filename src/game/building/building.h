@@ -6,4 +6,6 @@ void building_add_to_train_queue(GameContext* context, GameUnit* building, UnitT
 void building_update(GameContext *context, GameUnit *building);
 void building_handle_placing_input(GameContext *context);
 void building_add_construction(GameContext *context, GameUnit *building);
+void building_repair(GameContext *context, GameUnit *building);
+
 #endif /* BUILDING_H */

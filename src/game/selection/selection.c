@@ -108,6 +108,7 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 			if (!unit) continue;
 			if (target == WALKABILITY_FREE) {
 				if (isContextual) {
+					// TODO handle harvesting
 					game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
 				} else {
 					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
@@ -129,7 +130,24 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
 						game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 					} else {
-						game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+						if(unit->type == UNIT_TYPE_WORKER) {
+							if(targetUnit->isBuilding) {
+								unit->typed.workerData.targetConstruction = targetUnit->id;
+								if(game_spatial_unit_around_position(context, targetUnit->id, unit->x, unit->y)) {
+									game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+								}
+								else {
+									game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+								}
+							}
+							else {
+								// TODO handle harvest
+								game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);	
+							}
+						}
+						else {
+							game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+						}
 					}
 				} else {
 					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
