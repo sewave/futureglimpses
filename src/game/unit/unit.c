@@ -337,12 +337,12 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		context->stats[controller].unitsTrained++;
 	}
 
-	if(unit->controller == UNIT_CONTROLLER_PLAYER) {
+	if(unit->controller == UNIT_CONTROLLER_PLAYER && !unit->isBuilding) {
 		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
 		SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
 	}
 
-	// TODO spawn sound? building places / unit ready
+	// TODO spawn sound? building placed / unit ready
 
 	return unit;
 }

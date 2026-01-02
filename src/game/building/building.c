@@ -4,6 +4,7 @@
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
 #define UNIT_NORMAL_RESOURCES 2
 #define SPIRAL_DIRECTIONS 4
+#define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 
 static Position spiralDirections[SPIRAL_DIRECTIONS] = {
 		{1, 0},
@@ -165,4 +166,8 @@ void building_complete(GameContext *context, GameUnit *building) {
     // Provide food on completition
     UnitData* data = game_unit_get_data(building->type);
     resource_add_food_provided(context, building->controller, data->resources.foodProvided);
+    if(building->controller == UNIT_CONTROLLER_PLAYER) {
+        message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + building->type),
+            SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+    }
 }
