@@ -388,7 +388,8 @@ void game_free_context(GameContext *context);
 GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue);
 
 #define LOGIC_RATE_BPS 35
-#define SEC_TO_FRAMES(secs) (uint16_t) (secs * LOGIC_RATE_BPS)
+#define GAME_SPEED 1
+#define SEC_TO_FRAMES(secs) 1 + (uint16_t) (((float)secs * LOGIC_RATE_BPS) / GAME_SPEED)
 #define MAX_CATCHUP_TICKS 5
 // First MB is special so we check for 7 more
 #define PROGRAM_REQUIRED_RAM_MB 7
