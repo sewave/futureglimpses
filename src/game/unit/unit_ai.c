@@ -108,6 +108,14 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 		return;
 	}
 
+	if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.targetConstruction != NO_TARGET_ID) {
+		GameUnit* workUnit = game_unit_get_by_id(context, unit->typed.workerData.targetConstruction);
+		if(workUnit && game_spatial_unit_around_position(context, workUnit->id, unit->x, unit->y)) {
+			game_unit_command_work(unit, workUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			return;
+		}
+	}
+
 	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE && game_spatial_target_in_range(unit, targetX, targetY, 1)) {
 		game_unit_command_idle(unit);
 		return;
