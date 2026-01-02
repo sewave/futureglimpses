@@ -124,14 +124,6 @@ void building_handle_placing_input(GameContext *context) {
 						resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
 					}
 					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
-					// TODO building placed sound
-					building->state = BUILDING_STATE_CONSTRUCT;
-					building->health = 1;
-					BuildingData *buildingData = &building->typed.buildingData;
-					buildingData->addedHealth = building->health;
-					buildingData->currentTicks = 0;
-					UnitResourcesData *unitResources = game_unit_get_resources(building->type);
-					buildingData->targetTicks = unitResources->time;
 					// Send worker to build it
 					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
                     if(worker) {
@@ -155,8 +147,7 @@ void building_add_construction(GameContext *context, GameUnit *building) {
     if(building->health > building->maxHealth) building->health = building->maxHealth;
 
 	if (building->typed.buildingData.currentTicks >= building->typed.buildingData.targetTicks) {
-		building->state = BUILDING_STATE_COMPLETED;
-		game_animation_unit_set(building);
+        building_complete(context, building);
 	}
 }
 
@@ -166,4 +157,12 @@ void building_repair(GameContext *context, GameUnit *building) {
     uint32_t currentTicks = (((uint32_t) building->health * targetTicks) / building->maxHealth) + WORKER_TIME;
 	building->health = (currentTicks * building->maxHealth) / targetTicks;
     if(building->health > building->maxHealth) building->health = building->maxHealth;
+}
+
+void building_complete(GameContext *context, GameUnit *building) {
+    building->state = BUILDING_STATE_COMPLETED;
+    game_animation_unit_set(building);
+    // Provide food on completition
+    UnitData* data = game_unit_get_data(building->type);
+    resource_add_food_provided(context, building->controller, data->resources.foodProvided);
 }

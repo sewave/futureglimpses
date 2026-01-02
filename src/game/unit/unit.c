@@ -21,7 +21,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
 				.moveTime = SEC_TO_FRAMES(0.5),
-				{.used = {400, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_SOLDIER,
@@ -36,7 +36,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.4),
-				{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_ARCHER,
@@ -51,7 +51,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.45),
-				{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_KNIGHT,
@@ -66,7 +66,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
-				{.used = {800, 100, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {800, 100, 1}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -81,7 +81,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.8),
-				{.used = {900, 300, 1}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {900, 300, 1}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
@@ -96,7 +96,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 5},
+				{.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(85), .foodProvided = 5},
 		},
 		{
 				.type = UNIT_TYPE_FARM,
@@ -111,7 +111,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(15), .foodProvided = 4},
+				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(33), .foodProvided = 4},
 		},
 		{
 				.type = UNIT_TYPE_BARRACKS,
@@ -126,7 +126,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
+				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -141,7 +141,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_STABLES,
@@ -156,7 +156,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_TOWER,
@@ -171,7 +171,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
 		},
 };
 
@@ -269,8 +269,6 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->y = y;
 	unit->prevX = unit->x;
 	unit->prevY = unit->y;
-	unit->state = UNIT_STATE_IDLE;
-	unit->nextState = UNIT_STATE_IDLE;
 	unit->direction = DIRECTION_SOUTH;
 	unit->reactionTimeCounter = 0;
 	unit->moveTimeCounter = 0;
@@ -290,7 +288,6 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->minAttackRange = data->minAttackRange;
 	unit->maxAttackRange = data->maxAttackRange;
 	unit->sightRange = data->sightRange;
-	unit->health = data->health;
 	unit->maxHealth = data->maxHealth;
 	unit->tileSize = data->tileSize;
 	unit->minDamage = data->minDamage;
@@ -298,10 +295,29 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->reactionTime = data->reactionTime;
 	unit->moveTime = data->moveTime;
 
-	if(unit->isBuilding) {
-		unit->typed.buildingData.isTraining = FALSE;
-		unit->typed.buildingData.queueNextIndex = 0;
+	if(unit->type == UNIT_TYPE_WORKER) {
+		unit->typed.workerData.targetConstruction = NO_TARGET_ID;
 	}
+
+	if(unit->isBuilding) {
+		unit->health = 1;
+		unit->state = BUILDING_STATE_CONSTRUCT;
+		unit->nextState = BUILDING_STATE_CONSTRUCT;
+
+		BuildingData *buildingData = &unit->typed.buildingData;
+		buildingData->isTraining = FALSE;
+		buildingData->queueNextIndex = 0;
+		buildingData->addedHealth = unit->health;
+		buildingData->currentTicks = 0;
+		buildingData->targetTicks = data->resources.time;
+	}
+	else {
+		unit->health = data->health;
+		unit->state = UNIT_STATE_IDLE;
+		unit->nextState = UNIT_STATE_IDLE;
+	}
+
+	resource_add_food_usage(context, unit->controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD]);
 
 	game_animation_unit_set(unit);
 	game_gfx_set_sprite_sheet(unit);
@@ -321,12 +337,12 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		context->stats[controller].unitsTrained++;
 	}
 
-	resource_add_food(context, controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD], data->resources.foodProvided);
-
 	if(unit->controller == UNIT_CONTROLLER_PLAYER) {
 		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
 		SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
 	}
+
+	// TODO spawn sound? building places / unit ready
 
 	return unit;
 }

@@ -7,5 +7,6 @@ void building_update(GameContext *context, GameUnit *building);
 void building_handle_placing_input(GameContext *context);
 void building_add_construction(GameContext *context, GameUnit *building);
 void building_repair(GameContext *context, GameUnit *building);
+void building_complete(GameContext *context, GameUnit *building);
 
 #endif /* BUILDING_H */

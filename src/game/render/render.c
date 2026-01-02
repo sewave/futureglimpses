@@ -37,9 +37,9 @@ static char *getStateLetter(UnitStateEnum state) {
 		case UNIT_STATE_MOVE:
 			return "M";
 		case UNIT_STATE_MOVE_ANIM:
-			return "a";
-		case UNIT_STATE_MOVE_ATTACK:
 			return "m";
+		case UNIT_STATE_MOVE_ATTACK:
+			return "a";
 		case UNIT_STATE_WORK:
 			return "W";
 		case UNIT_STATE_DIE:
@@ -125,14 +125,20 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			}
 
 			int rectColor = PAL_COLOR_TRANS;
+			int rectZ = BACKGROUND_Z_ORDER + 100;
 
 			if (unit->isSelected && !unit->blinkTime) rectColor = PAL_COLOR_GREEN;
 			if (unit->blinkTime && unit->blinkTime % BLINK_MOD < BLINK_FRAMES) {
-				rectColor = (unit->controller == UNIT_CONTROLLER_AI) ? PAL_COLOR_RED : PAL_COLOR_GREEN;
+				if (unit->controller == UNIT_CONTROLLER_AI) {
+					rectColor = PAL_COLOR_RED;
+					rectZ++;
+				} else {
+					rectColor = PAL_COLOR_GREEN;
+				}
 			}
 			if (rectColor != PAL_COLOR_TRANS) {
 				render_queue_submit_rect(renderQueue,
-										 BACKGROUND_Z_ORDER + 100,
+										 rectZ,
 										 unitTileXCamera + SELECT_CUBE_OFF, unitTileYCamera + SELECT_CUBE_OFF,
 										 unitTileXCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 2 * SELECT_CUBE_OFF,
 										 unitTileYCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 2 * SELECT_CUBE_OFF,
@@ -246,7 +252,8 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 			}
 		}
 		snprintf(activeText, sizeof(activeText), "T:%d ^004B:%d ^005R:%d", context->activeUnitCount, blue, red);
-		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText, 220, 1, PAL_COLOR_WHITE, -1);
+		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText,
+			220, 2, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 
 	resource_render_queue_submit_ui(context, renderQueue);

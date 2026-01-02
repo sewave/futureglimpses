@@ -67,11 +67,16 @@ static void resource_update_available_food(GameContext *context, ControllerEnum 
 	resource_set_amount(context, controller, RESOURCE_TYPE_AVAILABLE_FOOD, availableFood);
 }
 
-void resource_add_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided) {
-	resource_add_amount(context, controller, RESOURCE_TYPE_MAX_FOOD, foodProvided);
+void resource_add_food_usage(GameContext *context, ControllerEnum controller, uint8_t foodUsage) {
 	resource_add_amount(context, controller, RESOURCE_TYPE_USED_FOOD, foodUsage);
 	resource_update_available_food(context, controller);
 }
+
+void resource_add_food_provided(GameContext *context, ControllerEnum controller, uint8_t foodProvided) {
+	resource_add_amount(context, controller, RESOURCE_TYPE_MAX_FOOD, foodProvided);
+	resource_update_available_food(context, controller);
+}
+
 void resource_deduct_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided) {
 	resource_deduct_amount(context, controller, RESOURCE_TYPE_MAX_FOOD, foodProvided);
 	resource_deduct_amount(context, controller, RESOURCE_TYPE_USED_FOOD, foodUsage);

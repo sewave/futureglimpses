@@ -643,7 +643,10 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 				GameUnit **activeUnits = context->activeUnits;
 				for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 					GameUnit *unit = *activeUnits;
-					if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) unitCount[unit->type]++;
+					if (unit && unit->controller == UNIT_CONTROLLER_PLAYER && 
+						(!unit->isBuilding || unit->state == BUILDING_STATE_COMPLETED)) {
+						unitCount[unit->type]++;
+					}
 				}
 				if (unit->isBuilding) {
 					game_cmd_bar_clear_build_placing(&context->buildPlacing);
