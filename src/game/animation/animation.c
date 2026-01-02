@@ -97,7 +97,7 @@ static AnimationData WORKER_WORK_ANIMATION_DATA = {
             {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
         },
 		.lastFrameIndex = 3,
-		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_IRON_HIT, .fireTime = SEC_TO_FRAMES(0.7)},
+		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_WORK, .fireTime = SEC_TO_FRAMES(0.7)},
                     {.type = EVENT_TYPE_WORK, .data = 0, .fireTime = WORKER_TIME}},
 		.numEvents = 2,
 };
