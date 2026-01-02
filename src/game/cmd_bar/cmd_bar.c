@@ -36,7 +36,7 @@
 #define RESOURCE_LOCATIONS_TEXT_X_OFF 10
 #define BUILDING_RESOURCE_X_OFF 28
 
-static int RESOURCE_LOCATIONS[UNIT_RESOURCES][2] = {
+static Position RESOURCE_LOCATIONS[UNIT_RESOURCES] = {
 		{220, 190},
 		{258, 190},
 		{295, 190}};
@@ -575,14 +575,15 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 			totalResources = BUILDING_RESOURCES;
 		}
 		for (int i = 0; i < totalResources; i++) {
+			Position pos = RESOURCE_LOCATIONS[i];
 			render_queue_submit_sprite(
-					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), RESOURCE_LOCATIONS[i][0] + xOff,
-					RESOURCE_LOCATIONS[i][1], RND_FLAG_NORMAL);
+					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), pos.x + xOff,
+					pos.y, RND_FLAG_NORMAL);
 			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMER);
 			render_queue_submit_text(renderQueue, RESOURCES_Z,
 									 font, resourceBuffers[i],
-									 RESOURCE_LOCATIONS[i][0] + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,
-									 RESOURCE_LOCATIONS[i][1], PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+									 pos.x + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,
+									 pos.y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 		}
 	}
 }
