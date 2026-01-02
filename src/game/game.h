@@ -196,12 +196,17 @@ typedef uint32_t UnitId;
 #define MAX_BUILDING_QUEUE 8
 typedef struct {
 	uint8_t isTraining;
-	uint16_t currentTrainTicks;
-	uint16_t targetTrainTicks;
 	UnitTypeEnum trainUnit;
 	uint8_t queueNextIndex;
 	UnitTypeEnum queue[MAX_BUILDING_QUEUE];
+	uint16_t currentTicks;
+	uint16_t targetTicks;
+	uint32_t addedHealth;
 } BuildingData;
+
+typedef struct {
+	UnitId targetConstruction;
+} WorkerData;
 
 typedef struct {
 	UnitId id;
@@ -233,6 +238,7 @@ typedef struct {
 	AnimationStatus animationStatus;
 	union {
 		BuildingData buildingData;
+		WorkerData workerData;
 	} typed;
 } GameUnit;
 
@@ -402,5 +408,6 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
+#define WORKER_TIME SEC_TO_FRAMES(0.8)
 
 #endif /* GAME_H */

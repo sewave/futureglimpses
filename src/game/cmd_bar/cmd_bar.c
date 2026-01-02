@@ -514,7 +514,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 			BuildingData *buildingData = &unit->typed.buildingData;
 			if (buildingData->isTraining) {
 				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
-									   buildingData->currentTrainTicks, buildingData->targetTrainTicks,
+									   buildingData->currentTicks, buildingData->targetTicks,
 									   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
 									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 			}
@@ -522,6 +522,13 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 				snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
 				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 										 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			}
+			// If building is in construction, show progress
+			if(unit->state == BUILDING_STATE_CONSTRUCT) {
+				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+									   buildingData->currentTicks, buildingData->targetTicks,
+									   text_get_by_id(GAME_TEXT_ID_BUILDING_COMPLETATION),
+									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 			}
 		}
 

@@ -7,8 +7,6 @@
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 
-
-
 static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 		{
 				.type = UNIT_TYPE_WORKER,
@@ -113,7 +111,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 4},
+				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(15), .foodProvided = 4},
 		},
 		{
 				.type = UNIT_TYPE_BARRACKS,
@@ -128,7 +126,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(1), .foodProvided = 0},
+				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -420,4 +418,16 @@ UnitResourcesData* game_unit_get_resources(UnitTypeEnum type) {
 
 UnitData* game_unit_get_data(UnitTypeEnum type) {
 	return &unitsData[type];
+}
+
+void game_unit_work(GameContext *context, GameUnit *worker) {
+	if (worker->type != UNIT_TYPE_WORKER) return;
+	GameUnit *workTarget = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
+	if (workTarget && workTarget->isBuilding) {
+		building_add_construction(context, workTarget);
+	} else {
+		worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+		game_unit_command_idle(worker);
+	}
+	// TODO if we are harvesting
 }

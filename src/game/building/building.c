@@ -43,24 +43,23 @@ static void building_start_training(GameUnit *building, UnitTypeEnum unitType) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	buildingData->isTraining = TRUE;
 	buildingData->trainUnit = unitType;
-	buildingData->currentTrainTicks = 0;
-	buildingData->targetTrainTicks = game_unit_get_resources(unitType)->time;
+	buildingData->currentTicks = 0;
+	buildingData->targetTicks = game_unit_get_resources(unitType)->time;
 }
 
 void building_update(GameContext *context, GameUnit *building) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	if (buildingData->isTraining) {
-		buildingData->currentTrainTicks++;
-		if (buildingData->currentTrainTicks >= buildingData->targetTrainTicks) {
-            if(resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
-                    game_unit_get_resources(buildingData->trainUnit)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
-                Position spawn = game_building_get_spawn_position(context, building);
-			    game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
+		buildingData->currentTicks++;
+		if (buildingData->currentTicks >= buildingData->targetTicks) {
+			if (resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
+									game_unit_get_resources(buildingData->trainUnit)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
+				Position spawn = game_building_get_spawn_position(context, building);
+				game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
 			    buildingData->isTraining = FALSE;
-            }
-            else {
-                buildingData->currentTrainTicks--;
-            }
+			} else {
+				buildingData->currentTicks--;
+			}
 		}
 	}
     else {
@@ -115,31 +114,48 @@ void building_handle_placing_input(GameContext *context) {
             // Check resources
             UnitResourcesData* unitResources = building_check_unit_resources(context, UNIT_CONTROLLER_PLAYER,
                 context->buildPlacing.building);
-            if(unitResources) {
-                // Deduct resources or message and exit
-                for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
-                    resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
-                }
-                // Spawn building
-                GameUnit* building = game_unit_spawn(context, context->buildPlacing.building,
-                    UNIT_CONTROLLER_PLAYER, context->buildPlacing.x, context->buildPlacing.y);
-                if(building) {
-                    context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
-                    // TODO building placed sound
-                    building->state = BUILDING_STATE_CONSTRUCT;
-                    building->health = 1;
-                    // TODO init construction counters
-
-                    // TODO send worker to build
-                    // For now the building will autobuild itself
-                }
-            }
-        }
+			if (unitResources) {
+				// Spawn building
+				GameUnit *building = game_unit_spawn(context, context->buildPlacing.building,
+													 UNIT_CONTROLLER_PLAYER, context->buildPlacing.x, context->buildPlacing.y);
+				if (building) {
+					// Deduct resources
+					for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
+						resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
+					}
+					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+					// TODO building placed sound
+					building->state = BUILDING_STATE_CONSTRUCT;
+					building->health = 1;
+					BuildingData *buildingData = &building->typed.buildingData;
+					buildingData->addedHealth = building->health;
+					buildingData->currentTicks = 0;
+					UnitResourcesData *unitResources = game_unit_get_resources(building->type);
+					buildingData->targetTicks = unitResources->time;
+					// Send worker to build it
+					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
+                    if(worker) {
+                        worker->typed.workerData.targetConstruction = building->id;
+                        game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
+                    }
+				}
+			}
+		}
     }
 }
 
-void building_update_construct(GameContext *context, GameUnit *building) {
-    // TODO add temporal autobuild
-    // TODO if construction timers are meet, go to new state, reload animation
-}
+void building_add_construction(GameContext *context, GameUnit *building) {
+	BuildingData *buildingData = &building->typed.buildingData;
+	buildingData->currentTicks += WORKER_TIME;
 
+	uint32_t newAddedHealth = ((uint32_t) buildingData->currentTicks * building->maxHealth) / buildingData->targetTicks;
+	uint32_t healthInc = newAddedHealth - buildingData->addedHealth;
+    buildingData->addedHealth = newAddedHealth;
+	building->health += healthInc;
+    if(building->health > building->maxHealth) building->health = building->maxHealth;
+
+	if (building->typed.buildingData.currentTicks >= building->typed.buildingData.targetTicks) {
+		building->state = BUILDING_STATE_COMPLETED;
+		game_animation_unit_set(building);
+	}
+}

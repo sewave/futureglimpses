@@ -20,8 +20,11 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			GameUnit *fireballTarget = game_unit_get_by_id(context, unit->targetId);
 			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x, unit->y, unit, fireballTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
+		case EVENT_TYPE_WORK:
+			game_unit_work(context, unit);
+			break;
 		case EVENT_TYPE_AREA_DAMAGE:
-			// Not usable for units
+			// Not used by units
 		break;
 	}
 }
@@ -48,6 +51,7 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 			break;
 		case EVENT_TYPE_SPAWN_ARROW:
 		case EVENT_TYPE_SPAWN_FIREBALL:
+		case EVENT_TYPE_WORK:
 			// Do nothing
 			break;
 	}

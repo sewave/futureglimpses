@@ -49,3 +49,4 @@ Stables built.
 Tower built.
 Queue full.
 In queue: %d
+Completed

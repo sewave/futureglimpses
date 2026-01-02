@@ -174,7 +174,8 @@ void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	if (unit->isBuilding) {
 		if (unit->state == UNIT_STATE_DIE) game_unit_ai_die(context, unit);
 		if (unit->state == BUILDING_STATE_COMPLETED) building_update(context, unit);
-		if (unit->state == BUILDING_STATE_CONSTRUCT) building_update_construct(context, unit);
+		// TODO temporal, will be replaced with worker action
+		if (unit->state == BUILDING_STATE_CONSTRUCT) building_add_construction(context, unit);
 	} else {
 		switch (unit->state) {
 			case UNIT_STATE_IDLE:

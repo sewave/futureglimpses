@@ -49,3 +49,4 @@ Establos construidos.
 Torre construida.
 Cola llena.
 En cola: %d
+Completado

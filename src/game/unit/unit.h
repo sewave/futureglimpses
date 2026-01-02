@@ -33,5 +33,6 @@ void game_unit_area_damage(GameContext* context, Object* object);
 void game_unit_process_all(GameContext *context);
 UnitResourcesData* game_unit_get_resources(UnitTypeEnum type);
 UnitData* game_unit_get_data(UnitTypeEnum type);
+void game_unit_work(GameContext* context, GameUnit* worker);
 
 #endif /* UNIT_H */

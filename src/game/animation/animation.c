@@ -88,6 +88,20 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 		.numEvents = 2,
 };
 
+static AnimationData WORKER_WORK_ANIMATION_DATA = {
+		.type = ANIMATION_TYPE_ONCE,
+		.frames = {
+            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
+            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 2},
+            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
+        },
+		.lastFrameIndex = 3,
+		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_IRON_HIT, .fireTime = SEC_TO_FRAMES(0.7)},
+                    {.type = EVENT_TYPE_WORK, .data = 0, .fireTime = WORKER_TIME}},
+		.numEvents = 2,
+};
+
 static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
@@ -150,6 +164,11 @@ static const AnimationPropsData WORKER_MOVE = {
 static const AnimationPropsData WORKER_ATTACK = {
     .props = ATTACK_PROPERTIES,
     .data = &WORKER_ATTACK_ANIMATION_DATA,
+};
+
+static const AnimationPropsData WORKER_WORK = {
+    .props = ATTACK_PROPERTIES,
+    .data = &WORKER_WORK_ANIMATION_DATA,
 };
 
 static const AnimationPropsData ARCHER_ATTACK = {
@@ -234,7 +253,7 @@ static const AnimationPropsData S_BUILD_DESTROY = {
 // UNIT_STATE_IDLE, UNIT_STATE_ATTACK, UNIT_STATE_DEFEND, UNIT_STATE_MOVE, UNIT_STATE_MOVE_ANIM, UNIT_STATE_MOVE_ATTACK, UNIT_STATE_WORK
 static AnimationPropsData UNIT_ANIMATIONS[UNIT_TYPE_NUMBER][UNIT_STATES_COUNT] = {
         // WORKER
-		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
+		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_WORK, COMMON_DIE},
         // SOLDIER
 		{COMMON_IDLE, WORKER_ATTACK, COMMON_IDLE, WORKER_MOVE, WORKER_MOVE, WORKER_MOVE, WORKER_ATTACK, COMMON_DIE},
         // ARCHER
