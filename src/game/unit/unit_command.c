@@ -34,6 +34,15 @@ void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, i
     if(target) unit->targetId = target->id; else unit->targetId = NO_TARGET_ID;
     unit->targetX = targetX;
     unit->targetY = targetY;
+    if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.targetConstruction != NO_TARGET_ID) {
+        if(target) {
+            if(target->id != unit->typed.workerData.targetConstruction) {
+                unit->typed.workerData.targetConstruction = NO_TARGET_ID;
+            }
+        } else {
+            unit->typed.workerData.targetConstruction = NO_TARGET_ID;
+        }
+    }
     // TODO do the pathfinding?
     game_unit_set_state_or_next(unit, UNIT_STATE_MOVE);
 }
