@@ -65,7 +65,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO this file path should be in context, selected in a filebrowser
 	MapData *map = game_map_load_data("assets/map/test.map");
 
-	// Load the map here (for now we just fill it with random)
+	// Load the map here
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
 			uint16_t tile = map->tile_layers->tiles[x + y * BOARD_WIDTH];

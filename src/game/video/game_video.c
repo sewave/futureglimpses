@@ -3,6 +3,9 @@
 #include "game_video.h"
 
 #define FIRST_COLORS 32
+#define LAST_COLORS 8
+#define TOTAL_COLORS 256
+#define LAST_COLORS_INDEX TOTAL_COLORS - LAST_COLORS
 
 static RGB firstColors[FIRST_COLORS] = {
     // TRANSPARENT
@@ -71,17 +74,32 @@ static RGB firstColors[FIRST_COLORS] = {
     {.r = 0, .g = 0, .b = 0, .filler = 0},
 };
 
-// TODO last colors
+// Last colors
+static RGB lastColors[LAST_COLORS] = {
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // UNUSED
+    {.r = 0, .g = 0, .b = 0, .filler = 0},
+};
 
 InitializationStatusEnum game_video_load_universal_pal() {
 	PALETTE universalPal;
-	if(video_load_raw_palette("assets/pal/game.pal", universalPal) != PROGRAM_OK) {
-		return PROGRAM_ERROR;
-	}
+	if(video_load_raw_palette("assets/pal/game.pal", universalPal) != PROGRAM_OK) return PROGRAM_ERROR;
 	// Load fixed palette indexes for ui
-    for(int i = 0; i < FIRST_COLORS; i++) {
-        universalPal[i] = firstColors[i];
-    }
+    for(int i = 0; i < FIRST_COLORS; i++) universalPal[i] = firstColors[i];
+    for(int i = LAST_COLORS_INDEX; i < LAST_COLORS; i++) universalPal[i + LAST_COLORS_INDEX] = lastColors[i];
 
 	set_palette(universalPal);
 	
