@@ -96,13 +96,9 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			int unitTileYCamera = unitWorldY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
-			render_queue_submit_masked_partial(renderQueue, SPRITES_Z_ORDER + unit->y, animationStatus->sheet,
-											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
-											   prop->yOffset,
-											   unitXCamera,
-											   unitYCamera,
-											   prop->width,
-											   prop->height);
+			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + unit->y,
+											animationStatus->sheet->frames[prop->startFrame + animationStatus->frame],
+											unitXCamera, unitYCamera);
 			// Some debug stuff
 			if (context->isDebugEnabled) {
 				render_queue_submit_text(
@@ -198,13 +194,9 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 			int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
-			render_queue_submit_masked_partial(renderQueue, OBJECTS_Z_ORDER + object->currentY / TILE_SIZE, animationStatus->sheet,
-											   animationStatus->animation.data->frames[animationStatus->frame].xOffset,
-											   prop->yOffset,
-											   unitXCamera,
-											   unitYCamera,
-											   prop->width,
-											   prop->height);
+			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + object->currentY / TILE_SIZE,
+											animationStatus->sheet->frames[prop->startFrame + animationStatus->frame],
+											unitXCamera, unitYCamera);
 		}
 	}
 }
@@ -286,20 +278,18 @@ void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
 										   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus,
 										   RND_FLAG_NORMAL);
 				if (context->buildPlacing.showBuilding) {
-					AnimationFramePosition framePos = game_animation_unit_get_frame_position(
+					uint16_t framePos = game_animation_unit_get_frame_position(
 							context->buildPlacing.building, UNIT_STATE_IDLE, DIRECTION_NORTH, 0);
-					BITMAP *buildingSheet = game_gfx_get_unit_sheet(context->buildPlacing.building, UNIT_CONTROLLER_PLAYER);
+					SpriteSheet *buildingSheet = game_gfx_get_unit_sheet(context->buildPlacing.building, UNIT_CONTROLLER_PLAYER);
 
 					int mouseGridXOff = context->buildPlacing.x - context->xPosition / TILE_SIZE;
 					int mouseGridYOff = context->buildPlacing.y - context->yPosition / TILE_SIZE;
 					int buildX = mouseGridXOff * TILE_SIZE + VIEWPORT_X_OFFSET - context->xPosition % TILE_SIZE;
 					int buildY = mouseGridYOff * TILE_SIZE + VIEWPORT_Y_OFFSET - context->yPosition % TILE_SIZE;
 
-					render_queue_submit_masked_partial(
-							renderQueue, OBJECTS_Z_ORDER + 900, buildingSheet,
-							framePos.x, framePos.y,
-							buildX, buildY,
-							framePos.width, framePos.height);
+					render_queue_submit_rle_sprite(
+							renderQueue, OBJECTS_Z_ORDER + 900, buildingSheet->frames[framePos],
+							buildX, buildY);
 					int quadX = buildX;
 					BITMAP* buildOkBitmap = game_gfx_get_overtile(GAME_OVERTILE_OK);
 					BITMAP* buildKoBitmap = game_gfx_get_overtile(GAME_OVERTILE_KO);

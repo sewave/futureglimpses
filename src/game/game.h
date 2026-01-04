@@ -147,8 +147,7 @@ typedef enum {
 #define MAX_EVENTS 4
 
 typedef struct {
-	uint16_t yOffset;
-	uint16_t width, height;
+	uint16_t startFrame;
 	uint8_t xRepos, yRepos;
 } AnimationProperties;
 
@@ -165,7 +164,6 @@ typedef struct {
 
 typedef struct {
 	uint16_t duration;
-	uint16_t xOffset;
 } AnimationFrame;
 
 typedef struct {
@@ -182,7 +180,12 @@ typedef struct {
 } Animation;
 
 typedef struct {
-	BITMAP *sheet;
+	RLE_SPRITE **frames;
+	uint16_t numFrames;
+} SpriteSheet;
+
+typedef struct {
+	SpriteSheet *sheet;
 	Animation animation;
 	uint16_t frameTicks;
 	uint16_t totalTicks;

@@ -12,9 +12,9 @@
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
 
-static BITMAP *spriteSheetsBlue[UNIT_TYPE_NUMBER];
-static BITMAP *spriteSheetsRed[UNIT_TYPE_NUMBER];
-static BITMAP *spriteSheetsObject[OBJ_TYPE_NUMBER];
+static SpriteSheet spriteSheetsBlue[UNIT_TYPE_NUMBER];
+static SpriteSheet spriteSheetsRed[UNIT_TYPE_NUMBER];
+static SpriteSheet spriteSheetsObject[OBJ_TYPE_NUMBER];
 static BITMAP *frame;
 static BITMAP *cmdBarButtons;
 static BITMAP *icons[GAME_ICON_COUNT];
@@ -58,28 +58,64 @@ static const char *objectSheetFilenames[OBJ_TYPE_NUMBER] = {
 		"assets/gfx/object/arrow.pcx",
 };
 
-static uint8_t game_gfx_load_sprite_sheet(uchar index, BITMAP *spriteSheets[], const char *spriteSheetFilenames[]) {
-	if (index >= UNIT_TYPE_NUMBER) return FALSE;
-	if (spriteSheets[index] != NULL) destroy_bitmap(spriteSheets[index]);
-	BITMAP *bitmap = load_bitmap(spriteSheetFilenames[index], NULL);
-	if (!bitmap) return FALSE;
-	spriteSheets[index] = bitmap;
+typedef struct {
+	uint16_t width, height;
+} SquareSize;
+
+static const SquareSize unitSquares[UNIT_TYPE_NUMBER] = {
+		// Mobile units
+		{32, 32}, {32, 32}, {32, 32}, {32, 32}, {32, 32},
+		// Buildings
+		{48, 48}, {32, 32}, {48, 48}, {32, 32}, {48, 48}, {32, 32},		
+};
+
+static const SquareSize objectSquares[OBJ_TYPE_NUMBER] = {
+		{16, 16}, {16, 16}, {48, 48}, {16, 16},
+};
+
+static void game_gfx_destroy_sheet(SpriteSheet * spriteSheet) {
+	if (spriteSheet->numFrames > 0 && spriteSheet->frames != NULL) {
+		for(int i = 0; i < spriteSheet->numFrames; i++) destroy_rle_sprite(spriteSheet->frames[i]);
+		free(spriteSheet->frames);
+		spriteSheet->numFrames = 0;
+	}
+}
+
+static uint8_t game_gfx_load_sprite_sheet(SpriteSheet * spriteSheet, const char *spriteSheetFilename, SquareSize frameSize) {
+	game_gfx_destroy_sheet(spriteSheet);
+	BITMAP *framesBitmap = load_bitmap(spriteSheetFilename, NULL);
+	if (!framesBitmap) return FALSE;
+	int width = framesBitmap->w / frameSize.width;
+	int height = framesBitmap->h / frameSize.height;
+	spriteSheet->numFrames = width * height;
+	spriteSheet->frames = (RLE_SPRITE **) calloc(spriteSheet->numFrames, sizeof(RLE_SPRITE*));
+
+	int frame = 0;
+	for(int y = 0; y < height; y++) {
+		for(int x = 0; x < width; x++) {
+			BITMAP* frameBitmap = create_bitmap(frameSize.width, frameSize.height);
+			blit(framesBitmap, frameBitmap, x * frameSize.width, y * frameSize.height, 0, 0, frameSize.width, frameSize.height);
+			spriteSheet->frames[frame] = get_rle_sprite(frameBitmap);
+			destroy_bitmap(frameBitmap);
+			frame++;
+		}
+	}
 	return TRUE;
 }
 
 InitializationStatusEnum game_gfx_load_all() {
 	printf("Loading units gfx [");
 	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
-		if (!game_gfx_load_sprite_sheet(i, spriteSheetsBlue, spriteSheetFilenamesBlue)) return INITIALIZATION_ERROR;
+		if (!game_gfx_load_sprite_sheet(&spriteSheetsBlue[i], spriteSheetFilenamesBlue[i], unitSquares[i])) return INITIALIZATION_ERROR;
 		printInitStep();
-		if (!game_gfx_load_sprite_sheet(i, spriteSheetsRed, spriteSheetFilenamesRed)) return INITIALIZATION_ERROR;
+		if (!game_gfx_load_sprite_sheet(&spriteSheetsRed[i], spriteSheetFilenamesRed[i], unitSquares[i])) return INITIALIZATION_ERROR;
 		printInitStep();
 	}
 	printOKSteps();
 
 	printf("Loading objects gfx [");
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
-		if (!game_gfx_load_sprite_sheet(i, spriteSheetsObject, objectSheetFilenames)) return INITIALIZATION_ERROR;
+		if (!game_gfx_load_sprite_sheet(&spriteSheetsObject[i], objectSheetFilenames[i], objectSquares[i])) return INITIALIZATION_ERROR;
 		printInitStep();
 	}
 	printOKSteps();
@@ -126,11 +162,11 @@ InitializationStatusEnum game_gfx_load_all() {
 
 void game_gfx_destroy_all() {
 	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
-		if (spriteSheetsBlue[i] != NULL) destroy_bitmap(spriteSheetsBlue[i]);
-		if (spriteSheetsRed[i] != NULL) destroy_bitmap(spriteSheetsRed[i]);
+		game_gfx_destroy_sheet(&spriteSheetsBlue[i]);
+		game_gfx_destroy_sheet(&spriteSheetsRed[i]);
 	}
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
-		if (spriteSheetsObject[i] != NULL) destroy_bitmap(spriteSheetsObject[i]);
+		game_gfx_destroy_sheet(&spriteSheetsObject[i]);
 	}
 	if (frame) destroy_bitmap(frame);
 	if (cmdBarButtons) destroy_bitmap(cmdBarButtons);
@@ -146,14 +182,14 @@ void game_gfx_destroy_all() {
 
 void game_gfx_set_sprite_sheet(GameUnit *unit) {
 	if (unit->controller == UNIT_CONTROLLER_PLAYER) {
-		unit->animationStatus.sheet = spriteSheetsBlue[unit->type];
+		unit->animationStatus.sheet = &spriteSheetsBlue[unit->type];
 	} else {
-		unit->animationStatus.sheet = spriteSheetsRed[unit->type];
+		unit->animationStatus.sheet = &spriteSheetsRed[unit->type];
 	}
 }
 
 void game_gfx_set_object_sheet(Object *object) {
-	object->animationStatus.sheet = spriteSheetsObject[object->type];
+	object->animationStatus.sheet = &spriteSheetsObject[object->type];
 }
 
 BITMAP *game_gfx_get_frame() {
@@ -176,11 +212,11 @@ BITMAP *game_gfx_get_tileset_colors() {
 	return tileSetColors;
 }
 
-BITMAP *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller) {
+SpriteSheet *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller) {
 	if (controller == UNIT_CONTROLLER_PLAYER) {
-		return spriteSheetsBlue[type];
+		return &spriteSheetsBlue[type];
 	} else {
-		return spriteSheetsRed[type];
+		return &spriteSheetsRed[type];
 	}
 }
 

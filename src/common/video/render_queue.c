@@ -91,6 +91,15 @@ void render_queue_submit_sprite(RenderQueue *queue, int z, BITMAP *bmp, int x, i
 	}
 }
 
+void render_queue_submit_rle_sprite(RenderQueue *queue, int z, RLE_SPRITE *rleSPrite, int x, int y) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_RLE_SPRITE);
+	if (cmd) {
+		cmd->data.rleSprite.rleSprite = rleSPrite;
+		cmd->data.rleSprite.x = x;
+		cmd->data.rleSprite.y = y;
+	}
+}
+
 void render_queue_submit_masked_partial(RenderQueue *queue,
 										int z,
 										BITMAP *bmp,
@@ -201,6 +210,10 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 					 cmd->data.solidPartial.height);
 			case RND_CMD_SPRITE:
 				render_sprite(target, &cmd->data.sprite);
+				break;
+			case RND_CMD_RLE_SPRITE:
+				draw_rle_sprite(target, cmd->data.rleSprite.rleSprite,
+					cmd->data.rleSprite.x, cmd->data.rleSprite.y);
 				break;
 			case RND_CMD_MASKED_PARTIAL:
 				masked_blit(cmd->data.maskedPartial.bitmap,

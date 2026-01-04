@@ -1,60 +1,58 @@
 #include "animation.h"
 
-#define UNIT_FRAME_SIZE 32
-#define BIG_BUILDING_SIZE 48
-#define SMALL_BUILDING_SIZE 32
+#define UNIT_ANI_FRAMES 4
 
 static AnimationProperties IDLE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 256, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 8 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_EAST
-		{.yOffset = 0,   .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 0 * UNIT_ANI_FRAMES,	.xRepos = 8, .yRepos = 8},
         // DIRECTION_SOUTH
-		{.yOffset = 128, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 4 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_WEST
-		{.yOffset = 384, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 12 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
 };
 
 static AnimationProperties MOVE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 288, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 9 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_EAST
-		{.yOffset = 32,  .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 1 * UNIT_ANI_FRAMES,	.xRepos = 8, .yRepos = 8},
         // DIRECTION_SOUTH
-		{.yOffset = 160, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 5 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_WEST
-		{.yOffset = 416, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 13 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
 };
 
 static AnimationProperties ATTACK_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 320, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 10 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_EAST
-		{.yOffset = 64,  .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 2 * UNIT_ANI_FRAMES,	.xRepos = 8, .yRepos = 8},
         // DIRECTION_SOUTH
-		{.yOffset = 192, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 6 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
         // DIRECTION_WEST
-		{.yOffset = 448, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+		{.startFrame = 14 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
 };
 
 static AnimationProperties DIE_PROPERTIES[DIRECTIONS_COUNT] = {
-		// DIRECTION_NORTH
-		{.yOffset = 352, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-		// DIRECTION_EAST
-		{.yOffset = 96, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-		// DIRECTION_SOUTH
-		{.yOffset = 224, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
-		// DIRECTION_WEST
-		{.yOffset = 480, .xRepos = 8, .yRepos = 8, .width = UNIT_FRAME_SIZE, .height = UNIT_FRAME_SIZE},
+        // DIRECTION_NORTH
+		{.startFrame = 11 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
+        // DIRECTION_EAST
+		{.startFrame = 3 * UNIT_ANI_FRAMES,	.xRepos = 8, .yRepos = 8},
+        // DIRECTION_SOUTH
+		{.startFrame = 7 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
+        // DIRECTION_WEST
+		{.startFrame = 15 * UNIT_ANI_FRAMES, .xRepos = 8, .yRepos = 8},
 };
 
 static AnimationData WORKER_IDLE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.2)},
         },
 		.lastFrameIndex = 3,
 		.events = {},
@@ -64,10 +62,10 @@ static AnimationData WORKER_IDLE_ANIMATION_DATA = {
 static AnimationData WORKER_MOVE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.1)},
         },
 		.lastFrameIndex = 3,
 		.events = {},
@@ -77,10 +75,10 @@ static AnimationData WORKER_MOVE_ANIMATION_DATA = {
 static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.5)},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.3)},
+            {.duration = SEC_TO_FRAMES(0.3)},
         },
 		.lastFrameIndex = 3,
 		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_IRON_HIT, .fireTime = SEC_TO_FRAMES(0.7)},
@@ -91,10 +89,10 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 static AnimationData WORKER_WORK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.3), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.5)},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.3)},
+            {.duration = SEC_TO_FRAMES(0.3)},
         },
 		.lastFrameIndex = 3,
 		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_WORK, .fireTime = SEC_TO_FRAMES(0.7)},
@@ -105,10 +103,10 @@ static AnimationData WORKER_WORK_ANIMATION_DATA = {
 static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
-				{.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE},
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+				{.duration = SEC_TO_FRAMES(0.5)},
+				{.duration = SEC_TO_FRAMES(0.1)},
+				{.duration = SEC_TO_FRAMES(0.2)},
+				{.duration = SEC_TO_FRAMES(0.2)},
 		},
 		.lastFrameIndex = 3,
 		.events = {
@@ -121,10 +119,10 @@ static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
-            {.duration = SEC_TO_FRAMES(0.8), .xOffset = UNIT_FRAME_SIZE},
-            {.duration = SEC_TO_FRAMES(0.1), .xOffset = UNIT_FRAME_SIZE * 2},
-            {.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 3},
+            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.8)},
+            {.duration = SEC_TO_FRAMES(0.1)},
+            {.duration = SEC_TO_FRAMES(0.2)},
         },
 		.lastFrameIndex = 3,
 		.events = {
@@ -136,10 +134,10 @@ static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
 static AnimationData COMMON_DIE_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE},
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = UNIT_FRAME_SIZE * 2},
-				{.duration = SEC_TO_FRAMES(0.5), .xOffset = UNIT_FRAME_SIZE * 3},
+				{.duration = SEC_TO_FRAMES(0.2)},
+				{.duration = SEC_TO_FRAMES(0.2)},
+				{.duration = SEC_TO_FRAMES(0.2)},
+				{.duration = SEC_TO_FRAMES(0.5)},
 		},
 		.lastFrameIndex = 3,
 		.events = {{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_DIE, .fireTime = SEC_TO_FRAMES(0.3)}},
@@ -188,41 +186,41 @@ static const AnimationPropsData COMMON_DIE = {
 
 static AnimationProperties BIG_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_EAST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_SOUTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_WEST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
 };
 
 static AnimationProperties BIG_BUILDING_CREATE_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = BIG_BUILDING_SIZE, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
         // DIRECTION_EAST
-		{.yOffset = BIG_BUILDING_SIZE, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
         // DIRECTION_SOUTH
-		{.yOffset = BIG_BUILDING_SIZE, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
         // DIRECTION_WEST
-		{.yOffset = BIG_BUILDING_SIZE, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = BIG_BUILDING_SIZE},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
 };
 
 static AnimationProperties SMALL_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_EAST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_SOUTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_WEST
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = BIG_BUILDING_SIZE, .height = SMALL_BUILDING_SIZE},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
 };
 
 static AnimationData BUILDING_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(60), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(60)},
         },
 		.lastFrameIndex = 0,
 		.events = {},
@@ -232,7 +230,7 @@ static AnimationData BUILDING_ANIMATION_DATA = {
 static AnimationData BUILDING_DESTROY_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.5), .xOffset = 0},
+            {.duration = SEC_TO_FRAMES(0.5)},
         },
 		.lastFrameIndex = 0,
 		.events = {
@@ -294,65 +292,65 @@ static AnimationPropsData UNIT_ANIMATIONS[UNIT_TYPE_NUMBER][UNIT_STATES_COUNT] =
 
 static AnimationProperties ARROW_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_NORTH_EAST
-		{.yOffset = 16, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_EAST
-		{.yOffset = 32, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 2, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH_EAST
-		{.yOffset = 48, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 3, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH
-		{.yOffset = 64, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 4, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH_WEST
-		{.yOffset = 80, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 5, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_WEST
-		{.yOffset = 96, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 6, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_NORTH_WEST
-		{.yOffset = 112, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 7, .xRepos = 0, .yRepos = 0},
 };
 
 static AnimationProperties FIREBALL_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
         // DIRECTION_NORTH_EAST
-		{.yOffset = 16, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_EAST
-		{.yOffset = 32, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 2, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH_EAST
-		{.yOffset = 48, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 3, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH
-		{.yOffset = 64, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 4, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_SOUTH_WEST
-		{.yOffset = 80, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 5, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_WEST
-		{.yOffset = 96, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 6, .xRepos = 0, .yRepos = 0},
 		// DIRECTION_NORTH_WEST
-		{.yOffset = 112, .xRepos = 0, .yRepos = 0, .width = 16, .height = 16},
+		{.startFrame = 7, .xRepos = 0, .yRepos = 0},
 };
 
 static AnimationProperties EXPLOSION_PROPERTIES[OBJ_DIRECTIONS_COUNT] = {
 		// DIRECTION_NORTH
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
         // DIRECTION_NORTH_EAST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_EAST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_SOUTH_EAST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_SOUTH
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_SOUTH_WEST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_WEST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 		// DIRECTION_NORTH_WEST
-		{.yOffset = 0, .xRepos = 16, .yRepos = 16, .width = 48, .height = 48},
+		{.startFrame = 0, .xRepos = 16, .yRepos = 16},
 };
 
 static AnimationData ARROW_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
+				{.duration = SEC_TO_FRAMES(5.0)},
 		},
 		.lastFrameIndex = 0,
 		.events = { },
@@ -362,7 +360,7 @@ static AnimationData ARROW_ANIMATION_DATA = {
 static AnimationData FIREBALL_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_CYCLE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(5.0), .xOffset = 0},
+				{.duration = SEC_TO_FRAMES(5.0)},
 		},
 		.lastFrameIndex = 0,
 		.events = {},
@@ -372,10 +370,10 @@ static AnimationData FIREBALL_ANIMATION_DATA = {
 static AnimationData EXPLOSION_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(0.2), .xOffset = 0},
-                {.duration = SEC_TO_FRAMES(0.2), .xOffset = 48},
-                {.duration = SEC_TO_FRAMES(0.2), .xOffset = 96},
-                {.duration = SEC_TO_FRAMES(0.2), .xOffset = 144},
+				{.duration = SEC_TO_FRAMES(0.2)},
+                {.duration = SEC_TO_FRAMES(0.2)},
+                {.duration = SEC_TO_FRAMES(0.2)},
+                {.duration = SEC_TO_FRAMES(0.2)},
 		},
 		.lastFrameIndex = 3,
 		.events = {
@@ -388,7 +386,7 @@ static AnimationData EXPLOSION_ANIMATION_DATA = {
 static AnimationData ARROW_HIT_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(0.15), .xOffset = 0},
+				{.duration = SEC_TO_FRAMES(0.15)},
 		},
 		.lastFrameIndex = 0,
 		.events = {
@@ -504,15 +502,6 @@ void game_animation_object_set(Object *object) {
 	game_animation_reset(animationStatus);
 }
 
-AnimationFramePosition game_animation_unit_get_frame_position(UnitTypeEnum type, UnitStateEnum state, DirectionEnum direction, int frame) {
-	AnimationPropsData *aniPropsData = &UNIT_ANIMATIONS[type][state];
-	AnimationFrame *aniFrame = &aniPropsData->data->frames[frame];
-	AnimationProperties *props = aniPropsData->props;
-
-	return (AnimationFramePosition) {
-		.x = aniFrame->xOffset,
-		.y = props->yOffset,
-		.width = props->width,
-		.height = props->height
-	};
+uint16_t game_animation_unit_get_frame_position(UnitTypeEnum type, UnitStateEnum state, DirectionEnum direction, uint8_t frame) {
+	return UNIT_ANIMATIONS[type][state].props[direction].startFrame + frame;
 }
