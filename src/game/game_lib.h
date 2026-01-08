@@ -22,4 +22,5 @@
 #include "ai/strategy_ai.h"
 #include "cmd_bar/cmd_bar.h"
 #include "building/building.h"
+#include "gui/gui.h"
 #endif /* GAME_LIB_H */

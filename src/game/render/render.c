@@ -272,7 +272,7 @@ void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
 			if (context->mouseStatus.y > MOUSE_Y_GO_DOWN) mouseEdgeY = 2;
 			//If we are on the screen edges, we use the arrow sprites
 
-			if (mouseEdgeX == 1 && mouseEdgeY == 1) {
+			if ((mouseEdgeX == 1 && mouseEdgeY == 1) || context->gameState != GAME_STATE_PLAY_MAP) {
 				// Mouse cursor
 				render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
 										   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus,

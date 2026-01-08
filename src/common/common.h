@@ -23,7 +23,7 @@ typedef struct {
 } Position;
 
 typedef struct {
-	uint32_t width, height;
+	int width, height;
 } Size;
 
 #define RESOLUTION_MULTIPLIER 3

@@ -28,6 +28,7 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO menus
 	if (keyboard_is_key_pressed(KEY_F12)) return GAME_STATE_EXIT;
 	if (keyboard_is_key_pressed(KEY_F11)) return GAME_STATE_LOAD_MAP;
+	if (keyboard_is_key_pressed(KEY_F10)) return GAME_STATE_INIT_MENU_MAP;
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
 	if (keyboard_is_key_pressed(KEY_6)) {

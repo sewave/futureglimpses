@@ -2,10 +2,14 @@
 
 extern GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue);
 extern GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue);
+extern GameStateEnum handle_init_menu_map(GameContext *context, RenderQueue *renderQueue);
+extern GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue);
 
 StateFunction gameStateTable[NUM_GAME_STATES] = {
     &handle_load_map,
     &handle_play_map,
+	&handle_init_menu_map,
+	&handle_menu_map,
     &handle_play_map
 };
 

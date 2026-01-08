@@ -119,11 +119,17 @@ int main(int argc, char *argv[]) {
 }
 END_OF_MAIN()
 
+BITMAP *screenBuffer;
+
+BITMAP* get_screen_buffer() {
+	return screenBuffer;
+}
+
 void main_loop(volatile long *logicTicks,
 			   volatile int *closeButtonFlag,
 			   int maxCatchUpTicks,
 			   int endState) {
-	BITMAP *screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_LOAD_MAP;
 	redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
