@@ -24,8 +24,8 @@ static RGB firstColors[FIRST_COLORS] = {
     {.r = 153, .g = 153, .b = 153, .filler = 0},
     // DARK_GREEN
     {.r = 0, .g = 153, .b = 0, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // DARK_GRAY
+    {.r =76, .g = 76, .b = 76, .filler = 0},
     // UNUSED
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // UNUSED

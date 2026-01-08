@@ -22,6 +22,10 @@ typedef struct {
 	int x, y;
 } Position;
 
+typedef struct {
+	uint32_t width, height;
+} Size;
+
 #define RESOLUTION_MULTIPLIER 3
 
 char common_init_basic(
