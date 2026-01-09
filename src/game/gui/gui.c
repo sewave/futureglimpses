@@ -9,8 +9,8 @@
 #define GUI_BAR_WIDTH 128
 
 #define GUI_BUTTON_TEXT_Y_OFFSET 4
-#define GUI_BUTTON_SELECT_COLOR PAL_COLOR_GREEN
-#define GUI_BUTTON_COLOR PAL_COLOR_DARK_GREEN
+#define GUI_BUTTON_SELECT_COLOR PAL_COLOR_TURQUOISE
+#define GUI_BUTTON_COLOR PAL_COLOR_DARK_TURQUOISE
 
 #define GUI_BUTTON_HOVER_COLOR PAL_COLOR_YELLOW
 #define GUI_BUTTON_UP_WALL_COLOR PAL_COLOR_GRAY
@@ -190,7 +190,22 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 											 element->x + width - 1, element->y + height - 1, GUI_BUTTON_HOVER_COLOR);
                     if(context->mouseStatus.isLeftDown) buttonColor = GUI_BUTTON_SELECT_COLOR;
 				} else {
-					// TODO render line walls
+					render_queue_submit_line(
+						renderQueue, z + 1, element->x, element->y,
+						element->x + width - 1, element->y, GUI_BUTTON_UP_WALL_COLOR
+					);
+					render_queue_submit_line(
+						renderQueue, z + 1, element->x, element->y,
+						element->x, element->y + height - 2, GUI_BUTTON_UP_WALL_COLOR
+					);
+					render_queue_submit_line(
+						renderQueue, z + 1, element->x + width - 1, element->y + 1,
+						element->x + width - 1,  element->y + height - 1, GUI_BUTTON_DOWN_WALL_COLOR
+					);
+					render_queue_submit_line(
+						renderQueue, z + 1, element->x, element->y + height - 1,
+						element->x + width - 1, element->y + height - 1, GUI_BUTTON_DOWN_WALL_COLOR
+					);
 
                     if(keyboard_is_key_down(element->hotkey)) buttonColor = GUI_BUTTON_SELECT_COLOR;
 				}

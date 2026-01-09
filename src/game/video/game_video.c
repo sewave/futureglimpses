@@ -11,25 +11,25 @@ static RGB firstColors[FIRST_COLORS] = {
     // TRANSPARENT
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // WHITE
-    {.r = 255, .g = 255, .b = 255, .filler = 0},
+    {.r = 63, .g = 63, .b = 63, .filler = 0},
     // BLACK
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // GREEN
-    {.r = 0, .g = 255, .b = 0, .filler = 0},
+    {.r = 0, .g = 63, .b = 0, .filler = 0},
     // YELLOW
-    {.r = 255, .g = 255, .b = 0, .filler = 0},
+    {.r = 63, .g = 63, .b = 0, .filler = 0},
     // RED
-    {.r = 255, .g = 0, .b = 0, .filler = 0},
+    {.r = 63, .g = 0, .b = 0, .filler = 0},
     // GRAY
-    {.r = 153, .g = 153, .b = 153, .filler = 0},
+    {.r = 38, .g = 38, .b = 38, .filler = 0},
     // DARK_GREEN
-    {.r = 0, .g = 153, .b = 0, .filler = 0},
+    {.r = 0, .g = 38, .b = 0, .filler = 0},
     // DARK_GRAY
-    {.r =76, .g = 76, .b = 76, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    {.r = 19, .g = 19, .b = 19, .filler = 0},
+    // TURQUOISE
+    {.r = 20, .g = 40, .b = 38, .filler = 0},
+    // DARK_TURQUOISE
+    {.r = 0, .g = 16, .b = 16, .filler = 0},
     // UNUSED
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // UNUSED

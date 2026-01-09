@@ -9,6 +9,7 @@
 #define TILESET_COLORS_FILE "assets/gfx/tilesetm.pcx"
 #define ICONS_FILE "assets/ui/icons.pcx"
 #define OVERTILES_FILE "assets/ui/otiles.pcx"
+#define MENU_BACK_FILE "assets/ui/menuback.pcx"
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
 
@@ -21,6 +22,7 @@ static BITMAP *icons[GAME_ICON_COUNT];
 static BITMAP *overtiles[GAME_OVERTILE_COUNT];
 static BITMAP *tileSet;
 static BITMAP *tileSetColors;
+static BITMAP *menuBack;
 
 static const char *spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
 		"assets/gfx/unit/workerb.pcx",
@@ -155,6 +157,10 @@ InitializationStatusEnum game_gfx_load_all() {
     }
     destroy_bitmap(allOvertiles);
 
+	menuBack = load_bitmap(MENU_BACK_FILE, NULL);
+	if (!menuBack) return INITIALIZATION_ERROR;
+	printInitStep();
+
 	printOKSteps();
 
 	return INITIALIZATION_OK;
@@ -178,6 +184,7 @@ void game_gfx_destroy_all() {
 	for (int i = 0; i < GAME_OVERTILE_COUNT; i++) {
 		if (overtiles[i] != NULL) destroy_bitmap(overtiles[i]);
 	}
+	if (menuBack) destroy_bitmap(menuBack);
 }
 
 void game_gfx_set_sprite_sheet(GameUnit *unit) {
@@ -222,4 +229,8 @@ SpriteSheet *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controlle
 
 BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile) {
 	return overtiles[overtile];
+}
+
+BITMAP *game_gfx_get_menu_back() {
+	return menuBack;
 }

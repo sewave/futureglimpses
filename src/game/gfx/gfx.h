@@ -35,5 +35,6 @@ BITMAP *game_gfx_get_tileset();
 BITMAP *game_gfx_get_tileset_colors();
 SpriteSheet *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller);
 BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile);
+BITMAP *game_gfx_get_menu_back();
 
 #endif /* GAME_GFX_H */

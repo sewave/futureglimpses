@@ -3,6 +3,12 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
+#define MENU_BACK_X 80
+#define MENU_BACK_Y 25
+#define MENU_BACK_WIDTH 160
+#define MENU_BACK_HEIGHT 160
+#define MENU_TITLE_Y_OFFSET 10
+
 #define BUTTON_HEIGHT 18
 #define BUTTON_Y_SEPARATION 20
 #define BUTTON_MAIN_MENU_WIDTH 100
@@ -19,6 +25,7 @@ typedef enum {
 } PauseMenuStateEnum;
 
 static BITMAP* background;
+static BITMAP* menuBack;
 static PauseMenuStateEnum menuState;
 static MouseCursorStateEnum prevMouseCursorState;
 static uint8_t goMainMenu, goOS;
@@ -43,7 +50,7 @@ static void exit_to_os(GameContext* context) {
 	goOS = TRUE;
 }
 
-#define MAIN_MENU_ELEMENTS 7
+#define MAIN_MENU_ELEMENTS 8
 
 static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 	{
@@ -52,15 +59,20 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &background } }
 	},
 	{
-		.x = 0, .y = 40, .z = 1,
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = 1,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = 2,
 		.type = GUI_ELEMENT_TEXT,
 		.textId = GAME_TEXT_ID_MENU_TITLE,
 		.textColor = PAL_COLOR_YELLOW,
 		.textBackground = TRANSPARENT_INDEX,
-		.typed = { .text = { .maxX = 320} }
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
-		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y, .z = 1,
+		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_SOUND,
 		.textColor = PAL_COLOR_WHITE,
@@ -74,7 +86,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION, .z = 1,
+		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY,
 		.textColor = PAL_COLOR_WHITE,
@@ -88,7 +100,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 2, .z = 1,
+		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 2, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_RETURN_TO_GAME,
 		.textColor = PAL_COLOR_WHITE,
@@ -102,7 +114,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 3, .z = 1,
+		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 3, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_RETURN_TITLE,
 		.textColor = PAL_COLOR_WHITE,
@@ -116,7 +128,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 4, .z = 1,
+		.x = BUTTON_MAIN_MENU_X, .y = BUTTON_MAIN_MENU_Y + BUTTON_Y_SEPARATION * 4, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_EXIT_TO_OS,
 		.textColor = PAL_COLOR_WHITE,
@@ -145,6 +157,7 @@ GameStateEnum handle_init_menu_map(GameContext *context, RenderQueue *renderQueu
 	BITMAP* screenBuffer = get_screen_buffer();
 	background = create_bitmap(screenBuffer->w, screenBuffer->h);
 	blit(screenBuffer, background, 0, 0, 0, 0, screenBuffer->w, screenBuffer->h);
+	menuBack = game_gfx_get_menu_back();
 
 	prevMouseCursorState = game_mouse_get_cursor_state();
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
