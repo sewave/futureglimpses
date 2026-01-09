@@ -15,6 +15,10 @@
 #define BUTTON_MAIN_MENU_X 110
 #define BUTTON_MAIN_MENU_Y 60
 
+#define BUTTON_RETURN_WIDTH 100
+#define BUTTON_RETURN_X MENU_BACK_X + MENU_BACK_WIDTH / 2 - BUTTON_RETURN_WIDTH / 2
+#define BUTTON_RETURN_Y 140
+
 typedef enum {
 	PAUSE_MENU_STATE_SELECT,
 	PAUSE_MENU_STATE_SOUND,
@@ -48,6 +52,18 @@ static void return_title(GameContext* context) {
 
 static void exit_to_os(GameContext* context) {
 	goOS = TRUE;
+}
+
+static void main_menu(GameContext* context) {
+	menuState = PAUSE_MENU_STATE_SELECT;
+}
+
+static uint8_t get_gameplay_life_bars(const GameContext *context) {
+	return context->config.lifeBar;
+}
+
+static void set_gameplay_life_bars(GameContext *context, uint8_t value) {
+	context->config.lifeBar = (LifeBarEnum) value;
 }
 
 #define MAIN_MENU_ELEMENTS 8
@@ -143,10 +159,107 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 	},
 };
 
+#define GAMEPLAY_MENU_ELEMENTS 5
+
+static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &background } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = 1,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = 2,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_RETURN_X, .y = BUTTON_RETURN_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_MENU_RETURN_MAIN_MENU,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_R,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_RETURN_WIDTH, .height = BUTTON_HEIGHT },
+				.action = main_menu
+			}
+		}
+	},
+	{
+		.x = BUTTON_RETURN_X, .y = MENU_BACK_Y + 40, .z = 10,
+		.type = GUI_ELEMENT_OPTION,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.option = {
+				.optionValuesNumber = 3,
+				.optionValues = (GuiOptionValue[]) {
+					{ .value = LIFE_BAR_ALWAYS, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ALWAYS, .hotkey = KEY_A,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+					{ .value = LIFE_BAR_DAMAGED, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ONLY_DAMAGED, .hotkey = KEY_D,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+					{ .value = LIFE_BAR_NEVER, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_NEVER, .hotkey = KEY_N,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+				},
+				.getValue = get_gameplay_life_bars,
+				.setValue = set_gameplay_life_bars
+			}
+		}
+	},
+};
+
+
+#define SOUND_MENU_ELEMENTS 4
+
+static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &background } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = 1,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = 2,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_MENU_SOUND_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_RETURN_X, .y = BUTTON_RETURN_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_MENU_RETURN_MAIN_MENU,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_R,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_RETURN_WIDTH, .height = BUTTON_HEIGHT },
+				.action = main_menu
+			}
+		}
+	},
+};
+
 static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_SELECT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
-	[PAUSE_MENU_STATE_SOUND] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
-	[PAUSE_MENU_STATE_GAMEPLAY] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
+	[PAUSE_MENU_STATE_SOUND] = { .elements = soundMenu, .elementsCount = SOUND_MENU_ELEMENTS },
+	[PAUSE_MENU_STATE_GAMEPLAY] = { .elements = gameplayMenu, .elementsCount = GAMEPLAY_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_CONFIRM] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_EXIT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 };

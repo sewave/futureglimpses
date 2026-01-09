@@ -55,4 +55,11 @@ Options Menu
 ^004G^001ameplay
 ^004R^001eturn to Game
 Go to ^004T^001itle
-Ecit to ^004O^001S
+Exit to ^004O^001S
+Gameplay
+Life Bars:
+^004A^001lways
+Only ^004D^001amaged
+^004N^001ever
+^004R^001eturn
+Sound

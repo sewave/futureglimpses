@@ -18,8 +18,9 @@
 #define GUI_BUTTON_INTRA_WALL_COLOR PAL_COLOR_WHITE
 #define GUI_BUTTON_INSIDE_WALL_COLOR PAL_COLOR_GRAY
 
-#define GUI_OPTION_X_OFFSET 24
+#define GUI_OPTION_X_OFFSET 12
 #define GUI_OPTION_Y_OFFSET 12
+#define GUI_OPTION_TEXT_X_OFF 10
 
 #define GUI_OPTION_VALUE_WIDTH 8
 #define GUI_OPTION_VALUE_HEIGHT 8
@@ -29,16 +30,16 @@
 static const char * COLOR_CHANGE_STRING = "^000^000";
 
 static int8_t game_gui_mouse_in_element_option(GameContext *context, GuiElement *element) {
+	int colorChangeLength = text_length(context->gameFont, COLOR_CHANGE_STRING);
 	int mouseX = context->mouseStatus.x;
 	int mouseY = context->mouseStatus.y;
 	int x = element->x + GUI_OPTION_X_OFFSET;
 	int y = element->y + GUI_OPTION_Y_OFFSET;
 	GuiOption *options = &element->typed.option;
 	GuiOptionValue *optionValue = options->optionValues;
-	for (int i = 0; i < options->optionValuesNumber; i++, optionValue++) {
-		if (mouseX >= x && mouseX <= x + GUI_OPTION_VALUE_WIDTH &&
+	for (int i = 0; i < options->optionValuesNumber; i++, optionValue++, y += GUI_OPTION_VALUE_HEIGHT_SEPARATION) {
+		if (mouseX >= x && mouseX <= x + GUI_OPTION_VALUE_WIDTH - colorChangeLength + text_length(context->gameFont, text_get_by_id(optionValue->textId)) &&
 			mouseY >= y && mouseY <= y + GUI_OPTION_VALUE_HEIGHT) return i;
-		y += GUI_OPTION_VALUE_HEIGHT_SEPARATION;
 	}
 	return GUI_OPTION_NO_VALUE;
 }
@@ -111,7 +112,7 @@ void game_gui_handle(GameContext *context, GuiScreen* guiScreen) {
 					GuiOption *options = &element->typed.option;
 					int8_t mouseOption = game_gui_mouse_in_element_option(context, element);
 					GuiOptionValue *optionValue = NULL;
-					if (mouseOption != GUI_OPTION_NO_VALUE) {
+					if (mouseOption != GUI_OPTION_NO_VALUE && context->mouseStatus.isLeftReleased) {
 						optionValue = &options->optionValues[mouseOption];
 					} else {
 						GuiOptionValue *optionValueSearch = options->optionValues;
@@ -212,7 +213,6 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
                 render_queue_submit_rect_fill(renderQueue, z, element->x, element->y,
 											  element->x + width - 1, element->y + height - 1, buttonColor);
 
-				// TODO render button
 				render_queue_submit_rect(renderQueue, z + 1, element->x + 1, element->y + 1,
 										 element->x + width - 2, element->y + height - 2, GUI_BUTTON_INTRA_WALL_COLOR);
                 render_queue_submit_rect(renderQueue, z + 1, element->x + 2, element->y + 2,
@@ -228,15 +228,24 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				break;
 			}
 			case GUI_ELEMENT_OPTION: {
-				// Render all options
-				// Render text
-
-				// Render options with text, selected enabled
-
-				uint8_t value = element->typed.option.getValue(context);
-				GuiOptionValue *opt = &element->typed.option.optionValues[value];
-				render_queue_submit_text(renderQueue, z, context->gameFont, text_get_by_id(opt->textId),
+				render_queue_submit_text_multicolor(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
 										 element->x, element->y, element->textColor, element->textBackground);
+				// Render all options
+				// Render options with text, selected enabled
+				uint8_t value = element->typed.option.getValue(context);				
+				GuiOption *options = &element->typed.option;
+				GuiOptionValue *optionValue = options->optionValues;
+				BITMAP* optionOnImage = game_gfx_get_icon(GAME_ICON_OPTION_ON);
+				BITMAP* optionOffImage = game_gfx_get_icon(GAME_ICON_OPTION_OFF);
+				int y = element->y + GUI_OPTION_Y_OFFSET;
+				int x = element->x + GUI_OPTION_X_OFFSET;
+				for (int i = 0; i < options->optionValuesNumber; i++, optionValue++, y += GUI_OPTION_VALUE_HEIGHT_SEPARATION) {
+					BITMAP* optionImage = (i == value) ? optionOnImage : optionOffImage;
+					render_queue_submit_sprite(renderQueue, z, optionImage, x, y, RND_FLAG_NORMAL);
+					render_queue_submit_text_multicolor(renderQueue, z, context->gameFont,
+						text_get_by_id(optionValue->textId), x + GUI_OPTION_TEXT_X_OFF, y,
+						optionValue->textColor, optionValue->textBackground);
+				}
 				break;
 			}
 			case GUI_ELEMENT_BAR: {

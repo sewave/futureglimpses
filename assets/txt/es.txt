@@ -56,3 +56,10 @@ Ju^004g^001abilidad
 Volve^004r^001 al Juego
 Ir al ^004T^001ítulo
 Salir al S^004O^001
+Jugabilidad
+Barras de Vida:
+Siempre (^004A^001)
+Solo ^004D^001añados
+^004N^001unca
+Volve^004r^001
+Sonido
