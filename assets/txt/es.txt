@@ -52,7 +52,7 @@ En cola: %d
 Completado
 Menú de Opciones
 ^004S^001onido
-Jugabilidad (^004G^001)
+Ju^004g^001abilidad
 Volve^004r^001 al Juego
 Ir al ^004T^001ítulo
-Salir al SO (^004X^001)
+Salir al S^004O^001

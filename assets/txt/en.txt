@@ -55,4 +55,4 @@ Options Menu
 ^004G^001ameplay
 ^004R^001eturn to Game
 Go to ^004T^001itle
-E^004x^001it to OS
+Ecit to ^004O^001S

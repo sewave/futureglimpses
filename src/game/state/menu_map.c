@@ -121,7 +121,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_MENU_EXIT_TO_OS,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
-		.hotkey = KEY_X,
+		.hotkey = KEY_O,
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_MAIN_MENU_WIDTH, .height = BUTTON_HEIGHT },
