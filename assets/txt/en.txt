@@ -63,3 +63,8 @@ Only ^004D^001amaged
 ^004N^001ever
 ^004R^001eturn
 Sound
+Are you sure?
+Ye^004s^001
+^004N^001o
+Music Volume:
+Effects Volume:

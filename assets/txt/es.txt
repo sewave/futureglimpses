@@ -63,3 +63,8 @@ Solo ^004D^001añados
 ^004N^001unca
 Volve^004r^001
 Sonido
+¿Estás seguro?
+^004S^001í
+^004N^001o
+Volumen de la Música:
+Volumen de los efectos:

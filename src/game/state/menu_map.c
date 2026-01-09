@@ -19,11 +19,17 @@
 #define BUTTON_RETURN_X MENU_BACK_X + MENU_BACK_WIDTH / 2 - BUTTON_RETURN_WIDTH / 2
 #define BUTTON_RETURN_Y 140
 
+#define BUTTON_CONFIRM_WIDTH 60
+#define BUTTON_CONFIRM_X_YES MENU_BACK_X + 10
+#define BUTTON_CONFIRM_X_NO BUTTON_CONFIRM_X_YES + BUTTON_CONFIRM_WIDTH + 20
+#define BUTTON_CONFIRM_Y 140
+
 typedef enum {
 	PAUSE_MENU_STATE_SELECT,
 	PAUSE_MENU_STATE_SOUND,
 	PAUSE_MENU_STATE_GAMEPLAY,
-	PAUSE_MENU_STATE_CONFIRM,
+	PAUSE_MENU_STATE_CONFIRM_TITLE,
+	PAUSE_MENU_STATE_CONFIRM_OS,
 	PAUSE_MENU_STATE_EXIT,
 	PAUSE_MENU_STATE_COUNT,
 } PauseMenuStateEnum;
@@ -56,6 +62,40 @@ static void exit_to_os(GameContext* context) {
 
 static void main_menu(GameContext* context) {
 	menuState = PAUSE_MENU_STATE_SELECT;
+}
+
+static void confirm_title(GameContext* context) {
+	menuState = PAUSE_MENU_STATE_CONFIRM_TITLE;
+}
+
+static void confirm_os(GameContext* context) {
+	menuState = PAUSE_MENU_STATE_CONFIRM_OS;
+}
+
+static uint8_t get_audio_max_volume(const GameContext *context) {
+	return 255;
+}
+
+static uint8_t get_audio_min_volume(const GameContext *context) {
+	return 0;
+}
+
+static void set_audio_music_volume(GameContext *context, uint8_t value) {
+	context->config.musicVolume = value;
+	set_volume(context->config.sfxVolume, context->config.musicVolume);
+}
+
+static uint8_t get_audio_music_volume(const GameContext *context) {
+	return context->config.musicVolume;
+}
+
+static uint8_t get_audio_sfx_volume(const GameContext *context) {
+	return context->config.sfxVolume;
+}
+
+static void set_audio_sfx_volume(GameContext *context, uint8_t value) {
+	context->config.sfxVolume = value;
+	set_volume(context->config.sfxVolume, context->config.musicVolume);
 }
 
 static uint8_t get_gameplay_life_bars(const GameContext *context) {
@@ -139,7 +179,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_MAIN_MENU_WIDTH, .height = BUTTON_HEIGHT },
-				.action = return_title
+				.action = confirm_title
 			}
 		}
 	},
@@ -153,7 +193,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_MAIN_MENU_WIDTH, .height = BUTTON_HEIGHT },
-				.action = exit_to_os
+				.action = confirm_os
 			}
 		}
 	},
@@ -218,8 +258,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	},
 };
 
-
-#define SOUND_MENU_ELEMENTS 4
+#define SOUND_MENU_ELEMENTS 6
 
 static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
 	{
@@ -254,13 +293,148 @@ static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
 			}
 		}
 	},
+	{
+		.x = MENU_BACK_X + 10, .y = MENU_BACK_Y + 30, .z = 10,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_SOUND_MUSIC_VOLUME,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.bar = {
+				.getMaxValue = get_audio_max_volume,
+				.getMinValue = get_audio_min_volume,
+				.getValue = get_audio_music_volume,
+				.setValue = set_audio_music_volume,
+				.valueInc = 16,
+			}
+		}
+	},
+	{
+		.x = MENU_BACK_X + 10, .y = MENU_BACK_Y + 70, .z = 10,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_SOUND_EFFECTS_VOLUME,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.bar = {
+				.getMaxValue = get_audio_max_volume,
+				.getMinValue = get_audio_min_volume,
+				.getValue = get_audio_sfx_volume,
+				.setValue = set_audio_sfx_volume,
+				.valueInc = 16,
+			}
+		}
+	},
+};
+
+#define CONFIRM_TITLE_MENU_ELEMENTS 5
+
+static GuiElement confirmTitleMenu[CONFIRM_TITLE_MENU_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &background } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = 1,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = 2,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_CONFIRM_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_CONFIRM_X_YES, .y = BUTTON_CONFIRM_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_YES,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_S,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_WIDTH, .height = BUTTON_HEIGHT },
+				.action = return_title
+			}
+		}
+	},
+	{
+		.x = BUTTON_CONFIRM_X_NO, .y = BUTTON_CONFIRM_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_NO,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_N,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_WIDTH, .height = BUTTON_HEIGHT },
+				.action = main_menu
+			}
+		}
+	},
+};
+
+#define CONFIRM_OS_MENU_ELEMENTS 5
+
+static GuiElement confirmOSMenu[CONFIRM_OS_MENU_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &background } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = 1,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = 2,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_CONFIRM_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_CONFIRM_X_YES, .y = BUTTON_CONFIRM_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_YES,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_S,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_WIDTH, .height = BUTTON_HEIGHT },
+				.action = exit_to_os
+			}
+		}
+	},
+	{
+		.x = BUTTON_CONFIRM_X_NO, .y = BUTTON_CONFIRM_Y, .z = 10,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_NO,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_N,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_WIDTH, .height = BUTTON_HEIGHT },
+				.action = main_menu
+			}
+		}
+	},
 };
 
 static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_SELECT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_SOUND] = { .elements = soundMenu, .elementsCount = SOUND_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_GAMEPLAY] = { .elements = gameplayMenu, .elementsCount = GAMEPLAY_MENU_ELEMENTS },
-	[PAUSE_MENU_STATE_CONFIRM] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
+	[PAUSE_MENU_STATE_CONFIRM_TITLE] = { .elements = confirmTitleMenu, .elementsCount = CONFIRM_TITLE_MENU_ELEMENTS },
+	[PAUSE_MENU_STATE_CONFIRM_OS] = { .elements = confirmOSMenu, .elementsCount = CONFIRM_OS_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_EXIT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 };
 

@@ -6,8 +6,6 @@
 #define GUI_CHECK_HEIGHT 8
 #define GUI_CHECK_TEXT_X_OFF 10
 
-#define GUI_BAR_WIDTH 128
-
 #define GUI_BUTTON_TEXT_Y_OFFSET 4
 #define GUI_BUTTON_SELECT_COLOR PAL_COLOR_TURQUOISE
 #define GUI_BUTTON_COLOR PAL_COLOR_DARK_TURQUOISE
@@ -27,7 +25,50 @@
 #define GUI_OPTION_VALUE_HEIGHT_SEPARATION 12
 #define GUI_OPTION_NO_VALUE -1
 
+#define GUI_BAR_X_OFFSET -2
+#define GUI_BAR_Y_OFFSET 12
+#define GUI_BAR_WIDTH 128
+#define GUI_BAR_ARROW_WIDTH 8
+#define GUI_BAR_LANE_WIDTH (GUI_BAR_WIDTH - GUI_BAR_ARROW_WIDTH)
+
 static const char * COLOR_CHANGE_STRING = "^000^000";
+
+typedef enum {
+	GUI_BAR_LEFT_BUTTON,
+	GUI_BAR_RIGHT_BUTTON,
+	GUI_BAR_CENTER,
+	GUI_BAR_NONE,
+} GuiBarPosition;
+
+/**
+ * Checks whether the mouse is inside the bar element.
+ */
+static GuiBarPosition game_gui_mouse_in_bar(GameContext *context, GuiElement *element) {
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
+	
+	BITMAP* barLeft = game_gfx_get_icon(GAME_ICON_BAR_LEFT_ON);
+	BITMAP* barRight = game_gfx_get_icon(GAME_ICON_BAR_RIGHT_ON);
+	if(mouseX >= element->x + GUI_BAR_X_OFFSET &&
+	   mouseX < element->x + GUI_BAR_X_OFFSET + barLeft->w &&
+	   mouseY >= element->y + GUI_BAR_Y_OFFSET &&
+	   mouseY <= element->y + GUI_BAR_Y_OFFSET + barLeft->h) {
+		return GUI_BAR_LEFT_BUTTON;
+	}
+	else if(mouseX >= element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH + barLeft->w &&
+			mouseX < element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH  + barLeft->w + barRight->w &&
+			mouseY >= element->y + GUI_BAR_Y_OFFSET &&
+			mouseY <= element->y + GUI_BAR_Y_OFFSET + barRight->h) {
+		return GUI_BAR_RIGHT_BUTTON;
+	}
+	else if(mouseX >= element->x + GUI_BAR_X_OFFSET + barLeft->w &&
+			mouseX < element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH + barLeft->w &&
+			mouseY >= element->y + GUI_BAR_Y_OFFSET &&
+			mouseY <= element->y + GUI_BAR_Y_OFFSET + GUI_OPTION_VALUE_HEIGHT) {
+		return GUI_BAR_CENTER;
+	}
+	return GUI_BAR_NONE;
+}
 
 static int8_t game_gui_mouse_in_element_option(GameContext *context, GuiElement *element) {
 	int colorChangeLength = text_length(context->gameFont, COLOR_CHANGE_STRING);
@@ -64,7 +105,8 @@ static uint8_t game_gui_mouse_in_element(GameContext *context, GuiElement *eleme
 			break;
 		}
 		case GUI_ELEMENT_BAR: {
-			// TODO do mouse check based on static UI positioning
+			inElement = mouseX >= element->x + GUI_BAR_X_OFFSET && mouseX <= element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH + 2 * GUI_BAR_ARROW_WIDTH &&
+						mouseY >= element->y + GUI_BAR_Y_OFFSET && mouseY <= element->y + GUI_BAR_Y_OFFSET + GUI_OPTION_VALUE_HEIGHT;
 			break;
 		}
 		default:
@@ -127,25 +169,34 @@ void game_gui_handle(GameContext *context, GuiScreen* guiScreen) {
 					break;
 				}
 				case GUI_ELEMENT_BAR: {
+					GuiBarPosition barPosition = game_gui_mouse_in_bar(context, element);
                     GuiBar* bar = &element->typed.bar;
-                    uint8_t leftPressed = FALSE;
-                    uint8_t rightPressed = FALSE;
-					// TODO button can click left side, right side or central bar
                     uint8_t value = bar->getValue(context);
                     uint8_t valueInc = bar->valueInc;
-                    if(leftPressed) {                        
-                        uint8_t minValue = bar->getMinValue(context);
-                        if(value - minValue < valueInc) value = 0; else value -= valueInc;
-                    }
-                    else {
-                        if(rightPressed) {
-                            uint8_t maxValue = bar->getMaxValue(context);
-                            if(value + valueInc > maxValue) value = maxValue; else value += valueInc;
-                        }
-                        else {
-                            // TODO BAR PRESS, select value based on position
-                        }
-                    }
+					switch (barPosition) {
+						case GUI_BAR_LEFT_BUTTON: {
+							uint8_t minValue = bar->getMinValue(context);
+							if(value - minValue < valueInc) value = 0; else value -= valueInc;
+							break;
+						}
+						case GUI_BAR_RIGHT_BUTTON: {
+							uint8_t maxValue = bar->getMaxValue(context);
+							if(maxValue - valueInc < value) value = maxValue; else value += valueInc;
+							break;
+						}
+						case GUI_BAR_CENTER: {
+							int maxValue = element->typed.bar.getMaxValue(context);
+							int barStartX = element->x + GUI_BAR_X_OFFSET + GUI_BAR_ARROW_WIDTH;
+							int relativeX = context->mouseStatus.x - barStartX;
+							if(relativeX < 0) relativeX = 0;
+							if(relativeX > GUI_BAR_LANE_WIDTH) relativeX = GUI_BAR_LANE_WIDTH;
+							value = (relativeX * maxValue) / GUI_BAR_LANE_WIDTH;
+							break;
+						}
+						case GUI_BAR_NONE:
+						default:
+							break;
+					}
                     bar->setValue(context, value);
 					break;
 				}
@@ -230,8 +281,6 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 			case GUI_ELEMENT_OPTION: {
 				render_queue_submit_text_multicolor(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
 										 element->x, element->y, element->textColor, element->textBackground);
-				// Render all options
-				// Render options with text, selected enabled
 				uint8_t value = element->typed.option.getValue(context);				
 				GuiOption *options = &element->typed.option;
 				GuiOptionValue *optionValue = options->optionValues;
@@ -249,11 +298,53 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				break;
 			}
 			case GUI_ELEMENT_BAR: {
-				// TODO Draw dec, inc and bar
+				render_queue_submit_text_multicolor(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+										 element->x, element->y, element->textColor, element->textBackground);
+				BITMAP* barLeftOff = game_gfx_get_icon(GAME_ICON_BAR_LEFT_OFF);
+				BITMAP* barLeftOn = game_gfx_get_icon(GAME_ICON_BAR_LEFT_ON);
+				BITMAP* barRightOff = game_gfx_get_icon(GAME_ICON_BAR_RIGHT_OFF);
+				BITMAP* barRightOn = game_gfx_get_icon(GAME_ICON_BAR_RIGHT_ON);
+				BITMAP* barImage = game_gfx_get_icon(GAME_ICON_BAR);
+				BITMAP* barBall = game_gfx_get_icon(GAME_ICON_OPTION_ON);
 
-				// TODO draw ball in position
+				BITMAP* barLeft = barLeftOff;
+				BITMAP* barRight = barRightOff;
+
+				if(context->mouseStatus.isLeftDown) {
+					GuiBarPosition barPosition = game_gui_mouse_in_bar(context, element);
+					switch(barPosition) {
+						case GUI_BAR_LEFT_BUTTON:
+							barLeft = barLeftOn;
+							break;
+						case GUI_BAR_RIGHT_BUTTON:
+							barRight = barRightOn;
+							break;
+						case GUI_BAR_CENTER:
+						case GUI_BAR_NONE:
+						default:
+							break;
+					}
+				}
+				
+				render_queue_submit_sprite(renderQueue, z, barLeft,
+					element->x + GUI_BAR_X_OFFSET, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
+				render_queue_submit_sprite(renderQueue, z, barRight,
+					element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH + barLeft->w, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
 
 				// Render progress bar
+				// Draw the bar using barImage between left and right buttons, the bar is from left to right
+				for(int bx = element->x + GUI_BAR_X_OFFSET + barLeft->w;
+					bx < element->x + GUI_BAR_X_OFFSET + barLeft->w + GUI_BAR_WIDTH;
+					bx += barImage->w) {
+					render_queue_submit_sprite(renderQueue, z, barImage, bx, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
+				}
+
+				// Draw barBall in position based on value
+				uint8_t value = element->typed.bar.getValue(context);
+				uint8_t maxValue = element->typed.bar.getMaxValue(context);
+				int ballX = element->x + GUI_BAR_X_OFFSET + barLeft->w;
+				ballX += (value * (GUI_BAR_LANE_WIDTH)) / maxValue;
+				render_queue_submit_sprite(renderQueue, z + 1, barBall, ballX, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
 				break;
 			}
 		}
