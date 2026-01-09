@@ -4,6 +4,7 @@
 #include <allegro.h>
 
 int moveViewportCounter = 0;
+uint8_t goMenu;
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// Inputs
@@ -28,7 +29,12 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// TODO menus
 	if (keyboard_is_key_pressed(KEY_F12)) return GAME_STATE_EXIT;
 	if (keyboard_is_key_pressed(KEY_F11)) return GAME_STATE_LOAD_MAP;
-	if (keyboard_is_key_pressed(KEY_F10)) return GAME_STATE_INIT_MENU_MAP;
+	if (keyboard_is_key_pressed(KEY_F10)) {
+		goMenu = TRUE;
+	}
+	else {
+		goMenu = FALSE;
+	}
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
 	if (keyboard_is_key_pressed(KEY_6)) {
@@ -141,10 +147,15 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);
-	render_queue_submit_mouse(context, renderQueue);
 	render_queue_submit_ui(context, renderQueue);
 	game_cmd_bar_render_queue_submit(context, renderQueue);
 	message_render_queue_submit(renderQueue, context->gameFont);
+	if(goMenu) {
+		return GAME_STATE_INIT_MENU_MAP;
+	}
+	else {
+		render_queue_submit_mouse(context, renderQueue);
+	}
 
 	return GAME_STATE_PLAY_MAP;
 }

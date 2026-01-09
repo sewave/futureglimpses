@@ -277,7 +277,7 @@ void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {
 				render_queue_submit_sprite(renderQueue, MOUSE_Z_ORDER, mouse_get_cursor_sprite(),
 										   context->mouseStatus.x - mouse_x_focus, context->mouseStatus.y - mouse_y_focus,
 										   RND_FLAG_NORMAL);
-				if (context->buildPlacing.showBuilding) {
+				if (context->buildPlacing.showBuilding && context->gameState == GAME_STATE_PLAY_MAP) {
 					uint16_t framePos = game_animation_unit_get_frame_position(
 							context->buildPlacing.building, UNIT_STATE_IDLE, DIRECTION_NORTH, 0);
 					SpriteSheet *buildingSheet = game_gfx_get_unit_sheet(context->buildPlacing.building, UNIT_CONTROLLER_PLAYER);

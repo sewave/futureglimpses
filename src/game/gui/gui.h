@@ -5,9 +5,8 @@
 typedef uint8_t (*GuiGetValueFunc)(const GameContext *context);
 typedef uint8_t (*GuiGetMaxValueFunc)(const GameContext *context);
 typedef uint8_t (*GuiGetMinValueFunc)(const GameContext *context);
-typedef void (*GuiSetValueFunc)(const GameContext *context, uint8_t value);
-typedef void (*GuiButtonActionFunc)(const GameContext *context);
-typedef BITMAP* (*GuiGetImageFunc)();
+typedef void (*GuiSetValueFunc)(GameContext *context, uint8_t value);
+typedef void (*GuiButtonActionFunc)(GameContext *context);
 
 typedef enum {
     GUI_ELEMENT_IMAGE,
@@ -24,7 +23,7 @@ typedef struct {
 } GuiButton;
 
 typedef struct {
-    GuiGetImageFunc getImage;
+    BITMAP** bitmap;
 } GuiImage;
 
 typedef struct {
@@ -47,7 +46,8 @@ typedef struct {
 } GuiOption;
 
 typedef struct {
-    int color, background;
+    // If maxX is > 0, the text will be centered in the area defined by (x, maxX)
+    int maxX;
 } GuiText;
 
 typedef struct {
@@ -74,7 +74,12 @@ typedef struct {
     } typed;
 } GuiElement;
 
-void game_gui_handle(GameContext *context, GuiElement* guiElements, uint8_t numElements);
-void game_gui_render_queue_submit(GameContext *context, RenderQueue* renderQueue, GuiElement* guiElements, uint8_t numElements);
+typedef struct {
+    GuiElement* elements;
+    uint8_t elementsCount;
+} GuiScreen;
+
+void game_gui_handle(GameContext *context, GuiScreen* guiScreen);
+void game_gui_render_queue_submit(GameContext *context, RenderQueue* renderQueue, GuiScreen* guiScreen);
 
 #endif /* GUI_H */
