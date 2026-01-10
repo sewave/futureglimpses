@@ -69,3 +69,7 @@ Ye^004s^001
 Music Volume:
 Effects Volume:
 Menu (^004F10^001)
+Congratulations, you won!
+^004V^001ictory
+You were defeatted!
+^004D^001efeat

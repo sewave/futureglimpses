@@ -3,13 +3,6 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-#define MENU_BACK_X 80
-#define MENU_BACK_Y 25
-#define MENU_BACK_WIDTH 160
-#define MENU_BACK_HEIGHT 160
-#define MENU_TITLE_Y_OFFSET 10
-
-#define BUTTON_HEIGHT 18
 #define BUTTON_Y_SEPARATION 20
 #define BUTTON_MAIN_MENU_WIDTH 100
 #define BUTTON_MAIN_MENU_X 110
@@ -461,7 +454,6 @@ static void clean_up_menu() {
 
 GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_handle(context, &guiScreens[menuState]);
-	if(keyboard_is_key_pressed(KEY_F10)) return_to_game(context);
 	if(goMainMenu) {
 		clean_up_menu();
 		return GAME_STATE_LOAD_MAP;
@@ -475,9 +467,7 @@ GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue) {
 		destroy_bitmap(background);
 		return GAME_STATE_PLAY_MAP;
 	}
-	else {
-		game_gui_render_queue_submit(context, renderQueue, &guiScreens[menuState]);
-		render_queue_submit_mouse(context, renderQueue);
-		return GAME_STATE_MENU_MAP;
-	}
+	game_gui_render_queue_submit(context, renderQueue, &guiScreens[menuState]);
+	render_queue_submit_mouse(context, renderQueue);
+	return GAME_STATE_MENU_MAP;
 }

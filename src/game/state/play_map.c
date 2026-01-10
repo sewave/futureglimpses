@@ -3,11 +3,15 @@
 #include "../game_lib.h"
 #include <allegro.h>
 
-int moveViewportCounter = 0;
-uint8_t goMenu;
+static int moveViewportCounter = 0;
+static GameStateEnum nextState;
 
 static void go_menu(GameContext* context) {
-	goMenu = TRUE;
+	nextState = GAME_STATE_INIT_MENU_MAP;
+}
+
+static void go_title(GameContext* context) {
+	nextState = GAME_STATE_LOAD_MAP;
 }
 
 #define PLAY_MENU_ELEMENTS 1
@@ -30,10 +34,82 @@ static GuiElement playMenu[PLAY_MENU_ELEMENTS] = {
 	},
 };
 
-GuiScreen guiScreenPlay = { .elements = playMenu, .elementsCount = PLAY_MENU_ELEMENTS };
+static BITMAP* menuBack;
 
-GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
-	goMenu = FALSE;
+#define BUTTON_CONFIRM_RESULT_WIDTH 80
+#define BUTTON_CONFIRM_RESULT_X (MENU_BACK_X + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 2)
+#define BUTTON_CONFIRM_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
+
+#define WIN_MENU_ELEMENTS 3
+
+static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = UI_Z_ORDER + 900,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 901,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_RESULT_WIN_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 902,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_RESULT_WIN_ACCEPT,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_V,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
+				.action = go_title
+			}
+		}
+	},
+};
+
+#define LOSE_MENU_ELEMENTS 3
+
+static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y, .z = UI_Z_ORDER + 900,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &menuBack } }
+	},
+	{
+		.x = MENU_BACK_X, .y = MENU_BACK_Y + MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 901,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_RESULT_DEFEAT_TITLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 902,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_RESULT_DEFEAT_ACCEPT,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_D,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
+				.action = go_title
+			}
+		}
+	},
+};
+
+static GuiScreen guiScreenPlay = { .elements = playMenu, .elementsCount = PLAY_MENU_ELEMENTS };
+static GuiScreen guiScreenWin = { .elements = winMenu, .elementsCount = WIN_MENU_ELEMENTS };
+static GuiScreen guiScreenLose = { .elements = loseMenu, .elementsCount = LOSE_MENU_ELEMENTS };
+
+static void game_update(GameContext *context, RenderQueue *renderQueue) {
+
 	// Inputs
 	// Command bar has related inputs so must be first
 	game_cmd_bar_handle_buttons(context);
@@ -139,14 +215,39 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	message_update();
 
 	// Win condition
-	// TODO WIN Message + WIN SCREEN
-	// If active units are of only one controller, we go to load map again, TODO win/loss screen
+	// If active units are of only one controller, we go to load map again
 	int playerUnitsCount = 0;
 	for (int i = 0; i < context->activeUnitCount; i++) {
 		GameUnit *unit = context->activeUnits[i];
 		if (!unit || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
 	}
-	if (playerUnitsCount == context->activeUnitCount || playerUnitsCount == 0) return GAME_STATE_LOAD_MAP;
+	if(playerUnitsCount == 0) {
+		menuBack = game_gfx_get_menu_back();
+		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+		context->gameResult = GAME_RESULT_DEFEAT;
+	}
+	else if (playerUnitsCount == context->activeUnitCount) {
+		menuBack = game_gfx_get_menu_back();
+		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+		context->gameResult = GAME_RESULT_VICTORY;
+	}
+	// TODO win/loss restults screen
+}
+
+GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+	nextState = GAME_STATE_PLAY_MAP;
+	
+	if(context->gameResult == GAME_RESULT_ONGOING) {
+		game_update(context, renderQueue);
+	}
+	else {
+		if(context->gameResult == GAME_RESULT_VICTORY) {
+			game_gui_handle(context, &guiScreenWin);
+		}
+		else if(context->gameResult == GAME_RESULT_DEFEAT) {
+			game_gui_handle(context, &guiScreenLose);
+		}
+	}
 
 	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
@@ -157,13 +258,15 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	game_cmd_bar_render_queue_submit(context, renderQueue);
 	message_render_queue_submit(renderQueue, context->gameFont);
 	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
-	if(goMenu) {
-		goMenu = FALSE;
-		return GAME_STATE_INIT_MENU_MAP;
+	if(nextState == GAME_STATE_PLAY_MAP) render_queue_submit_mouse(context, renderQueue);
+	if(context->gameResult != GAME_RESULT_ONGOING) {
+		if(context->gameResult == GAME_RESULT_VICTORY) {
+			game_gui_render_queue_submit(context, renderQueue, &guiScreenWin);
+		}
+		else if(context->gameResult == GAME_RESULT_DEFEAT) {
+			game_gui_render_queue_submit(context, renderQueue, &guiScreenLose);
+		}
 	}
-	else {
-		render_queue_submit_mouse(context, renderQueue);
-	}	
 
-	return GAME_STATE_PLAY_MAP;
+	return nextState;
 }

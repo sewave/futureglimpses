@@ -2,6 +2,14 @@
 #define GUI_H
 #include "../game_lib.h"
 
+#define MENU_BACK_X 80
+#define MENU_BACK_Y 25
+#define MENU_BACK_WIDTH 160
+#define MENU_BACK_HEIGHT 160
+#define MENU_TITLE_Y_OFFSET 10
+
+#define BUTTON_HEIGHT 18
+
 typedef uint8_t (*GuiGetValueFunc)(const GameContext *context);
 typedef uint8_t (*GuiGetMaxValueFunc)(const GameContext *context);
 typedef uint8_t (*GuiGetMinValueFunc)(const GameContext *context);

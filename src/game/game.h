@@ -353,6 +353,12 @@ typedef struct {
 	uint8_t placeResult[MAX_BUILDING_SIZE][MAX_BUILDING_SIZE];
 } BuildPlacing;
 
+typedef enum {
+	GAME_RESULT_ONGOING,
+	GAME_RESULT_VICTORY,
+	GAME_RESULT_DEFEAT,
+} GameResultEnum;
+
 typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
@@ -385,6 +391,7 @@ typedef struct {
 	CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS];
 	uint8_t isDebugEnabled;
 	BuildPlacing buildPlacing;
+	GameResultEnum gameResult;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

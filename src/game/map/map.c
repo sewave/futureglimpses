@@ -52,13 +52,9 @@ MapData* game_map_load_data(const char *filename) {
         fclose(file_ptr);
         return NULL;
     }
-    
-    printf("Map loaded: %d Tile Layers, %d Object Layers.\n", 
-           map->num_tile_layers, map->num_object_layers);
            
     // If there are no layers, we stop here.
     if (map->num_tile_layers == 0 && map->num_object_layers == 0) {
-        printf("Warning: The map is empty.\n");
         fclose(file_ptr);
         return map;
     }
@@ -146,8 +142,6 @@ MapData* game_map_load_data(const char *filename) {
                 fclose(file_ptr);
                 return NULL;
             }
-            
-            printf(" -> Object Layer %d: %zu objects.\n", i, object_count);
         }
     }
 

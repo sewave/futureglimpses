@@ -69,3 +69,7 @@ Sonido
 Volumen de la Música:
 Volumen de los efectos:
 Menú (^004F10^001)
+¡Felicidades, has ganado!
+^004V^001ictoria
+¡Has sido derrotado!
+^004D^001errota

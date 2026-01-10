@@ -119,6 +119,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 5000);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 3000);
 	context->isDebugEnabled = FALSE;
+	context->gameResult = GAME_RESULT_ONGOING;
 	message_init(MESSAGES_X, MESSAGES_Y, MESSAGES_Y_INC, MESSAGES_Z);
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
