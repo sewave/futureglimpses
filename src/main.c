@@ -11,21 +11,19 @@ void close_button_handler() {
 }
 END_OF_FUNCTION(close_button_handler)
 
-volatile long logic_ticks = 0;
+volatile long logicTicks = 0;
 
 void timer_handler() {
-	logic_ticks++;
+	logicTicks++;
 }
 END_OF_FUNCTION(timer_handler);
 
-static long lastTickCount;
-static char redrawNeeded;
 static RenderQueue renderQueue;
 static GameContext context;
 
-void main_loop(volatile long* logicTicks, volatile int* closeButtonFlag, int maxCatchUpTicks, int endState);
+static void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag);
 
-void install_timers() {
+static void install_timers() {
 	printf("Installing timers...");
 	/* Attach function to close button */
 	LOCK_VARIABLE(closeButtonPressed);
@@ -33,7 +31,7 @@ void install_timers() {
 	set_close_button_callback(close_button_handler);
 
 	/* Install timer handler function */
-	LOCK_VARIABLE(logic_ticks);
+	LOCK_VARIABLE(logicTicks);
 	LOCK_FUNCTION(timer_handler);
 	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
 	printOK();
@@ -106,7 +104,7 @@ int main(int argc, char *argv[]) {
 
 	fps_init();
 
-	main_loop(&logic_ticks, &closeButtonPressed, MAX_CATCHUP_TICKS, GAME_STATE_EXIT);
+	main_loop(&logicTicks, &closeButtonPressed);
 
 	game_gfx_destroy_all();
 	snd_stop_music();
@@ -125,22 +123,19 @@ BITMAP* get_screen_buffer() {
 	return screenBuffer;
 }
 
-void main_loop(volatile long *logicTicks,
-			   volatile int *closeButtonFlag,
-			   int maxCatchUpTicks,
-			   int endState) {
+void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag) {
 	screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_LOAD_MAP;
-	redrawNeeded = FALSE;
+	uint8_t redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
-	lastTickCount = *logicTicks;
+	long lastTickCount = *logicTicks;
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
-	while (!*closeButtonFlag && context.gameState != endState) {
+	while (!*closeButtonFlag && context.gameState != GAME_STATE_EXIT) {
 		if (*logicTicks > lastTickCount) {
 			context.ticksToCatchup = *logicTicks - lastTickCount;
-			if (context.ticksToCatchup > maxCatchUpTicks) {
-				lastTickCount = *logicTicks - maxCatchUpTicks;
-				context.ticksToCatchup = maxCatchUpTicks;
+			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) {
+				lastTickCount = *logicTicks - MAX_CATCHUP_TICKS;
+				context.ticksToCatchup = MAX_CATCHUP_TICKS;
 			}
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
