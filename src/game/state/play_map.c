@@ -6,35 +6,41 @@
 int moveViewportCounter = 0;
 uint8_t goMenu;
 
+static void go_menu(GameContext* context) {
+	goMenu = TRUE;
+}
+
+#define PLAY_MENU_ELEMENTS 1
+
+static GuiElement playMenu[PLAY_MENU_ELEMENTS] = {
+	{
+		.x = 3, .y = 1, .z = UI_Z_ORDER + 900,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_MENU_PLAY,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.hotkey = KEY_F10,
+		.typed = {
+			.button = {
+				.size = { .width = 66, .height = 9 },
+				.action = go_menu,
+				.fit = TRUE
+			}
+		}
+	},
+};
+
+GuiScreen guiScreenPlay = { .elements = playMenu, .elementsCount = PLAY_MENU_ELEMENTS };
+
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+	goMenu = FALSE;
 	// Inputs
 	// Command bar has related inputs so must be first
 	game_cmd_bar_handle_buttons(context);
 	game_mouse_handle_status_change(context);
+	game_gui_handle(context, &guiScreenPlay);
 
-	if(keyboard_is_key_pressed(KEY_G)) {
-		context->isDebugEnabled ^= TRUE;
-	}
-
-	if(context->isDebugEnabled) {
-		if(keyboard_is_key_pressed(KEY_F1)) {
-			message_add_to_queue("Test message 1", SEC_TO_FRAMES(5), PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-		}
-
-		if(keyboard_is_key_pressed(KEY_F2)) {
-			message_add_to_queue("Test ^004m^005e^006ssage 2", SEC_TO_FRAMES(5), PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-		}
-	}
-
-	// TODO menus
-	if (keyboard_is_key_pressed(KEY_F12)) return GAME_STATE_EXIT;
-	if (keyboard_is_key_pressed(KEY_F11)) return GAME_STATE_LOAD_MAP;
-	if (keyboard_is_key_pressed(KEY_F10)) {
-		goMenu = TRUE;
-	}
-	else {
-		goMenu = FALSE;
-	}
+	if(keyboard_is_key_pressed(KEY_G)) context->isDebugEnabled ^= TRUE;
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
 	if (keyboard_is_key_pressed(KEY_6)) {
@@ -150,12 +156,14 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	render_queue_submit_ui(context, renderQueue);
 	game_cmd_bar_render_queue_submit(context, renderQueue);
 	message_render_queue_submit(renderQueue, context->gameFont);
+	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
 	if(goMenu) {
+		goMenu = FALSE;
 		return GAME_STATE_INIT_MENU_MAP;
 	}
 	else {
 		render_queue_submit_mouse(context, renderQueue);
-	}
+	}	
 
 	return GAME_STATE_PLAY_MAP;
 }

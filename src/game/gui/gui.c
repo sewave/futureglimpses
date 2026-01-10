@@ -7,6 +7,7 @@
 #define GUI_CHECK_TEXT_X_OFF 10
 
 #define GUI_BUTTON_TEXT_Y_OFFSET 4
+#define GUI_BUTTON_FIT_TEXT_Y_OFFSET 0
 #define GUI_BUTTON_SELECT_COLOR PAL_COLOR_TURQUOISE
 #define GUI_BUTTON_COLOR PAL_COLOR_DARK_TURQUOISE
 
@@ -233,9 +234,13 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				int height = element->typed.button.size.height;
 
 				const char *text = text_get_by_id(element->textId);
+				int yOffset = GUI_BUTTON_TEXT_Y_OFFSET;
+				if (element->typed.button.fit) {
+					yOffset = GUI_BUTTON_FIT_TEXT_Y_OFFSET;
+				}
 				int textX = element->x + element->typed.button.size.width / 2 - (text_length(context->gameFont, text) - colorChangeLength) / 2;
 				render_queue_submit_text_multicolor(renderQueue, z + 1, context->gameFont, text,
-										 textX, element->y + GUI_BUTTON_TEXT_Y_OFFSET, element->textColor, element->textBackground);
+										 textX, element->y + yOffset, element->textColor, element->textBackground);
                 int buttonColor = GUI_BUTTON_COLOR;
 				if (game_gui_mouse_in_element(context, element)) {
 					render_queue_submit_rect(renderQueue, z + 1, element->x, element->y,
@@ -263,11 +268,12 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				}
                 render_queue_submit_rect_fill(renderQueue, z, element->x, element->y,
 											  element->x + width - 1, element->y + height - 1, buttonColor);
-
-				render_queue_submit_rect(renderQueue, z + 1, element->x + 1, element->y + 1,
-										 element->x + width - 2, element->y + height - 2, GUI_BUTTON_INTRA_WALL_COLOR);
-                render_queue_submit_rect(renderQueue, z + 1, element->x + 2, element->y + 2,
-                            element->x + width - 3, element->y + height - 3, GUI_BUTTON_INSIDE_WALL_COLOR);
+				if(!element->typed.button.fit ) {
+					render_queue_submit_rect(renderQueue, z + 1, element->x + 1, element->y + 1,
+						element->x + width - 2, element->y + height - 2, GUI_BUTTON_INTRA_WALL_COLOR);
+                	render_queue_submit_rect(renderQueue, z + 1, element->x + 2, element->y + 2,
+						element->x + width - 3, element->y + height - 3, GUI_BUTTON_INSIDE_WALL_COLOR);
+				}
 				break;
 			}
 			case GUI_ELEMENT_CHECK: {

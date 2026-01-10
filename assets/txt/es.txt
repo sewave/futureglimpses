@@ -68,3 +68,4 @@ Sonido
 ^004N^001o
 Volumen de la Música:
 Volumen de los efectos:
+Menú (^004F10^001)

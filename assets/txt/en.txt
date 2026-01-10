@@ -68,3 +68,4 @@ Ye^004s^001
 ^004N^001o
 Music Volume:
 Effects Volume:
+Menu (^004F10^001)

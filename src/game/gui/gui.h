@@ -20,6 +20,7 @@ typedef enum {
 typedef struct {
     GuiButtonActionFunc action;
     Size size;
+    uint8_t fit;
 } GuiButton;
 
 typedef struct {
