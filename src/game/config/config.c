@@ -28,3 +28,37 @@ void game_config_save_settings(Config* config) {
     set_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, config->language);
     flush_config_file();
 }
+
+uint8_t game_config_get_audio_max_volume(const GameContext *context) {
+	return 255;
+}
+
+uint8_t game_config_get_audio_min_volume(const GameContext *context) {
+	return 0;
+}
+
+void game_config_set_audio_music_volume(GameContext *context, uint8_t value) {
+	context->config.musicVolume = value;
+	set_volume(context->config.sfxVolume, context->config.musicVolume);
+}
+
+uint8_t game_config_get_audio_music_volume(const GameContext *context) {
+	return context->config.musicVolume;
+}
+
+uint8_t game_config_get_audio_sfx_volume(const GameContext *context) {
+	return context->config.sfxVolume;
+}
+
+void game_config_set_audio_sfx_volume(GameContext *context, uint8_t value) {
+	context->config.sfxVolume = value;
+	set_volume(context->config.sfxVolume, context->config.musicVolume);
+}
+
+uint8_t game_config_get_gameplay_life_bars(const GameContext *context) {
+	return context->config.lifeBar;
+}
+
+void game_config_set_gameplay_life_bars(GameContext *context, uint8_t value) {
+	context->config.lifeBar = (LifeBarEnum) value;
+}

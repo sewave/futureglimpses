@@ -65,40 +65,6 @@ static void confirm_os(GameContext* context) {
 	menuState = PAUSE_MENU_STATE_CONFIRM_OS;
 }
 
-static uint8_t get_audio_max_volume(const GameContext *context) {
-	return 255;
-}
-
-static uint8_t get_audio_min_volume(const GameContext *context) {
-	return 0;
-}
-
-static void set_audio_music_volume(GameContext *context, uint8_t value) {
-	context->config.musicVolume = value;
-	set_volume(context->config.sfxVolume, context->config.musicVolume);
-}
-
-static uint8_t get_audio_music_volume(const GameContext *context) {
-	return context->config.musicVolume;
-}
-
-static uint8_t get_audio_sfx_volume(const GameContext *context) {
-	return context->config.sfxVolume;
-}
-
-static void set_audio_sfx_volume(GameContext *context, uint8_t value) {
-	context->config.sfxVolume = value;
-	set_volume(context->config.sfxVolume, context->config.musicVolume);
-}
-
-static uint8_t get_gameplay_life_bars(const GameContext *context) {
-	return context->config.lifeBar;
-}
-
-static void set_gameplay_life_bars(GameContext *context, uint8_t value) {
-	context->config.lifeBar = (LifeBarEnum) value;
-}
-
 #define MAIN_MENU_ELEMENTS 8
 
 static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
@@ -244,8 +210,8 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 					{ .value = LIFE_BAR_NEVER, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_NEVER, .hotkey = KEY_N,
 						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
 				},
-				.getValue = get_gameplay_life_bars,
-				.setValue = set_gameplay_life_bars
+				.getValue = game_config_get_gameplay_life_bars,
+				.setValue = game_config_set_gameplay_life_bars
 			}
 		}
 	},
@@ -294,10 +260,10 @@ static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
 		.textBackground = TRANSPARENT_INDEX,
 		.typed = {
 			.bar = {
-				.getMaxValue = get_audio_max_volume,
-				.getMinValue = get_audio_min_volume,
-				.getValue = get_audio_music_volume,
-				.setValue = set_audio_music_volume,
+				.getMaxValue = game_config_get_audio_max_volume,
+				.getMinValue = game_config_get_audio_min_volume,
+				.getValue = game_config_get_audio_music_volume,
+				.setValue = game_config_set_audio_music_volume,
 				.valueInc = 16,
 			}
 		}
@@ -310,10 +276,10 @@ static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
 		.textBackground = TRANSPARENT_INDEX,
 		.typed = {
 			.bar = {
-				.getMaxValue = get_audio_max_volume,
-				.getMinValue = get_audio_min_volume,
-				.getValue = get_audio_sfx_volume,
-				.setValue = set_audio_sfx_volume,
+				.getMaxValue = game_config_get_audio_max_volume,
+				.getMinValue = game_config_get_audio_min_volume,
+				.getValue = game_config_get_audio_sfx_volume,
+				.setValue = game_config_set_audio_sfx_volume,
 				.valueInc = 16,
 			}
 		}
