@@ -11,7 +11,7 @@ static void go_menu(GameContext* context) {
 }
 
 static void go_title(GameContext* context) {
-	nextState = GAME_STATE_LOAD_MAP;
+	nextState = GAME_STATE_INIT_TITLE;
 }
 
 #define PLAY_MENU_ELEMENTS 1

@@ -125,7 +125,7 @@ BITMAP* get_screen_buffer() {
 
 void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag) {
 	screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
-	context.gameState = GAME_STATE_LOAD_MAP;
+	context.gameState = GAME_STATE_INIT_TITLE;
 	uint8_t redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
 	long lastTickCount = *logicTicks;

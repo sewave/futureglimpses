@@ -73,3 +73,5 @@ Congratulations, you won!
 ^004V^001ictory
 You were defeatted!
 ^004D^001efeat
+Pl^004a^001y
+O^004p^001tions

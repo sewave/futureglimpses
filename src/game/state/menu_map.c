@@ -216,7 +216,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	{
 		.x = BUTTON_RETURN_X, .y = BUTTON_RETURN_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
-		.textId = GAME_TEXT_ID_MENU_RETURN_MAIN_MENU,
+		.textId = GAME_TEXT_ID_MENU_RETURN,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
 		.hotkey = KEY_R,
@@ -275,7 +275,7 @@ static GuiElement soundMenu[SOUND_MENU_ELEMENTS] = {
 	{
 		.x = BUTTON_RETURN_X, .y = BUTTON_RETURN_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
-		.textId = GAME_TEXT_ID_MENU_RETURN_MAIN_MENU,
+		.textId = GAME_TEXT_ID_MENU_RETURN,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
 		.hotkey = KEY_R,
@@ -456,7 +456,7 @@ GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_handle(context, &guiScreens[menuState]);
 	if(goMainMenu) {
 		clean_up_menu();
-		return GAME_STATE_LOAD_MAP;
+		return GAME_STATE_INIT_TITLE;
 	}
 	if(goOS) {
 		clean_up_menu();
