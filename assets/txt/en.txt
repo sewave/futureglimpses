@@ -75,3 +75,6 @@ You were defeatted!
 ^004D^001efeat
 Pl^004a^001y
 O^004p^001tions
+Language:
+^004E^001spañol
+Engli^004s^001h

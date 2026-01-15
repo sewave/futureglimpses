@@ -75,3 +75,6 @@ Menú (^004F10^001)
 ^004D^001errota
 Jug^004a^001r
 O^004p^001ciones
+Idioma:
+^004E^001spañol
+Engli^004s^001h

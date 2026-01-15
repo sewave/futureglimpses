@@ -62,3 +62,12 @@ uint8_t game_config_get_gameplay_life_bars(const GameContext *context) {
 void game_config_set_gameplay_life_bars(GameContext *context, uint8_t value) {
 	context->config.lifeBar = (LifeBarEnum) value;
 }
+
+uint8_t game_config_get_language(const GameContext *context) {
+	return context->config.language;
+}
+
+void game_config_set_language(GameContext *context, uint8_t value) {
+	context->config.language = (GameLanguageEnum) value;
+    game_text_set_language(context->config.language);
+}

@@ -47,11 +47,16 @@ static void confirm_os(GameContext* context) {
 	titleMenuState = TITLE_MENU_CONFIRM_EXIT;
 }
 
-#define TITLE_MENU_START_Y 135
+#define TITLE_MENU_START_Y 120
 #define TITLE_MENU_SPACING 20
+#define TITLE_MENU_LAST_SPACING 10
 #define TITLE_MENU_BUTTON_WIDTH 120
 #define TITLE_MENU_BUTTON_HEIGHT 18
 #define TITLE_MENU_BUTTON_X 100
+#define TITLE_MENU_Y 130
+#define TITLE_MENU_X 80
+#define TITLE_MENU_WIDTH 170
+#define TITLE_MENU_HEIGHT 115
 
 #define TITLE_MENU_ELEMENTS 4
 
@@ -62,7 +67,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = UI_Z_ORDER + 900,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_START_GAME,
         .textColor = PAL_COLOR_WHITE,
@@ -76,7 +81,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = UI_Z_ORDER + 901,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_OPTIONS,
         .textColor = PAL_COLOR_WHITE,
@@ -90,7 +95,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2, .z = UI_Z_ORDER + 903,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_EXIT_TO_OS,
         .textColor = PAL_COLOR_WHITE,
@@ -114,7 +119,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = UI_Z_ORDER + 901,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_SOUND,
         .textColor = PAL_COLOR_WHITE,
@@ -128,7 +133,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = UI_Z_ORDER + 902,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_GAMEPLAY,
         .textColor = PAL_COLOR_WHITE,
@@ -142,7 +147,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2, .z = UI_Z_ORDER + 903,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
@@ -166,7 +171,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = UI_Z_ORDER + 900,
+		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
 		.type = GUI_ELEMENT_TEXT,
 		.textId = GAME_TEXT_ID_CONFIRM_TITLE,
 		.textColor = PAL_COLOR_WHITE,
@@ -174,7 +179,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.typed = { .text = { .maxX = TITLE_MENU_BUTTON_X + TITLE_MENU_BUTTON_WIDTH } }
 	},
 	{
-		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = UI_Z_ORDER + 901,
+		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING, .z = 1,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_YES,
 		.textColor = PAL_COLOR_WHITE,
@@ -188,7 +193,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		}
 	},
 	{
-		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2, .z = UI_Z_ORDER + 902,
+		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2, .z = 1,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_NO,
 		.textColor = PAL_COLOR_WHITE,
@@ -203,13 +208,135 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 	},
 };
 
+#define TITLE_MENU_SOUND_ELEMENTS 4
+
+static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+    {
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+        .hotkey = KEY_R,
+        .typed = {
+            .button = {
+                .size = { .width = TITLE_MENU_BUTTON_WIDTH, .height = TITLE_MENU_BUTTON_HEIGHT },
+                .action = options_settings
+            }
+        }
+    },
+	{
+		.x = TITLE_MENU_X + 10, .y = TITLE_MENU_Y - 15, .z = 2,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_SOUND_MUSIC_VOLUME,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.bar = {
+				.getMaxValue = game_config_get_audio_max_volume,
+				.getMinValue = game_config_get_audio_min_volume,
+				.getValue = game_config_get_audio_music_volume,
+				.setValue = game_config_set_audio_music_volume,
+				.valueInc = 16,
+			}
+		}
+	},
+	{
+		.x = TITLE_MENU_X + 10, .y = TITLE_MENU_Y + 10, .z = 2,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_SOUND_EFFECTS_VOLUME,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.bar = {
+				.getMaxValue = game_config_get_audio_max_volume,
+				.getMinValue = game_config_get_audio_min_volume,
+				.getValue = game_config_get_audio_sfx_volume,
+				.setValue = game_config_set_audio_sfx_volume,
+				.valueInc = 16,
+			}
+		}
+	},
+};
+
+#define GAMEPLAY_MENU_ELEMENTS 4
+
+static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+    {
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+        .hotkey = KEY_R,
+        .typed = {
+            .button = {
+                .size = { .width = TITLE_MENU_BUTTON_WIDTH, .height = TITLE_MENU_BUTTON_HEIGHT },
+                .action = options_settings
+            }
+        }
+    },
+	{
+		.x = TITLE_MENU_X, .y = TITLE_MENU_Y - 15, .z = 10,
+		.type = GUI_ELEMENT_OPTION,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.option = {
+				.optionValuesNumber = 3,
+				.optionValues = (GuiOptionValue[]) {
+					{ .value = LIFE_BAR_ALWAYS, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ALWAYS, .hotkey = KEY_A,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+					{ .value = LIFE_BAR_DAMAGED, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ONLY_DAMAGED, .hotkey = KEY_D,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+					{ .value = LIFE_BAR_NEVER, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_NEVER, .hotkey = KEY_N,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+				},
+				.getValue = game_config_get_gameplay_life_bars,
+				.setValue = game_config_set_gameplay_life_bars
+			}
+		}
+	},
+	{
+		.x = TITLE_MENU_X + 100, .y = TITLE_MENU_Y - 15, .z = 11,
+		.type = GUI_ELEMENT_OPTION,
+		.textId = GAME_TEXT_ID_MENU_LANGUAGE,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.option = {
+				.optionValuesNumber = 2,
+				.optionValues = (GuiOptionValue[]) {
+					{ .value = LANGUAGE_SPANISH, .textId = GAME_TEXT_ID_MENU_LANGUAGE_SPANISH, .hotkey = KEY_E,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+					{ .value = LANGUAGE_ENGLISH, .textId = GAME_TEXT_ID_MENU_LANGUAGE_ENGLISH, .hotkey = KEY_S,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+				},
+				.getValue = game_config_get_language,
+				.setValue = game_config_set_language
+			}
+		}
+	},
+};
+
 static GuiScreen guiScreens[TITLE_MENU_STATE_COUNT] = {
 		[TITLE_MENU_INITIAL] = {.elements = titleMenu, .elementsCount = TITLE_MENU_ELEMENTS},
 		// We won't print anything in here
 		[TITLE_MENU_START_GAME] = {.elements = NULL, .elementsCount = 0},
         [TITLE_MENU_OPTIONS] = {.elements = optionsMenu, .elementsCount = TITLE_MENU_OPTIONS_ELEMENTS},
-		[TITLE_MENU_AUDIO] = {.elements = optionsMenu, .elementsCount = TITLE_MENU_OPTIONS_ELEMENTS},
-		[TITLE_MENU_GAMEPLAY] = {.elements = optionsMenu, .elementsCount = TITLE_MENU_OPTIONS_ELEMENTS},
+		[TITLE_MENU_AUDIO] = {.elements = soundMenu, .elementsCount = TITLE_MENU_SOUND_ELEMENTS},
+		[TITLE_MENU_GAMEPLAY] = {.elements = gameplayMenu, .elementsCount = GAMEPLAY_MENU_ELEMENTS},
         [TITLE_MENU_CONFIRM_EXIT] = {.elements = confirmOSMenu, .elementsCount = TITLE_MENU_CONFIRM_EXIT_ELEMENTS},
 		// We won't print anything in here
 		[TITLE_MENU_EXIT] = {.elements = NULL, .elementsCount = 0}
