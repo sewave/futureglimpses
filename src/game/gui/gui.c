@@ -353,6 +353,22 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				render_queue_submit_sprite(renderQueue, z + 1, barBall, ballX, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
 				break;
 			}
+			case GUI_ELEMENT_RECTANGLE: {
+				GuiRectangle* rectangle = &element->typed.rectangle;
+				render_queue_submit_rect(renderQueue, z, element->x, element->y,
+										 element->x + rectangle->size.width - 1,
+										 element->y + rectangle->size.height - 1,
+										 rectangle->color);
+				break;
+			}
+			case GUI_ELEMENT_FILL_RECTANGLE: {
+				GuiFillRectangle* fillRectangle = &element->typed.fillRectangle;
+				render_queue_submit_rect_fill(renderQueue, z, element->x, element->y,
+											  element->x + fillRectangle->size.width - 1,
+											  element->y + fillRectangle->size.height - 1,
+											  fillRectangle->color);
+				break;
+			}
 		}
 	}
 }

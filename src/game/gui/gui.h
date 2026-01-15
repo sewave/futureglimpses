@@ -23,6 +23,8 @@ typedef enum {
     GUI_ELEMENT_BAR,
     GUI_ELEMENT_OPTION,
     GUI_ELEMENT_TEXT,
+    GUI_ELEMENT_RECTANGLE,
+    GUI_ELEMENT_FILL_RECTANGLE,
 } GuiElementType;
 
 typedef struct {
@@ -67,6 +69,18 @@ typedef struct {
     uint8_t valueInc;
 } GuiBar;
 
+
+typedef struct {
+    Size size;
+    int color;
+} GuiRectangle;
+
+
+typedef struct {
+    Size size;
+    int color;
+} GuiFillRectangle;
+
 typedef struct {
     int x, y, z;
     GuiElementType type;
@@ -80,6 +94,8 @@ typedef struct {
         GuiBar bar;
         GuiOption option;
         GuiText text;
+        GuiRectangle rectangle;
+        GuiFillRectangle fillRectangle;
     } typed;
 } GuiElement;
 
