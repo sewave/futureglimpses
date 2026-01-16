@@ -9,6 +9,11 @@
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
+        "Archer_Blue1.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "FullTileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 2
@@ -28,10 +33,16 @@
                 "x": 512,
                 "y": 714
             }
+        },
+        "tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
-    "last.imagePath": "C:/dev/games/Fantasy Battle Pack/Tiles",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
+    "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
+    "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/units",
     "map.height": 64,
     "map.lastUsedExportFilter": "Simple Bin Exporter (*.map)",
     "map.lastUsedFormat": "tmx",
@@ -43,13 +54,18 @@
         "FullTileset.tsx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "int",
+    "property.type": "color",
     "recentFiles": [
+        "tileset.tsx",
         "FullTileset.tsx",
+        "Archer_Blue1.tsx",
         "base.tmx",
         "sin nombre.tmx"
     ],
+    "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
     "tileset.tileSize": {
         "height": 16,
         "width": 16
