@@ -133,6 +133,7 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 		if (keyboard_is_key_pressed(KEY_9)) {
 			resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 		}
+		if (keyboard_is_key_pressed(KEY_F12)) nextState = GAME_STATE_LOAD_MAP;
 	}
 
 	game_selection_handle_slots(context);

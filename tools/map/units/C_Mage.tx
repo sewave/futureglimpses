@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="units.tsx"/>
+ <object name="C_Mage" gid="10" width="16" height="16">
+  <properties>
+   <property name="UNIT_CONTROLLER" type="int" value="1"/>
+   <property name="UNIT_TYPE" type="int" value="4"/>
+  </properties>
+ </object>
+</template>

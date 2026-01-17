@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="units.tsx"/>
+ <object name="P_Archer" gid="3" width="16" height="16">
+  <properties>
+   <property name="UNIT_CONTROLLER" type="int" value="0"/>
+   <property name="UNIT_TYPE" type="int" value="2"/>
+  </properties>
+ </object>
+</template>
