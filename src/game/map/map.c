@@ -142,6 +142,14 @@ MapData* game_map_load_data(const char *filename) {
                 fclose(file_ptr);
                 return NULL;
             }
+
+            // Correct y position of object, 1 minus 1 to match tile indexing
+            for (int j = 0; j < object_count; j++) {
+                // Adjust on object types from 0 to 4 y coordinate to match tile indexing (Units)
+                if (current_layer->objects[j].type >= 0 && current_layer->objects[j].type <= 4) {
+                    current_layer->objects[j].y -= 1;
+                }
+            }
         }
     }
 

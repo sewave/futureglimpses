@@ -2,7 +2,8 @@
 #define MAP_H
 
 typedef struct {
-    unsigned short int type;
+    unsigned char type;
+    unsigned char controller;
     unsigned short int x;
     unsigned short int y;
 } MapObject;

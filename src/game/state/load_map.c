@@ -58,12 +58,8 @@ void spawn_test_units(GameContext *context) {
 	}
 }
 
-GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
-	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
-	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
-
-	// TODO this file path should be in context, selected in a filebrowser
-	MapData *map = game_map_load_data("assets/map/test.map");
+static void load_map(GameContext *context, const char * filePath) {
+	MapData *map = game_map_load_data(filePath);
 
 	// Load the map here
 	for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -75,11 +71,31 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
+	// Only 1 object layer
+	ObjectLayer *objLayer = &map->object_layers[0];
+	for (int i = 0; i < objLayer->num_objects; i++) {
+		MapObject *mapObj = &objLayer->objects[i];
+		GameUnit *unit = game_unit_spawn(context, (UnitTypeEnum) mapObj->type, (ControllerEnum) mapObj->controller, mapObj->x, mapObj->y);
+		if (unit->isBuilding) {
+			building_complete(context, unit);
+			unit->health = unit->maxHealth;
+		}
+	}
+
+	//spawn_test_units(context);
+
 	game_map_free_data(map);
+}	
+
+GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
+	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
+	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
 
 	game_units_init(context);
 	game_objects_init(context);
 	game_selection_init(context);
+
+	load_map(context, "assets/map/test.map");
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -125,8 +141,6 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
 	game_snd_play_music(GAME_MUSIC_MAP_1);
-
-	spawn_test_units(context);
 
 	return GAME_STATE_PLAY_MAP;
 }
