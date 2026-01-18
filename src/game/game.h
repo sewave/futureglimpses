@@ -3,6 +3,7 @@
 #include "../common/common_lib.h"
 #include <allegro/gfx.h>
 #include "text/game_text_enum.h"
+#include "game_enums.h"
 
 #define VERSION "1.00"
 #define GAME_TITLE "Future Glimpses"
@@ -35,26 +36,6 @@
 #define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
 #define NULL_HANDLE 0
 
-typedef enum {
-	GAME_STATE_INIT_TITLE,
-	GAME_STATE_TITLE,
-	GAME_STATE_LOAD_MAP,
-	GAME_STATE_PLAY_MAP,
-	GAME_STATE_INIT_MENU_MAP,
-	GAME_STATE_MENU_MAP,
-	GAME_STATE_EXIT,
-	NUM_GAME_STATES
-} GameStateEnum;
-
-typedef enum {
-	RESOURCE_TYPE_GOLD,
-	RESOURCE_TYPE_WOOD,
-	RESOURCE_TYPE_AVAILABLE_FOOD,
-	RESOURCE_TYPE_USED_FOOD,
-	RESOURCE_TYPE_MAX_FOOD,
-	RESOURCE_TYPES_COUNT
-} ResourceTypeEnum;
-
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
 	uint32_t uiQuantity[RESOURCE_TYPES_COUNT];
@@ -69,84 +50,10 @@ typedef struct {
 	uint32_t resourcesGathered[RESOURCE_TYPES_COUNT];
 } Stats;
 
-typedef enum {
-	BOARD_UNEXPLORED,
-	BOARD_EXPLORED
-} BoardExplorationEnum;
-
 #define MAX_WALKABLE_TILE 127
-typedef enum {
-	WALKABILITY_FREE,
-	WALKABILITY_BLOCKED,
-} WalkabilityEnum;
-
-typedef enum {
-	UNIT_TYPE_WORKER,
-	UNIT_TYPE_SOLDIER,
-	UNIT_TYPE_ARCHER,
-	UNIT_TYPE_KNIGHT,
-	UNIT_TYPE_MAGE,
-	UNIT_TYPE_CITY_HALL,
-	UNIT_TYPE_FARM,
-	UNIT_TYPE_BARRACKS,
-	UNIT_TYPE_BLACKSMITH,
-	UNIT_TYPE_STABLES,
-	UNIT_TYPE_TOWER,
-	UNIT_TYPE_NUMBER,
-} UnitTypeEnum;
-
-typedef enum {
-	UNIT_CONTROLLER_PLAYER,
-	UNIT_CONTROLLER_AI,
-	UNIT_CONTROLLERS_COUNT,
-} ControllerEnum;
-
 #define opponent_controller(controller) ((controller) == UNIT_CONTROLLER_PLAYER ? UNIT_CONTROLLER_AI : UNIT_CONTROLLER_PLAYER)
-
-typedef enum {
-	UNIT_STATE_IDLE,
-	UNIT_STATE_ATTACK,
-	UNIT_STATE_DEFEND,
-	UNIT_STATE_MOVE,
-	UNIT_STATE_MOVE_ANIM,
-	UNIT_STATE_MOVE_ATTACK,
-	UNIT_STATE_WORK,
-	UNIT_STATE_DIE,
-	UNIT_STATES_COUNT,
-} UnitStateEnum;
-
 #define BUILDING_STATE_COMPLETED UNIT_STATE_IDLE
 #define BUILDING_STATE_CONSTRUCT UNIT_STATE_DEFEND
-
-typedef enum {
-	DIRECTION_NORTH,
-	DIRECTION_EAST,
-	DIRECTION_SOUTH,
-	DIRECTION_WEST,
-	DIRECTIONS_COUNT,
-} DirectionEnum;
-
-typedef enum {
-	OBJ_DIRECTION_NORTH,
-	OBJ_DIRECTION_NORTH_EAST,
-	OBJ_DIRECTION_EAST,
-	OBJ_DIRECTION_SOUTH_EAST,
-	OBJ_DIRECTION_SOUTH,
-	OBJ_DIRECTION_SOUTH_WEST,
-	OBJ_DIRECTION_WEST,
-	OBJ_DIRECTION_NORTH_WEST,
-	OBJ_DIRECTIONS_COUNT,
-} ObjectDirectionEnum;
-
-typedef enum {
-	EVENT_TYPE_SOUND,
-	EVENT_TYPE_DAMAGE,
-	EVENT_TYPE_AREA_DAMAGE,
-	EVENT_TYPE_SPAWN_ARROW,
-	EVENT_TYPE_SPAWN_FIREBALL,
-	EVENT_TYPE_WORK,
-} EventType;
-
 #define MAX_FRAMES 4
 #define MAX_EVENTS 4
 
@@ -154,11 +61,6 @@ typedef struct {
 	uint16_t startFrame;
 	uint8_t xRepos, yRepos;
 } AnimationProperties;
-
-typedef enum {
-	ANIMATION_TYPE_ONCE,
-	ANIMATION_TYPE_CYCLE,
-} AnimationType;
 
 typedef struct {
 	EventType type;
@@ -249,14 +151,6 @@ typedef struct {
 	} typed;
 } GameUnit;
 
-typedef enum {
-	OBJ_TYPE_ARROW,
-	OBJ_TYPE_FIREBALL,
-	OBJ_TYPE_EXPLOSION,
-	OBJ_TYPE_ARROW_DAMAGE,
-	OBJ_TYPE_NUMBER,
-} ObjectTypeEnum;
-
 typedef uint32_t ObjectId;
 
 typedef struct {
@@ -281,19 +175,7 @@ typedef struct {
 	AnimationStatus animationStatus;
 } Object;
 
-typedef enum {
-	LIFE_BAR_ALWAYS,
-	LIFE_BAR_DAMAGED,
-	LIFE_BAR_NEVER,
-	LIFE_BAR_COUNT,
-} LifeBarEnum;
-
 #define DEFAULT_LIFE_BAR LIFE_BAR_DAMAGED
-
-typedef enum {
-    LANGUAGE_SPANISH = 0,
-    LANGUAGE_ENGLISH = 1,
-} GameLanguageEnum;
 
 typedef struct {
 	uint8_t musicVolume;
@@ -302,29 +184,8 @@ typedef struct {
 	GameLanguageEnum language;
 } Config;
 
-typedef enum {
-	STRATEGY_HARVEST,
-	STRATEGY_BUILD,
-	STRATEGY_TRAIN,
-	STRATEGY_ATTACK,
-	STRATEGY_COUNT,
-} ComputerStrategyEnum;
-
 #define CMD_BAR_BUTTONS 6
-
-typedef enum {
-	CMD_BAR_BTN_STATE_IDLE,
-	CMD_BAR_BTN_STATE_HOVER,
-	CMD_BAR_BTN_STATE_DOWN,
-	CMD_BAR_BTN_STATE_RELEASED,
-} CommandBarButtonStateEnum;
-
 typedef void (*CommandBarButtonFunction)(void *, uint8_t);
-
-typedef enum {
-	CMD_BAR_BTN_TYPE_ACTION,
-	CMD_BAR_BTN_TYPE_CREATE,
-} CommandBarButtonTypeEnum;
 
 typedef struct {
 	CommandBarButtonTypeEnum type;
@@ -339,12 +200,6 @@ typedef struct {
 	CommandBarButtonStateEnum state;
 } CommandBarButton;
 
-typedef enum {
-	CMD_BAR_BUILD_STATE_NONE,
-	CMD_BAR_BUILD_STATE_SELECT,
-	CMD_BAR_BUILD_STATE_PLACE,
-} BuildingStateEnum;
-
 typedef struct {
 	BuildingStateEnum state;
 	UnitTypeEnum building;
@@ -354,12 +209,6 @@ typedef struct {
 	uint8_t size;
 	uint8_t placeResult[MAX_BUILDING_SIZE][MAX_BUILDING_SIZE];
 } BuildPlacing;
-
-typedef enum {
-	GAME_RESULT_ONGOING,
-	GAME_RESULT_VICTORY,
-	GAME_RESULT_DEFEAT,
-} GameResultEnum;
 
 typedef struct {
 	GameStateEnum gameState;

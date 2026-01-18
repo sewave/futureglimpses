@@ -76,7 +76,7 @@ static void load_map(GameContext *context, const char * filePath) {
 	for (int i = 0; i < objLayer->num_objects; i++) {
 		MapObject *mapObj = &objLayer->objects[i];
 		GameUnit *unit = game_unit_spawn(context, (UnitTypeEnum) mapObj->type, (ControllerEnum) mapObj->controller, mapObj->x, mapObj->y);
-		if (unit->isBuilding) {
+		if (unit && unit->isBuilding) {
 			building_complete(context, unit);
 			unit->health = unit->maxHealth;
 		}
@@ -85,7 +85,7 @@ static void load_map(GameContext *context, const char * filePath) {
 	//spawn_test_units(context);
 
 	game_map_free_data(map);
-}	
+}
 
 GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));

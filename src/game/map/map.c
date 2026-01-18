@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "map.h"
+#include "../game_enums.h"
 
 void game_map_free_data(MapData *map) {
     if (!map) return;
@@ -145,9 +146,27 @@ MapData* game_map_load_data(const char *filename) {
 
             // Correct y position of object, 1 minus 1 to match tile indexing
             for (int j = 0; j < object_count; j++) {
-                // Adjust on object types from 0 to 4 y coordinate to match tile indexing (Units)
-                if (current_layer->objects[j].type >= 0 && current_layer->objects[j].type <= 4) {
-                    current_layer->objects[j].y -= 1;
+                switch (current_layer->objects[j].type) {
+                    case UNIT_TYPE_WORKER:
+                    case UNIT_TYPE_SOLDIER:
+                    case UNIT_TYPE_ARCHER:
+                    case UNIT_TYPE_KNIGHT:
+                    case UNIT_TYPE_MAGE:
+                        current_layer->objects[j].y -= 1;
+                        break;
+                    case UNIT_TYPE_CITY_HALL:
+                    case UNIT_TYPE_BARRACKS:
+                    case UNIT_TYPE_STABLES:
+                        current_layer->objects[j].y -= 3;
+                        break;
+                    case UNIT_TYPE_TOWER:
+                    case UNIT_TYPE_BLACKSMITH:
+                    case UNIT_TYPE_FARM:
+                        current_layer->objects[j].y -= 2;
+                        break;
+                    default:
+                        // No adjustment needed
+                        break;
                 }
             }
         }
