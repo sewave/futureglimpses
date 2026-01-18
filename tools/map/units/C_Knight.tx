@@ -3,8 +3,8 @@
  <tileset firstgid="1" source="units.tsx"/>
  <object name="C_Knight" gid="9" width="16" height="16">
   <properties>
-   <property name="UNIT_CONTROLLER" type="int" value="1"/>
-   <property name="UNIT_TYPE" type="int" value="3"/>
+   <property name="UNIT_CONTROLLER" type="int" propertytype="UNIT_CONTROLLER" value="1"/>
+   <property name="UNIT_TYPE" type="int" propertytype="UNIT_TYPE" value="3"/>
   </properties>
  </object>
 </template>

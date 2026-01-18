@@ -13,7 +13,8 @@
  * * OBJECT LAYERS (M times):
  * - Num Objects (U16)
  * - Objects (K times): 
- * - TYPE (U16, from obj.properties.TYPE)
+ * - UNIT_TYPE (U8, from obj.properties.UNIT_TYPE)
+ * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
  * - Y (U16, tile unit)
  * -----------------------------------------------------
@@ -50,7 +51,7 @@ function calculateTotalSize(map) {
 		// Object Layer Header: Num Objects (2)
 		size += 2;
 
-		// Object Data: TYPE (2) + X (2) + Y (2) = 6 bytes per object
+		// Object Data: TYPES (2) + X (2) + Y (2) = 6 bytes per object
 		size += layer.objects.length * 6; 
 	}
 	return size;
@@ -118,23 +119,32 @@ function exportBinary(map) {
     // ===================================
 	tiled.log(`Writing objects`);
     for (let layer of objectLayers) {
+		
         // Num Objects in Layer (U16)
         view.setUint16(offset, layer.objects.length, littleEndian);
         offset += 2;
 
         for (let obj of layer.objects) {
-            // A. Object TYPE (U16) from properties
-            // If the TYPE property is missing or null, default to 0.
-            const objectType = obj.properties && obj.properties.TYPE ? obj.properties.TYPE : 0;
-            view.setUint16(offset, objectType, littleEndian);
-            offset += 2;
+            // A. Object UNIT_TYPE (U8) from properties
+            // If the UNIT_TYPE property is missing or null, default to 0.
+			const resolvedProperties = obj.resolvedProperties();
+
+            const objectType = resolvedProperties.UNIT_TYPE.value;
+            view.setUint8(offset, objectType, littleEndian);
+            offset += 1;
+
+            // B. Object UNIT_CONTROLLER (U8) from properties
+            // If the UNIT_CONTROLLER property is missing or null, default to 0.
+            const objectController = resolvedProperties.UNIT_CONTROLLER.value;
+            view.setUint8(offset, objectController, littleEndian);
+            offset += 1;
             
-            // B. Object X (U16) converted to tile units
+            // C. Object X (U16) converted to tile units
             const tileX = Math.floor(obj.x / map.tileWidth);
             view.setUint16(offset, tileX, littleEndian);
             offset += 2;
             
-            // C. Object Y (U16) converted to tile units
+            // D. Object Y (U16) converted to tile units
             const tileY = Math.floor(obj.y / map.tileHeight);
             view.setUint16(offset, tileY, littleEndian);
             offset += 2;

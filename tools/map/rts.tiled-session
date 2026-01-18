@@ -5,10 +5,15 @@
     },
     "activeFile": "base.tmx",
     "expandedProjectPaths": [
-        "."
+        ".",
+        "units",
+        "buildings"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
         "Archer_Blue1.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
@@ -19,15 +24,23 @@
             "scaleInEditor": 2
         },
         "base.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 0,
+            "scale": 0.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 173,
-                "y": 48.99999999999997
+                "x": 512,
+                "y": 511
             }
         },
         "base.tmx#tileset": {
             "scaleInDock": 1
+        },
+        "buildings/big_buildings.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "buildings/small_buildings.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "sin nombre.tmx": {
             "scale": 0.5,
@@ -48,8 +61,8 @@
     },
     "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
-    "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/units",
-    "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/units",
+    "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
+    "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "map.height": 64,
     "map.lastUsedExportFilter": "Simple Bin Exporter (*.map)",
     "map.lastUsedFormat": "tmx",
@@ -57,14 +70,15 @@
     "map.tileWidth": 16,
     "map.width": 64,
     "openFiles": [
-        "base.tmx",
-        "FullTileset.tsx"
+        "base.tmx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "int",
+    "property.type": "UNIT_TYPE",
     "recentFiles": [
-        "units/units.tsx",
         "base.tmx",
+        "buildings/big_buildings.tsx",
+        "buildings/small_buildings.tsx",
+        "units/units.tsx",
         "Archer_Blue1.tsx",
         "tileset.tsx",
         "FullTileset.tsx",
@@ -72,11 +86,11 @@
     ],
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
-    "tileset.margin": 8,
-    "tileset.spacing": 16,
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 32,
+        "width": 32
     },
     "tileset.useTransparentColor": true
 }

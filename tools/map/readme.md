@@ -1,4 +1,5 @@
-
-Hay que copiar el exportador de mapas (tiled2simplebin.js) a la carpeta correspondiente para poder usar mapas personalizados:
-https://doc.mapeditor.org/en/stable/manual/scripting/#script-extensions
-
+Para crear un nuevo mapa:
+1-Para empezar copia el mapa base.tmx
+2-Abre "rts.tiled-project".
+3-Abre el mapa creado.
+4-Podrás arrastrar unidades/edificios desde sus carpetas.

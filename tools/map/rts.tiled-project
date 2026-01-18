@@ -10,5 +10,36 @@
     "properties": [
     ],
     "propertyTypes": [
+        {
+            "id": 1,
+            "name": "UNIT_TYPE",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "UNIT_TYPE_WORKER",
+                "UNIT_TYPE_SOLDIER",
+                "UNIT_TYPE_ARCHER",
+                "UNIT_TYPE_KNIGHT",
+                "UNIT_TYPE_MAGE",
+                "UNIT_TYPE_CITY_HALL",
+                "UNIT_TYPE_FARM",
+                "UNIT_TYPE_BARRACKS",
+                "UNIT_TYPE_BLACKSMITH",
+                "UNIT_TYPE_STABLES",
+                "UNIT_TYPE_TOWER"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "name": "UNIT_CONTROLLER",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "UNIT_CONTROLLER_PLAYER",
+                "UNIT_CONTROLLER_AI"
+            ],
+            "valuesAsFlags": false
+        }
     ]
 }
