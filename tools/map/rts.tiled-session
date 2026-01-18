@@ -24,11 +24,11 @@
             "scaleInEditor": 2
         },
         "base.tmx": {
-            "scale": 0.5,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
-                "y": 511
+                "x": 244.75,
+                "y": 744.75
             }
         },
         "base.tmx#tileset": {
@@ -50,6 +50,14 @@
                 "y": 714
             }
         },
+        "test.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 212.3333333333333,
+                "y": 180.33333333333337
+            }
+        },
         "tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 2
@@ -69,11 +77,12 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 64,
+    "mapScene.enableWorlds": true,
     "openFiles": [
         "base.tmx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "UNIT_TYPE",
+    "property.type": "string",
     "recentFiles": [
         "base.tmx",
         "buildings/big_buildings.tsx",

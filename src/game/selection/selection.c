@@ -48,12 +48,6 @@ static void game_selection_remove_unit(GameContext *context, GameUnit *unit) {
 	}
 }
 
-static void game_selection_add_unit(GameContext *context, GameUnit *unit) {
-	if (unit->isSelected) return;
-	unit->isSelected = TRUE;
-	context->selectedUnits[context->selectedUnitCount++] = unit->id;
-}
-
 static GameUnit *get_first_selected_unit_active(GameContext *context) {
 	if (context->selectedUnitCount == 0) return NULL;
 	for (int i = 0; i < context->selectedUnitCount; i++) {
@@ -184,6 +178,12 @@ static void game_selection_clear_slots(GameContext *context) {
 	for (int slot = 0; slot < MAX_SELECTION_SLOTS; slot++) {
 		selectionSlots[slot].selectedUnitCount = 0;
 	}
+}
+
+void game_selection_add_unit(GameContext *context, GameUnit *unit) {
+	if (unit->isSelected) return;
+	unit->isSelected = TRUE;
+	context->selectedUnits[context->selectedUnitCount++] = unit->id;
 }
 
 void game_selection_clear(GameContext *context) {

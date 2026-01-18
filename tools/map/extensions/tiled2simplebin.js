@@ -21,6 +21,45 @@
  */
 let littleEndian = true; // Define Endianness for binary writes
 
+function getUtf8Size(str) {
+    var size = 0;
+    for (var i = 0; i < str.length; i++) {
+        var code = str.charCodeAt(i);
+        if (code < 0x80) size += 1;
+        else if (code < 0x800) size += 2;
+        else if (code < 0xD800 || code >= 0xE000) size += 3;
+        else {
+            i++;
+            size += 4;
+        }
+    }
+    return size;
+}
+
+function writeUtf8String(view, offset, str) {
+    for (var i = 0; i < str.length; i++) {
+        var code = str.charCodeAt(i);
+        if (code < 0x80) {
+            view.setUint8(offset++, code);
+        } else if (code < 0x800) {
+            view.setUint8(offset++, 0xC0 | (code >> 6));
+            view.setUint8(offset++, 0x80 | (code & 0x3F));
+        } else if (code < 0xD800 || code >= 0xE000) {
+            view.setUint8(offset++, 0xE0 | (code >> 12));
+            view.setUint8(offset++, 0x80 | ((code >> 6) & 0x3F));
+            view.setUint8(offset++, 0x80 | (code & 0x3F));
+        } else {
+            i++;
+            var codePoint = ((code & 0x3FF) << 10) | (str.charCodeAt(i) & 0x3FF);
+            view.setUint8(offset++, 0xF0 | (codePoint >> 18));
+            view.setUint8(offset++, 0x80 | ((codePoint >> 12) & 0x3F));
+            view.setUint8(offset++, 0x80 | ((codePoint >> 6) & 0x3F));
+            view.setUint8(offset++, 0x80 | (codePoint & 0x3F));
+        }
+    }
+    return offset;
+}
+
 /**
  * Calculates the exact size required for the ArrayBuffer
  * based on the map's content and the binary specification.
@@ -54,6 +93,17 @@ function calculateTotalSize(map) {
 		// Object Data: TYPES (2) + X (2) + Y (2) = 6 bytes per object
 		size += layer.objects.length * 6; 
 	}
+
+    var mapProperties = map.resolvedProperties();
+
+    var titleLength = getUtf8Size(mapProperties.TITLE || "");
+    tiled.log(`Title length: ${titleLength}`);
+    size += 2 + titleLength; // Title length (2) + title string bytes
+
+    var descriptionLength = getUtf8Size(mapProperties.DESCRIPTION || "");
+    tiled.log(`Description length: ${descriptionLength}`);
+    size += 2 + descriptionLength; // Description length (2) + description string bytes
+
 	return size;
 }
 
@@ -151,6 +201,35 @@ function exportBinary(map) {
         }
     }
 	tiled.log(`Writed objects`);
+
+    // ===================================
+    // 4. MAP ATTRIBUTES (TITLE and DESCRIPTION)
+    // ===================================
+    tiled.log(`Writing map attributes`);
+    var mapProperties = map.resolvedProperties();
+
+    // A. TITLE
+    var titleStr = mapProperties.TITLE || "";
+    var titleLength = getUtf8Size(titleStr);
+    // Write Title Length (U16)
+    view.setUint16(offset, titleLength, littleEndian);
+    offset += 2;
+    // Write Title String (UTF-8 bytes)
+    writeUtf8String(view, offset, titleStr);
+    offset += titleLength;
+    tiled.log(`Writed title with length ${titleLength}`);
+
+    // B. DESCRIPTION
+    var descriptionStr = mapProperties.DESCRIPTION || "";
+    var descriptionLength = getUtf8Size(descriptionStr);
+    // Write Description Length (U16)
+    view.setUint16(offset, descriptionLength, littleEndian);
+    offset += 2;
+    // Write Description String (UTF-8 bytes)
+    writeUtf8String(view, offset, descriptionStr);
+    offset += descriptionLength;
+    tiled.log(`Writed description with length ${descriptionLength}`);
+    tiled.log(`Writed map attributes`);
 
     // --- Final Check ---
     if (offset !== totalSize) {

@@ -9,8 +9,8 @@ typedef struct {
 } MapObject;
 
 typedef struct {
-    unsigned short int num_objects;
-    MapObject *objects;
+	unsigned short int numObjects;
+	MapObject *objects;
 } ObjectLayer;
 
 typedef struct {
@@ -20,11 +20,13 @@ typedef struct {
 } TileLayer;
 
 typedef struct {
-    unsigned short int num_tile_layers;
-    unsigned short int num_object_layers;
-    
-    TileLayer *tile_layers;
-    ObjectLayer *object_layers;
+	unsigned short int numTileLayers;
+	unsigned short int numObjectLayers;
+    char * title;
+    char * description;
+
+	TileLayer *tileLayers;
+	ObjectLayer *objectLayers;
 } MapData;
 
 /**
