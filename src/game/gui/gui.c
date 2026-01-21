@@ -229,6 +229,24 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 										 x, element->y, element->textColor, element->textBackground);
 				break;
 			}
+			case GUI_ELEMENT_CUSTOM_TEXT: {
+				int x = element->x;
+				if (element->typed.customText.maxX > 0) {
+					const char *text = element->typed.customText.text;
+					int textWidth = text_length(context->gameFont, text);
+					x = element->x + (element->typed.customText.maxX - element->x) / 2 - textWidth / 2;
+				}
+				if(element->typed.customText.maxWidth > 0 && element->typed.customText.maxHeight > 0) {
+					render_queue_submit_enclosed_text(renderQueue, z, context->gameFont, element->typed.customText.text,
+											 x, element->y, element->typed.customText.maxWidth, element->typed.customText.maxHeight,
+											 element->textColor, element->textBackground);
+				}
+				else {
+					render_queue_submit_text(renderQueue, z, context->gameFont, element->typed.customText.text,
+											 x, element->y, element->textColor, element->textBackground);
+				}
+				break;
+			}
 			case GUI_ELEMENT_BUTTON: {
 				int width = element->typed.button.size.width;
 				int height = element->typed.button.size.height;

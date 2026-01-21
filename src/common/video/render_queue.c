@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "render_queue.h"
 // --- Helper Functions ---
 
@@ -31,6 +32,56 @@ static void render_sprite(BITMAP *target, RenderSpriteCommand *spriteCmd) {
 			draw_sprite_vh_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
 	}
+}
+
+#define TEXTOUT_EX_BOX_BUFFER 2048
+#define WORD_DELIMITER " "
+
+static void textout_ex_box(BITMAP *bmp, FONT *font, const char *str, int x, int y, int maxWidth, int maxHeight, int color, int bg) {
+	char tempBuffer[TEXTOUT_EX_BOX_BUFFER]; // Temporary buffer to hold the string
+    char *wordPtr;
+    char currentLine[TEXTOUT_EX_BOX_BUFFER] = "";
+    int currentY = y;
+    int fontHeight = text_height(font);
+
+    // Copy original text to avoid modifying the constant input
+    strncpy(tempBuffer, str, sizeof(tempBuffer) - 1);
+    tempBuffer[sizeof(tempBuffer) - 1] = '\0';
+
+    // Tokenize text by spaces to process word by word
+    wordPtr = strtok(tempBuffer, WORD_DELIMITER);
+
+	char testLine[TEXTOUT_EX_BOX_BUFFER];
+    while (wordPtr != NULL) {
+        // Prepare a test line: current line + the next word
+        if (strlen(currentLine) == 0) {
+            strcpy(testLine, wordPtr);
+        } else {
+            sprintf(testLine, "%s %s", currentLine, wordPtr);
+        }
+
+        // Check if the test line fits in the box width
+        if (text_length(font, testLine) <= maxWidth) {
+            // It fits, update the current line
+            strcpy(currentLine, testLine);
+        } else {
+            // It doesn't fit, print the current line and start a new one
+            textout_ex(bmp, font, currentLine, x, currentY, color, bg);
+            
+            currentY += fontHeight + 2; // Move to next line (2 pixels of padding)
+            strcpy(currentLine, wordPtr);
+
+            // Safety check: Stop if we exceed the box height
+            if (currentY + fontHeight > y + maxHeight) return;
+        }
+
+        wordPtr = strtok(NULL, WORD_DELIMITER);
+    }
+
+    // Print the last remaining line if there is space
+    if (strlen(currentLine) > 0 && (currentY + fontHeight <= y + maxHeight)) {
+        textout_ex(bmp, font, currentLine, x, currentY, color, bg);
+    }
 }
 
 // --- Manager Functions ---
@@ -166,6 +217,20 @@ void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char 
 	}
 }
 
+void render_queue_submit_enclosed_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int maxWidth, int maxHeight, int color, int background) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_ENCLOSED_TEXT);
+	if (cmd) {
+		cmd->data.enclosedText.font = font;
+		cmd->data.enclosedText.text = text;
+		cmd->data.enclosedText.x = x;
+		cmd->data.enclosedText.y = y;
+		cmd->data.enclosedText.maxWidth = maxWidth;
+		cmd->data.enclosedText.maxHeight = maxHeight;
+		cmd->data.enclosedText.color = color;
+		cmd->data.enclosedText.background = background;
+	}
+}
+
 void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_TEXT_MULTICOLOR);
 	if (cmd) {
@@ -208,6 +273,7 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 					 cmd->data.solidPartial.destY,
 					 cmd->data.solidPartial.width,
 					 cmd->data.solidPartial.height);
+				break;
 			case RND_CMD_SPRITE:
 				render_sprite(target, &cmd->data.sprite);
 				break;
@@ -251,6 +317,17 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 						   cmd->data.text.y,
 						   cmd->data.text.color,
 						   cmd->data.text.background);
+				break;
+			case RND_CMD_ENCLOSED_TEXT:
+				textout_ex_box(target,
+							   cmd->data.enclosedText.font,
+							   cmd->data.enclosedText.text,
+							   cmd->data.enclosedText.x,
+							   cmd->data.enclosedText.y,
+							   cmd->data.enclosedText.maxWidth,
+							   cmd->data.enclosedText.maxHeight,
+							   cmd->data.enclosedText.color,
+							   cmd->data.enclosedText.background);
 				break;
 			case RND_CMD_TEXT_MULTICOLOR:
 				text_out_multicolor(target,

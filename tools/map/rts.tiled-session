@@ -3,11 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "base.tmx",
+    "activeFile": "test.tmx",
     "expandedProjectPaths": [
-        ".",
-        "units",
-        "buildings"
+        "."
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -51,11 +49,14 @@
             }
         },
         "test.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 1,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 212.3333333333333,
-                "y": 180.33333333333337
+                "x": 385,
+                "y": 295
             }
         },
         "tileset.tsx": {
@@ -72,18 +73,19 @@
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "map.height": 64,
-    "map.lastUsedExportFilter": "Simple Bin Exporter (*.map)",
+    "map.lastUsedExportFilter": "Future Glimpses map (*.fgm)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "base.tmx"
+        "test.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "test.tmx",
         "base.tmx",
         "buildings/big_buildings.tsx",
         "buildings/small_buildings.tsx",

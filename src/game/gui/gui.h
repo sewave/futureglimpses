@@ -23,6 +23,7 @@ typedef enum {
     GUI_ELEMENT_BAR,
     GUI_ELEMENT_OPTION,
     GUI_ELEMENT_TEXT,
+    GUI_ELEMENT_CUSTOM_TEXT,
     GUI_ELEMENT_RECTANGLE,
     GUI_ELEMENT_FILL_RECTANGLE,
 } GuiElementType;
@@ -62,6 +63,13 @@ typedef struct {
 } GuiText;
 
 typedef struct {
+    // If maxX is > 0, the text will be centered in the area defined by (x, maxX)
+    int maxX;
+    int maxWidth, maxHeight;
+    char* text;
+} GuiCustomText;
+
+typedef struct {
     GuiGetValueFunc getValue;
     GuiSetValueFunc setValue;
     GuiGetMinValueFunc getMinValue;
@@ -94,6 +102,7 @@ typedef struct {
         GuiBar bar;
         GuiOption option;
         GuiText text;
+        GuiCustomText customText;
         GuiRectangle rectangle;
         GuiFillRectangle fillRectangle;
     } typed;

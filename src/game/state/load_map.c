@@ -74,7 +74,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	resource_reset(context);
 
 	// TODO load different maps based on campaign/scenario
-	load_map(context, "assets/map/test.map");
+	load_map(context, "assets/map/test.fgm");
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);

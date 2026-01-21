@@ -25,6 +25,7 @@ typedef enum {
 	RND_CMD_RECT,
 	RND_CMD_RECT_FILL,
 	RND_CMD_TEXT,
+    RND_CMD_ENCLOSED_TEXT,
 	RND_CMD_TEXT_MULTICOLOR,
 	RND_CMD_SOLID_PARTIAL
 } RenderCommandType;
@@ -91,6 +92,15 @@ typedef struct {
 } RenderTextCommand;
 
 typedef struct {
+    FONT *font;
+    const char* text;
+    int x, y;
+    int maxWidth, maxHeight;
+    int color;
+    int background;
+} RenderEnclosedTextCommand;
+
+typedef struct {
     RenderCommandType type;
     int zOrder;
     union {
@@ -101,6 +111,7 @@ typedef struct {
         RenderLineCommand line;
 		RenderRectCommand rect;
         RenderTextCommand text;
+        RenderEnclosedTextCommand enclosedText;
         RenderClearCommand clear;
         RenderSolidCommand solid;
         RenderSolidPartialCommand solidPartial;
@@ -124,6 +135,7 @@ void render_queue_submit_rect_fill(RenderQueue* queue, int z, int x1, int y1, in
 void render_queue_submit_clear(RenderQueue* queue, int z, int color);
 void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, int y);
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
+void render_queue_submit_enclosed_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int maxWidth, int maxHeight, int color, int background);
 void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
 void render_queue_execute(RenderQueue* queue, BITMAP* targetBmp);
 void render_queue_submit_solid_partial(RenderQueue *queue, int z, BITMAP *bmp, int originX, int originY, int destX, int destY, int width, int height);

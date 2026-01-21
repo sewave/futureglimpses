@@ -17,6 +17,10 @@
  * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
  * - Y (U16, tile unit)
+ * - Title length (U16)
+ * - Title string (N times)
+ * - Description length (U16)
+ * - Description string (N times)
  * -----------------------------------------------------
  */
 let littleEndian = true; // Define Endianness for binary writes
@@ -239,10 +243,10 @@ function exportBinary(map) {
     return buffer; 
 }
 
-let Tiled2SimpleBinExporter = {
-    name: "Simple Bin Exporter",
-    extension: "map",
-    description: "Export to a simple binary file with layers and objects",
+let Tiled2FutureGlimpsesExporter = {
+    name: "Future Glimpses map",
+    extension: "fgm",
+    description: "Export to a simple binary file with layers, objects, and some attributes",
     version: "1.0",
 	write: function(map, fileName) {
 		try {
@@ -258,4 +262,4 @@ let Tiled2SimpleBinExporter = {
 	}
 };
 
-tiled.registerMapFormat("Custom Binary (*.map)", Tiled2SimpleBinExporter);
+tiled.registerMapFormat("Future Glimpses map (*.fgm)", Tiled2FutureGlimpsesExporter);
