@@ -22,6 +22,8 @@ void game_free_context(GameContext *context) {
 	destroy_bitmap(context->renderedMinimap);
 	destroy_bitmap(context->renderedMinimapUnits);
 	destroy_font(context->gameFont);
+	if(context->map.title) free(context->map.title);
+	if(context->map.description) free(context->map.description);
 }
 
 GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue) {

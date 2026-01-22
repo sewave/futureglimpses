@@ -78,3 +78,7 @@ O^004p^001ciones
 Idioma:
 ^004E^001spañol
 Engli^004s^001h
+Info ^004M^001apa
+Información del Mapa
+Título:
+Descripción:

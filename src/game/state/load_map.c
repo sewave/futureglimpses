@@ -35,6 +35,12 @@ static void load_map(GameContext *context, const char * filePath) {
 		}
 	}
 
+	if(context->map.title) free(context->map.title);
+	if(context->map.description) free(context->map.description);
+
+	context->map.title = strdup(map->title);
+	context->map.description = strdup(map->description);
+
 	game_map_free_data(map);
 }
 

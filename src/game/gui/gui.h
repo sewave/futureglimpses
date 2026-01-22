@@ -15,6 +15,7 @@ typedef uint8_t (*GuiGetMaxValueFunc)(const GameContext *context);
 typedef uint8_t (*GuiGetMinValueFunc)(const GameContext *context);
 typedef void (*GuiSetValueFunc)(GameContext *context, uint8_t value);
 typedef void (*GuiButtonActionFunc)(GameContext *context);
+typedef char * (*GuiGetStringFunc)(const GameContext *context);
 
 typedef enum {
     GUI_ELEMENT_IMAGE,
@@ -66,7 +67,7 @@ typedef struct {
     // If maxX is > 0, the text will be centered in the area defined by (x, maxX)
     int maxX;
     int maxWidth, maxHeight;
-    char* text;
+    GuiGetStringFunc text;
 } GuiCustomText;
 
 typedef struct {
@@ -93,7 +94,7 @@ typedef struct {
     int x, y, z;
     GuiElementType type;
     GameTextIdEnum textId;
-    int textColor, textBackground;
+    int textColor, textBackground, shadowTextColor;
     char hotkey;
     union {
         GuiImage image;

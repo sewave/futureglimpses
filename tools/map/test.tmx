@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="137">
  <editorsettings>
-  <export target="../../assets/map/test.map" format="Custom Binary (*.map)"/>
+  <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
-  <property name="DESCRIPTION" value="Bla bla bla long description"/>
+  <property name="DESCRIPTION" value="Bla bla bla long description, a very long description. En un lugar de la mancha, de cuyo nombre no quiero acordarme."/>
   <property name="TITLE" value="Test map ñ"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>

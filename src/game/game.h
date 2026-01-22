@@ -211,6 +211,11 @@ typedef struct {
 } BuildPlacing;
 
 typedef struct {
+	char * title;
+	char * description;
+} GameMap;
+
+typedef struct {
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
@@ -243,6 +248,7 @@ typedef struct {
 	uint8_t isDebugEnabled;
 	BuildPlacing buildPlacing;
 	GameResultEnum gameResult;
+	GameMap map;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

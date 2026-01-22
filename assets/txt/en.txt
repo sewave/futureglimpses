@@ -78,3 +78,7 @@ O^004p^001tions
 Language:
 ^004E^001spañol
 Engli^004s^001h
+^004M^001ap Info
+Map Information
+Title:
+Description:
