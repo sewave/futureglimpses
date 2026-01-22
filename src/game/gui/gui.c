@@ -225,12 +225,8 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 					int textWidth = text_length(context->gameFont, text);
 					x = element->x + (element->typed.text.maxX - element->x) / 2 - textWidth / 2;
 				}
-				render_queue_submit_text(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
-										 x, element->y, element->textColor, element->textBackground);
-				if (element->shadowTextColor != TRANSPARENT_INDEX) {
-					render_queue_submit_text(renderQueue, z - 1, context->gameFont, text_get_by_id(element->textId),
-											 x + 1, element->y + 1, element->shadowTextColor, element->textBackground);
-				}
+				render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+										 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
 				break;
 			}
 			case GUI_ELEMENT_CUSTOM_TEXT: {
@@ -241,22 +237,13 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 					x = element->x + (element->typed.customText.maxX - element->x) / 2 - textWidth / 2;
 				}
 				if(element->typed.customText.maxWidth > 0 && element->typed.customText.maxHeight > 0) {
-					render_queue_submit_enclosed_text(renderQueue, z, context->gameFont, element->typed.customText.text(context),
+					render_queue_submit_enclosed_text_shadow(renderQueue, z, context->gameFont, element->typed.customText.text(context),
 											 x, element->y, element->typed.customText.maxWidth, element->typed.customText.maxHeight,
-											 element->textColor, element->textBackground);
-					if(element->shadowTextColor != TRANSPARENT_INDEX) {
-						render_queue_submit_enclosed_text(renderQueue, z - 1, context->gameFont, element->typed.customText.text(context),
-												 x + 1, element->y + 1, element->typed.customText.maxWidth, element->typed.customText.maxHeight,
-												 element->shadowTextColor, element->textBackground);
-					}
+											 element->textColor, element->textBackground, element->shadowTextColor);
 				}
 				else {
-					render_queue_submit_text(renderQueue, z, context->gameFont, element->typed.customText.text(context),
-											 x, element->y, element->textColor, element->textBackground);
-					if(element->shadowTextColor != TRANSPARENT_INDEX) {
-						render_queue_submit_text(renderQueue, z - 1, context->gameFont, element->typed.customText.text(context),
-												 x + 1, element->y + 1, element->shadowTextColor, element->textBackground);
-					}
+					render_queue_submit_text_shadow(renderQueue, z, context->gameFont, element->typed.customText.text(context),
+											 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
 				}
 				break;
 			}
@@ -270,8 +257,8 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 					yOffset = GUI_BUTTON_FIT_TEXT_Y_OFFSET;
 				}
 				int textX = element->x + element->typed.button.size.width / 2 - (text_length(context->gameFont, text) - colorChangeLength) / 2;
-				render_queue_submit_text_multicolor(renderQueue, z + 1, context->gameFont, text,
-										 textX, element->y + yOffset, element->textColor, element->textBackground);
+				render_queue_submit_text_multicolor_shadow(renderQueue, z + 1, context->gameFont, text,
+										 textX, element->y + yOffset, element->textColor, element->textBackground, element->shadowTextColor);
                 int buttonColor = GUI_BUTTON_COLOR;
 				if (game_gui_mouse_in_element(context, element)) {
 					render_queue_submit_rect(renderQueue, z + 1, element->x, element->y,
@@ -311,23 +298,13 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				GameIconEnum checkIcon = element->typed.check.getValue(context) ? GAME_ICON_CHECK_ON : GAME_ICON_CHECK_OFF;
 				BITMAP *checkImage = game_gfx_get_icon(checkIcon);
 				render_queue_submit_sprite(renderQueue, z, checkImage, element->x, element->y, RND_FLAG_NORMAL);
-				render_queue_submit_text(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
-										 element->x + GUI_CHECK_TEXT_X_OFF, element->y, element->textColor, element->textBackground);
-				if(element->shadowTextColor != TRANSPARENT_INDEX) {
-					render_queue_submit_text(renderQueue, z - 1, context->gameFont, text_get_by_id(element->textId),
-											 element->x + GUI_CHECK_TEXT_X_OFF + 1, element->y + 1,
-											 element->shadowTextColor, element->textBackground);
-				}
+				render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+										 element->x + GUI_CHECK_TEXT_X_OFF, element->y, element->textColor, element->textBackground, element->shadowTextColor);
 				break;
 			}
 			case GUI_ELEMENT_OPTION: {
-				render_queue_submit_text(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
-										 element->x, element->y, element->textColor, element->textBackground);
-				if(element->shadowTextColor != TRANSPARENT_INDEX) {
-					render_queue_submit_text(renderQueue, z - 1, context->gameFont, text_get_by_id(element->textId),
-											 element->x + 1, element->y + 1,
-											 element->shadowTextColor, element->textBackground);
-				}
+				render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+										 element->x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
 				uint8_t value = element->typed.option.getValue(context);				
 				GuiOption *options = &element->typed.option;
 				GuiOptionValue *optionValue = options->optionValues;
@@ -338,19 +315,15 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				for (int i = 0; i < options->optionValuesNumber; i++, optionValue++, y += GUI_OPTION_VALUE_HEIGHT_SEPARATION) {
 					BITMAP* optionImage = (i == value) ? optionOnImage : optionOffImage;
 					render_queue_submit_sprite(renderQueue, z, optionImage, x, y, RND_FLAG_NORMAL);
-					render_queue_submit_text_multicolor(renderQueue, z, context->gameFont,
+					render_queue_submit_text_multicolor_shadow(renderQueue, z, context->gameFont,
 						text_get_by_id(optionValue->textId), x + GUI_OPTION_TEXT_X_OFF, y,
-						optionValue->textColor, optionValue->textBackground);
+						optionValue->textColor, optionValue->textBackground, optionValue->shadowTextColor);
 				}
 				break;
 			}
 			case GUI_ELEMENT_BAR: {
-				render_queue_submit_text(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
-										 element->x, element->y, element->textColor, element->textBackground);
-				if(element->shadowTextColor != TRANSPARENT_INDEX) {
-					render_queue_submit_text(renderQueue, z - 1, context->gameFont, text_get_by_id(element->textId),
-											 element->x + 1, element->y + 1, element->shadowTextColor, element->textBackground);
-				}
+				render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+										 element->x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
 				BITMAP* barLeftOff = game_gfx_get_icon(GAME_ICON_BAR_LEFT_OFF);
 				BITMAP* barLeftOn = game_gfx_get_icon(GAME_ICON_BAR_LEFT_ON);
 				BITMAP* barRightOff = game_gfx_get_icon(GAME_ICON_BAR_RIGHT_OFF);

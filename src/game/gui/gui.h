@@ -46,7 +46,7 @@ typedef struct {
 
 typedef struct {
     GameTextIdEnum textId;
-    int textColor, textBackground;
+    int textColor, textBackground, shadowTextColor;
     char hotkey;
     uint8_t value;
 } GuiOptionValue;

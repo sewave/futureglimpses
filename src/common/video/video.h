@@ -9,6 +9,7 @@ typedef struct RGB_FILE_ENTRY {
 } RGB_FILE_ENTRY;
 
 #define TRANSPARENT_INDEX -1
+#define TRANSPARENT_COLOR 0
 
 #define PALETTE_ENTRIES 256
 

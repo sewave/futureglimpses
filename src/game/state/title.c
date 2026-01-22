@@ -72,6 +72,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_START_GAME,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_S,
         .typed = {
             .button = {
@@ -86,6 +87,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_OPTIONS,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+        .shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_P,
         .typed = {
             .button = {
@@ -100,6 +102,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_EXIT_TO_OS,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_O,
         .typed = {
             .button = {
@@ -124,6 +127,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_SOUND,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_S,
         .typed = {
             .button = {
@@ -138,6 +142,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_GAMEPLAY,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_G,
         .typed = {
             .button = {
@@ -152,6 +157,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_R,
         .typed = {
             .button = {
@@ -176,6 +182,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_CONFIRM_TITLE,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = { .text = { .maxX = TITLE_MENU_BUTTON_X + TITLE_MENU_BUTTON_WIDTH } }
 	},
 	{
@@ -184,6 +191,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_YES,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.hotkey = KEY_S,
 		.typed = {
 			.button = {
@@ -198,6 +206,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_NO,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.hotkey = KEY_N,
 		.typed = {
 			.button = {
@@ -222,6 +231,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_R,
         .typed = {
             .button = {
@@ -236,6 +246,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_MENU_SOUND_MUSIC_VOLUME,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = {
 			.bar = {
 				.getMaxValue = game_config_get_audio_max_volume,
@@ -252,6 +263,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_MENU_SOUND_EFFECTS_VOLUME,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = {
 			.bar = {
 				.getMaxValue = game_config_get_audio_max_volume,
@@ -278,6 +290,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
         .hotkey = KEY_R,
         .typed = {
             .button = {
@@ -292,16 +305,17 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = {
 			.option = {
 				.optionValuesNumber = 3,
 				.optionValues = (GuiOptionValue[]) {
 					{ .value = LIFE_BAR_ALWAYS, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ALWAYS, .hotkey = KEY_A,
-						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 					{ .value = LIFE_BAR_DAMAGED, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_ONLY_DAMAGED, .hotkey = KEY_D,
-						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 					{ .value = LIFE_BAR_NEVER, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_NEVER, .hotkey = KEY_N,
-						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 				},
 				.getValue = game_config_get_gameplay_life_bars,
 				.setValue = game_config_set_gameplay_life_bars
@@ -314,14 +328,15 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_MENU_LANGUAGE,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = {
 			.option = {
 				.optionValuesNumber = 2,
 				.optionValues = (GuiOptionValue[]) {
 					{ .value = LANGUAGE_SPANISH, .textId = GAME_TEXT_ID_MENU_LANGUAGE_SPANISH, .hotkey = KEY_E,
-						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 					{ .value = LANGUAGE_ENGLISH, .textId = GAME_TEXT_ID_MENU_LANGUAGE_ENGLISH, .hotkey = KEY_S,
-						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX },
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 				},
 				.getValue = game_config_get_language,
 				.setValue = game_config_set_language

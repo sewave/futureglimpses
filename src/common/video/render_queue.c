@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "render_queue.h"
+
+#define TRANSPARENT_COLOR 0
 // --- Helper Functions ---
 
 // Comparison function for qsort (sorts by zOrder ascending)
@@ -32,56 +34,6 @@ static void render_sprite(BITMAP *target, RenderSpriteCommand *spriteCmd) {
 			draw_sprite_vh_flip(target, spriteCmd->bitmap, spriteCmd->x, spriteCmd->y);
 			break;
 	}
-}
-
-#define TEXTOUT_EX_BOX_BUFFER 2048
-#define WORD_DELIMITER " "
-
-static void textout_ex_box(BITMAP *bmp, FONT *font, const char *str, int x, int y, int maxWidth, int maxHeight, int color, int bg) {
-	char tempBuffer[TEXTOUT_EX_BOX_BUFFER]; // Temporary buffer to hold the string
-    char *wordPtr;
-    char currentLine[TEXTOUT_EX_BOX_BUFFER] = "";
-    int currentY = y;
-    int fontHeight = text_height(font);
-
-    // Copy original text to avoid modifying the constant input
-    strncpy(tempBuffer, str, sizeof(tempBuffer) - 1);
-    tempBuffer[sizeof(tempBuffer) - 1] = '\0';
-
-    // Tokenize text by spaces to process word by word
-    wordPtr = strtok(tempBuffer, WORD_DELIMITER);
-
-	char testLine[TEXTOUT_EX_BOX_BUFFER];
-    while (wordPtr != NULL) {
-        // Prepare a test line: current line + the next word
-        if (strlen(currentLine) == 0) {
-            strcpy(testLine, wordPtr);
-        } else {
-            sprintf(testLine, "%s %s", currentLine, wordPtr);
-        }
-
-        // Check if the test line fits in the box width
-        if (text_length(font, testLine) <= maxWidth) {
-            // It fits, update the current line
-            strcpy(currentLine, testLine);
-        } else {
-            // It doesn't fit, print the current line and start a new one
-            textout_ex(bmp, font, currentLine, x, currentY, color, bg);
-            
-            currentY += fontHeight + 2; // Move to next line (2 pixels of padding)
-            strcpy(currentLine, wordPtr);
-
-            // Safety check: Stop if we exceed the box height
-            if (currentY + fontHeight > y + maxHeight) return;
-        }
-
-        wordPtr = strtok(NULL, WORD_DELIMITER);
-    }
-
-    // Print the last remaining line if there is space
-    if (strlen(currentLine) > 0 && (currentY + fontHeight <= y + maxHeight)) {
-        textout_ex(bmp, font, currentLine, x, currentY, color, bg);
-    }
 }
 
 // --- Manager Functions ---
@@ -206,6 +158,10 @@ void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2,
 }
 
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
+	render_queue_submit_text_shadow(queue, z, font, text, x, y, color, background, TRANSPARENT_COLOR);
+}
+
+void render_queue_submit_text_shadow(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background, int shadowColor) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_TEXT);
 	if (cmd) {
 		cmd->data.text.font = font;
@@ -214,10 +170,15 @@ void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char 
 		cmd->data.text.y = y;
 		cmd->data.text.color = color;
 		cmd->data.text.background = background;
+		cmd->data.text.shadowColor = shadowColor;
 	}
 }
 
 void render_queue_submit_enclosed_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int maxWidth, int maxHeight, int color, int background) {
+	render_queue_submit_enclosed_text_shadow(queue, z, font, text, x, y, maxWidth, maxHeight, color, background, TRANSPARENT_COLOR);
+}
+
+void render_queue_submit_enclosed_text_shadow(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int maxWidth, int maxHeight, int color, int background, int shadowColor) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_ENCLOSED_TEXT);
 	if (cmd) {
 		cmd->data.enclosedText.font = font;
@@ -228,10 +189,15 @@ void render_queue_submit_enclosed_text(RenderQueue *queue, int z, FONT *font, co
 		cmd->data.enclosedText.maxHeight = maxHeight;
 		cmd->data.enclosedText.color = color;
 		cmd->data.enclosedText.background = background;
+		cmd->data.enclosedText.shadowColor = shadowColor;
 	}
 }
 
 void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
+	render_queue_submit_text_multicolor_shadow(queue, z, font, text, x, y, color, background, TRANSPARENT_COLOR);
+}
+
+void render_queue_submit_text_multicolor_shadow(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background, int shadowColor) {
 	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_TEXT_MULTICOLOR);
 	if (cmd) {
 		cmd->data.text.font = font;
@@ -240,6 +206,7 @@ void render_queue_submit_text_multicolor(RenderQueue *queue, int z, FONT *font, 
 		cmd->data.text.y = y;
 		cmd->data.text.color = color;
 		cmd->data.text.background = background;
+		cmd->data.text.shadowColor = shadowColor;
 	}
 }
 
@@ -310,6 +277,15 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 						 cmd->data.rectFill.color);
 				break;
 			case RND_CMD_TEXT:
+				if (cmd->data.text.shadowColor != TRANSPARENT_COLOR) {
+					textout_ex(target,
+							   cmd->data.text.font,
+							   cmd->data.text.text,
+							   cmd->data.text.x + 1,
+							   cmd->data.text.y + 1,
+							   cmd->data.text.shadowColor,
+							   cmd->data.text.background);
+				}
 				textout_ex(target,
 						   cmd->data.text.font,
 						   cmd->data.text.text,
@@ -319,7 +295,7 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 						   cmd->data.text.background);
 				break;
 			case RND_CMD_ENCLOSED_TEXT:
-				textout_ex_box(target,
+				text_out_box_shadow(target,
 							   cmd->data.enclosedText.font,
 							   cmd->data.enclosedText.text,
 							   cmd->data.enclosedText.x,
@@ -327,16 +303,18 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 							   cmd->data.enclosedText.maxWidth,
 							   cmd->data.enclosedText.maxHeight,
 							   cmd->data.enclosedText.color,
-							   cmd->data.enclosedText.background);
+							   cmd->data.enclosedText.background,
+							   cmd->data.enclosedText.shadowColor);
 				break;
 			case RND_CMD_TEXT_MULTICOLOR:
-				text_out_multicolor(target,
+				text_out_multicolor_shadow(target,
 									cmd->data.text.font,
 									cmd->data.text.text,
 									cmd->data.text.x,
 									cmd->data.text.y,
 									cmd->data.text.color,
-									cmd->data.text.background);
+									cmd->data.text.background,
+									cmd->data.text.shadowColor);
 				break;
 		}
 	}
