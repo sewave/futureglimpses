@@ -8,6 +8,7 @@ typedef struct {
 	uint16_t timeLeft;
 	int color;
 	int background;
+	int shadowColor;
 } Message;
 
 static int messageStartY;
@@ -30,6 +31,10 @@ void message_reset() {
 }
 
 void message_add_to_queue(const char *message, uint16_t showTime, int color, int background) {
+	message_add_to_queue_shadow(message, showTime, color, background, TRANSPARENT_COLOR);
+}
+
+void message_add_to_queue_shadow(const char *message, uint16_t showTime, int color, int background, int shadowColor) {
 	if (nextSlotIndex >= MAX_MESSAGES) return;
 	Message *ptr = &messageLog[nextSlotIndex];
 	strncpy(ptr->messageText, message, MAX_TEXT_LENGTH - 1);
@@ -37,6 +42,7 @@ void message_add_to_queue(const char *message, uint16_t showTime, int color, int
 	ptr->timeLeft = showTime;
 	ptr->color = color;
 	ptr->background = background;
+	ptr->shadowColor = shadowColor;
 	nextSlotIndex++;
 }
 
@@ -45,9 +51,9 @@ void message_render_queue_submit(RenderQueue *renderQueue, FONT *font) {
 		int yPos = messageStartY;
 		Message *currentMessage = &messageLog[nextSlotIndex - 1];
 		for (int i = 0; i < nextSlotIndex; i++, currentMessage--, yPos += messageYInc) {
-			render_queue_submit_text_multicolor(renderQueue, messageZ, font,
+			render_queue_submit_text_multicolor_shadow(renderQueue, messageZ, font,
 												currentMessage->messageText, messageX, yPos, currentMessage->color,
-												currentMessage->background);
+												currentMessage->background, currentMessage->shadowColor);
 		}
 	}
 }

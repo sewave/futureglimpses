@@ -54,6 +54,7 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_RESULT_WIN_TITLE,
 		.textColor = PAL_COLOR_YELLOW,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
@@ -62,6 +63,7 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_RESULT_WIN_ACCEPT,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.hotkey = KEY_V,
 		.typed = {
 			.button = {
@@ -86,6 +88,7 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_RESULT_DEFEAT_TITLE,
 		.textColor = PAL_COLOR_YELLOW,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
@@ -94,6 +97,7 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		.textId = GAME_TEXT_ID_RESULT_DEFEAT_ACCEPT,
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
 		.hotkey = KEY_D,
 		.typed = {
 			.button = {

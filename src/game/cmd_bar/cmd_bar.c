@@ -34,6 +34,7 @@
 #define RESOURCES_Z UI_Z_ORDER + 600
 #define BASE_TEN_NUMER 10
 #define RESOURCE_LOCATIONS_TEXT_X_OFF 10
+#define RESOURCE_LOCATIONS_TEXT_Y_OFF -1
 #define BUILDING_RESOURCE_X_OFF 28
 
 static Position RESOURCE_LOCATIONS[UNIT_RESOURCES] = {
@@ -561,9 +562,9 @@ static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, Re
 }
 
 static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, FONT* font, CommandBarButton *button) {
-	render_queue_submit_text_multicolor(
+	render_queue_submit_text_multicolor_shadow(
 			renderQueue, UI_Z_ORDER + 505, font, text_get_by_id(button->hoverTextId),
-			HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 
 	if (button->type == CMD_BAR_BTN_TYPE_CREATE) {
 		UnitTypeEnum unitType = (UnitTypeEnum) button->fixedParam;
@@ -580,10 +581,11 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), pos.x + xOff,
 					pos.y, RND_FLAG_NORMAL);
 			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMER);
-			render_queue_submit_text(renderQueue, RESOURCES_Z,
+			render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
 									 font, resourceBuffers[i],
 									 pos.x + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,
-									 pos.y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+									 pos.y + RESOURCE_LOCATIONS_TEXT_Y_OFF, PAL_COLOR_WHITE,
+									 TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 		}
 	}
 }

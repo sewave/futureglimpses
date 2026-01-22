@@ -25,8 +25,8 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 244.75,
-                "y": 744.75
+                "x": 245,
+                "y": 745
             }
         },
         "base.tmx#tileset": {
@@ -55,8 +55,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 385,
-                "y": 295
+                "x": 643,
+                "y": 596.5
             }
         },
         "tileset.tsx": {
@@ -85,8 +85,8 @@
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "test.tmx",
         "base.tmx",
+        "test.tmx",
         "buildings/big_buildings.tsx",
         "buildings/small_buildings.tsx",
         "units/units.tsx",

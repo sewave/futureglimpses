@@ -78,8 +78,8 @@ static UnitResourcesData* building_check_unit_resources(GameContext *context, Co
     UnitResourcesData* unitResources = game_unit_get_resources(unitType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
 		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
-			message_add_to_queue(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
-								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+			message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
+								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
             // TODO not valid sound
 			return NULL;
 		}
@@ -98,8 +98,8 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 			resource_deduct_amount(context, building->controller, i, unitResources->used[i]);
 		}
 	} else {
-		message_add_to_queue(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),
-							 QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+		message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),
+							 QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 	}
 }
 
@@ -167,7 +167,7 @@ void building_complete(GameContext *context, GameUnit *building) {
     UnitData* data = game_unit_get_data(building->type);
     resource_add_food_provided(context, building->controller, data->resources.foodProvided);
     if(building->controller == UNIT_CONTROLLER_PLAYER) {
-        message_add_to_queue(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + building->type),
-            SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX);
+        message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + building->type),
+            SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
     }
 }

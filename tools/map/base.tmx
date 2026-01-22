@@ -5,6 +5,7 @@
  </editorsettings>
  <properties>
   <property name="DESCRIPTION" value="Bla bla bla long description"/>
+  <property name="TITLE" value="Título"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="257" source="units/units.tsx"/>
