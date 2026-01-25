@@ -29,7 +29,6 @@
 #define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
 #define UNIT_SHEET_Z_ORDER_BAR_RECT UI_Z_ORDER + 511
 
-#define UNIT_RESOURCES 3
 #define BUILDING_RESOURCES 2
 #define RESOURCES_Z UI_Z_ORDER + 600
 #define BASE_TEN_NUMER 10
@@ -37,7 +36,7 @@
 #define RESOURCE_LOCATIONS_TEXT_Y_OFF -1
 #define BUILDING_RESOURCE_X_OFF 28
 
-static Position RESOURCE_LOCATIONS[UNIT_RESOURCES] = {
+static Position RESOURCE_LOCATIONS[UNIT_USED_RESOURCES] = {
 		{220, 190},
 		{258, 190},
 		{295, 190}};
@@ -94,7 +93,7 @@ static void handle_build_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	if (unit) {
 		// Return used resources
 		UnitResourcesData* unitResources = game_unit_get_resources(unit->type);
-		for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
+		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_add_amount(context, unit->controller, i, unitResources->used[i]);
 		}
 		// Destroy the building
@@ -272,8 +271,7 @@ static const CommandBarButton CANCEL_BUILDING_CMD_BUTTON = {
 		.action = handle_build_cancel_button,
 		.hotkeyIndex = KEY_ESC,
 		.hotkey = "ESC",
-		// TODO change text? Cancel building?
-		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_BUILDING,
 		.fixedParam = 0,
 		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
 		.sheetOffsetY = 0,
@@ -569,7 +567,7 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 	if (button->type == CMD_BAR_BTN_TYPE_CREATE) {
 		UnitTypeEnum unitType = (UnitTypeEnum) button->fixedParam;
 		UnitData *unitData = game_unit_get_data(unitType);
-		int totalResources = UNIT_RESOURCES;
+		int totalResources = UNIT_USED_RESOURCES;
 		int xOff = 0;
 		if(unitData->isBuilding) {
 			xOff = BUILDING_RESOURCE_X_OFF;

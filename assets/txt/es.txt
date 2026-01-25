@@ -82,3 +82,4 @@ Info ^004M^001apa
 Información del Mapa
 Título:
 Descripción:
+Cancelar edificio (^004ESC^001)

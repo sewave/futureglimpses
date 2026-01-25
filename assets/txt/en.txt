@@ -82,3 +82,4 @@ Engli^004s^001h
 Map Information
 Title:
 Description:
+Cancel building (^004ESC^001)

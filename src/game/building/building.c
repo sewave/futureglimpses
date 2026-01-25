@@ -2,7 +2,6 @@
 
 #define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
-#define UNIT_NORMAL_RESOURCES 2
 #define SPIRAL_DIRECTIONS 4
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 
@@ -94,7 +93,7 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 
 	if (building_queue_training(building, unitType)) {
 		// Deduct resources but not food
-		for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
+		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_deduct_amount(context, building->controller, i, unitResources->used[i]);
 		}
 	} else {
@@ -121,7 +120,7 @@ void building_handle_placing_input(GameContext *context) {
 													 UNIT_CONTROLLER_PLAYER, context->buildPlacing.x, context->buildPlacing.y);
 				if (building) {
 					// Deduct resources
-					for (int i = 0; i < UNIT_NORMAL_RESOURCES; i++) {
+					for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 						resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
 					}
 					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;

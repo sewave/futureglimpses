@@ -246,7 +246,15 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 			context->stats[opponentController].enemiesKilled++;
 		}
 		UnitData *data = &unitsData[unit->type];
-		resource_deduct_food(context, unit->controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD], data->resources.foodProvided);
+		uint8_t foodProvidedReturn;
+		// An uncompleted building has not yet provided any food
+		if(unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
+			foodProvidedReturn = 0;
+		}
+		else {
+			foodProvidedReturn = data->resources.foodProvided;
+		}
+		resource_deduct_food(context, unit->controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD], foodProvidedReturn);
 	}
 }
 
