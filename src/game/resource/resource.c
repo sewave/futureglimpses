@@ -6,6 +6,7 @@
 #define RESOURCES_Z UI_Z_ORDER + 600
 #define BASE_TEN_NUMER 10
 #define FOOD_USE_FORMAT "%u/%u"
+#define FOOD_USE_SURPASSED_FORMAT "^005%u^001/%u"
 
 static int RESOURCE_TEXT_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{89, 1},
@@ -127,10 +128,17 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 	}
 
 	// Render food usage
+	uint32_t usedFood = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD];
+	uint32_t maxFood = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD];
+	char* foodFormat;
+	if(usedFood > maxFood) {
+		foodFormat = FOOD_USE_SURPASSED_FORMAT;
+	} else {
+		foodFormat = FOOD_USE_FORMAT;
+	}
 	snprintf(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD]),
-			 FOOD_USE_FORMAT, context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD],
-			 context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD]);
-	render_queue_submit_text_shadow(renderQueue, RESOURCES_Z, context->gameFont,
+			 foodFormat, usedFood, maxFood);
+	render_queue_submit_text_multicolor_shadow(renderQueue, RESOURCES_Z, context->gameFont,
 			resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD],
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][0],
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][1],
