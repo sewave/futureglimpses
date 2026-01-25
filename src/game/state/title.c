@@ -365,6 +365,7 @@ GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue) 
 		exit(EXIT_FAILURE);
 	}
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+	game_snd_play_music(GAME_MUSIC_MENUS);
 	return GAME_STATE_TITLE;
 }
 

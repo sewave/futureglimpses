@@ -5,7 +5,7 @@
 // TODO add music
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
 		"assets/music/none.mid",
-        "assets/music/none.mid",
+        "assets/music/menus.mid",
         "assets/music/none.mid",
         "assets/music/none.mid",
         "assets/music/map1.mid",
