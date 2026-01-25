@@ -141,6 +141,15 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 										 rectColor);
 			}
 
+			if (unit->isBuilding && context->buildPlacing.showBuilding) {
+				render_queue_submit_rect(renderQueue,
+										 rectZ,
+										 unitTileXCamera, unitTileYCamera,
+										 unitTileXCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 1,
+										 unitTileYCamera + (SELECT_CUBE_SIZE * unit->tileSize) - 1,
+										 PAL_COLOR_WHITE);
+			}
+
 			LifeBarEnum lifeBarSetting = context->config.lifeBar;
 
 			if (unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
@@ -194,7 +203,7 @@ void render_queue_add_active_objects(GameContext *context, RenderQueue *renderQu
 			int unitTileYCamera = object->currentY - context->yPosition + VIEWPORT_Y_OFFSET;
 			int unitXCamera = unitTileXCamera - prop->xRepos;
 			int unitYCamera = unitTileYCamera - prop->yRepos;
-			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + object->currentY / TILE_SIZE,
+			render_queue_submit_rle_sprite(renderQueue, OBJECTS_Z_ORDER + object->currentY / TILE_SIZE,
 											animationStatus->sheet->frames[prop->startFrame + animationStatus->frame],
 											unitXCamera, unitYCamera);
 		}
