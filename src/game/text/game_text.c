@@ -1,4 +1,7 @@
 #include "game_text.h"
+#include "game_text_enum.h"
+#include "../../common/text/text.h"
+#include <stdio.h>
 
 #define GAME_TEXT_FILE_ES "assets/txt/es.txt"
 #define GAME_TEXT_FILE_EN "assets/txt/en.txt"
@@ -17,8 +20,6 @@ InitializationStatusEnum game_text_set_language(GameLanguageEnum language) {
             filename = GAME_TEXT_FILE_ES;
             break;
         case LANGUAGE_ENGLISH:
-            filename = GAME_TEXT_FILE_EN;
-            break;
         default:
             filename = GAME_TEXT_FILE_EN;
             break;

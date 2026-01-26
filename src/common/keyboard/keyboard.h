@@ -1,6 +1,6 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
-#include <allegro/keyboard.h>
+#include <stdint.h>
 
 void keyboard_update();
 uint8_t keyboard_is_key_down(int keyCode);

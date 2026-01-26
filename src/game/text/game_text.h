@@ -1,6 +1,7 @@
 #ifndef GAME_TEXT_H
 #define GAME_TEXT_H
-#include "../game_lib.h"
+#include "../../common/common.h"
+#include "../game_enums.h"
 
 #define DEFAULT_LANGUAGE LANGUAGE_SPANISH
 

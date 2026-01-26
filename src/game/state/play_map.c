@@ -236,7 +236,7 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 		context->gameResult = GAME_RESULT_VICTORY;
 	}
-	// TODO win/loss restults screen
+	// TODO win/loss results screen
 }
 
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
