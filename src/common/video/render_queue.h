@@ -5,6 +5,7 @@
 #include <allegro/draw.h>
 #include <allegro/font.h>
 #include <allegro/text.h>
+#include <allegro/rle.h>
 #include "../common.h"
 #include "../text/text.h"
 

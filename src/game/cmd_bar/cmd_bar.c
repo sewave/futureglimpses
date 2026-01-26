@@ -1,5 +1,6 @@
 #include "cmd_bar.h"
 #include <stdio.h>
+#include <allegro/keyboard.h>
 
 #define CMD_BAR_BUTTON_INITIAL_X 3
 #define CMD_BAR_BUTTON_INITIAL_Y 127

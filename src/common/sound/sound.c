@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "sound.h"
+#include <allegro/sound.h>
 #include <jgmod.h>
 
 static JGMOD *currentModMusic = NULL;

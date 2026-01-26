@@ -1,4 +1,5 @@
 #include "selection.h"
+#include <allegro/keyboard.h>
 typedef struct {
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;

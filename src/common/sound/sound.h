@@ -1,7 +1,6 @@
 #ifndef SOUND_H
 #define SOUND_H
 #include "../common.h"
-#include <allegro/sound.h>
 
 typedef enum {
     MUSIC_TYPE_MIDI,
