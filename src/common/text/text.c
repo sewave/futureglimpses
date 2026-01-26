@@ -1,5 +1,6 @@
 #include "text.h"
 #include "../common_lib.h"
+#include <stdio.h>
 
 #define CONTROL_SEQUENCE "^"
 #define COLOR_CODE_LENGTH 3

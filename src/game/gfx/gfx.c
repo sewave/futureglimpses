@@ -2,6 +2,7 @@
 #include <allegro/gfx.h>
 #include <allegro/file.h>
 #include <allegro/datafile.h>
+#include <stdio.h>
 
 #define CMD_BAR_BUTTONS_FILE "assets/ui/cmdbtns.pcx"
 #define FRAME_FILE "assets/ui/back.pcx"

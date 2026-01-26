@@ -1,5 +1,6 @@
 #include "config.h"
 #include <allegro/config.h>
+#include <stdio.h>
 
 #define CONFIG_FILE_PATH "config.cfg"
 #define CONFIG_SECTION_AUDIO "audio"

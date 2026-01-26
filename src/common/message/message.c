@@ -1,4 +1,5 @@
 #include "message.h"
+#include "../video/video.h"
 
 #define MAX_MESSAGES 5
 #define MAX_SLOT_INDEX MAX_MESSAGES - 1

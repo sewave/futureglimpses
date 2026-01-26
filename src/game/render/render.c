@@ -1,6 +1,7 @@
 #include "render.h"
 #include <allegro/color.h>
 #include <allegro/keyboard.h>
+#include <stdio.h>
 
 #define MOVE_PRECISION 16384
 #define HEALTH_BAR_Y_OFFSET 6

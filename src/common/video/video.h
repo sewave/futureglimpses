@@ -1,7 +1,6 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 #include <allegro/palette.h>
-#include <stdio.h>
 #include "../common.h"
 
 typedef struct RGB_FILE_ENTRY {
@@ -10,7 +9,6 @@ typedef struct RGB_FILE_ENTRY {
 
 #define TRANSPARENT_INDEX -1
 #define TRANSPARENT_COLOR 0
-
 #define PALETTE_ENTRIES 256
 
 int video_init_system(int width, int height, int depth);
