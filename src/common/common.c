@@ -16,70 +16,70 @@ char common_init_basic(
 	/* Init all systems */
 	printf("Initializing Allegro...");
 	if (allegro_init() != ALLEGRO_INIT_OK) {
-		printKO();
+		common_print_ko();
 		printf("Error initializing Allegro.");
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	// Check cpu is at least a minCpuFamily and has requiredCpuCapabilities
 	printf("Checking CPU capabilities...");
 	if (cpu_family < minCpuFamily || !(cpu_capabilities & requiredCpuCapabilities)) {
-		printKO();
+		common_print_ko();
 		printf(unsupportedCpuMessage);
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	// Check for requiredRamMb MB of extra memory
 	printf("Checking available memory...");
 	if (!has_minimal_free_memory(requiredRamMb)) {
-		printKO();
+		common_print_ko();
 		printf("Error: Not enough memory. At least %d MB of RAM is required.", requiredRamMb);
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	printf("Initializing keyboard...");
 	if (install_keyboard() != ALLEGRO_INIT_OK) {
-		printKO();
+		common_print_ko();
 		printf("Error initializing keyboard.");
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	printf("Initializing mouse [");
 	if (mouse_init_func != NULL) {
 		if (mouse_init_func() != INITIALIZATION_OK) {
-			printKO();
+			common_print_ko();
 			printf("Error initializing mouse.");
 			return PROGRAM_ERROR;
 		}
 	}
-	printOKSteps();
+	common_print_ok_steps();
 
 	printf("Seeding random number generator...");
 	srand(time(NULL));
-	printOK();
+	common_print_ok();
 
 	printf("***Common systems initialized***\n\n");
 
 	return PROGRAM_OK;
 }
 
-void printOK() {
+void common_print_ok() {
 	printf("OK\n");
 }
 
-void printOKSteps() {
+void common_print_ok_steps() {
 	printf("] OK\n");
 }
 
-void printKO() {
+void common_print_ko() {
 	printf("KO\n");
 }
 
-void printInitStep() {
+void common_print_init_step() {
 	printf("*");
 	fflush(stdout);
 }

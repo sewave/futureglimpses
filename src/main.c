@@ -34,7 +34,7 @@ static void install_interruptions() {
 	LOCK_VARIABLE(logicTicks);
 	LOCK_FUNCTION(timer_handler);
 	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
-	printOK();
+	common_print_ok();
 }
 
 int main(int argc, char *argv[]) {
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	game_config_load_settings(&context.config);
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
-		printKO();
+		common_print_ko();
 		printf("Error initializing sound. Continuing without sound.");
 	}
 
@@ -63,26 +63,26 @@ int main(int argc, char *argv[]) {
 
 	if (game_gfx_load_all() != INITIALIZATION_OK) {
 		game_gfx_destroy_all();
-		printOKSteps();
+		common_print_ok_steps();
 		printf("Error loading gfx.\n");
 		return PROGRAM_ERROR;
 	}
 
 	if (game_text_init_system(context.config.language) != INITIALIZATION_OK) {
-		printKO();
+		common_print_ko();
 		printf("Error initializing text system.");
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	printf("Loading game font...");
 	context.gameFont = load_font("assets/font/bitrimus.pcx", NULL, NULL);
 	if (context.gameFont == NULL) {
-		printKO();
+		common_print_ko();
 		printf("Error loading game font.");
 		return PROGRAM_ERROR;
 	}
-	printOK();
+	common_print_ok();
 
 	printf("\n***Press any key/Pulsa cualquier tecla***\n\n");
 	while (keypressed()) {
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 	readkey();
 
 	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
-		printKO();
+		common_print_ko();
 		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}

@@ -31,9 +31,9 @@ char common_init_basic(
 		const char *unsupportedCpuMessage,
 		int requiredRamMb,
 		int (*mouse_init_func)(void));
-void printOK();
-void printKO();
-void printInitStep();
-void printOKSteps();
+void common_print_ok();
+void common_print_ko();
+void common_print_init_step();
+void common_print_ok_steps();
 
 #endif /* COMMON_H */

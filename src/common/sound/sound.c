@@ -40,7 +40,7 @@ InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, Music
 	if (currentMusicType == MUSIC_TYPE_MOD) {
 		if (install_mod(musicVoices) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	}
-	printOK();
+	common_print_ok();
 	return INITIALIZATION_OK;
 }
 
@@ -84,7 +84,7 @@ void snd_init_sounds(int numSounds, const char **soundFilenames) {
 	for (int i = 0; i < totalSounds; i++) {
 		_snd_destroy_sound(i);
 		sounds[i] = load_sample(soundFilenames[i]);
-		printInitStep();
+		common_print_init_step();
 	}
 }
 

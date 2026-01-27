@@ -19,7 +19,7 @@ void game_config_load_settings(Config* config) {
     config->sfxVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, DEFAULT_SFX_VOLUME);
     config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);
     config->language = (GameLanguageEnum) get_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, DEFAULT_LANGUAGE);
-    printOK(); 
+	common_print_ok();
 }
 
 void game_config_save_settings(Config* config) {

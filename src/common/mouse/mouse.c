@@ -40,7 +40,7 @@ InitializationStatusEnum mouse_init_cursors(uint8_t numCursors, const char **mou
 		BITMAP *cursorBitmap = load_bitmap(mouseCursorFilenames[i], NULL);
 		if (cursorBitmap == NULL) return INITIALIZATION_ERROR;
 		mouse_load_cursor(i, cursorBitmap);
-		printInitStep();
+		common_print_init_step();
 	}
 	return INITIALIZATION_OK;
 }

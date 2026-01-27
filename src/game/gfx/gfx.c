@@ -110,59 +110,59 @@ InitializationStatusEnum game_gfx_load_all() {
 	printf("Loading units gfx [");
 	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsBlue[i], spriteSheetFilenamesBlue[i], unitSquares[i])) return INITIALIZATION_ERROR;
-		printInitStep();
+		common_print_init_step();
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsRed[i], spriteSheetFilenamesRed[i], unitSquares[i])) return INITIALIZATION_ERROR;
-		printInitStep();
+		common_print_init_step();
 	}
-	printOKSteps();
+	common_print_ok_steps();
 
 	printf("Loading objects gfx [");
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsObject[i], objectSheetFilenames[i], objectSquares[i])) return INITIALIZATION_ERROR;
-		printInitStep();
+		common_print_init_step();
 	}
-	printOKSteps();
+	common_print_ok_steps();
 
 	printf("Loading ui gfx [");
 	frame = load_bitmap(FRAME_FILE, NULL);
 	if (!frame) return INITIALIZATION_ERROR;
-	printInitStep();
+	common_print_init_step();
 
 	cmdBarButtons = load_bitmap(CMD_BAR_BUTTONS_FILE, NULL);
 	if (!cmdBarButtons) return INITIALIZATION_ERROR;
-	printInitStep();
+	common_print_init_step();
 
 	tileSet = load_bitmap(TILESET_FILE, NULL);
 	if (!tileSet) return INITIALIZATION_ERROR;
-	printInitStep();
+	common_print_init_step();
 
 	tileSetColors = load_bitmap(TILESET_COLORS_FILE, NULL);
 	if (!tileSetColors) return INITIALIZATION_ERROR;
-	printInitStep();
+	common_print_init_step();
 
-    BITMAP* allIcons = load_bitmap(ICONS_FILE, NULL);
-    if (!allIcons) return INITIALIZATION_ERROR;
+	BITMAP *allIcons = load_bitmap(ICONS_FILE, NULL);
+	if (!allIcons) return INITIALIZATION_ERROR;
     for(int i = 0; i < GAME_ICON_COUNT; i++) {
         icons[i] = create_bitmap(ICON_WIDTH, ICON_HEIGHT);
         blit(allIcons, icons[i], i * ICON_WIDTH, 0, 0, 0, ICON_WIDTH, ICON_HEIGHT);
-        printInitStep();
-    }
-    destroy_bitmap(allIcons);
+		common_print_init_step();
+	}
+	destroy_bitmap(allIcons);
 
     BITMAP* allOvertiles = load_bitmap(OVERTILES_FILE, NULL);
     if (!allOvertiles) return INITIALIZATION_ERROR;
     for(int i = 0; i < GAME_OVERTILE_COUNT; i++) {
         overtiles[i] = create_bitmap(TILE_SIZE, TILE_SIZE);
         blit(allOvertiles, overtiles[i], i * TILE_SIZE, 0, 0, 0, TILE_SIZE, TILE_SIZE);
-        printInitStep();
-    }
-    destroy_bitmap(allOvertiles);
+		common_print_init_step();
+	}
+	destroy_bitmap(allOvertiles);
 
 	menuBack = load_bitmap(MENU_BACK_FILE, NULL);
 	if (!menuBack) return INITIALIZATION_ERROR;
-	printInitStep();
+	common_print_init_step();
 
-	printOKSteps();
+	common_print_ok_steps();
 
 	return INITIALIZATION_OK;
 }
