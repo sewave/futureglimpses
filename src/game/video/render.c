@@ -1,4 +1,4 @@
-#include "game/render/render.h"
+#include "game/video/render.h"
 #include <allegro/color.h>
 #include <allegro/keyboard.h>
 #include <stdio.h>
