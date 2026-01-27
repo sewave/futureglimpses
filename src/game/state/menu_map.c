@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../game_lib.h"
+#include "game/game_lib.h"
 #include <allegro.h>
 
 #define BUTTON_Y_SEPARATION 20

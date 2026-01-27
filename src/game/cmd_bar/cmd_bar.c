@@ -1,4 +1,4 @@
-#include "cmd_bar.h"
+#include "game/cmd_bar/cmd_bar.h"
 #include <stdio.h>
 #include <allegro/keyboard.h>
 

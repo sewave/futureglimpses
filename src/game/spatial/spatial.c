@@ -1,4 +1,4 @@
-#include "spatial.h"
+#include "game/spatial/spatial.h"
 
 uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uint16_t centerTileY, uint8_t tileRadius,
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,

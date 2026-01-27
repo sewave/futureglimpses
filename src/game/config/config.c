@@ -1,4 +1,4 @@
-#include "config.h"
+#include "game/config/config.h"
 #include <allegro/config.h>
 #include <stdio.h>
 #include <allegro/sound.h>

@@ -1,6 +1,6 @@
 #ifndef UNIT_COMMAND_H
 #define UNIT_COMMAND_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 void game_unit_command_idle(GameUnit* unit);
 void game_unit_command_attack(GameUnit *unit, GameUnit *target, UnitStateEnum nextState);

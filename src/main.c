@@ -23,8 +23,8 @@ static GameContext context;
 
 static void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag);
 
-static void install_timers() {
-	printf("Installing timers...");
+static void install_interruptions() {
+	printf("Installing interruptions...");
 	/* Attach function to close button */
 	LOCK_VARIABLE(closeButtonPressed);
 	LOCK_FUNCTION(close_button_handler);
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 		printf("Error initializing sound. Continuing without sound.");
 	}
 
-	install_timers();
+	install_interruptions();
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 

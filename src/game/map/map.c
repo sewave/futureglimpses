@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "map.h"
-#include "../game_enums.h"
+#include "game/map/map.h"
+#include "game/game_enums.h"
 
 void game_map_free_data(MapData *map) {
 	if (!map) return;

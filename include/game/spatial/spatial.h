@@ -1,6 +1,6 @@
 #ifndef SPATIAL_H
 #define SPATIAL_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 /**
  * All filter functions must conform to this 3-argument signature.

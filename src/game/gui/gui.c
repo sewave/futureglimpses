@@ -1,4 +1,4 @@
-#include "gui.h"
+#include "game/gui/gui.h"
 
 #define GUI_Z_ORDER UI_Z_ORDER + 100
 

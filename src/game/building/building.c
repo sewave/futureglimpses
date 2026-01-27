@@ -1,4 +1,4 @@
-#include "building.h"
+#include "game/building/building.h"
 
 #define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)

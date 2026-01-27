@@ -1,5 +1,5 @@
 #include <allegro/sound.h>
-#include "game_sound.h"
+#include "game/sound/game_sound.h"
 #include <stdio.h>
 
 // TODO add music

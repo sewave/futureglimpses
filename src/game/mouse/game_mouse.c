@@ -1,4 +1,4 @@
-#include "game_mouse.h"
+#include "game/mouse/game_mouse.h"
 #include <allegro.h>
 
 static MouseCursorStateEnum mouseCursorState = MOUSE_CURSOR_IDLE;

@@ -1,4 +1,4 @@
-#include "strategy_ai.h"
+#include "game/ai/strategy_ai.h"
 
 static uint16_t strategyCounter = 0;
 static const uint16_t quadrantXPositions[3] = { BOARD_WIDTH / 6, BOARD_WIDTH / 2, (BOARD_WIDTH * 5) / 6 };

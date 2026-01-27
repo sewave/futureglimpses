@@ -1,4 +1,4 @@
-#include "game.h"
+#include "game/game.h"
 
 extern GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue);
 extern GameStateEnum handle_title(GameContext *context, RenderQueue *renderQueue);

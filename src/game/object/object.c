@@ -1,4 +1,4 @@
-#include "object.h"
+#include "game/object/object.h"
 
 #define FIRST_GENERATION 1
 #define NO_FREE_INDEX -1

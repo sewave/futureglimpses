@@ -1,6 +1,6 @@
 #ifndef UNIT_AI_H
 #define UNIT_AI_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 void game_unit_ai_invoke(GameContext* context, GameUnit* unit);
 

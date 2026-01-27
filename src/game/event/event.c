@@ -1,4 +1,4 @@
-#include "event.h"
+#include "game/event/event.h"
 
 void game_event_unit_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
 	switch (eventType) {

@@ -1,5 +1,5 @@
-#include "game_text.h"
-#include "game_text_enum.h"
+#include "game/text/game_text.h"
+#include "game/text/game_text_enum.h"
 #include "common/text.h"
 #include <stdio.h>
 

@@ -1,4 +1,4 @@
-#include "selection.h"
+#include "game/selection/selection.h"
 #include <allegro/keyboard.h>
 typedef struct {
 	UnitId selectedUnits[MAX_GAME_UNITS];

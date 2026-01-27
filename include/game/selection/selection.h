@@ -1,6 +1,6 @@
 #ifndef SELECTION_H
 #define SELECTION_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 void game_selection_init(GameContext *context);
 void game_selection_clear(GameContext *context);

@@ -1,6 +1,6 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 void resource_reset(GameContext *context);
 void resource_set_amount(GameContext *context, ControllerEnum controller, ResourceTypeEnum type, uint32_t amount);

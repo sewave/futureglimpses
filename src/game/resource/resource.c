@@ -1,4 +1,4 @@
-#include "resource.h"
+#include "game/resource/resource.h"
 #include <stdio.h>
 
 #define UI_RESOURCE_UPDATE_RATE 20 // Quantity to update of ui resource per call

@@ -1,4 +1,4 @@
-#include "unit_command.h"
+#include "game/unit/unit_command.h"
 
 static void game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitState) {
     if(unit->state == UNIT_STATE_DIE) return;

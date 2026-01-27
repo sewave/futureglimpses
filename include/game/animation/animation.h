@@ -1,6 +1,6 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 #define BLINK_TIME 35
 #define BLINK_MOD 10
 #define BLINK_FRAMES 5

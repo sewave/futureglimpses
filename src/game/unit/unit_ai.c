@@ -1,4 +1,4 @@
-#include "unit_ai.h"
+#include "game/unit/unit_ai.h"
 
 #define MAX_FOUND_UNITS 32
 static GameUnit *foundUnits[MAX_FOUND_UNITS];

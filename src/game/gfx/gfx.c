@@ -1,4 +1,4 @@
-#include "gfx.h"
+#include "game/gfx/gfx.h"
 #include <allegro/gfx.h>
 #include <allegro/file.h>
 #include <allegro/datafile.h>

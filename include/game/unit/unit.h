@@ -1,6 +1,6 @@
 #ifndef UNIT_H
 #define UNIT_H
-#include "../game_lib.h"
+#include "game/game_lib.h"
 
 #define UNIT_USED_RESOURCES 3
 #define UNIT_CREATE_REDUCE_RESOURCES 2
