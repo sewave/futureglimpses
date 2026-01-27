@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "render_queue.h"
+#include "common/render_queue.h"
 
 #define TRANSPARENT_COLOR 0
 // --- Helper Functions ---

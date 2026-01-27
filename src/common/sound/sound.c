@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "sound.h"
+#include "common/sound.h"
 #include <allegro/sound.h>
 #include <jgmod.h>
 

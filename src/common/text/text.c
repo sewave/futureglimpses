@@ -1,5 +1,5 @@
-#include "text.h"
-#include "../common_lib.h"
+#include "common/text.h"
+#include "common/common_lib.h"
 #include <stdio.h>
 
 #define CONTROL_SEQUENCE "^"

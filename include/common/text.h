@@ -1,6 +1,6 @@
 #ifndef TEXT_H
 #define TEXT_H
-#include "../common.h"
+#include "common/common.h"
 #include <allegro/gfx.h>
 #include <allegro/palette.h>
 #include <allegro/font.h>

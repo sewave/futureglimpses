@@ -1,8 +1,8 @@
 #include <allegro/gfx.h>
-#include "video.h"
+#include "common/video.h"
 #include <stdio.h>
 
-int video_init_system(int width, int height, int depth) {
+InitializationStatusEnum video_init_system(int width, int height, int depth) {
 	printf("Initializing video...");
 	set_color_depth(depth);
 #ifdef DOS
@@ -19,7 +19,7 @@ int video_init_system(int width, int height, int depth) {
 	return INITIALIZATION_OK;
 }
 
-int video_load_raw_palette(const char *filename, PALETTE p) {
+InitializationStatusEnum video_load_raw_palette(const char *filename, PALETTE p) {
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
         printf("Error: Could not open palette file '%s'\n", filename);

@@ -1,6 +1,6 @@
 #ifndef SOUND_H
 #define SOUND_H
-#include "../common.h"
+#include "common/common.h"
 
 typedef enum {
     MUSIC_TYPE_MIDI,

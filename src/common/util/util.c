@@ -1,4 +1,4 @@
-#include "util.h"
+#include "common/util.h"
 #include <stdlib.h>
 
 char has_minimal_free_memory(int megaBytes) {

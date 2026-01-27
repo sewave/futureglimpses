@@ -6,8 +6,8 @@
 #include <allegro/font.h>
 #include <allegro/text.h>
 #include <allegro/rle.h>
-#include "../common.h"
-#include "../text/text.h"
+#include "common/common.h"
+#include "common/text.h"
 
 typedef enum {
 	RND_FLAG_NORMAL,

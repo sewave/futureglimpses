@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "common.h"
-#include "util/util.h"
-#include <allegro/system.h>
-#include <allegro/keyboard.h>
-#include <allegro/mouse.h>
+#include "common/common.h"
+#include "common/util.h"
+#include <allegro.h>
 
 char common_init_basic(
 		int minCpuFamily,

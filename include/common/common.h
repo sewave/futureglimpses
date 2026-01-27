@@ -1,5 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
+#include <stdint.h>
 
 typedef enum {
     INITIALIZATION_OK = 0,
@@ -13,10 +14,6 @@ typedef enum {
 
 #define FUNCTION_OK 0
 #define FUNCTION_ERROR -1
-
-#ifndef uchar
-#define uchar   unsigned char
-#endif
 
 typedef struct {
 	int x, y;

@@ -12,13 +12,13 @@ BUILD_MODE ?= debug
 
 ifeq ($(ENV), djgpp)
     # DJGPP Environment (DOS)
-    CC = C:/dev-allegro/djgpp/bin/i586-pc-msdosdjgpp-gcc.exe -DDOS
+    CC = C:/dev-allegro/djgpp/bin/i586-pc-msdosdjgpp-gcc.exe -DDOS -DALLEGRO_HAVE_STDINT_H
     TARGET_NAME = dos
     TARGET_EXT = .exe
     CLEAN_RM = del 2> /dev/null
     
     # Custom Paths for DJGPP
-    IFLAGS  = -IC:/dev-allegro/allegro4-dos/include
+    IFLAGS  = -IC:/dev-allegro/allegro4-dos/include -I./include
     LDPATHS = -LC:/dev-allegro/allegro4-dos/lib
     
     # Combined Flags
@@ -31,7 +31,7 @@ else
     CLEAN_RM = del 2> /dev/null
 
     # Custom Paths for MinGW
-    IFLAGS  = -IC:/dev-allegro/allegro4-win/include
+    IFLAGS  = -IC:/dev-allegro/allegro4-win/include -I./include
     LDPATHS = -LC:/dev-allegro/allegro4-win/lib
 
     # Combined Flags

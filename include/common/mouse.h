@@ -1,6 +1,6 @@
 #ifndef MOUSE_H
 #define MOUSE_H
-#include "../../common/common.h"
+#include "common/common.h"
 #include <allegro/gfx.h>
 #include <allegro/mouse.h>
 
@@ -20,9 +20,9 @@ typedef struct {
 } MouseStatus;
 
 BITMAP *mouse_get_cursor_sprite();
-void mouse_set_cursor(uchar index);
+void mouse_set_cursor(uint8_t index);
 void mouse_destroy_cursors(void);
-InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char** mouseCursorFilenames);
+InitializationStatusEnum mouse_init_cursors(uint8_t numCursors, const char** mouseCursorFilenames);
 void mouse_initialize_status(MouseStatus *status, uint32_t doubleClickMaxTime);
 void mouse_update_status(MouseStatus* status);
 

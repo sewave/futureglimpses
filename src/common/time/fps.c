@@ -1,4 +1,4 @@
-#include "fps.h"
+#include "common/fps.h"
 #include <time.h>
 
 #define FPS_SAMPLES 60

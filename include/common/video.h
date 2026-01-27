@@ -1,7 +1,7 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 #include <allegro/palette.h>
-#include "../common.h"
+#include "common/common.h"
 
 typedef struct RGB_FILE_ENTRY {
     unsigned char r, g, b;
@@ -11,6 +11,6 @@ typedef struct RGB_FILE_ENTRY {
 #define TRANSPARENT_COLOR 0
 #define PALETTE_ENTRIES 256
 
-int video_init_system(int width, int height, int depth);
-int video_load_raw_palette(const char *filename, PALETTE p);
+InitializationStatusEnum video_init_system(int width, int height, int depth);
+InitializationStatusEnum video_load_raw_palette(const char *filename, PALETTE p);
 #endif /* VIDEO_H */

@@ -1,6 +1,6 @@
 #ifndef GAME_SOUND_H
 #define GAME_SOUND_H
-#include "../../common/sound/sound.h"
+#include "common/sound.h"
 
 #define MOD_VOICES 4
 #define GAME_VOICES 8

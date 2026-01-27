@@ -1,6 +1,6 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
-#include "../video/render_queue.h"
+#include "common/render_queue.h"
 
 void message_init(int pMessageX, int pMessageStartY, int pMessageYInc, int pMessageZ);
 void message_reset();

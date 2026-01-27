@@ -1,6 +1,6 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
-#include <stdint.h>
+#include "common/common.h"
 
 void keyboard_update();
 uint8_t keyboard_is_key_down(int keyCode);

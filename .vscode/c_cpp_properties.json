@@ -3,7 +3,7 @@
         {
             "name": "Win32-MinGW",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**",
                 "${config:allegroIncludePath}"
             ],
             "compilerPath": "${config:compilerPath}",

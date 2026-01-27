@@ -1,13 +1,13 @@
 #include <allegro/gfx.h>
 #include <allegro/file.h>
 #include <allegro/datafile.h>
-#include "mouse.h"
+#include "common/mouse.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 static BITMAP **mouseCursors = NULL;
-static uchar numMouseCursors = 0;
-static uchar currentMouseCursor = 0;
+static uint8_t numMouseCursors = 0;
+static uint8_t currentMouseCursor = 0;
 
 static int mouse_get_x() {
 #ifdef DOS
@@ -25,13 +25,13 @@ static int mouse_get_y() {
 #endif
 }
 
-static void mouse_load_cursor(uchar index, BITMAP *cursor) {
+static void mouse_load_cursor(uint8_t index, BITMAP *cursor) {
 	if (index >= numMouseCursors) return;
 	if (mouseCursors[index] != NULL) destroy_bitmap(mouseCursors[index]);
 	mouseCursors[index] = cursor;
 }
 
-InitializationStatusEnum mouse_init_cursors(uchar numCursors, const char **mouseCursorFilenames) {
+InitializationStatusEnum mouse_init_cursors(uint8_t numCursors, const char **mouseCursorFilenames) {
 	if (install_mouse() < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	show_mouse(NULL);
 	numMouseCursors = numCursors;
@@ -49,7 +49,7 @@ BITMAP *mouse_get_cursor_sprite() {
 	return mouseCursors[currentMouseCursor];
 }
 
-void mouse_set_cursor(uchar index) {
+void mouse_set_cursor(uint8_t index) {
 	currentMouseCursor = index;
 }
 
