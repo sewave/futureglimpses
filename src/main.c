@@ -7,9 +7,7 @@
 static RenderQueue renderQueue;
 static GameContext context;
 
-static void main_loop();
-
-int main(int argc, char *argv[]) {
+static int init_all() {
 	printf("Starting %s v%s...\n", GAME_TITLE, VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
@@ -78,26 +76,16 @@ int main(int argc, char *argv[]) {
 	}
 
 	fps_init();
-
-	main_loop();
-
-	game_gfx_destroy_all();
-	snd_stop_music();
-	snd_destroy_sounds();
-	game_mouse_destroy_cursors();
-	text_free_all();
-	game_config_save_settings(&context.config);
-	allegro_exit();
-	return PROGRAM_OK;
-}
-END_OF_MAIN()
-
-void main_loop() {
 	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_INIT_TITLE;
-	uint8_t redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
+
+	return PROGRAM_OK;
+}
+
+static void main_loop() {
+	uint8_t redrawNeeded = FALSE;
 	while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT) {
 		if (timer_has_ticks()) {
 			context.ticksToCatchup = timer_get_ticks();
@@ -126,6 +114,24 @@ void main_loop() {
 			fps_update();
 		}
 	}
-	
-	game_free_context(&context);
 }
+
+static void clean_all() {
+	game_free_context(&context);
+	game_gfx_destroy_all();
+	snd_stop_music();
+	snd_destroy_sounds();
+	game_mouse_destroy_cursors();
+	text_free_all();
+	game_config_save_settings(&context.config);
+	allegro_exit();
+}
+
+int main(int argc, char *argv[]) {
+	if(init_all() != PROGRAM_OK) return PROGRAM_ERROR;
+	main_loop();
+	clean_all();
+	return PROGRAM_OK;
+}
+END_OF_MAIN()
+
