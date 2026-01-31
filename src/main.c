@@ -4,38 +4,10 @@
 #include "common/common_lib.h"
 #include "game/game_lib.h"
 
-volatile int closeButtonPressed = FALSE;
-
-void close_button_handler() {
-	closeButtonPressed = TRUE;
-}
-END_OF_FUNCTION(close_button_handler)
-
-volatile long logicTicks = 0;
-
-void timer_handler() {
-	logicTicks++;
-}
-END_OF_FUNCTION(timer_handler);
-
 static RenderQueue renderQueue;
 static GameContext context;
 
-static void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag);
-
-static void install_interruptions() {
-	printf("Installing interruptions...");
-	/* Attach function to close button */
-	LOCK_VARIABLE(closeButtonPressed);
-	LOCK_FUNCTION(close_button_handler);
-	set_close_button_callback(close_button_handler);
-
-	/* Install timer handler function */
-	LOCK_VARIABLE(logicTicks);
-	LOCK_FUNCTION(timer_handler);
-	install_int_ex(timer_handler, BPS_TO_TIMER(LOGIC_RATE_BPS));
-	common_print_ok();
-}
+static void main_loop();
 
 int main(int argc, char *argv[]) {
 	printf("Starting %s v%s...\n", GAME_TITLE, VERSION);
@@ -54,7 +26,10 @@ int main(int argc, char *argv[]) {
 		printf("Error initializing sound. Continuing without sound.");
 	}
 
-	install_interruptions();
+	printf("Installing interruptions...");
+	close_install_handler();
+	timer_init(LOGIC_RATE_BPS);
+	common_print_ok();
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 
@@ -104,7 +79,7 @@ int main(int argc, char *argv[]) {
 
 	fps_init();
 
-	main_loop(&logicTicks, &closeButtonPressed);
+	main_loop();
 
 	game_gfx_destroy_all();
 	snd_stop_music();
@@ -123,27 +98,23 @@ BITMAP* get_screen_buffer() {
 	return screenBuffer;
 }
 
-void main_loop(volatile long *logicTicks, volatile int *closeButtonFlag) {
+void main_loop() {
 	screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_INIT_TITLE;
 	uint8_t redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
-	long lastTickCount = *logicTicks;
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
-	while (!*closeButtonFlag && context.gameState != GAME_STATE_EXIT) {
-		if (*logicTicks > lastTickCount) {
-			context.ticksToCatchup = *logicTicks - lastTickCount;
-			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) {
-				lastTickCount = *logicTicks - MAX_CATCHUP_TICKS;
-				context.ticksToCatchup = MAX_CATCHUP_TICKS;
-			}
+	while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT) {
+		if (timer_has_ticks()) {
+			context.ticksToCatchup = timer_get_ticks();
+			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) context.ticksToCatchup = MAX_CATCHUP_TICKS;
+			timer_reset_ticks();
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
 				context.gameState = game_execute_state(&context, &renderQueue);
-				lastTickCount++;
 			}
 			redrawNeeded = TRUE;
 		}

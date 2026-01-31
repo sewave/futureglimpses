@@ -256,7 +256,7 @@ typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
 void game_free_context(GameContext *context);
 GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue);
 
-#define LOGIC_RATE_BPS 35
+#define LOGIC_RATE_BPS 30
 #define GAME_SPEED 1
 #define SEC_TO_FRAMES(secs) 1 + (uint16_t) (((float)secs * LOGIC_RATE_BPS) / GAME_SPEED)
 #define MAX_CATCHUP_TICKS 5
