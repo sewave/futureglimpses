@@ -23,4 +23,5 @@
 #include "game/gui/cmd_bar.h"
 #include "game/building/building.h"
 #include "game/gui/gui.h"
+#include "game/main/main.h"
 #endif /* GAME_LIB_H */
