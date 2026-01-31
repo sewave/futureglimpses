@@ -112,9 +112,9 @@ void main_loop() {
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
+				context.gameState = game_execute_state(&context, &renderQueue);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
-				context.gameState = game_execute_state(&context, &renderQueue);
 			}
 			redrawNeeded = TRUE;
 		}

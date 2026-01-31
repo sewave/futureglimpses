@@ -8,12 +8,14 @@
 
 // Comparison function for qsort (sorts by zOrder ascending)
 static int compare_commands(const void *a, const void *b) {
-	return ((RenderCommand *) a)->zOrder - ((RenderCommand *) b)->zOrder;
+	return (*((RenderCommand **) a))->zOrder - (*((RenderCommand **) b))->zOrder;
 }
 
 static RenderCommand *render_queue_get_next_command(RenderQueue *queue, int z, RenderCommandType type) {
 	if (queue->count >= MAX_COMMANDS) return NULL;
-	RenderCommand *cmd = &queue->commands[queue->count++];
+	RenderCommand *cmd = &queue->commands[queue->count];
+	queue->sortedCommands[queue->count] = cmd;
+	queue->count++;
 	cmd->type = type;
 	cmd->zOrder = z;
 	return cmd;
@@ -40,6 +42,7 @@ static void render_sprite(BITMAP *target, RenderSpriteCommand *spriteCmd) {
 void render_queue_init(RenderQueue *queue) {
 	queue->count = 0;
 	memset(queue->commands, 0, sizeof(RenderCommand) * MAX_COMMANDS);
+	memset(queue->sortedCommands, 0, sizeof(RenderCommand*) * MAX_COMMANDS);
 }
 
 void render_queue_clear(RenderQueue *queue) {
@@ -214,10 +217,11 @@ void render_queue_submit_text_multicolor_shadow(RenderQueue *queue, int z, FONT 
 void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 	if (queue->count == 0) return;
 
-	qsort(queue->commands, queue->count, sizeof(RenderCommand), compare_commands);
+	qsort(queue->sortedCommands, queue->count, sizeof(RenderCommand*), compare_commands);
 
-	RenderCommand *cmd = &queue->commands[0];
-	for (int i = 0; i < queue->count; ++i, ++cmd) {
+	RenderCommand **cmdPtr = &queue->sortedCommands[0];
+	for (int i = 0; i < queue->count; ++i, ++cmdPtr) {
+		RenderCommand *cmd = *cmdPtr;
 		switch (cmd->type) {
 			case RND_CMD_CLEAR:
 				clear_to_color(target, cmd->data.clear.color);

@@ -124,6 +124,7 @@ typedef struct {
 
 typedef struct {
     RenderCommand commands[MAX_COMMANDS];
+    RenderCommand* sortedCommands[MAX_COMMANDS];
     int count;
 } RenderQueue;
 
