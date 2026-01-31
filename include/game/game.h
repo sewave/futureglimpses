@@ -216,6 +216,7 @@ typedef struct {
 } GameMap;
 
 typedef struct {
+	BITMAP *screenBuffer;
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];

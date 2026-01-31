@@ -92,14 +92,8 @@ int main(int argc, char *argv[]) {
 }
 END_OF_MAIN()
 
-BITMAP *screenBuffer;
-
-BITMAP* get_screen_buffer() {
-	return screenBuffer;
-}
-
 void main_loop() {
-	screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	context.gameState = GAME_STATE_INIT_TITLE;
 	uint8_t redrawNeeded = FALSE;
 	render_queue_init(&renderQueue);
@@ -119,19 +113,19 @@ void main_loop() {
 			redrawNeeded = TRUE;
 		}
 		if (redrawNeeded) {
-			render_queue_execute(&renderQueue, screenBuffer);
+			render_queue_execute(&renderQueue, context.screenBuffer);
 			vsync();
 			acquire_screen();
 			#ifdef DOS
-				blit(screenBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
+				blit(context.screenBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 			#else
-				stretch_blit(screenBuffer, screen, 0, 0, screenBuffer->w, screenBuffer->h, 0, 0, screen->w, screen->h);
+				stretch_blit(context.screenBuffer, screen, 0, 0, context.screenBuffer->w, context.screenBuffer->h, 0, 0, screen->w, screen->h);
 			#endif
 			release_screen();
 			redrawNeeded = FALSE;
 			fps_update();
 		}
 	}
-	destroy_bitmap(screenBuffer);
+	
 	game_free_context(&context);
 }

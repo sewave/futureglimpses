@@ -523,10 +523,8 @@ static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_EXIT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 };
 
-extern BITMAP* get_screen_buffer();
-
 GameStateEnum handle_init_menu_map(GameContext *context, RenderQueue *renderQueue) {
-	BITMAP* screenBuffer = get_screen_buffer();
+	BITMAP* screenBuffer = context->screenBuffer;
 	background = create_bitmap(screenBuffer->w, screenBuffer->h);
 	blit(screenBuffer, background, 0, 0, 0, 0, screenBuffer->w, screenBuffer->h);
 	menuBack = game_gfx_get_menu_back();

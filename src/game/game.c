@@ -21,6 +21,7 @@ void game_free_context(GameContext *context) {
 	destroy_bitmap(context->renderedBoard);
 	destroy_bitmap(context->renderedMinimap);
 	destroy_bitmap(context->renderedMinimapUnits);
+	destroy_bitmap(context->screenBuffer);
 	destroy_font(context->gameFont);
 	if(context->map.title) free(context->map.title);
 	if(context->map.description) free(context->map.description);
