@@ -61,6 +61,7 @@ typedef struct {
 typedef struct {
     // If maxX is > 0, the text will be centered in the area defined by (x, maxX)
     int maxX;
+    int maxWidth, maxHeight;
 } GuiText;
 
 typedef struct {

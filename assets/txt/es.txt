@@ -83,3 +83,8 @@ Información del Mapa
 Título:
 Descripción:
 Cancelar edificio (^004ESC^001)
+^004C^001réditos
+Créditos
+Créditos de recursos: [Bitrimus Font] (GGBotNet). [Fantasy Battle Pack] (Matt Walkden). [Superpowers assets sound effects] (Sparklin Labs' Superpowers HTML5 game maker). [DarkBasic Music Library] (DarkBasic).
+Línea de créditos núm. 2
+Línea de créditos núm. 3

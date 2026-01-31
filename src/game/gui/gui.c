@@ -220,13 +220,20 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 			}
 			case GUI_ELEMENT_TEXT: {
 				int x = element->x;
+				const char *text = text_get_by_id(element->textId);
 				if (element->typed.text.maxX > 0) {
-					const char *text = text_get_by_id(element->textId);
 					int textWidth = text_length(context->gameFont, text);
 					x = element->x + (element->typed.text.maxX - element->x) / 2 - textWidth / 2;
 				}
-				render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
-										 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
+				if(element->typed.text.maxWidth > 0 && element->typed.text.maxHeight > 0) {
+					render_queue_submit_enclosed_text_shadow(renderQueue, z, context->gameFont, text,
+											 x, element->y, element->typed.text.maxWidth, element->typed.text.maxHeight,
+											 element->textColor, element->textBackground, element->shadowTextColor);
+				}
+				else {
+					render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text_get_by_id(element->textId),
+											 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
+				}
 				break;
 			}
 			case GUI_ELEMENT_CUSTOM_TEXT: {

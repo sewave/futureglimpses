@@ -13,6 +13,7 @@ typedef enum {
 	TITLE_MENU_GAMEPLAY,
 	TITLE_MENU_EXIT,
     TITLE_MENU_CONFIRM_EXIT,
+	TITLE_MENU_CREDITS,
 	TITLE_MENU_STATE_COUNT
 } TitleMenuStateEnum;
 
@@ -47,9 +48,12 @@ static void confirm_os(GameContext* context) {
 	titleMenuState = TITLE_MENU_CONFIRM_EXIT;
 }
 
+static void credits(GameContext* context) {
+	titleMenuState = TITLE_MENU_CREDITS;
+}
+
 #define TITLE_MENU_START_Y 120
 #define TITLE_MENU_SPACING 20
-#define TITLE_MENU_LAST_SPACING 10
 #define TITLE_MENU_BUTTON_WIDTH 120
 #define TITLE_MENU_BUTTON_HEIGHT 18
 #define TITLE_MENU_BUTTON_X 100
@@ -58,7 +62,7 @@ static void confirm_os(GameContext* context) {
 #define TITLE_MENU_WIDTH 170
 #define TITLE_MENU_HEIGHT 115
 
-#define TITLE_MENU_ELEMENTS 4
+#define TITLE_MENU_ELEMENTS 5
 
 static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
 	{
@@ -97,7 +101,22 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 , .z = 1,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_CREDITS_BUTTON,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+        .shadowTextColor = PAL_COLOR_BLACK,
+        .hotkey = KEY_C,
+        .typed = {
+            .button = {
+                .size = { .width = TITLE_MENU_BUTTON_WIDTH, .height = TITLE_MENU_BUTTON_HEIGHT },
+                .action = credits
+            }
+        }
+    },
+    {
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_EXIT_TO_OS,
         .textColor = PAL_COLOR_WHITE,
@@ -152,7 +171,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
         }
     },
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
@@ -226,7 +245,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
@@ -285,7 +304,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
     {
-        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 2 + TITLE_MENU_LAST_SPACING, .z = 1,
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN,
         .textColor = PAL_COLOR_WHITE,
@@ -345,6 +364,60 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	},
 };
 
+#define TITLE_MENU_CREDITS_ELEMENTS 5
+#define CREDITS_Y 10
+#define CREDITS_X 10
+#define CREDITS_Y_OFFSET 12
+
+static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
+	{
+		.x = 0, .y = 0, .z = 0,
+		.type = GUI_ELEMENT_IMAGE,
+		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+    {
+        .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+        .hotkey = KEY_R,
+        .typed = {
+            .button = {
+                .size = { .width = TITLE_MENU_BUTTON_WIDTH, .height = TITLE_MENU_BUTTON_HEIGHT },
+                .action = init_settings
+            }
+        }
+    },
+    {
+        .x = CREDITS_X, .y = CREDITS_Y - CREDITS_Y_OFFSET / 2 + 2, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_TITLE,
+        .textColor = PAL_COLOR_YELLOW,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+        .typed = { .text = { .maxX = GAME_INTERNAL_WIDTH - CREDITS_X, } }
+    },
+    {
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_LINE_1,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .text = { .maxWidth = GAME_INTERNAL_WIDTH - CREDITS_X, .maxHeight = CREDITS_Y_OFFSET * 10 } }
+    },
+    {
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 11, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_LINE_2,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
+};
+
 static GuiScreen guiScreens[TITLE_MENU_STATE_COUNT] = {
 		[TITLE_MENU_INITIAL] = {.elements = titleMenu, .elementsCount = TITLE_MENU_ELEMENTS},
 		// We won't print anything in here
@@ -353,6 +426,7 @@ static GuiScreen guiScreens[TITLE_MENU_STATE_COUNT] = {
 		[TITLE_MENU_AUDIO] = {.elements = soundMenu, .elementsCount = TITLE_MENU_SOUND_ELEMENTS},
 		[TITLE_MENU_GAMEPLAY] = {.elements = gameplayMenu, .elementsCount = GAMEPLAY_MENU_ELEMENTS},
         [TITLE_MENU_CONFIRM_EXIT] = {.elements = confirmOSMenu, .elementsCount = TITLE_MENU_CONFIRM_EXIT_ELEMENTS},
+		[TITLE_MENU_CREDITS] = {.elements = creditsMenu, .elementsCount = TITLE_MENU_CREDITS_ELEMENTS},
 		// We won't print anything in here
 		[TITLE_MENU_EXIT] = {.elements = NULL, .elementsCount = 0}
 };

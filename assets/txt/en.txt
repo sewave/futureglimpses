@@ -83,3 +83,8 @@ Map Information
 Title:
 Description:
 Cancel building (^004ESC^001)
+^004C^001redits
+Credits
+Credits line number 1
+Credits line number 2
+Credits line number 3
