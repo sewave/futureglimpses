@@ -24,7 +24,7 @@ char common_init_basic(
 
 	// Check cpu is at least a minCpuFamily and has requiredCpuCapabilities
 	printf("Checking CPU capabilities...");
-	if (cpu_family < minCpuFamily || !(cpu_capabilities & requiredCpuCapabilities)) {
+	if (cpu_family < minCpuFamily || (requiredCpuCapabilities && !(cpu_capabilities & requiredCpuCapabilities))) {
 		common_print_ko();
 		printf(unsupportedCpuMessage);
 		return PROGRAM_ERROR;
@@ -32,7 +32,7 @@ char common_init_basic(
 	common_print_ok();
 
 	// Check for requiredRamMb MB of extra memory
-	printf("Checking available memory...");
+	printf("Checking required memory (%d MB)...", requiredRamMb);
 	if (!has_minimal_free_memory(requiredRamMb)) {
 		common_print_ko();
 		printf("Error: Not enough memory. At least %d MB of RAM is required.", requiredRamMb);

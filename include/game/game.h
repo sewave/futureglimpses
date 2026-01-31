@@ -263,7 +263,7 @@ GameStateEnum game_execute_state(GameContext *context, RenderQueue * renderQueue
 // First MB is special so we check for 7 more
 #define PROGRAM_REQUIRED_RAM_MB 7
 #define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
-#define REQUIRED_CPU_CAPABILITIES CPU_FPU
+#define REQUIRED_CPU_CAPABILITIES 0
 #define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."
 #define MINIMAP_X_POS 4
 #define MINIMAP_Y_POS 12
