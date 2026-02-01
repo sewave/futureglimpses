@@ -17,6 +17,10 @@
  * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
  * - Y (U16, tile unit)
+ * - Player Gold (U32)
+ * - Player Wood (U32)
+ * - Computer Gold (U32)
+ * - Computer Wood (U32)
  * - Title length (U16)
  * - Title string (N times)
  * - Description length (U16)
@@ -97,6 +101,9 @@ function calculateTotalSize(map) {
 		// Object Data: TYPES (2) + X (2) + Y (2) = 6 bytes per object
 		size += layer.objects.length * 6; 
 	}
+
+	// 4 resources of 32 bits
+	size += 4 * 4;
 
     var mapProperties = map.resolvedProperties();
 
@@ -211,6 +218,16 @@ function exportBinary(map) {
     // ===================================
     tiled.log(`Writing map attributes`);
     var mapProperties = map.resolvedProperties();
+
+	// Write resources
+	view.setUint32(offset, mapProperties.PLAYER_GOLD || 0, littleEndian);
+	offset += 4;
+	view.setUint32(offset, mapProperties.PLAYER_WOOD || 0, littleEndian);
+	offset += 4;
+	view.setUint32(offset, mapProperties.COMPUTER_GOLD || 0, littleEndian);
+	offset += 4;
+	view.setUint32(offset, mapProperties.COMPUTER_WOOD || 0, littleEndian);
+	offset += 4;
 
     // A. TITLE
     var titleStr = mapProperties.TITLE || "";

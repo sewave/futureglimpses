@@ -44,8 +44,9 @@ static BoardTile get_board_tile(uint16_t tile) {
 	};
 }
 
-static void load_map(GameContext *context, const char * filePath) {
+static InitializationStatusEnum load_map(GameContext *context, const char * filePath) {
 	MapData *map = game_map_load_data(filePath);
+	if(!map) return INITIALIZATION_ERROR;
 
 	// Load the map here
 	for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -79,13 +80,13 @@ static void load_map(GameContext *context, const char * filePath) {
 	context->map.title = strdup(map->title);
 	context->map.description = strdup(map->description);
 
-	// TODO read quantities from map
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 100000);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, map->playerGold);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, map->playerWood);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, map->computerGold);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, map->computerWood);
 
 	game_map_free_data(map);
+	return INITIALIZATION_OK;
 }
 
 static void render_minimap(GameContext *context) {
@@ -120,7 +121,11 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	game_selection_init(context);
 	resource_reset(context);
 
-	load_map(context, context->mapPath);
+	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
+		fprintf(stderr, "Error loading map: %s\n", context->mapPath);
+		// TODO go to stage select again, maybe with error message in context
+		return GAME_STATE_INIT_TITLE;
+	}
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);

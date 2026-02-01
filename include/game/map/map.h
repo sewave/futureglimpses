@@ -22,6 +22,9 @@ typedef struct {
 typedef struct {
 	unsigned short int numTileLayers;
 	unsigned short int numObjectLayers;
+    unsigned int playerGold, playerWood;
+    unsigned int computerGold, computerWood;
+
     char * title;
     char * description;
 

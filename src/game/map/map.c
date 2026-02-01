@@ -4,6 +4,12 @@
 #include "game/map/map.h"
 #include "game/game_enums.h"
 
+#define MAP_RESOURCES 4
+#define MAP_RESOURCE_PLAYER_GOLD_INDEX 0
+#define MAP_RESOURCE_PLAYER_WOOD_INDEX 1
+#define MAP_RESOURCE_COMPUTER_GOLD_INDEX 2
+#define MAP_RESOURCE_COMPUTER_WOOD_INDEX 3
+
 void game_map_free_data(MapData *map) {
 	if (!map) return;
 
@@ -175,7 +181,20 @@ MapData *game_map_load_data(const char *filename) {
 		}
 	}
 
-	// 4. Load title and description strings as lines
+	// 4. Load start resources, must be in sequence, gold wood gold wood
+	unsigned int resources[MAP_RESOURCES];
+	if (fread(resources, sizeof(unsigned int), MAP_RESOURCES, file_ptr) != MAP_RESOURCES) {
+		fprintf(stderr, "Error reading resources.\n");
+		game_map_free_data(map);
+		fclose(file_ptr);
+		return NULL;
+	}
+	map->playerGold = resources[MAP_RESOURCE_PLAYER_GOLD_INDEX];
+	map->playerWood = resources[MAP_RESOURCE_PLAYER_WOOD_INDEX];
+	map->computerGold = resources[MAP_RESOURCE_COMPUTER_GOLD_INDEX];
+	map->computerWood = resources[MAP_RESOURCE_COMPUTER_WOOD_INDEX];
+
+	// 5. Load title and description strings as lines
 	// Read title length
 	unsigned short int titleLength = 0;
 	if (fread(&titleLength, sizeof(unsigned short int), 1, file_ptr) != 1) {

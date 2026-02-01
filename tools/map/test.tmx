@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="137">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="157">
  <editorsettings>
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
+  <property name="COMPUTER_GOLD" type="int" value="100000"/>
+  <property name="COMPUTER_WOOD" type="int" value="100000"/>
   <property name="DESCRIPTION" value="Bla bla bla long description, a very long description. En un lugar de la mancha, de cuyo nombre no quiero acordarme."/>
+  <property name="PLAYER_GOLD" type="int" value="123456"/>
+  <property name="PLAYER_WOOD" type="int" value="234567"/>
   <property name="TITLE" value="Test map ñ"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>

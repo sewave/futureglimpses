@@ -22,11 +22,14 @@
             "scaleInEditor": 2
         },
         "base.tmx": {
-            "scale": 2,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 245,
-                "y": 745
+                "x": 794.25,
+                "y": 905.625
             }
         },
         "base.tmx#tileset": {
@@ -53,10 +56,10 @@
                 2
             ],
             "scale": 2,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 643,
-                "y": 596.5
+                "x": 255.5,
+                "y": 814.25
             }
         },
         "tileset.tsx": {
@@ -83,7 +86,7 @@
         "test.tmx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "string",
+    "property.type": "int",
     "recentFiles": [
         "base.tmx",
         "test.tmx",
