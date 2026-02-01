@@ -103,6 +103,7 @@ static uint8_t game_gfx_load_sprite_sheet(SpriteSheet * spriteSheet, const char 
 			frame++;
 		}
 	}
+	destroy_bitmap(framesBitmap);
 	return TRUE;
 }
 

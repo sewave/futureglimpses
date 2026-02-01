@@ -41,6 +41,8 @@ static BITMAP* menuBack;
 #define BUTTON_CONFIRM_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
 
 #define WIN_MENU_ELEMENTS 3
+#define MINIMAP_CENTER_OFFSET_X 8
+#define MINIMAP_CENTER_OFFSET_Y 6
 
 static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 	{
@@ -161,8 +163,8 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 		MouseCursorStateEnum mouseState = game_mouse_get_cursor_state();
 
 		if (context->mouseStatus.isLeftDown && mouseState == MOUSE_CURSOR_IDLE) {
-			context->xPosition = (mouseX - MINIMAP_X_POS - 8) * TILE_SIZE;
-			context->yPosition = (mouseY - MINIMAP_Y_POS - 6) * TILE_SIZE;
+			context->xPosition = (mouseX - MINIMAP_X_POS - MINIMAP_CENTER_OFFSET_X) * TILE_SIZE;
+			context->yPosition = (mouseY - MINIMAP_Y_POS - MINIMAP_CENTER_OFFSET_Y) * TILE_SIZE;
 			if (context->yPosition < 0) context->yPosition = 0;
 			if (context->xPosition < 0) context->xPosition = 0;
 			if (context->xPosition > MAX_CAMERA_X_POSITION) context->xPosition = MAX_CAMERA_X_POSITION;
@@ -224,7 +226,7 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 	int playerUnitsCount = 0;
 	for (int i = 0; i < context->activeUnitCount; i++) {
 		GameUnit *unit = context->activeUnits[i];
-		if (!unit || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
+		if (unit == NULL || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
 	}
 	if(playerUnitsCount == 0) {
 		menuBack = game_gfx_get_menu_back();
