@@ -7,9 +7,42 @@
 #define MESSAGES_Y 175
 #define MESSAGES_Y_INC -14
 #define MESSAGES_Z UI_Z_ORDER + 900
-#define MINIMAP_COLORS 256
-#define TILESET_TILES_COLOR_WIDTH 16
-#define TILESET_TILES_COLOR_HEIGHT 16
+
+typedef struct {
+	uint16_t minTile, maxTile;
+	int16_t altTileOffset;
+	TileTypeEnum tileType;
+	uint16_t data;
+} BoardTileDefinition;
+
+static BoardTileDefinition boardTileConversion[] = {
+		{.minTile = 0x00, .maxTile = 0x7F, .altTileOffset = 0, .tileType = TILE_TYPE_WALKABLE, .data = 0},
+		{.minTile = 0x80, .maxTile = 0x8F, .altTileOffset = -0x20, .tileType = TILE_TYPE_WOOD, .data = 100},
+		{.minTile = 0x90, .maxTile = 0x9F, .altTileOffset = -0x20, .tileType = TILE_TYPE_GOLD, .data = 2000},
+		{.minTile = 0xA0, .maxTile = 0xBF, .altTileOffset = 0, .tileType = TILE_TYPE_BLOCKED, .data = 0},
+		{.minTile = 0xC0, .maxTile = 0xDF, .altTileOffset = -0xC0, .tileType = TILE_TYPE_WALL, .data = 50},
+};
+
+#define BOARD_TILE_CONVERSION_ELEMENTS sizeof(boardTileConversion) / sizeof(boardTileConversion[0])
+
+static BoardTile get_board_tile(uint16_t tile) {
+	BoardTileDefinition definition = boardTileConversion[0];
+
+	BoardTileDefinition* definitionPtr = &boardTileConversion[0];
+	for(int i = 0; i < BOARD_TILE_CONVERSION_ELEMENTS; i++, definitionPtr++) {
+		if(tile >= definitionPtr->minTile && tile <= definitionPtr->maxTile) {
+			definition = *definitionPtr;
+			break;
+		}
+	}
+
+	return (BoardTile) {
+		.tile = tile,
+		.data = definition.data,
+		.type = definition.tileType,
+		.altTile = tile + definition.altTileOffset
+	};
+}
 
 static void load_map(GameContext *context, const char * filePath) {
 	MapData *map = game_map_load_data(filePath);
@@ -18,13 +51,18 @@ static void load_map(GameContext *context, const char * filePath) {
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
 			uint16_t tile = map->tileLayers->tiles[x + y * BOARD_WIDTH];
-			context->board[x][y] = tile;
-			if (tile > MAX_WALKABLE_TILE) context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
-			// TODO mark in resources table
+			BoardTile boardTile = get_board_tile(tile);
+			context->board[x][y] = boardTile;
+			if (boardTile.type == TILE_TYPE_WALKABLE) {
+				context->walkabilityGrid[x][y] = WALKABILITY_FREE;
+			}
+			else {
+				context->walkabilityGrid[x][y] = WALKABILITY_BLOCKED;
+			}
 		}
 	}
 
-	// Only 1 object layer
+	// Only one object layer
 	ObjectLayer *objLayer = &map->objectLayers[0];
 	for (int i = 0; i < objLayer->numObjects; i++) {
 		MapObject *mapObj = &objLayer->objects[i];
@@ -41,31 +79,34 @@ static void load_map(GameContext *context, const char * filePath) {
 	context->map.title = strdup(map->title);
 	context->map.description = strdup(map->description);
 
+	// TODO read quantities from map
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100000);
+	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100000);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 100000);
+	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 100000);
+
 	game_map_free_data(map);
 }
 
 static void render_minimap(GameContext *context) {
 	// Generate the LUT for the tileset pixel colors
 	BITMAP *minimapImage = game_gfx_get_tileset_colors();
-	int minimapColors[MINIMAP_COLORS];
 	for (int x = 0; x < TILESET_TILES_COLOR_WIDTH; x++) {
 		for (int y = 0; y < TILESET_TILES_COLOR_HEIGHT; y++) {
-			minimapColors[x + y * TILESET_TILES_COLOR_WIDTH] = getpixel(minimapImage, x, y);
+			context->minimapColors[x + y * TILESET_TILES_COLOR_WIDTH] = getpixel(minimapImage, x, y);
 		}
 	}
-
-	// TODO save lut to context for future minimap rendering
 
 	BITMAP* tileSet = game_gfx_get_tileset();
 	for (int x = 0; x < BOARD_WIDTH; x++) {
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			int tile = context->board[x][y];
+			int tile = context->board[x][y].tile;
 			blit(
 					tileSet, context->renderedBoard,
 					(tile % TILE_SIZE) * TILE_SIZE, (tile / TILE_SIZE) * TILE_SIZE,
 					x * TILE_SIZE, y * TILE_SIZE,
 					TILE_SIZE, TILE_SIZE);
-			putpixel(context->renderedMinimap, x, y, minimapColors[tile]);
+			putpixel(context->renderedMinimap, x, y, context->minimapColors[tile]);
 		}
 	}
 }
@@ -79,8 +120,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	game_selection_init(context);
 	resource_reset(context);
 
-	// TODO load different maps based on campaign/scenario
-	load_map(context, "assets/map/test.fgm");
+	load_map(context, context->mapPath);
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -92,12 +132,6 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	context->renderedMinimapUnits = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
 
 	render_minimap(context);
-
-	// TODO disable when resources can be harvested
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, 100000);
-	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, 100000);
 
 	context->isDebugEnabled = FALSE;
 	context->gameResult = GAME_RESULT_ONGOING;

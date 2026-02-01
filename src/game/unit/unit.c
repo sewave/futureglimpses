@@ -303,8 +303,12 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->reactionTime = data->reactionTime;
 	unit->moveTime = data->moveTime;
 
-	if(unit->type == UNIT_TYPE_WORKER) {
-		unit->typed.workerData.targetConstruction = NO_TARGET_ID;
+	if (unit->type == UNIT_TYPE_WORKER) {
+		WorkerData *workerData = &unit->typed.workerData;
+		workerData->targetConstruction = NO_TARGET_ID;
+		workerData->carriedResourceType = RESOURCE_TYPE_NONE;
+		workerData->carriedResourceQty = 0;
+		workerData->workplace = (Position) {.x = NO_TARGET_POSITION, .y = NO_TARGET_POSITION};
 	}
 
 	if(unit->isBuilding) {

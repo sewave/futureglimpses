@@ -1,5 +1,6 @@
 #include "game/game.h"
 
+// TODO think how to remove extern
 extern GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue);
 extern GameStateEnum handle_title(GameContext *context, RenderQueue *renderQueue);
 extern GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue);

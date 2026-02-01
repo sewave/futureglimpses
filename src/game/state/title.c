@@ -449,6 +449,7 @@ GameStateEnum handle_title(GameContext *context, RenderQueue *renderQueue) {
 
 	if (titleMenuState == TITLE_MENU_START_GAME) {
 		// TODO go to stage select when implemented
+		context->mapPath = "assets/map/test.fgm";
 		destroy_bitmap(titleBackground);
 		return GAME_STATE_LOAD_MAP;
 	} else if (titleMenuState == TITLE_MENU_EXIT) {

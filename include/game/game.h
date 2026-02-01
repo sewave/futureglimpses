@@ -36,6 +36,10 @@
 #define MAKE_ID(index, gen) ((gen << ID_GEN_SHIFT) | (index & ID_INDEX_MASK))
 #define NULL_HANDLE 0
 
+#define MINIMAP_COLORS 256
+#define TILESET_TILES_COLOR_WIDTH 16
+#define TILESET_TILES_COLOR_HEIGHT 16
+
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
 	uint32_t uiQuantity[RESOURCE_TYPES_COUNT];
@@ -115,6 +119,9 @@ typedef struct {
 
 typedef struct {
 	UnitId targetConstruction;
+	Position workplace;
+	uint16_t carriedResourceQty;
+	ResourceTypeEnum carriedResourceType;
 } WorkerData;
 
 typedef struct {
@@ -216,12 +223,19 @@ typedef struct {
 } GameMap;
 
 typedef struct {
+	TileTypeEnum type;
+	uint16_t tile;
+	uint16_t altTile;
+	uint16_t data;
+} BoardTile;
+
+typedef struct {
 	BITMAP *screenBuffer;
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
-	// TODO resources/walls grid
-	int board[BOARD_WIDTH][BOARD_HEIGHT];
+	BoardTile board[BOARD_WIDTH][BOARD_HEIGHT];
+	int minimapColors[MINIMAP_COLORS];
 	GameUnit units[MAX_GAME_UNITS];
 	// Whenever the board is modified, we re-render the modified parts to this bitmap
 	BITMAP *renderedBoard;
@@ -250,6 +264,7 @@ typedef struct {
 	BuildPlacing buildPlacing;
 	GameResultEnum gameResult;
 	GameMap map;
+	char* mapPath;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
