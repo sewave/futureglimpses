@@ -57,8 +57,7 @@ static const char *objectSheetFilenames[OBJ_TYPE_NUMBER] = {
 		"assets/gfx/object/arrow.pcx",
 		"assets/gfx/object/fireball.pcx",
 		"assets/gfx/object/explode.pcx",
-		// TODO different sprite for arrow damage or null
-		"assets/gfx/object/arrow.pcx",
+		"assets/gfx/object/arrowhit.pcx",
 };
 
 typedef struct {
