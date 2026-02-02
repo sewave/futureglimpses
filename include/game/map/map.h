@@ -1,11 +1,18 @@
 #ifndef MAP_H
 #define MAP_H
 
+#define CUSTOM_NAME_LENGTH 11
+
 typedef struct {
     unsigned char type;
     unsigned char controller;
     unsigned short int x;
     unsigned short int y;
+    unsigned char isCustom;
+    char name[CUSTOM_NAME_LENGTH];
+    unsigned short int maxHealth;
+    unsigned char minDamage;
+    unsigned char maxDamage;
 } MapObject;
 
 typedef struct {

@@ -4,6 +4,10 @@
 
 #define UNIT_USED_RESOURCES 3
 #define UNIT_CREATE_REDUCE_RESOURCES 2
+#define UNIT_MIN_DAMAGE 0
+#define UNIT_MAX_DAMAGE 999
+#define UNIT_MIN_HEALTH 1
+#define UNIT_MAX_HEALTH 9999
 
 typedef struct {
 	uint16_t used[UNIT_USED_RESOURCES];

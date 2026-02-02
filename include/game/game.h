@@ -39,6 +39,7 @@
 #define MINIMAP_COLORS 256
 #define TILESET_TILES_COLOR_WIDTH 16
 #define TILESET_TILES_COLOR_HEIGHT 16
+#define CUSTOM_UNIT_NAME_LENGTH 11
 
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
@@ -156,6 +157,8 @@ typedef struct {
 		BuildingData buildingData;
 		WorkerData workerData;
 	} typed;
+	uint8_t isCustom;
+	char name[CUSTOM_UNIT_NAME_LENGTH];
 } GameUnit;
 
 typedef uint32_t ObjectId;

@@ -25,11 +25,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 4,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 794.25,
-                "y": 905.625
+                "x": 808,
+                "y": 894
             }
         },
         "base.tmx#tileset": {
@@ -55,11 +55,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 255.5,
-                "y": 814.25
+                "x": 837,
+                "y": 826
             }
         },
         "tileset.tsx": {

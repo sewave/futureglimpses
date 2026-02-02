@@ -289,6 +289,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->targetId = NO_TARGET_ID;
 	unit->prevTargetId = NO_TARGET_ID;
 	unit->blinkTime = 0;
+	unit->isCustom = FALSE;
 
 	UnitData *data = &unitsData[type];
 	unit->type = data->type;

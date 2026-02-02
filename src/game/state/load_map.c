@@ -68,9 +68,21 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	for (int i = 0; i < objLayer->numObjects; i++) {
 		MapObject *mapObj = &objLayer->objects[i];
 		GameUnit *unit = game_unit_spawn(context, (UnitTypeEnum) mapObj->type, (ControllerEnum) mapObj->controller, mapObj->x, mapObj->y);
-		if (unit && unit->isBuilding) {
-			building_complete(context, unit);
-			unit->health = unit->maxHealth;
+		if (unit) {
+			if(unit->isBuilding) {
+				building_complete(context, unit);
+				unit->health = unit->maxHealth;
+			}
+			if(mapObj->isCustom) {
+				unit->isCustom = TRUE;
+				strcpy(unit->name, mapObj->name);
+				if(mapObj->maxHealth) {
+					unit->maxHealth = clamp(mapObj->maxHealth, UNIT_MIN_HEALTH, UNIT_MAX_HEALTH);
+					unit->health = unit->maxHealth;
+				}
+				if(mapObj->minDamage) unit->minDamage = clamp(mapObj->minDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
+				if(mapObj->maxDamage) unit->maxDamage = clamp(mapObj->maxDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
+			}
 		}
 	}
 

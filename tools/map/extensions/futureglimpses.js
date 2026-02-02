@@ -17,6 +17,11 @@
  * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
  * - Y (U16, tile unit)
+ * - isCustom (U8)
+ * - name (11 * U8)
+ * - maxHealth (U16)
+ * - minDamage (U8)
+ * - maxDamage (U8)
  * - Player Gold (U32)
  * - Player Wood (U32)
  * - Computer Gold (U32)
@@ -98,8 +103,8 @@ function calculateTotalSize(map) {
 		// Object Layer Header: Num Objects (2)
 		size += 2;
 
-		// Object Data: TYPES (2) + X (2) + Y (2) = 6 bytes per object
-		size += layer.objects.length * 6; 
+        // Object Data: TYPES (2) + X (2) + Y (2) + CUSTOM (1) + NAME (11) + minDamage (1) + MaxDamage (1) + Health (2)= 22 bytes per object
+        size += layer.objects.length * 22; 
 	}
 
 	// 4 resources of 32 bits
@@ -209,6 +214,46 @@ function exportBinary(map) {
             const tileY = Math.floor(obj.y / map.tileHeight);
             view.setUint16(offset, tileY, littleEndian);
             offset += 2;
+
+            // E. Is a custom object?   
+            const isCustom = resolvedProperties.CUSTOM ? resolvedProperties.CUSTOM : 0;
+            tiled.log(`Custom: [` + isCustom + `]`);
+            view.setUint8(offset, isCustom, littleEndian);
+            offset += 1;
+
+            // F. Name, up to 10 bytes + end
+            var name = obj.name ? obj.name || "" : "";
+            while (getUtf8Size(name) > 10) {
+                name = name.substring(0, name.length - 1);
+            }
+            const nameLength = getUtf8Size(name);
+            tiled.log(`Name length: [` + nameLength + `]`);
+            while (getUtf8Size(name) < 10) {
+                name = name.padEnd(name.length + 1);
+            }
+            tiled.log(`Name: [` + name + `]`);
+            writeUtf8String(view, offset, name);
+            offset += nameLength;
+            // Finish string with 0es
+            for(let i = nameLength; i < 11; i++) {
+                view.setUint8(offset, 0, littleEndian);
+                offset += 1;
+            }
+
+            const maxHealth = resolvedProperties.MAX_HEALTH ? resolvedProperties.MAX_HEALTH : 0;
+            tiled.log(`maxHealth: [` + maxHealth + `]`);
+            view.setUint16(offset, maxHealth, littleEndian);
+            offset += 2;
+
+            const minDamage = resolvedProperties.MIN_DAMAGE ? resolvedProperties.MIN_DAMAGE : 0;
+            tiled.log(`minDamage: [` + minDamage + `]`);
+            view.setUint8(offset, minDamage, littleEndian);
+            offset += 1;
+
+            const maxDamage = resolvedProperties.MAX_DAMAGE ? resolvedProperties.MAX_DAMAGE : 0;
+            tiled.log(`minDamage: [` + maxDamage + `]`);
+            view.setUint8(offset, maxDamage, littleEndian);
+            offset += 1;
         }
     }
 	tiled.log(`Writed objects`);

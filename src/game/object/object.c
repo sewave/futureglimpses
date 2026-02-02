@@ -157,16 +157,18 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 	ObjectData *data = &objectsData[type];
 	object->type = data->type;
 	object->damageRadius = data->damageRadius;
-	object->minDamage = data->minDamage;
-	object->maxDamage = data->maxDamage;
 	if(source) {
 		uint16_t dx = object->targetX > object->x ? object->targetX / TILE_SIZE - object->x / TILE_SIZE : object->x / TILE_SIZE - object->targetX / TILE_SIZE; 
 		uint16_t dy = object->targetY > object->y ? object->targetY / TILE_SIZE - object->y / TILE_SIZE : object->y / TILE_SIZE - object->targetY / TILE_SIZE;
 		uint16_t maxDistance = source->maxAttackRange * source->maxAttackRange;
 		object->moveTime = (data->moveTime * (dx * dx + dy * dy) / maxDistance);
+		object->minDamage = source->minDamage;
+		object->maxDamage = source->maxDamage;
 	}
 	else {
 		object->moveTime = data->moveTime;
+		object->minDamage = data->minDamage;
+		object->maxDamage = data->maxDamage;
 	}
 
 	game_animation_object_set(object);

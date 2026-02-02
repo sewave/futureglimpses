@@ -493,8 +493,14 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 		// TODO unit stats background
 
 		// Unit name
-		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont,
-								 text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type),
+		const char* name;
+		if(unit->isCustom) {
+			name = unit->name;
+		}
+		else {
+			name = text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type);
+		}
+		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, name,
 								 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
 		// Unit HP bar
