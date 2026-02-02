@@ -7,6 +7,7 @@
 #define CONTROL_LENGTH (strlen(CONTROL_SEQUENCE) + COLOR_CODE_LENGTH)
 #define TEXTOUT_EX_BOX_BUFFER 2048
 #define WORD_DELIMITER " "
+const static char* UNKNOWN_TEXT = "???";
 
 static char **texts = NULL;
 static uint16_t totalTexts = 0;
@@ -40,7 +41,7 @@ void text_free_all() {
 }
 
 const char *text_get_by_id(uint16_t textId) {
-	if (texts == NULL || textId >= totalTexts) return NULL;
+	if (texts == NULL || textId >= totalTexts) return UNKNOWN_TEXT;
 	return texts[textId];
 }
 
