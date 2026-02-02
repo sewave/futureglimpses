@@ -19,7 +19,7 @@ int main_init() {
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
 		common_print_ko();
-		printf("Error initializing sound. Continuing without sound.");
+		printf("Error initializing sound. Continuing without sound.\n");
 	}
 
 	printf("Installing interruptions...");
