@@ -32,6 +32,12 @@
 #define GUI_BAR_ARROW_WIDTH 8
 #define GUI_BAR_LANE_WIDTH (GUI_BAR_WIDTH - GUI_BAR_ARROW_WIDTH)
 
+#define GUI_VERTICAL_BAR_X_OFFSET 12
+#define GUI_VERTICAL_BAR_Y_OFFSET -2
+#define GUI_VERTICAL_BAR_HEIGHT 128
+#define GUI_VERTICAL_BAR_ARROW_HEIGHT 8
+#define GUI_VERTICAL_BAR_LANE_HEIGHT (GUI_VERTICAL_BAR_HEIGHT - GUI_VERTICAL_BAR_ARROW_HEIGHT)
+
 static const char * COLOR_CHANGE_STRING = "^000^000";
 
 typedef enum {
@@ -40,6 +46,13 @@ typedef enum {
 	GUI_BAR_CENTER,
 	GUI_BAR_NONE,
 } GuiBarPosition;
+
+typedef enum {
+	GUI_VERTICAL_BAR_UP_BUTTON,
+	GUI_VERTICAL_BAR_DOWN_BUTTON,
+	GUI_VERTICAL_BAR_CENTER,
+	GUI_VERTICAL_BAR_NONE,
+} GuiVerticalBarPosition;
 
 /**
  * Checks whether the mouse is inside the bar element.
@@ -69,6 +82,34 @@ static GuiBarPosition game_gui_mouse_in_bar(GameContext *context, GuiElement *el
 		return GUI_BAR_CENTER;
 	}
 	return GUI_BAR_NONE;
+}
+
+/**
+ * Checks whether the mouse is inside the vertical bar element.
+ */
+static GuiVerticalBarPosition game_gui_mouse_in_vertical_bar(GameContext *context, GuiElement *element) {
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
+
+	BITMAP *barUp = game_gfx_get_icon(GAME_ICON_BAR_LEFT_ON);
+	BITMAP *barDown = game_gfx_get_icon(GAME_ICON_BAR_RIGHT_ON);
+	if (mouseX >= element->x + GUI_VERTICAL_BAR_X_OFFSET &&
+		mouseX < element->x + GUI_VERTICAL_BAR_X_OFFSET + barUp->w &&
+		mouseY >= element->y + GUI_VERTICAL_BAR_Y_OFFSET &&
+		mouseY <= element->y + GUI_VERTICAL_BAR_Y_OFFSET + barUp->h) {
+		return GUI_VERTICAL_BAR_UP_BUTTON;
+	} else if (mouseX >= element->x + GUI_VERTICAL_BAR_X_OFFSET &&
+			   mouseX < element->x + GUI_VERTICAL_BAR_X_OFFSET + barDown->w &&
+			   mouseY >= element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + barUp->h &&
+			   mouseY <= element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + barUp->h + barDown->h) {
+		return GUI_VERTICAL_BAR_DOWN_BUTTON;
+	} else if (mouseX >= element->x + GUI_VERTICAL_BAR_X_OFFSET &&
+			   mouseX < element->x + GUI_VERTICAL_BAR_X_OFFSET + GUI_OPTION_VALUE_WIDTH &&
+			   mouseY >= element->y + GUI_VERTICAL_BAR_Y_OFFSET + barUp->h &&
+			   mouseY <= element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + barUp->h) {
+		return GUI_VERTICAL_BAR_CENTER;
+	}
+	return GUI_VERTICAL_BAR_NONE;
 }
 
 static int8_t game_gui_mouse_in_element_option(GameContext *context, GuiElement *element) {
@@ -108,6 +149,11 @@ static uint8_t game_gui_mouse_in_element(GameContext *context, GuiElement *eleme
 		case GUI_ELEMENT_BAR: {
 			inElement = mouseX >= element->x + GUI_BAR_X_OFFSET && mouseX <= element->x + GUI_BAR_X_OFFSET + GUI_BAR_WIDTH + 2 * GUI_BAR_ARROW_WIDTH &&
 						mouseY >= element->y + GUI_BAR_Y_OFFSET && mouseY <= element->y + GUI_BAR_Y_OFFSET + GUI_OPTION_VALUE_HEIGHT;
+			break;
+		}
+		case GUI_ELEMENT_VERTICAL_BAR: {
+			inElement = mouseX >= element->x + GUI_VERTICAL_BAR_X_OFFSET && mouseX <= element->x + GUI_VERTICAL_BAR_X_OFFSET + GUI_OPTION_VALUE_WIDTH &&
+						mouseY >= element->y + GUI_VERTICAL_BAR_Y_OFFSET && mouseY <= element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + 2 * GUI_VERTICAL_BAR_ARROW_HEIGHT;
 			break;
 		}
 		default:
@@ -201,6 +247,42 @@ void game_gui_handle(GameContext *context, GuiScreen* guiScreen) {
                     bar->setValue(context, value);
 					break;
 				}
+				case GUI_ELEMENT_VERTICAL_BAR: {
+					GuiVerticalBarPosition vBarPosition = game_gui_mouse_in_vertical_bar(context, element);
+					GuiVerticalBar *vBar = &element->typed.vBar;
+					uint8_t value = vBar->getValue(context);
+					uint8_t valueInc = vBar->valueInc;
+					switch (vBarPosition) {
+						case GUI_VERTICAL_BAR_UP_BUTTON: {
+							uint8_t minValue = vBar->getMinValue(context);
+							if (value - minValue < valueInc) value = 0;
+							else
+								value -= valueInc;
+							break;
+						}
+						case GUI_VERTICAL_BAR_DOWN_BUTTON: {
+							uint8_t maxValue = vBar->getMaxValue(context);
+							if (maxValue - valueInc < value) value = maxValue;
+							else
+								value += valueInc;
+							break;
+						}
+						case GUI_VERTICAL_BAR_CENTER: {
+							int maxValue = element->typed.vBar.getMaxValue(context);
+							int barStartY = element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_ARROW_HEIGHT;
+							int relativeY = context->mouseStatus.y - barStartY;
+							if (relativeY < 0) relativeY = 0;
+							if (relativeY > GUI_VERTICAL_BAR_LANE_HEIGHT) relativeY = GUI_VERTICAL_BAR_LANE_HEIGHT;
+							value = (relativeY * maxValue) / GUI_VERTICAL_BAR_LANE_HEIGHT;
+							break;
+						}
+						case GUI_VERTICAL_BAR_NONE:
+						default:
+							break;
+					}
+					vBar->setValue(context, value);
+					break;
+				}
 				default:
 					break;
 			}
@@ -251,6 +333,42 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				else {
 					render_queue_submit_text_shadow(renderQueue, z, context->gameFont, element->typed.customText.text(context),
 											 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
+				}
+				break;
+			}
+			case GUI_ELEMENT_CUSTOM_TEXT_ROWS: {
+				GuiCustomTextRows *customTextRows = &element->typed.customTextRows;
+				uint8_t offset = customTextRows->getOffsetValue(context);
+				uint8_t selectedValue = customTextRows->getSelectedValue(context);
+				uint8_t maxRow = customTextRows->getMaxRow(context);
+				uint8_t lastCustomRow = offset + customTextRows->numRows;
+				uint8_t maxIndex = min_val(maxRow, lastCustomRow);
+				int currentY = element->y;
+
+				for (int i = offset; i <= maxIndex; i++) {
+					const char *text = customTextRows->getText(context, i);
+					if (text == NULL) break;
+
+					int x = element->x;
+					if (customTextRows->maxX > 0) {
+						int textWidth = text_length(context->gameFont, text);
+						x = element->x + (customTextRows->maxX - element->x) / 2 - textWidth / 2;
+					}
+
+					// Determine text color: use selectedTextColor if index matches selected
+					int textColor = element->textColor;
+					if (i == selectedValue) textColor = customTextRows->selectedTextColor;
+
+					if (customTextRows->maxWidth > 0 && customTextRows->maxHeight > 0) {
+						render_queue_submit_enclosed_text_shadow(renderQueue, z, context->gameFont, text,
+																 x, currentY, customTextRows->maxWidth, customTextRows->maxHeight,
+																 textColor, element->textBackground, element->shadowTextColor);
+					} else {
+						render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text,
+														x, currentY, textColor, element->textBackground, element->shadowTextColor);
+					}
+
+					currentY += customTextRows->ySeparation;
 				}
 				break;
 			}
@@ -376,6 +494,54 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				int ballX = element->x + GUI_BAR_X_OFFSET + barLeft->w;
 				ballX += (value * (GUI_BAR_LANE_WIDTH)) / maxValue;
 				render_queue_submit_sprite(renderQueue, z + 1, barBall, ballX, element->y + GUI_BAR_Y_OFFSET, RND_FLAG_NORMAL);
+				break;
+			}
+			case GUI_ELEMENT_VERTICAL_BAR: {
+				BITMAP *barUpOff = game_gfx_get_icon(GAME_ICON_BAR_UP_OFF);
+				BITMAP *barUpOn = game_gfx_get_icon(GAME_ICON_BAR_UP_ON);
+				BITMAP *barDownOff = game_gfx_get_icon(GAME_ICON_BAR_DOWN_OFF);
+				BITMAP *barDownOn = game_gfx_get_icon(GAME_ICON_BAR_DOWN_ON);
+				BITMAP *barImage = game_gfx_get_icon(GAME_ICON_BAR_VERTICAL);
+				BITMAP *barBall = game_gfx_get_icon(GAME_ICON_OPTION_ON);
+
+				BITMAP *barUp = barUpOff;
+				BITMAP *barDown = barDownOff;
+
+				if (context->mouseStatus.isLeftDown) {
+					GuiVerticalBarPosition vBarPosition = game_gui_mouse_in_vertical_bar(context, element);
+					switch (vBarPosition) {
+						case GUI_VERTICAL_BAR_UP_BUTTON:
+							barUp = barUpOn;
+							break;
+						case GUI_VERTICAL_BAR_DOWN_BUTTON:
+							barDown = barDownOn;
+							break;
+						case GUI_VERTICAL_BAR_CENTER:
+						case GUI_VERTICAL_BAR_NONE:
+						default:
+							break;
+					}
+				}
+
+				render_queue_submit_sprite(renderQueue, z, barUp,
+										   element->x + GUI_VERTICAL_BAR_X_OFFSET, element->y + GUI_VERTICAL_BAR_Y_OFFSET, RND_FLAG_NORMAL);
+				render_queue_submit_sprite(renderQueue, z, barDown,
+										   element->x + GUI_VERTICAL_BAR_X_OFFSET, element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + barUp->h, RND_FLAG_NORMAL);
+
+				// Render vertical progress bar
+				// Draw the bar using barImage between up and down buttons, the bar is from top to bottom
+				for (int by = element->y + GUI_VERTICAL_BAR_Y_OFFSET + barUp->h;
+					 by < element->y + GUI_VERTICAL_BAR_Y_OFFSET + barUp->h + GUI_VERTICAL_BAR_HEIGHT;
+					 by += barImage->h) {
+					render_queue_submit_sprite(renderQueue, z, barImage, element->x + GUI_VERTICAL_BAR_X_OFFSET, by, RND_FLAG_NORMAL);
+				}
+
+				// Draw barBall in position based on value
+				uint8_t value = element->typed.vBar.getValue(context);
+				uint8_t maxValue = element->typed.vBar.getMaxValue(context);
+				int ballY = element->y + GUI_VERTICAL_BAR_Y_OFFSET + barUp->h;
+				ballY += (value * (GUI_VERTICAL_BAR_LANE_HEIGHT)) / max_val(1, maxValue);
+				render_queue_submit_sprite(renderQueue, z + 1, barBall, element->x + GUI_VERTICAL_BAR_X_OFFSET, ballY, RND_FLAG_NORMAL);
 				break;
 			}
 			case GUI_ELEMENT_RECTANGLE: {
