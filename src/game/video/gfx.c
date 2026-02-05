@@ -79,6 +79,7 @@ static void game_gfx_destroy_sheet(SpriteSheet * spriteSheet) {
 	if (spriteSheet->numFrames > 0 && spriteSheet->frames != NULL) {
 		for(int i = 0; i < spriteSheet->numFrames; i++) destroy_rle_sprite(spriteSheet->frames[i]);
 		free(spriteSheet->frames);
+		spriteSheet->frames = NULL;
 		spriteSheet->numFrames = 0;
 	}
 }

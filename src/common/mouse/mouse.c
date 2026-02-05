@@ -61,6 +61,7 @@ void mouse_destroy_cursors(void) {
 		}
 	}
 	free(mouseCursors);
+	mouseCursors = NULL;
 }
 
 void mouse_initialize_status(MouseStatus *status, uint32_t doubleClickMaxTime) {

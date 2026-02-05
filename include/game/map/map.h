@@ -1,56 +1,51 @@
 #ifndef MAP_H
 #define MAP_H
+#include "common/common.h"
 
 #define CUSTOM_NAME_LENGTH 11
 
 typedef struct {
-    unsigned char type;
-    unsigned char controller;
-    unsigned short int x;
-    unsigned short int y;
-    unsigned char isCustom;
-    char name[CUSTOM_NAME_LENGTH];
-    unsigned short int maxHealth;
-    unsigned char minDamage;
-    unsigned char maxDamage;
+	uint8_t type;
+	uint8_t controller;
+	uint16_t x;
+	uint16_t y;
+	uint8_t isCustom;
+	char name[CUSTOM_NAME_LENGTH];
+	uint16_t maxHealth;
+	uint8_t minDamage;
+	uint8_t maxDamage;
 } MapObject;
 
 typedef struct {
-	unsigned short int numObjects;
+	uint16_t numObjects;
 	MapObject *objects;
 } ObjectLayer;
 
 typedef struct {
-    unsigned short int width;
-    unsigned short int height;
-    unsigned short int *tiles;
+	uint16_t width;
+	uint16_t height;
+	uint16_t *tiles;
 } TileLayer;
 
 typedef struct {
-	unsigned short int numTileLayers;
-	unsigned short int numObjectLayers;
-    unsigned int playerGold, playerWood;
-    unsigned int computerGold, computerWood;
+	uint16_t numTileLayers;
+	uint16_t numObjectLayers;
+	uint32_t playerGold, playerWood;
+	uint32_t computerGold, computerWood;
 
-    char * title;
+	char * title;
     char * description;
 
 	TileLayer *tileLayers;
 	ObjectLayer *objectLayers;
 } MapData;
 
-/**
- * Frees all dynamically allocated memory for the map structure.
- * @param map Pointer to the MapData structure.
- */
 void game_map_free_data(MapData *map);
 
-/**
- * Loads the binary map data from a file into the MapData format in memory.
- *
- * @param filename The name of the binary map file.
- * @return A pointer to the loaded MapData structure, or NULL on error.
- */
 MapData* game_map_load_data(const char *filename);
+
+void game_map_load_metadata(const char *filepath, char **title, char **description);
+
+void game_map_load_campaign_metadata(const char *dirpath, char **title, char **description);
 
 #endif /* MAP_H */
