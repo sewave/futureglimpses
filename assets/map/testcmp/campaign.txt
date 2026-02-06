@@ -1,2 +1,2 @@
-Test campaign title
-Test campaign description
+Test campaign title plus
+Lorem ipsum dolor sit amet consectetur.

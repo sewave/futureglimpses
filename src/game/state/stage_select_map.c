@@ -5,6 +5,8 @@
 #include "game/map/map.h"
 #include <allegro.h>
 
+#define MAX_PATH_LENGTH 256
+
 typedef struct {
 	MapList *mapList;
 	const char *basePath;
@@ -21,7 +23,7 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 	if (len >= 1 && filename[len - 1] == '.') return 0;
 	if (len >= 2 && filename[len - 1] == '.' && filename[len - 2] == '.') return 0;
 
-	fprintf(stdout, "Found file: %s (attrib=%d)\n", filename, attrib);
+	TRACE("Found file: %s (attrib=%d)\n", filename, attrib);
 
 	int isDirectory = (attrib & FA_DIREC) != 0;
 	int isFgmFile = 0;
@@ -33,11 +35,11 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 
 	if (!isDirectory && !isFgmFile) return 0;
 
-	fprintf(stdout, "Adding: %s (type=%s)\n", filename, isDirectory ? "DIR" : "FILE");
+	TRACE("Adding: %s (type=%s)\n", filename, isDirectory ? "DIR" : "FILE");
 
 	mapList->entries[mapList->count].path = strdup(filename);
 	if (!mapList->entries[mapList->count].path) {
-		fprintf(stderr, "Error: Could not allocate memory for path\n");
+		TRACE("Error: Could not allocate memory for path.\n");
 		exit(PROGRAM_ERROR);
 	}
 
@@ -59,7 +61,7 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 
 int stage_select_load_maps(const char *path, MapList **mapList) {
 	if (!path || !mapList) {
-		fprintf(stderr, "Error: Invalid parameters to stage_select_load_maps\n");
+		TRACE("Error: Invalid parameters to stage_select_load_maps\n");
 		exit(PROGRAM_ERROR);
 	}
 
@@ -68,13 +70,13 @@ int stage_select_load_maps(const char *path, MapList **mapList) {
 
     MapList *newMapList = (MapList *) malloc(sizeof(MapList));
 	if (!newMapList) {
-		fprintf(stderr, "Error: Could not allocate memory for MapList.\n");
+		TRACE("Error: Could not allocate memory for MapList.\n");
 		exit(PROGRAM_ERROR);
 	}
 
 	newMapList->entries = (MapEntry *) malloc(sizeof(MapEntry) * MAX_MAPS);
 	if (!newMapList->entries) {
-		fprintf(stderr, "Error: Could not allocate memory for map entries.\n");
+		TRACE("Error: Could not allocate memory for map entries.\n");
 		free(newMapList);
         newMapList = NULL;
 		exit(PROGRAM_ERROR);
@@ -83,17 +85,17 @@ int stage_select_load_maps(const char *path, MapList **mapList) {
 	newMapList->count = 0;
 	newMapList->capacity = MAX_MAPS;
 
-	// Build search pattern for for_each_file_ex
-	char pattern[256];
-	snprintf(pattern, sizeof(pattern), "%s*", path);
-
 	// Set up callback context
 	FileIteratorContext ctx;
 	ctx.mapList = newMapList;
 	ctx.basePath = path;
 
-    // Dirss and then files
+	// Build search pattern for for_each_file_ex
+	char pattern[MAX_PATH_LENGTH];
+	snprintf(pattern, sizeof(pattern), "%s/*", path);
+    // Dirs and then files
 	for_each_file_ex(pattern, FA_DIREC, 0, file_iterator_callback, &ctx);
+	snprintf(pattern, sizeof(pattern), "%s/*", path);
 	for_each_file_ex(pattern, FA_ARCH, 0, file_iterator_callback, &ctx);
 
 	*mapList = newMapList;

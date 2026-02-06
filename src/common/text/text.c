@@ -8,7 +8,7 @@
 #define TEXTOUT_EX_BOX_BUFFER 2048
 #define WORD_DELIMITER " "
 const static char* UNKNOWN_TEXT = "???";
-
+static char buffer[TEXTOUT_EX_BOX_BUFFER];
 static char **texts = NULL;
 static uint16_t totalTexts = 0;
 
@@ -50,7 +50,6 @@ InitializationStatusEnum text_load_texts_from_file(const char *filename) {
 	if (file == NULL) return INITIALIZATION_ERROR;
 	text_free_texts();
 
-	char buffer[2048];
 	uint16_t currentTextId = 0;
 
 	while (fgets(buffer, sizeof(buffer), file) != NULL && currentTextId < totalTexts) {
@@ -74,39 +73,56 @@ void text_out_multicolor(struct BITMAP *bmp, const struct FONT *f, const char *s
 }
 
 void text_out_multicolor_shadow(struct BITMAP *bmp, const struct FONT *f, const char *str, int x, int y, int color, int bg, int shadowColor) {
-	const char *currentPtr = str;
-	const char *nextMarker = NULL;
+	const char *ptr = str;
 	int currentX = x;
 	int currentColor = color;
-	char segmentBuffer[1024];
-	int segmentLength;
+	int bufferLen;
+	const int controlLen = strlen(CONTROL_SEQUENCE);
 
-	while (*currentPtr != '\0') {
-		nextMarker = strstr(currentPtr, CONTROL_SEQUENCE);
-		if (nextMarker == NULL) {
-			segmentLength = strlen(currentPtr);
+	while (*ptr != '\0') {
+		// Find next control sequence
+		const char *nextCtrl = strstr(ptr, CONTROL_SEQUENCE);
+
+		// Calculate segment length up to control sequence or end of string
+		if (nextCtrl == NULL) {
+			bufferLen = strlen(ptr);
+			nextCtrl = ptr + bufferLen;// Point to end for later
 		} else {
-			segmentLength = nextMarker - currentPtr;
-			if (strlen(nextMarker) < CONTROL_LENGTH) {
-				nextMarker = NULL;
-				segmentLength = strlen(currentPtr);
-			}
+			bufferLen = nextCtrl - ptr;
 		}
-		if (segmentLength > 0) {
-			strncpy(segmentBuffer, currentPtr, segmentLength);
-			segmentBuffer[segmentLength] = '\0';
-			if(shadowColor != TRANSPARENT_COLOR) textout_ex(bmp, f, segmentBuffer, currentX + 1, y + 1, shadowColor, bg);
-			textout_ex(bmp, f, segmentBuffer, currentX, y, currentColor, bg);
-			currentX += text_length(f, segmentBuffer);
-		}
-		if (nextMarker != NULL) {
-			unsigned int colorIndex = 0;
-			if (sscanf(nextMarker + strlen(CONTROL_SEQUENCE), "%3x", &colorIndex) == 1) {
-				currentColor = colorIndex;
+
+		// Copy and render segment if there's text
+		if (bufferLen > 0) {
+			if (bufferLen >= sizeof(buffer)) bufferLen = sizeof(buffer) - 1;
+			strncpy(buffer, ptr, bufferLen);
+			buffer[bufferLen] = '\0';
+
+			if (shadowColor != TRANSPARENT_COLOR) {
+				textout_ex(bmp, f, buffer, currentX + 1, y + 1, shadowColor, bg);
 			}
-			currentPtr = nextMarker + CONTROL_LENGTH;
-		} else {
-			currentPtr += segmentLength;
+			textout_ex(bmp, f, buffer, currentX, y, currentColor, bg);
+			currentX += text_length(f, buffer);
+		}
+
+		ptr += bufferLen;
+
+		// Process control sequence if found
+		if (*ptr != '\0' && strncmp(ptr, CONTROL_SEQUENCE, controlLen) == 0) {
+			// Check if we have enough characters for a valid control sequence (^ + 3 hex)
+			if (strlen(ptr) >= CONTROL_LENGTH) {
+				unsigned int colorIndex = 0;
+				// Try to parse the hex color code
+				if (sscanf(ptr + controlLen, "%3x", &colorIndex) == 1) {
+					currentColor = colorIndex;
+					ptr += CONTROL_LENGTH;
+				} else {
+					// Invalid format, treat ^ as regular character
+					ptr++;
+				}
+			} else {
+				// Not enough characters, stop parsing
+				break;
+			}
 		}
 	}
 }
@@ -116,54 +132,74 @@ void text_out_box(BITMAP *bmp, FONT *font, const char *str, int x, int y, int ma
 }
 
 void text_out_box_shadow(BITMAP *bmp, FONT *font, const char *str, int x, int y, int maxWidth, int maxHeight, int color, int bg, int shadowColor) {
-	char tempBuffer[TEXTOUT_EX_BOX_BUFFER]; // Temporary buffer to hold the string
-    char *wordPtr;
-    char currentLine[TEXTOUT_EX_BOX_BUFFER] = "";
-    int currentY = y;
-    int fontHeight = text_height(font);
+	strncpy(buffer, str, sizeof(buffer) - 1);
+	buffer[sizeof(buffer) - 1] = '\0';// Ensure null-termination
 
-    // Copy original text to avoid modifying the constant input
-    strncpy(tempBuffer, str, sizeof(tempBuffer) - 1);
-    tempBuffer[sizeof(tempBuffer) - 1] = '\0';
+	int currentY = y;
+	int fontHeight = text_height(font);
+	char *lineStart = buffer;
+	char *lastFitPtr = NULL;
+	char *testPtr = NULL;
+	char *segmentEnd = NULL;
+	char savedChar;
+	int lineLen;
 
-    // Tokenize text by spaces to process word by word
-    wordPtr = strtok(tempBuffer, WORD_DELIMITER);
+	while (*lineStart != '\0') {
+		lastFitPtr = lineStart;
+		segmentEnd = lineStart + strlen(lineStart);// Cache the end of remaining string
+		testPtr = strchr(lineStart, ' ');
+		if (testPtr == NULL) testPtr = segmentEnd;
 
-	char testLine[TEXTOUT_EX_BOX_BUFFER];
-    while (wordPtr != NULL) {
-        // Prepare a test line: current line + the next word
-        if (strlen(currentLine) == 0) {
-            strcpy(testLine, wordPtr);
-        } else {
-            sprintf(testLine, "%s %s", currentLine, wordPtr);
-        }
+		// Try to fit as many words as possible on this line
+		while (testPtr <= segmentEnd) {
+			// Temporarily null-terminate and test
+			savedChar = *testPtr;
+			*testPtr = '\0';
 
-        // Check if the test line fits in the box width
-        if (text_length(font, testLine) <= maxWidth) {
-            // It fits, update the current line
-            strcpy(currentLine, testLine);
-        } else {
-            // It doesn't fit, print the current line and start a new one
-			if(shadowColor != TRANSPARENT_COLOR) {
-				textout_ex(bmp, font, currentLine, x + 1, currentY + 1, shadowColor, bg);
+			lineLen = text_length(font, lineStart);
+
+			if (lineLen <= maxWidth) {
+				// This fits, save the position
+				lastFitPtr = testPtr;
+				*testPtr = savedChar;
+
+				// If we reached the end, we're done with this line
+				if (testPtr == segmentEnd) break;
+
+				// Look for next space
+				testPtr = strchr(testPtr + 1, ' ');
+				if (testPtr == NULL) testPtr = segmentEnd;
+			} else {
+				// Doesn't fit, restore and decide what to do
+				*testPtr = savedChar;
+
+				// If nothing fits and we're at the start, show at least until the first space
+				// (word is too long, but we must show something to avoid infinite loop)
+				if (lastFitPtr == lineStart && testPtr != lineStart) {
+					lastFitPtr = testPtr;// Show the long word anyway
+				}
+				break;
 			}
-            textout_ex(bmp, font, currentLine, x, currentY, color, bg);
-            
-            currentY += fontHeight + 2; // Move to next line (2 pixels of padding)
-            strcpy(currentLine, wordPtr);
-
-            // Safety check: Stop if we exceed the box height
-            if (currentY + fontHeight > y + maxHeight) return;
-        }
-
-        wordPtr = strtok(NULL, WORD_DELIMITER);
-    }
-
-    // Print the last remaining line if there is space
-    if (strlen(currentLine) > 0 && (currentY + fontHeight <= y + maxHeight)) {
-		if(shadowColor != TRANSPARENT_COLOR) {
-			textout_ex(bmp, font, currentLine, x + 1, currentY + 1, shadowColor, bg);
 		}
-        textout_ex(bmp, font, currentLine, x, currentY, color, bg);
-    }
+
+		// Render the line that fits (if there's content)
+		if (lastFitPtr > lineStart) {
+			savedChar = *lastFitPtr;
+			*lastFitPtr = '\0';
+
+			if (shadowColor != TRANSPARENT_COLOR) {
+				textout_ex(bmp, font, lineStart, x + 1, currentY + 1, shadowColor, bg);
+			}
+			textout_ex(bmp, font, lineStart, x, currentY, color, bg);
+
+			*lastFitPtr = savedChar;
+		}
+
+		currentY += fontHeight + 2;
+		if (currentY + fontHeight > y + maxHeight) return;
+
+		// Move to next line: skip the trailing spaces
+		lineStart = lastFitPtr;
+		while (*lineStart == ' ') lineStart++;
+	}
 }

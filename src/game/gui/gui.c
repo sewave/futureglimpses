@@ -32,11 +32,13 @@
 #define GUI_BAR_ARROW_WIDTH 8
 #define GUI_BAR_LANE_WIDTH (GUI_BAR_WIDTH - GUI_BAR_ARROW_WIDTH)
 
-#define GUI_VERTICAL_BAR_X_OFFSET 12
+#define GUI_VERTICAL_BAR_X_OFFSET 0
 #define GUI_VERTICAL_BAR_Y_OFFSET -2
 #define GUI_VERTICAL_BAR_HEIGHT 128
 #define GUI_VERTICAL_BAR_ARROW_HEIGHT 8
 #define GUI_VERTICAL_BAR_LANE_HEIGHT (GUI_VERTICAL_BAR_HEIGHT - GUI_VERTICAL_BAR_ARROW_HEIGHT)
+
+#define TEXT_ROWS_ICON_OFFSET 3
 
 static const char * COLOR_CHANGE_STRING = "^000^000";
 
@@ -154,6 +156,11 @@ static uint8_t game_gui_mouse_in_element(GameContext *context, GuiElement *eleme
 		case GUI_ELEMENT_VERTICAL_BAR: {
 			inElement = mouseX >= element->x + GUI_VERTICAL_BAR_X_OFFSET && mouseX <= element->x + GUI_VERTICAL_BAR_X_OFFSET + GUI_OPTION_VALUE_WIDTH &&
 						mouseY >= element->y + GUI_VERTICAL_BAR_Y_OFFSET && mouseY <= element->y + GUI_VERTICAL_BAR_Y_OFFSET + GUI_VERTICAL_BAR_HEIGHT + 2 * GUI_VERTICAL_BAR_ARROW_HEIGHT;
+			break;
+		}
+		case GUI_ELEMENT_CUSTOM_TEXT_ROWS: {
+			inElement = mouseX >= element->x && mouseX <= element->x + element->typed.customTextRows.width &&
+			mouseY >= element->y && mouseY <= element->y + (element->typed.customTextRows.numRows + 1) * element->typed.customTextRows.ySeparation;
 			break;
 		}
 		default:
@@ -283,8 +290,20 @@ void game_gui_handle(GameContext *context, GuiScreen* guiScreen) {
 					vBar->setValue(context, value);
 					break;
 				}
+				case GUI_ELEMENT_CUSTOM_TEXT_ROWS: {
+					if(element->typed.customTextRows.setSelectedValue) {
+						uint8_t offset = element->typed.customTextRows.getOffsetValue(context);
+						uint8_t selectedRow = (context->mouseStatus.y - element->y) / element->typed.customTextRows.ySeparation;
+						element->typed.customTextRows.setSelectedValue(context, offset + selectedRow);
+					}
+				}
 				default:
 					break;
+			}
+		}
+		if (context->mouseStatus.isLeftDoubleClick && game_gui_mouse_in_element(context, element)) {
+			if(element->type == GUI_ELEMENT_CUSTOM_TEXT_ROWS) {
+					if(element->typed.customTextRows.rowAction) element->typed.customTextRows.rowAction(context);
 			}
 		}
 	}
@@ -325,14 +344,17 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 					int textWidth = text_length(context->gameFont, text);
 					x = element->x + (element->typed.customText.maxX - element->x) / 2 - textWidth / 2;
 				}
-				if(element->typed.customText.maxWidth > 0 && element->typed.customText.maxHeight > 0) {
-					render_queue_submit_enclosed_text_shadow(renderQueue, z, context->gameFont, element->typed.customText.text(context),
-											 x, element->y, element->typed.customText.maxWidth, element->typed.customText.maxHeight,
-											 element->textColor, element->textBackground, element->shadowTextColor);
-				}
-				else {
-					render_queue_submit_text_shadow(renderQueue, z, context->gameFont, element->typed.customText.text(context),
-											 x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
+				char* text = element->typed.customText.text(context);
+				if(text) {
+					if(element->typed.customText.maxWidth > 0 && element->typed.customText.maxHeight > 0) {
+						render_queue_submit_enclosed_text_shadow(renderQueue, z, context->gameFont, text,
+												x, element->y, element->typed.customText.maxWidth, element->typed.customText.maxHeight,
+												element->textColor, element->textBackground, element->shadowTextColor);
+					}
+					else {
+						render_queue_submit_text_shadow(renderQueue, z, context->gameFont, text,
+												x, element->y, element->textColor, element->textBackground, element->shadowTextColor);
+					}
 				}
 				break;
 			}
@@ -348,8 +370,15 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				for (int i = offset; i <= maxIndex; i++) {
 					const char *text = customTextRows->getText(context, i);
 					if (text == NULL) break;
+					BITMAP* icon = customTextRows->getIcon(context, i);
 
 					int x = element->x;
+
+					if(icon != NULL) {
+						render_queue_submit_sprite(renderQueue, z, icon, x, currentY, RND_FLAG_NORMAL);
+						x += icon->w + TEXT_ROWS_ICON_OFFSET;
+					}
+
 					if (customTextRows->maxX > 0) {
 						int textWidth = text_length(context->gameFont, text);
 						x = element->x + (customTextRows->maxX - element->x) / 2 - textWidth / 2;

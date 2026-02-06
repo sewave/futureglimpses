@@ -2,6 +2,9 @@
 #define COMMON_H
 #include <stdint.h>
 
+// Uncomment to compile debug mode with logs
+//#define DEBUGMODE
+
 typedef enum {
     INITIALIZATION_OK = 0,
     INITIALIZATION_ERROR = -1

@@ -4,3 +4,4 @@ build/
 *.exe
 out
 CWSDPMI.SWP
+ALLEGRO.LOG

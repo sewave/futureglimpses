@@ -78,13 +78,17 @@ typedef struct {
 typedef struct {
     // If maxX is > 0, the text will be centered in the area defined by (x, maxX)
     int maxX;
+    int width;
     int maxWidth, maxHeight;
     int ySeparation, numRows;
     int selectedTextColor;
     GuiGetStringIndexedFunc getText;
+    GuiGetIconIndexedFunc getIcon;
     GuiGetValueFunc getOffsetValue;
     GuiGetValueFunc getSelectedValue;
     GuiGetValueFunc getMaxRow;
+    GuiSetValueFunc setSelectedValue;
+    GuiButtonActionFunc rowAction;
 } GuiCustomTextRows;
 
 typedef struct {

@@ -77,7 +77,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
-        .hotkey = KEY_S,
+        .hotkey = KEY_A,
         .typed = {
             .button = {
                 .size = { .width = TITLE_MENU_BUTTON_WIDTH, .height = TITLE_MENU_BUTTON_HEIGHT },
