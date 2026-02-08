@@ -54,7 +54,7 @@ static uint8_t get_min_stage_select_offset(const GameContext *context) {
 }
 
 static uint8_t get_max_stage_select_offset(const GameContext *context) {
-	return max_val(0, mapList->count - 1 - STAGE_SELECT_MAPS);
+	return max_val(0, mapList->count - STAGE_SELECT_MAPS);
 }
 
 static uint8_t get_max_stage_selected(const GameContext *context) {

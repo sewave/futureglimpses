@@ -33,8 +33,8 @@
 #define GUI_BAR_LANE_WIDTH (GUI_BAR_WIDTH - GUI_BAR_ARROW_WIDTH)
 
 #define GUI_VERTICAL_BAR_X_OFFSET 0
-#define GUI_VERTICAL_BAR_Y_OFFSET -2
-#define GUI_VERTICAL_BAR_HEIGHT 128
+#define GUI_VERTICAL_BAR_Y_OFFSET 0
+#define GUI_VERTICAL_BAR_HEIGHT 104
 #define GUI_VERTICAL_BAR_ARROW_HEIGHT 8
 #define GUI_VERTICAL_BAR_LANE_HEIGHT (GUI_VERTICAL_BAR_HEIGHT - GUI_VERTICAL_BAR_ARROW_HEIGHT)
 
@@ -160,7 +160,7 @@ static uint8_t game_gui_mouse_in_element(GameContext *context, GuiElement *eleme
 		}
 		case GUI_ELEMENT_CUSTOM_TEXT_ROWS: {
 			inElement = mouseX >= element->x && mouseX <= element->x + element->typed.customTextRows.width &&
-			mouseY >= element->y && mouseY <= element->y + (element->typed.customTextRows.numRows + 1) * element->typed.customTextRows.ySeparation;
+			mouseY >= element->y && mouseY <= element->y + (element->typed.customTextRows.numRows) * element->typed.customTextRows.ySeparation;
 			break;
 		}
 		default:
@@ -363,7 +363,7 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 				uint8_t offset = customTextRows->getOffsetValue(context);
 				uint8_t selectedValue = customTextRows->getSelectedValue(context);
 				uint8_t maxRow = customTextRows->getMaxRow(context);
-				uint8_t lastCustomRow = offset + customTextRows->numRows;
+				uint8_t lastCustomRow = offset + customTextRows->numRows - 1;
 				uint8_t maxIndex = min_val(maxRow, lastCustomRow);
 				int currentY = element->y;
 
