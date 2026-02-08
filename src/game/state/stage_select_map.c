@@ -3,58 +3,88 @@
 #include <string.h>
 #include "game/state/stage_select_map.h"
 #include "game/map/map.h"
+#include "common/util.h"
 #include <allegro.h>
 
+#define MAX_MAPS 64
 #define MAX_PATH_LENGTH 256
+#define FGM_EXTENSION ".fgm"
+#define DIR_FILTER "%s/*"
+#define FGM_FILTER "%s/*.fgm"
 
 typedef struct {
 	MapList *mapList;
 	const char *basePath;
 } FileIteratorContext;
 
-static int file_iterator_callback(const char *filename, int attrib, void *param) {
+static int dir_iterator_callback(const char *filename, int attrib, void *param) {
 	FileIteratorContext *ctx = (FileIteratorContext *) param;
 	MapList *mapList = ctx->mapList;
-
+	TRACE("Found file: %s (attrib=%d)\n", filename, attrib);
 	if (mapList->count >= mapList->capacity) return 1;
 
 	// Skip "." and ".." entries (check if path ends with these)
 	size_t len = strlen(filename);
-	if (len >= 1 && filename[len - 1] == '.') return 0;
-	if (len >= 2 && filename[len - 1] == '.' && filename[len - 2] == '.') return 0;
-
-	TRACE("Found file: %s (attrib=%d)\n", filename, attrib);
-
-	int isDirectory = (attrib & FA_DIREC) != 0;
-	int isFgmFile = 0;
-
-	if (!isDirectory) {
-		const char *ext = strrchr(filename, '.');
-		isFgmFile = (ext != NULL && strcmp(ext, ".fgm") == 0);
+	if (len >= 2 && filename[len - 1] == '.' && filename[len - 2] != '.') return 0;
+	uint8_t isUpFolder = FALSE;
+	
+	// ".." should be seen on upper folders
+	if (len >= 2 && filename[len - 1] == '.' && filename[len - 2] == '.') {
+		TRACE("Base path for ..: [%s], maps folder [%s]", ctx->basePath, MAPS_FOLDER);
+		if(strcmp(ctx->basePath, MAPS_FOLDER) == 0) {
+			return 0;
+		} else {
+			isUpFolder = TRUE;
+		}
 	}
 
-	if (!isDirectory && !isFgmFile) return 0;
+	TRACE("Adding: %s (type=DIR)\n", filename);
 
-	TRACE("Adding: %s (type=%s)\n", filename, isDirectory ? "DIR" : "FILE");
+	MapEntry *mapEntry = &mapList->entries[mapList->count];
 
-	mapList->entries[mapList->count].path = strdup(filename);
-	if (!mapList->entries[mapList->count].path) {
+	mapEntry->path = strdup(filename);
+	if (!mapEntry->path) {
 		TRACE("Error: Could not allocate memory for path.\n");
 		exit(PROGRAM_ERROR);
 	}
-
-	mapList->entries[mapList->count].type = isDirectory ? MAP_ENTRY_DIRECTORY : MAP_ENTRY_FILE;
-
-	if (isDirectory) {
-		game_map_load_campaign_metadata(filename,
-										&mapList->entries[mapList->count].title,
-										&mapList->entries[mapList->count].description);
-	} else {
-		game_map_load_metadata(filename,
-							   &mapList->entries[mapList->count].title,
-							   &mapList->entries[mapList->count].description);
+	if(isUpFolder) {
+		get_parent_directory(ctx->basePath, mapEntry->path, strlen(mapEntry->path));
+		mapEntry->type = MAP_ENTRY_FOLDER_UP;
+		mapEntry->title = strdup("..");
+		mapEntry->description = strdup("");
+	}
+	else {
+		mapEntry->type = MAP_ENTRY_FOLDER;
+		game_map_load_campaign_metadata(filename, &mapEntry->title, &mapEntry->description);
 	}
 
+	mapList->count++;
+	return 0;
+}
+
+static int file_iterator_callback(const char *filename, int attrib, void *param) {
+	FileIteratorContext *ctx = (FileIteratorContext *) param;
+	MapList *mapList = ctx->mapList;
+	TRACE("Found file: %s (attrib=%d)\n", filename, attrib);
+	if (mapList->count >= mapList->capacity) return 1;
+
+	const char *ext = strlwr(strrchr(filename, '.'));
+	uint8_t isFgmFile = (ext != NULL && strcmp(ext, FGM_EXTENSION) == 0);
+
+	if (!isFgmFile) return 0;
+
+	TRACE("Adding: %s (type=FILE)\n", filename);
+
+	MapEntry *mapEntry = &mapList->entries[mapList->count];
+
+	mapEntry->path = strdup(filename);
+	if (!mapEntry->path) {
+		TRACE("Error: Could not allocate memory for path.\n");
+		exit(PROGRAM_ERROR);
+	}
+	mapEntry->type = MAP_ENTRY_FILE;
+
+	game_map_load_metadata(filename, &mapEntry->title, &mapEntry->description);
 	mapList->count++;
 	return 0;
 }
@@ -92,11 +122,11 @@ int stage_select_load_maps(const char *path, MapList **mapList) {
 
 	// Build search pattern for for_each_file_ex
 	char pattern[MAX_PATH_LENGTH];
-	snprintf(pattern, sizeof(pattern), "%s/*", path);
-    // Dirs and then files
-	for_each_file_ex(pattern, FA_DIREC, 0, file_iterator_callback, &ctx);
-	snprintf(pattern, sizeof(pattern), "%s/*", path);
-	for_each_file_ex(pattern, FA_ARCH, 0, file_iterator_callback, &ctx);
+	snprintf(pattern, sizeof(pattern), DIR_FILTER, path);
+	// Dirs and then files
+	for_each_file_ex(pattern, FA_DIREC, FA_NONE, dir_iterator_callback, &ctx);
+	snprintf(pattern, sizeof(pattern), FGM_FILTER, path);
+	for_each_file_ex(pattern, FA_ARCH, FA_DIREC, file_iterator_callback, &ctx);
 
 	*mapList = newMapList;
 	return 0;

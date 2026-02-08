@@ -8,5 +8,6 @@
 char has_minimal_free_memory(int megaBytes);
 int distance_sq(int x1, int y1, int x2, int y2);
 int random_int(int minVal, int maxVal);
+void get_parent_directory(const char *path, char *out_buffer, unsigned int bufferSize);
 
 #endif // UTIL_H

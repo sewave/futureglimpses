@@ -1,14 +1,13 @@
 #ifndef STAGE_SELECT_MAP_H
 #define STAGE_SELECT_MAP_H
+#include "common/common.h"
 
-#include <allegro.h>
-
-#define MAX_MAPS 64
-#define MAPS_FOLDER "assets/map/"
+#define MAPS_FOLDER "assets/map"
 
 typedef enum {
 	MAP_ENTRY_FILE,
-	MAP_ENTRY_DIRECTORY
+	MAP_ENTRY_FOLDER,
+	MAP_ENTRY_FOLDER_UP,
 } MapEntryTypeEnum;
 
 typedef struct {
