@@ -1,5 +1,5 @@
-#ifndef STAGE_SELECT_MAP_H
-#define STAGE_SELECT_MAP_H
+#ifndef SCENARIO_SELECT_MAP_H
+#define SCENARIO_SELECT_MAP_H
 #include "common/common.h"
 
 #define MAPS_FOLDER "assets/map"
@@ -23,8 +23,8 @@ typedef struct {
 	int capacity;
 } MapList;
 
-int stage_select_load_maps(const char *path, MapList **mapList);
+int scenario_select_load_maps(const char *path, MapList **mapList);
 
-void stage_select_free_maps(MapList *mapList);
+void scenario_select_free_maps(MapList *mapList);
 
-#endif /* STAGE_SELECT_MAP_H */
+#endif /* SCENARIO_SELECT_MAP_H */

@@ -449,7 +449,7 @@ GameStateEnum handle_title(GameContext *context, RenderQueue *renderQueue) {
 
 	if (titleMenuState == TITLE_MENU_START_GAME) {
 		destroy_bitmap(titleBackground);
-		return GAME_STATE_INIT_STAGE_SELECT;
+		return GAME_STATE_INIT_SCENARIO_SELECT;
 	} else if (titleMenuState == TITLE_MENU_EXIT) {
 		destroy_bitmap(titleBackground);
 		return GAME_STATE_EXIT;

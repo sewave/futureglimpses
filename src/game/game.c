@@ -1,5 +1,5 @@
 #include "game/game.h"
-#include "game/state/stage_select.h"
+#include "game/scenario/scenario_select.h"
 
 // TODO think how to remove extern
 extern GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue);
@@ -12,8 +12,8 @@ extern GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQu
 StateFunction gameStateTable[NUM_GAME_STATES] = {
 		&handle_init_title,
 		&handle_title,
-		&handle_init_stage_select,
-		&handle_stage_select,
+		&handle_init_scenario_select,
+		&handle_scenario_select,
 		&handle_load_map,
 		&handle_play_map,
 		&handle_init_menu_map,

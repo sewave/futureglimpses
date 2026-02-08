@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "game/state/stage_select_map.h"
+#include "game/scenario/scenario_select_map.h"
 #include "game/map/map.h"
 #include "common/util.h"
 #include <allegro.h>
@@ -89,16 +89,16 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 	return 0;
 }
 
-int stage_select_load_maps(const char *path, MapList **mapList) {
+int scenario_select_load_maps(const char *path, MapList **mapList) {
 	if (!path || !mapList) {
-		TRACE("Error: Invalid parameters to stage_select_load_maps\n");
+		TRACE("Error: Invalid parameters to scenario_select_load_maps\n");
 		exit(PROGRAM_ERROR);
 	}
 
-	stage_select_free_maps(*mapList);
-    *mapList = NULL;
+	scenario_select_free_maps(*mapList);
+	*mapList = NULL;
 
-    MapList *newMapList = (MapList *) malloc(sizeof(MapList));
+	MapList *newMapList = (MapList *) malloc(sizeof(MapList));
 	if (!newMapList) {
 		TRACE("Error: Could not allocate memory for MapList.\n");
 		exit(PROGRAM_ERROR);
@@ -132,7 +132,7 @@ int stage_select_load_maps(const char *path, MapList **mapList) {
 	return 0;
 }
 
-void stage_select_free_maps(MapList *mapList) {
+void scenario_select_free_maps(MapList *mapList) {
 	if (!mapList) return;
 
 	if (mapList->entries) {

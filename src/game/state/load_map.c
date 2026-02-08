@@ -135,7 +135,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
 		TRACE("Error loading map: %s\n", context->mapPath);
-		return GAME_STATE_INIT_STAGE_SELECT;
+		return GAME_STATE_INIT_SCENARIO_SELECT;
 	}
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
