@@ -170,7 +170,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 		.textColor = PAL_COLOR_WHITE,
 		.textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
-		.hotkey = KEY_T,
+		.hotkey = KEY_R,
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_RETURN_WIDTH, .height = BUTTON_HEIGHT },
