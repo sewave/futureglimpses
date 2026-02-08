@@ -1,4 +1,5 @@
 #include "game/building/building.h"
+#include <allegro.h>
 
 #define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
@@ -123,13 +124,15 @@ void building_handle_placing_input(GameContext *context) {
 					for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 						resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
 					}
-					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+					if(!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
+						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+					}
 					// Send worker to build it
 					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
-                    if(worker) {
-                        worker->typed.workerData.targetConstruction = building->id;
-                        game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
-                    }
+					if(worker) {
+						worker->typed.workerData.targetConstruction = building->id;
+						game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					}
 				}
 			}
 		}
