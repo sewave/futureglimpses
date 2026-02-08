@@ -419,6 +419,41 @@ AnimationPropsData OBJECT_ANIMATIONS[OBJ_TYPE_NUMBER] = {
         ARROW_ANIM, FIREBALL_ANIM, EXPLOSION_ANIM, ARROW_DAMAGE_ANIM
 };
 
+// Common animation advancement logic
+typedef void (*AnimationEventProcessor)(GameContext *context, AnimationEvent *event, void *entity);
+
+static void game_animation_advance_internal(GameContext *context, AnimationStatus *animationStatus,
+											AnimationEventProcessor eventProcessor, void *entity) {
+	AnimationData *data = animationStatus->animation.data;
+	AnimationFrame *frame = &data->frames[animationStatus->frame];
+	if (animationStatus->frameTicks < frame->duration) {
+		++animationStatus->frameTicks;
+		++animationStatus->totalTicks;
+		AnimationEvent *event = data->events;
+		for (uint8_t i = 0; i < data->numEvents; i++, event++) {
+			if (event->fireTime == animationStatus->totalTicks) {
+				eventProcessor(context, event, entity);
+			}
+		}
+		if (animationStatus->frameTicks == frame->duration) {
+			if (animationStatus->frame == data->lastFrameIndex) {
+				if (data->type == ANIMATION_TYPE_CYCLE) game_animation_reset(animationStatus);
+			} else {
+				++animationStatus->frame;
+				animationStatus->frameTicks = 0;
+			}
+		}
+	}
+}
+
+static void game_animation_unit_event_processor(GameContext *context, AnimationEvent *event, void *entity) {
+	game_event_unit_process(context, event->type, (GameUnit *) entity, event->data);
+}
+
+static void game_animation_object_event_processor(GameContext *context, AnimationEvent *event, void *entity) {
+	game_event_object_process(context, event->type, (Object *) entity, event->data);
+}
+
 void game_animation_unit_set(GameUnit *unit) {
     AnimationPropsData* propsData = &UNIT_ANIMATIONS[unit->type][unit->state];
     AnimationStatus* animationStatus = &unit->animationStatus;
@@ -427,56 +462,13 @@ void game_animation_unit_set(GameUnit *unit) {
 	game_animation_reset(animationStatus);
 }
 
-void game_animation_unit_advance(GameContext* context, GameUnit* unit) {
-    if(unit->blinkTime) --unit->blinkTime;
-    AnimationStatus* animationStatus = &unit->animationStatus;
-    AnimationData *data = animationStatus->animation.data;
-    AnimationFrame* frame = &data->frames[animationStatus->frame];
-    if(animationStatus->frameTicks < frame->duration) {
-        ++animationStatus->frameTicks;
-        ++animationStatus->totalTicks;
-        AnimationEvent* event = data->events;
-        for(uint8_t i = 0; i < data->numEvents; i++, event++) {
-            if(event->fireTime == animationStatus->totalTicks) {
-				game_event_unit_process(context, event->type, unit, event->data);
-			}
-        }
-        if(animationStatus->frameTicks == frame->duration) {
-            if(animationStatus->frame == data->lastFrameIndex) {
-				if (data->type == ANIMATION_TYPE_CYCLE) game_animation_reset(animationStatus);
-			}
-            else {
-                ++animationStatus->frame;
-                animationStatus->frameTicks = 0;
-            }
-        }
-    }
+void game_animation_unit_advance(GameContext *context, GameUnit *unit) {
+	if (unit->blinkTime) --unit->blinkTime;
+	game_animation_advance_internal(context, &unit->animationStatus, game_animation_unit_event_processor, unit);
 }
 
-void game_animation_object_advance(GameContext* context, Object* object) {
-    // TODO how to join with unit animation advance?
-    AnimationStatus* animationStatus = &object->animationStatus;
-    AnimationData *data = animationStatus->animation.data;
-    AnimationFrame* frame = &data->frames[animationStatus->frame];
-    if(animationStatus->frameTicks < frame->duration) {
-        ++animationStatus->frameTicks;
-        ++animationStatus->totalTicks;
-        AnimationEvent* event = data->events;
-        for(uint8_t i = 0; i < data->numEvents; i++, event++) {
-            if(event->fireTime == animationStatus->totalTicks) {
-				game_event_object_process(context, event->type, object, event->data);
-			}
-        }
-        if(animationStatus->frameTicks == frame->duration) {
-            if(animationStatus->frame == data->lastFrameIndex) {
-				if (data->type == ANIMATION_TYPE_CYCLE) game_animation_reset(animationStatus);
-			}
-            else {
-                ++animationStatus->frame;
-                animationStatus->frameTicks = 0;
-            }
-        }
-    }
+void game_animation_object_advance(GameContext *context, Object *object) {
+	game_animation_advance_internal(context, &object->animationStatus, game_animation_object_event_processor, object);
 }
 
 uint8_t game_animation_finished(AnimationStatus* animationStatus) {
