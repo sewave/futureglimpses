@@ -134,9 +134,8 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 	resource_reset(context);
 
 	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
-		fprintf(stderr, "Error loading map: %s\n", context->mapPath);
-		// TODO go to stage select again, maybe with error message in context
-		return GAME_STATE_INIT_TITLE;
+		TRACE("Error loading map: %s\n", context->mapPath);
+		return GAME_STATE_INIT_STAGE_SELECT;
 	}
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
