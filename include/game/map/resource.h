@@ -12,5 +12,7 @@ void resource_add_food_usage(GameContext *context, ControllerEnum controller, ui
 void resource_add_food_provided(GameContext *context, ControllerEnum controller, uint8_t foodProvided);
 void resource_deduct_food(GameContext *context, ControllerEnum controller, uint8_t foodUsage, uint8_t foodProvided);
 void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQueue);
+void resource_unit_harvest(GameContext *context, GameUnit *worker);
+void resource_search_for_work(GameContext *context, GameUnit *worker);
 
 #endif /* RESOURCE_H */

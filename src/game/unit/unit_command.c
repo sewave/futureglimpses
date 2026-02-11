@@ -71,9 +71,15 @@ void game_unit_command_set_move_anim(GameUnit *unit, UnitStateEnum nextState) {
 
 void game_unit_command_work(GameUnit* worker, GameUnit* target, int16_t targetX,  int16_t targetY) {
     if(worker->type != UNIT_TYPE_WORKER) return;
-    // TODO work with target positions for harvesting
     if(target) {
         worker->typed.workerData.targetConstruction = target->id;
+        game_unit_face_target(worker, target);
+    }
+    else {
+        worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+        worker->typed.workerData.workplace.x = targetX;
+        worker->typed.workerData.workplace.y = targetY;
+        game_unit_face_position(worker, targetX, targetY);
     }
     game_unit_set_state_or_next(worker, UNIT_STATE_WORK);
 }

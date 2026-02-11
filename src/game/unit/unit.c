@@ -360,25 +360,28 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	return unit;
 }
 
-void game_unit_face_target(GameUnit *unit, GameUnit *target) {
-	// If we are not moving, we face our enemy
+void game_unit_face_position(GameUnit *unit, uint16_t x, uint16_t y) {
 	if (unit->state != UNIT_STATE_MOVE_ANIM) {
-		if (target->y < unit->y) {
+		if (y < unit->y) {
 			unit->direction = DIRECTION_NORTH;
 		} else {
-			if (target->y > unit->y) {
+			if (y > unit->y) {
 				unit->direction = DIRECTION_SOUTH;
 			} else {
-				if (target->x < unit->x) {
+				if (x < unit->x) {
 					unit->direction = DIRECTION_WEST;
 				} else {
-					if (target->x > unit->x) {
+					if (x > unit->x) {
 						unit->direction = DIRECTION_EAST;
 					}
 				}
 			}
 		}
 	}
+}
+
+void game_unit_face_target(GameUnit *unit, GameUnit *target) {
+	game_unit_face_position(unit, target->x, target->y);
 }
 
 void game_unit_damage(GameContext *context, uint8_t minDamage, uint8_t maxDamage, GameUnit *target) {
@@ -451,23 +454,54 @@ UnitData* game_unit_get_data(UnitTypeEnum type) {
 
 void game_unit_work(GameContext *context, GameUnit *worker) {
 	if (worker->type != UNIT_TYPE_WORKER) return;
-	GameUnit *workTarget = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
-	if (workTarget && workTarget->isBuilding) {
-		if(workTarget->state == BUILDING_STATE_COMPLETED) {
-			if(workTarget->health < workTarget->maxHealth) {
-				building_repair(context, workTarget);
+	WorkerData *workerData = &worker->typed.workerData;
+	if (workerData->targetConstruction != NO_TARGET_ID) {
+		GameUnit *workTarget = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
+		if (workTarget && workTarget->isBuilding) {
+			if (workTarget->state == BUILDING_STATE_COMPLETED) {
+				if (workTarget->health < workTarget->maxHealth) {
+					building_repair(context, workTarget);
+				} else {
+					worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+					game_unit_command_idle(worker);
+				}
+			} else {
+				building_add_construction(context, workTarget);
+			}
+		} else {
+			worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+			game_unit_command_idle(worker);
+		}
+	} else {
+		// If we are working, call resource_unit_harvest to check if we should keep working or stop
+		if (workerData->workplace.x != NO_TARGET_POSITION &&
+			workerData->workplace.y != NO_TARGET_POSITION) {
+			BoardTile *tile = &context->board[workerData->workplace.x][workerData->workplace.y];
+			if (tile->type == TILE_TYPE_WOOD || tile->type == TILE_TYPE_GOLD) {
+				resource_unit_harvest(context, worker);
 			}
 			else {
-				worker->typed.workerData.targetConstruction = NO_TARGET_ID;
 				game_unit_command_idle(worker);
 			}
 		}
-		else {
-			building_add_construction(context, workTarget);
-		}
-	} else {
-		worker->typed.workerData.targetConstruction = NO_TARGET_ID;
-		game_unit_command_idle(worker);
 	}
-	// TODO if we are harvesting
+}
+
+GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, UnitTypeEnum type, ControllerEnum controller) {
+	GameUnit **activeUnits = context->activeUnits;
+	GameUnit *closestUnit = NULL;
+	int closestDistanceSq = 0;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *otherUnit = *activeUnits;
+		if (otherUnit->type == type && otherUnit->controller == controller) {
+			int dx = otherUnit->x - unit->x;
+			int dy = otherUnit->y - unit->y;
+			int distanceSq = dx * dx + dy * dy;
+			if (!closestUnit || distanceSq < closestDistanceSq) {
+				closestUnit = otherUnit;
+				closestDistanceSq = distanceSq;
+			}
+		}
+	}
+	return closestUnit;
 }

@@ -121,7 +121,13 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 	game_cmd_bar_handle_buttons(context);
 	game_mouse_handle_status_change(context);
 	game_gui_handle(context, &guiScreenPlay);
-
+	if(context->targetBlinkTime) {
+		context->targetBlinkTime--;
+	}
+	else {
+		context->targetPosition.x = NO_TARGET_POSITION;
+		context->targetPosition.y = NO_TARGET_POSITION;
+	}
 	
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
@@ -258,6 +264,21 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 
 	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
+
+	if(context->targetPosition.x != NO_TARGET_POSITION && context->targetPosition.y != NO_TARGET_POSITION &&
+		context->targetBlinkTime && context->targetBlinkTime % BLINK_MOD < BLINK_FRAMES) {
+		uint16_t cameraMinX = context->xPosition / TILE_SIZE;
+		uint16_t cameraMaxX = (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE;
+		uint16_t cameraMinY = context->yPosition / TILE_SIZE;
+		uint16_t cameraMaxY = (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
+		if (context->targetPosition.x >= cameraMinX && context->targetPosition.x < cameraMaxX &&
+			context->targetPosition.y >= cameraMinY && context->targetPosition.y < cameraMaxY) {
+			int unitTileXCamera = context->targetPosition.x * TILE_SIZE - context->xPosition + VIEWPORT_X_OFFSET;
+			int unitTileYCamera = context->targetPosition.y * TILE_SIZE - context->yPosition + VIEWPORT_Y_OFFSET;	
+			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera, unitTileXCamera + TILE_SIZE,
+				unitTileYCamera + TILE_SIZE, PAL_COLOR_GREEN);
+		}
+	}
 
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);

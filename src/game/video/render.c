@@ -152,10 +152,15 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			}
 
 			LifeBarEnum lifeBarSetting = context->config.lifeBar;
-
-			if (unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
+			uint8_t showHealthBar = unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
 												   (lifeBarSetting == LIFE_BAR_ALWAYS || (lifeBarSetting == LIFE_BAR_DAMAGED && unit->health < unit->maxHealth))) ||
-												  keyboard_is_key_down(KEY_ALT))) {
+												  keyboard_is_key_down(KEY_ALT));
+			if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.carriedResourceQty > 0) {
+				BITMAP* resourceIcon = game_gfx_get_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
+				render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 1, resourceIcon,
+						unitTileXCamera - showHealthBar * resourceIcon->w, unitTileYCamera - resourceIcon->h, RND_FLAG_NORMAL);
+			}
+			if (showHealthBar) {
 				int healthBarColor = PAL_COLOR_DARK_GREEN;
 				if (unit->health < unit->maxHealth / HEALTH_BAR_QUARTER) {
 					healthBarColor = PAL_COLOR_RED;

@@ -8,6 +8,8 @@
 #define BASE_TEN_NUMER 10
 #define FOOD_USE_FORMAT "%u/%u"
 #define FOOD_USE_SURPASSED_FORMAT "^005%u^001/%u"
+#define WORKER_RESOURCE_GATHER 5
+#define WORKER_RESOURCE_GATHER_MAX 10
 
 static int RESOURCE_TEXT_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{89, 1},
@@ -144,4 +146,104 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][0],
 			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][1],
 			PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+}
+
+void resource_unit_harvest(GameContext *context, GameUnit *worker) {
+	if (worker->type != UNIT_TYPE_WORKER) return;
+	WorkerData *workerData = &worker->typed.workerData;
+	if (workerData->workplace.x != NO_TARGET_POSITION && workerData->workplace.y != NO_TARGET_POSITION) {
+		BoardTile *tile = &context->board[workerData->workplace.x][workerData->workplace.y];
+		switch (tile->type) {
+			case TILE_TYPE_WOOD:
+				if (workerData->carriedResourceType == RESOURCE_TYPE_WOOD || workerData->carriedResourceQty == 0) {
+					workerData->carriedResourceType = RESOURCE_TYPE_WOOD;
+					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GATHER, 0,
+						WORKER_RESOURCE_GATHER_MAX);
+				}
+				break;
+			case TILE_TYPE_GOLD:
+				if (workerData->carriedResourceType == RESOURCE_TYPE_GOLD || workerData->carriedResourceQty == 0) {
+					workerData->carriedResourceType = RESOURCE_TYPE_GOLD;
+					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GATHER, 0,
+						WORKER_RESOURCE_GATHER_MAX);
+				}
+				break;
+			default:
+				return;
+				break;
+		}
+		if (tile->data >= WORKER_RESOURCE_GATHER) {
+			tile->data -= WORKER_RESOURCE_GATHER;
+		} else {
+			tile->data = 0;
+		}
+		if (tile->data == 0) {
+			tile->type = TILE_TYPE_WALKABLE;
+			tile->tile = tile->altTile;
+			context->walkabilityGrid[workerData->workplace.x][workerData->workplace.y] = WALKABILITY_FREE;
+			blit(game_gfx_get_tileset(), context->renderedBoard,
+				(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
+				workerData->workplace.x * TILE_SIZE, workerData->workplace.y * TILE_SIZE,
+				TILE_SIZE, TILE_SIZE);
+			putpixel(context->renderedMinimap, workerData->workplace.x, workerData->workplace.y, context->minimapColors[tile->tile]);
+		}
+
+		if (workerData->carriedResourceQty >= WORKER_RESOURCE_GATHER_MAX) {
+			// We set our current position as target to search sorroundings
+			workerData->workplace.x = worker->x;
+			workerData->workplace.y = worker->y;
+
+			// Search the nearest city hall on active units to drop the resources
+			GameUnit *closeCityHall = game_unit_get_nearest_unit_type(context, worker, UNIT_TYPE_CITY_HALL, worker->controller);
+			if (closeCityHall) {
+				game_unit_command_move(worker, closeCityHall, closeCityHall->x, closeCityHall->y);
+			}
+		}
+		else {
+			if(tile->data == 0) {
+				workerData->workplace.x = NO_TARGET_POSITION;
+				workerData->workplace.y = NO_TARGET_POSITION;
+				resource_search_for_work(context, worker);
+			}
+		}
+	}
+}
+
+static Position resource_find_first_around_unit(GameContext *context, GameUnit *unit, TileTypeEnum resourceType, uint8_t maxDistance) {
+	// Search in range for closest resource using distance_sq to avoid sqrt
+	int closestDistanceSq = maxDistance * maxDistance + 1;
+	Position closestResourcePos = {.x = NO_TARGET_POSITION, .y = NO_TARGET_POSITION};
+	for (int dx = -maxDistance; dx <= maxDistance; dx++) {
+		for (int dy = -maxDistance; dy <= maxDistance; dy++) {
+			int checkX = unit->x + dx;
+			int checkY = unit->y + dy;
+			if (checkX < 0 || checkX >= BOARD_WIDTH || checkY < 0 || checkY >= BOARD_HEIGHT) continue;
+			BoardTile *tile = &context->board[checkX][checkY];
+			if (tile->type == resourceType) {
+				int distanceSq = dx * dx + dy * dy;
+				if (distanceSq < closestDistanceSq) {
+					closestDistanceSq = distanceSq;
+					closestResourcePos.x = checkX;
+					closestResourcePos.y = checkY;
+				}
+			}
+		}
+	}
+	return closestResourcePos;
+}
+
+void resource_search_for_work(GameContext *context, GameUnit *worker) {
+	if (worker->type != UNIT_TYPE_WORKER) return;
+	WorkerData *workerData = &worker->typed.workerData;
+	TileTypeEnum searchType = workerData->carriedResourceType != RESOURCE_TYPE_NONE ? (workerData->carriedResourceType == RESOURCE_TYPE_WOOD ? TILE_TYPE_WOOD : TILE_TYPE_GOLD) : TILE_TYPE_WOOD;
+	Position nearResource = resource_find_first_around_unit(context, worker, searchType, worker->sightRange);
+	if (nearResource.x == NO_TARGET_POSITION && nearResource.y == NO_TARGET_POSITION) {
+		searchType = searchType == TILE_TYPE_WOOD ? TILE_TYPE_GOLD : TILE_TYPE_WOOD;
+		nearResource = resource_find_first_around_unit(context, worker, searchType, worker->sightRange);
+	}
+
+	if (nearResource.x != NO_TARGET_POSITION && nearResource.y != NO_TARGET_POSITION) {
+		workerData->workplace = nearResource;
+		game_unit_command_move(worker, NULL, nearResource.x, nearResource.y);
+	}
 }

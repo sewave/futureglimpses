@@ -88,13 +88,24 @@ static void game_selection_load_from_slot(GameContext *context, SelectionSlotInd
 
 static void handle_target_selection(GameContext *context, GameUnit *unit, GameUnit *targetUnit) {
 	if (unit->type == UNIT_TYPE_WORKER && targetUnit->isBuilding) {
-		unit->typed.workerData.targetConstruction = targetUnit->id;
 		if (game_spatial_unit_around_position(context, targetUnit->id, unit->x, unit->y)) {
-			game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-			return;
+			if(unit->typed.workerData.carriedResourceQty > 0) {
+				resource_unit_harvest(context, unit);
+			}
+			else {
+				unit->typed.workerData.targetConstruction = targetUnit->id;
+				game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				return;
+			}
 		}
 	}
 	game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+}
+
+static void setBlinkPosition(GameContext *context, int x, int y) {
+	context->targetPosition.x = x;
+	context->targetPosition.y = y;
+	context->targetBlinkTime = BLINK_TIME;
 }
 
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
@@ -113,15 +124,34 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 			if (!unit) continue;
 			if (target == WALKABILITY_FREE) {
+				if(unit->type == UNIT_TYPE_WORKER) {
+					unit->typed.workerData.workplace.x = NO_TARGET_POSITION;
+					unit->typed.workerData.workplace.y = NO_TARGET_POSITION;
+					unit->typed.workerData.targetConstruction = NO_TARGET_ID;
+				}
 				if (isContextual) {
-					// TODO handle harvesting
 					game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+					setBlinkPosition(context, boardXPosition, boardYPosition);
 				} else {
-					if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
-					if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+					if (mouseState == MOUSE_CURSOR_ATTACK) {
+						game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
+						setBlinkPosition(context, boardXPosition, boardYPosition);
+					}
+					if (mouseState == MOUSE_CURSOR_TARGET) {
+						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+						setBlinkPosition(context, boardXPosition, boardYPosition);
+					}
 				}
 			} else {
-				// TODO Resource => Work, if we are workers
+				if(unit->type == UNIT_TYPE_WORKER) {
+					BoardTile* tile = &context->board[boardXPosition][boardYPosition];
+					if (tile->type == TILE_TYPE_GOLD || tile->type == TILE_TYPE_WOOD) {
+						setBlinkPosition(context, boardXPosition, boardYPosition);
+						unit->typed.workerData.workplace.x = boardXPosition;
+						unit->typed.workerData.workplace.y = boardYPosition;
+						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+					}
+				}
 			}
 		}
 	} else {

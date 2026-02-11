@@ -121,7 +121,7 @@ typedef struct {
 typedef struct {
 	UnitId targetConstruction;
 	Position workplace;
-	uint16_t carriedResourceQty;
+	uint8_t carriedResourceQty;
 	ResourceTypeEnum carriedResourceType;
 } WorkerData;
 
@@ -268,6 +268,8 @@ typedef struct {
 	GameResultEnum gameResult;
 	GameMap map;
 	char* mapPath;
+	Position targetPosition;
+	uint8_t targetBlinkTime;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);
