@@ -110,12 +110,13 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 	}
 
 	if (unit->type == UNIT_TYPE_WORKER) {
+		uint8_t mustWork = FALSE;
 		WorkerData *workerData = &unit->typed.workerData;
 		if (workerData->targetConstruction != NO_TARGET_ID) {
 			GameUnit *workUnit = game_unit_get_by_id(context, workerData->targetConstruction);
 			if (workUnit && game_spatial_unit_around_position(context, workUnit->id, unit->x, unit->y)) {
 				game_unit_command_work(unit, workUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-				return;
+				mustWork = TRUE;
 			}
 		}
 		if (workerData->carriedResourceQty > 0 && unit->targetId != NO_TARGET_ID) {
@@ -123,12 +124,13 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 			if (destination && destination->type == UNIT_TYPE_CITY_HALL && game_spatial_unit_around_position(context, destination->id, unit->x, unit->y)) {
 				resource_add_amount(context, unit->controller, workerData->carriedResourceType, workerData->carriedResourceQty);
 				workerData->carriedResourceQty = 0;
-				if(workerData->workplace.x != NO_TARGET_POSITION && workerData->workplace.y != NO_TARGET_POSITION) {
+				if(workerData->workplace.x != NO_TARGET_POSITION && workerData->workplace.y != NO_TARGET_POSITION && !mustWork) {
 					game_unit_command_move(unit, NULL, workerData->workplace.x, workerData->workplace.y);
 					return;
 				}
 			}
 		}
+		if(mustWork) return;
 	}
 
 	if (context->walkabilityGrid[targetX][targetY] != WALKABILITY_FREE && game_spatial_target_in_range(unit, targetX, targetY, 1)) {

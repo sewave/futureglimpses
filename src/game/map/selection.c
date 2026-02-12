@@ -88,15 +88,10 @@ static void game_selection_load_from_slot(GameContext *context, SelectionSlotInd
 
 static void handle_target_selection(GameContext *context, GameUnit *unit, GameUnit *targetUnit) {
 	if (unit->type == UNIT_TYPE_WORKER && targetUnit->isBuilding) {
+		unit->typed.workerData.targetConstruction = targetUnit->id;
 		if (game_spatial_unit_around_position(context, targetUnit->id, unit->x, unit->y)) {
-			if(unit->typed.workerData.carriedResourceQty > 0) {
-				resource_unit_harvest(context, unit);
-			}
-			else {
-				unit->typed.workerData.targetConstruction = targetUnit->id;
-				game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
-				return;
-			}
+			game_unit_command_work(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			return;
 		}
 	}
 	game_unit_command_move(unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
