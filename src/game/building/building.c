@@ -56,7 +56,10 @@ void building_update(GameContext *context, GameUnit *building) {
 			if (resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
 									game_unit_get_resources(buildingData->trainUnit)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
 				Position spawn = game_building_get_spawn_position(context, building);
-				game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
+				GameUnit* newUnit = game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
+				if(newUnit && building->targetX != NO_TARGET_POSITION && building->targetY != NO_TARGET_POSITION) {
+					game_unit_command_move(newUnit, NULL, building->targetX, building->targetY);
+				}
 			    buildingData->isTraining = FALSE;
 			} else {
 				buildingData->currentTicks--;

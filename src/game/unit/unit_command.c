@@ -30,10 +30,10 @@ void game_unit_command_defend(GameUnit *unit) {
 }
 
 void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, int16_t targetY) {
-    if(unit->isBuilding) return;
     if(target) unit->targetId = target->id; else unit->targetId = NO_TARGET_ID;
     unit->targetX = targetX;
     unit->targetY = targetY;
+    if(unit->isBuilding) return;
     if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.targetConstruction != NO_TARGET_ID) {
         if(target) {
             if(target->id != unit->typed.workerData.targetConstruction) {
@@ -48,7 +48,6 @@ void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, i
 }
 
 void game_unit_command_move_attack(GameUnit *unit, GameUnit *target, int16_t targetX, int16_t targetY) {
-    if(unit->isBuilding) return;
     if(target) {
         unit->targetId = target->id;
         unit->targetX = target->x;
@@ -58,7 +57,7 @@ void game_unit_command_move_attack(GameUnit *unit, GameUnit *target, int16_t tar
         unit->targetX = targetX;
         unit->targetY = targetY;
     }
-    game_unit_set_state_or_next(unit, UNIT_STATE_MOVE_ATTACK);
+    if(!unit->isBuilding) game_unit_set_state_or_next(unit, UNIT_STATE_MOVE_ATTACK);
 }
 
 void game_unit_command_set_move_anim(GameUnit *unit, UnitStateEnum nextState) {
