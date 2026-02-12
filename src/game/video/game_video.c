@@ -30,8 +30,8 @@ static RGB firstColors[FIRST_COLORS] = {
     {.r = 20, .g = 40, .b = 38, .filler = 0},
     // DARK_TURQUOISE
     {.r = 0, .g = 16, .b = 16, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // CMD_BUTTON
+    {.r = 0, .g = 26, .b = 38, .filler = 0},
     // UNUSED
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // UNUSED

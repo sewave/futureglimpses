@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <allegro/keyboard.h>
 
-#define CMD_BAR_BUTTON_INITIAL_X 3
-#define CMD_BAR_BUTTON_INITIAL_Y 127
+#define CMD_BAR_BUTTON_INITIAL_X 2
+#define CMD_BAR_BUTTON_INITIAL_Y 129
 
-#define CMD_BAR_BUTTON_SEPARATION_WIDTH 34
+#define CMD_BAR_BUTTON_SEPARATION_WIDTH 35
 #define CMD_BAR_BUTTON_SEPARATION_HEIGHT 24
 #define CMD_BAR_BUTTON_LINE_WIDTH CMD_BAR_BUTTON_WIDTH - 2
 #define CMD_BAR_BUTTON_LINE_HEIGTH CMD_BAR_BUTTON_HEIGHT - 2
@@ -15,13 +15,17 @@
 #define CMD_BUTTON_DOWN_RECT_Z UI_Z_ORDER + 506
 #define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
 
-#define UNIT_SHEET_COL_ONE_X 5
+#define UNIT_SHEET_COL_ONE_X 3
 #define UNIT_SHEET_ROW_ONE_Y 80
 #define UNIT_SHEET_ROW_TWO_Y 90
 #define UNIT_SHEET_ROW_THREE_Y 104
 #define UNIT_SHEET_ROW_FOUR_Y 116
 #define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 1
 #define UNIT_SHEET_TRAIN_BAR_X UNIT_SHEET_COL_ONE_X + 1
+#define UNIT_SHEET_BACK_X 1
+#define UNIT_SHEET_BACK_Y 79
+#define UNIT_SHEET_BACK_WIDTH 68
+#define UNIT_SHEET_BACK_HEIGHT 48
 
 #define UNIT_SHEET_BAR_LENGTH 58
 #define UNIT_SHEET_BAR_HEIGHT 11
@@ -487,10 +491,33 @@ static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int val
 							 PAL_COLOR_WHITE);
 }
 
+static void game_render_unit_stats_background(RenderQueue *renderQueue) {
+	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 1, 
+		UNIT_SHEET_BACK_X, UNIT_SHEET_BACK_Y,
+		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
+		PAL_COLOR_CMD_BUTTON
+	);
+	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 2, 
+		UNIT_SHEET_BACK_X, UNIT_SHEET_BACK_Y,
+		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
+		PAL_COLOR_WHITE
+	);
+	render_queue_submit_line(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 3, 
+		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y,
+		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
+		PAL_COLOR_GRAY
+	);
+	render_queue_submit_line(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 3, 
+		UNIT_SHEET_BACK_X, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
+		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
+		PAL_COLOR_GRAY
+	);
+}
+
 static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, RenderQueue *renderQueue) {
 	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 	if (unit) {
-		// TODO unit stats background
+		game_render_unit_stats_background(renderQueue);
 
 		// Unit name
 		const char* name;
@@ -549,6 +576,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 }
 
 static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {
+	game_render_unit_stats_background(renderQueue);
 	snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
 	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 							 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
