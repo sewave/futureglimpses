@@ -10,6 +10,7 @@
 
 #define DEFAULT_MUSIC_VOLUME 100
 #define DEFAULT_SFX_VOLUME 100
+#define DEFAULT_FADE_SPEED 4
 
 #define BOARD_WIDTH 64
 #define BOARD_HEIGHT 64
@@ -234,6 +235,7 @@ typedef struct {
 
 typedef struct {
 	BITMAP *screenBuffer;
+	PALETTE mainPalette;
 	GameStateEnum gameState;
 	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
@@ -270,6 +272,8 @@ typedef struct {
 	char* mapPath;
 	Position targetPosition;
 	uint8_t targetBlinkTime;
+	GameStateEnum nextState;
+	uint8_t fadeSpeed;
 } GameContext;
 
 typedef GameStateEnum (*StateFunction)(GameContext *, RenderQueue *);

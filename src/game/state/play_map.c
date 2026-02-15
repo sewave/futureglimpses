@@ -247,6 +247,50 @@ static void game_update(GameContext *context, RenderQueue *renderQueue) {
 	// TODO win/loss results screen
 }
 
+static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
+	// TODO performance - not updating minimap each frame?
+	// Minimap update
+	clear_bitmap(context->renderedMinimapUnits);
+	GameUnit **activeUnits = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *unit = *activeUnits;
+		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		if (unit->tileSize == 1) {
+			putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
+		} else {
+			for (int dx = 0; dx < unit->tileSize; dx++) {
+				for (int dy = 0; dy < unit->tileSize; dy++) {
+					putpixel(context->renderedMinimapUnits, unit->x + dx, unit->y + dy, color);
+				}
+			}
+		}
+	}
+}
+
+static void game_render(GameContext *context, RenderQueue *renderQueue) {
+	minimap_render(context, renderQueue);
+	render_queue_add_active_units(context, renderQueue);
+	render_queue_add_active_objects(context, renderQueue);
+	render_queue_submit_ui(context, renderQueue);
+	game_cmd_bar_render_queue_submit(context, renderQueue);
+	message_render_queue_submit(renderQueue, context->gameFont);
+	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
+	if(nextState == GAME_STATE_PLAY_MAP) render_queue_submit_mouse(context, renderQueue);
+	if(context->gameResult != GAME_RESULT_ONGOING) {
+		if(context->gameResult == GAME_RESULT_VICTORY) {
+			game_gui_render_queue_submit(context, renderQueue, &guiScreenWin);
+		}
+		else if(context->gameResult == GAME_RESULT_DEFEAT) {
+			game_gui_render_queue_submit(context, renderQueue, &guiScreenLose);
+		}
+	}
+}
+
+GameStateEnum handle_init_play_map(GameContext *context, RenderQueue *renderQueue) {
+	game_render(context, renderQueue);
+	return fade_in_init(context, GAME_STATE_PLAY_MAP, DEFAULT_FADE_SPEED);	
+}
+
 GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	nextState = GAME_STATE_PLAY_MAP;
 	
@@ -265,36 +309,12 @@ GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
 	// If there are more ticks to draw, skip queue phase, ups performance
 	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
 
-	if(context->targetPosition.x != NO_TARGET_POSITION && context->targetPosition.y != NO_TARGET_POSITION &&
-		context->targetBlinkTime && context->targetBlinkTime % BLINK_MOD < BLINK_FRAMES) {
-		uint16_t cameraMinX = context->xPosition / TILE_SIZE;
-		uint16_t cameraMaxX = (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE;
-		uint16_t cameraMinY = context->yPosition / TILE_SIZE;
-		uint16_t cameraMaxY = (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
-		if (context->targetPosition.x >= cameraMinX && context->targetPosition.x < cameraMaxX &&
-			context->targetPosition.y >= cameraMinY && context->targetPosition.y < cameraMaxY) {
-			int unitTileXCamera = context->targetPosition.x * TILE_SIZE - context->xPosition + VIEWPORT_X_OFFSET;
-			int unitTileYCamera = context->targetPosition.y * TILE_SIZE - context->yPosition + VIEWPORT_Y_OFFSET;	
-			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera, unitTileXCamera + TILE_SIZE,
-				unitTileYCamera + TILE_SIZE, PAL_COLOR_GREEN);
-		}
-	}
+	game_render(context, renderQueue);
 
-	render_queue_add_active_units(context, renderQueue);
-	render_queue_add_active_objects(context, renderQueue);
-	render_queue_submit_ui(context, renderQueue);
-	game_cmd_bar_render_queue_submit(context, renderQueue);
-	message_render_queue_submit(renderQueue, context->gameFont);
-	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
-	if(nextState == GAME_STATE_PLAY_MAP) render_queue_submit_mouse(context, renderQueue);
-	if(context->gameResult != GAME_RESULT_ONGOING) {
-		if(context->gameResult == GAME_RESULT_VICTORY) {
-			game_gui_render_queue_submit(context, renderQueue, &guiScreenWin);
-		}
-		else if(context->gameResult == GAME_RESULT_DEFEAT) {
-			game_gui_render_queue_submit(context, renderQueue, &guiScreenLose);
-		}
+	if(nextState == GAME_STATE_INIT_TITLE) {
+		return fade_out_init(context, GAME_STATE_INIT_TITLE, DEFAULT_FADE_SPEED);
 	}
-
-	return nextState;
+	else {
+		return nextState;
+	}
 }

@@ -4,22 +4,31 @@
 #include "game/scenario/scenario_select_map.h"
 #include <allegro.h>
 
-#define SCENARIO_SELECT_BACKGROUND_PATH "assets/ui/back_f.pcx"
+#define SCENARIO_SELECT_BACKGROUND_PATH "assets/ui/select.pcx"
 #define SCENARIO_SELECT_MAPS 10
 #define GUI_BODY_Y 20
-#define GUI_BAR_X 150
+#define GUI_BAR_X 152
 #define GUI_ROWS_X 5
 #define GUI_ROWS_WIDTH 140
-#define GUI_DESCRIPTION_X 163
-#define GUI_DESCRIPTION_MAX_WIDTH 157
-#define GUI_DESCRIPTION_MAX_HEIGHT 180
+#define GUI_DESCRIPTION_X 168
+#define GUI_DESCRIPTION_MAX_WIDTH 140
+#define GUI_DESCRIPTION_MAX_HEIGHT 160
 #define BUTTON_RETURN_WIDTH 50
-#define BUTTON_RETURN_X 110
-#define BUTTON_RETURN_Y 170
+#define BUTTON_RETURN_X 100
+#define BUTTON_RETURN_Y 155
 
 #define BUTTON_PLAY_WIDTH 50
-#define BUTTON_PLAY_X 50
-#define BUTTON_PLAY_Y 170
+#define BUTTON_PLAY_X 40
+#define BUTTON_PLAY_Y 155
+
+#define LEFT_BACK_X GUI_ROWS_X - 2
+#define LEFT_BACK_Y GUI_BODY_Y - 2
+#define LEFT_BACK_WIDTH GUI_DESCRIPTION_MAX_WIDTH + 8
+#define LEFT_BACK_HEIGHT 122
+#define RIGHT_BACK_WIDTH GUI_DESCRIPTION_MAX_WIDTH + 4
+#define RIGHT_BACK_HEIGHT GUI_DESCRIPTION_MAX_HEIGHT + 4
+#define RIGHT_BACK_X GUI_DESCRIPTION_X - 2
+#define RIGHT_BACK_Y GUI_BODY_Y - 2
 
 typedef enum {
 	SCENARIO_SELECT_BROWSE_STATE,
@@ -106,7 +115,7 @@ static void go_title_action(GameContext *context) {
 	state = SCENARIO_SELECT_TITLE_STATE;
 }
 
-#define SCENARIO_SELECT_ELEMENTS 6
+#define SCENARIO_SELECT_ELEMENTS 10
 
 static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 	{
@@ -193,6 +202,46 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
+	{
+		.type = GUI_ELEMENT_RECTANGLE,
+		.x = LEFT_BACK_X, .y = LEFT_BACK_Y, .z = 9,
+		.typed = {
+			.rectangle = {
+				.size = { .width = LEFT_BACK_WIDTH, .height = LEFT_BACK_HEIGHT },
+				.color = PAL_COLOR_BLACK
+			}
+		}
+	},
+	{
+		.type = GUI_ELEMENT_FILL_RECTANGLE,
+		.x = LEFT_BACK_X, .y = LEFT_BACK_Y, .z = 8,
+		.typed = {
+			.fillRectangle = {
+				.size = { .width = LEFT_BACK_WIDTH, .height = LEFT_BACK_HEIGHT },
+				.color = PAL_COLOR_DARK_TURQUOISE
+			}
+		}
+	},
+	{
+		.type = GUI_ELEMENT_RECTANGLE,
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 9,
+		.typed = {
+			.rectangle = {
+				.size = { .width = RIGHT_BACK_WIDTH, .height = RIGHT_BACK_HEIGHT },
+				.color = PAL_COLOR_BLACK
+			}
+		}
+	},
+	{
+		.type = GUI_ELEMENT_FILL_RECTANGLE,
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 8,
+		.typed = {
+			.fillRectangle = {
+				.size = { .width = RIGHT_BACK_WIDTH, .height = RIGHT_BACK_HEIGHT },
+				.color = PAL_COLOR_DARK_TURQUOISE
+			}
+		}
+	}
 };
 
 GuiScreen scenarioSelectGuiScreen = { .elements = scenarioSelect, .elementsCount = SCENARIO_SELECT_ELEMENTS };
@@ -232,6 +281,13 @@ static void init_scenarios_folder(char *folder) {
 	state = SCENARIO_SELECT_BROWSE_STATE;
 }
 
+static void scenario_select_render(GameContext *context, RenderQueue *renderQueue, GuiScreen *guiScreen) {
+	game_gui_render_queue_submit(context, renderQueue, guiScreen);
+	render_queue_submit_mouse(context, renderQueue);
+	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
+}
+
 GameStateEnum handle_init_scenario_select(GameContext *context, RenderQueue *renderQueue) {
 	background = load_bitmap(SCENARIO_SELECT_BACKGROUND_PATH, NULL);
 	if (!background) {
@@ -241,8 +297,8 @@ GameStateEnum handle_init_scenario_select(GameContext *context, RenderQueue *ren
 	
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	init_scenarios_folder(MAPS_FOLDER);
-
-	return GAME_STATE_SCENARIO_SELECT;
+	scenario_select_render(context, renderQueue, &scenarioSelectGuiScreen);
+	return fade_in_init(context, GAME_STATE_SCENARIO_SELECT, DEFAULT_FADE_SPEED);
 }
 
 GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQueue) {
@@ -254,7 +310,7 @@ GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQu
 			free(context->mapPath);
 			context->mapPath = strdup(mapList->entries[scenarioSelected].path);
 			free_all();
-			return GAME_STATE_LOAD_MAP;
+			return fade_out_init(context, GAME_STATE_LOAD_MAP, DEFAULT_FADE_SPEED);
 			break;
 		}
 		case SCENARIO_SELECT_RELOAD_STATE: {
@@ -264,16 +320,13 @@ GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQu
 		}
 		case SCENARIO_SELECT_TITLE_STATE: {
 			free_all();
-			return GAME_STATE_INIT_TITLE;
+			return fade_out_init(context, GAME_STATE_INIT_TITLE, DEFAULT_FADE_SPEED);
 		}
 		default:
 			break;
 	}
 
-	game_gui_render_queue_submit(context, renderQueue, &scenarioSelectGuiScreen);
-	render_queue_submit_mouse(context, renderQueue);
-	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
+	scenario_select_render(context, renderQueue, &scenarioSelectGuiScreen);
 
 	return GAME_STATE_SCENARIO_SELECT;
 }

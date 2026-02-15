@@ -1,13 +1,12 @@
 #ifndef RENDER_QUEUE_H
 #define RENDER_QUEUE_H
-
+#include "common/common.h"
+#include "common/text.h"
 #include <allegro/palette.h>
 #include <allegro/draw.h>
 #include <allegro/font.h>
 #include <allegro/text.h>
 #include <allegro/rle.h>
-#include "common/common.h"
-#include "common/text.h"
 
 typedef enum {
 	RND_FLAG_NORMAL,

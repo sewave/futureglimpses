@@ -67,14 +67,15 @@ int main_init() {
 		return PROGRAM_ERROR;
 	}
 
-	if (game_video_load_universal_pal() != INITIALIZATION_OK) {
+	if (game_video_load_universal_pal(context.mainPalette) != INITIALIZATION_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 		printf("Error loading universal game pal.");
 		return PROGRAM_ERROR;
 	}
-
+	set_palette(black_palette);
 	fps_init();
 	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	clear_bitmap(context.screenBuffer);
 	context.gameState = GAME_STATE_INIT_TITLE;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
@@ -84,17 +85,20 @@ int main_init() {
 
 void main_loop() {
 	uint8_t redrawNeeded = FALSE;
+	timer_reset_ticks();
 	while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT) {
 		if (timer_has_ticks()) {
 			context.ticksToCatchup = timer_get_ticks();
 			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) context.ticksToCatchup = MAX_CATCHUP_TICKS;
 			timer_reset_ticks();
 			while (context.ticksToCatchup > 0) {
+				GameStateEnum oldState = context.gameState;
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
 				context.gameState = game_execute_state(&context, &renderQueue);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
+				if(context.gameState != oldState) context.ticksToCatchup = 0;
 			}
 			redrawNeeded = TRUE;
 		}

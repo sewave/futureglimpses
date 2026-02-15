@@ -167,5 +167,5 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	return GAME_STATE_PLAY_MAP;
+	return GAME_STATE_INIT_PLAY_MAP;
 }

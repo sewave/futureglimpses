@@ -15,7 +15,6 @@ InitializationStatusEnum video_init_system(int width, int height, int depth) {
 #ifdef DOS
 	}
 #endif
-	common_print_ok();
 	return INITIALIZATION_OK;
 }
 

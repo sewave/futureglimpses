@@ -94,14 +94,11 @@ static RGB lastColors[LAST_COLORS] = {
     {.r = 0, .g = 0, .b = 0, .filler = 0},
 };
 
-InitializationStatusEnum game_video_load_universal_pal() {
-	PALETTE universalPal;
-	if(video_load_raw_palette("assets/pal/game.pal", universalPal) != PROGRAM_OK) return PROGRAM_ERROR;
+InitializationStatusEnum game_video_load_universal_pal(PALETTE palette) {
+	if(video_load_raw_palette("assets/pal/game.pal", palette) != PROGRAM_OK) return PROGRAM_ERROR;
 	// Load fixed palette indexes for ui
-    for(int i = 0; i < FIRST_COLORS; i++) universalPal[i] = firstColors[i];
-    for(int i = LAST_COLORS_INDEX; i < LAST_COLORS; i++) universalPal[i + LAST_COLORS_INDEX] = lastColors[i];
+    for(int i = 0; i < FIRST_COLORS; i++) palette[i] = firstColors[i];
+    for(int i = LAST_COLORS_INDEX; i < LAST_COLORS; i++) palette[i + LAST_COLORS_INDEX] = lastColors[i];
 
-	set_palette(universalPal);
-	
 	return PROGRAM_OK;
 }

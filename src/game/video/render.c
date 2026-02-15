@@ -264,6 +264,22 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 	}
 
 	resource_render_queue_submit_ui(context, renderQueue);
+
+	// Target position blinkingg square
+	if(context->targetPosition.x != NO_TARGET_POSITION && context->targetPosition.y != NO_TARGET_POSITION &&
+		context->targetBlinkTime && context->targetBlinkTime % BLINK_MOD < BLINK_FRAMES) {
+		uint16_t cameraMinX = context->xPosition / TILE_SIZE;
+		uint16_t cameraMaxX = (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE;
+		uint16_t cameraMinY = context->yPosition / TILE_SIZE;
+		uint16_t cameraMaxY = (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
+		if (context->targetPosition.x >= cameraMinX && context->targetPosition.x < cameraMaxX &&
+			context->targetPosition.y >= cameraMinY && context->targetPosition.y < cameraMaxY) {
+			int unitTileXCamera = context->targetPosition.x * TILE_SIZE - context->xPosition + VIEWPORT_X_OFFSET;
+			int unitTileYCamera = context->targetPosition.y * TILE_SIZE - context->yPosition + VIEWPORT_Y_OFFSET;	
+			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera, unitTileXCamera + TILE_SIZE,
+				unitTileYCamera + TILE_SIZE, PAL_COLOR_GREEN);
+		}
+	}
 }
 
 void render_queue_submit_mouse(GameContext *context, RenderQueue *renderQueue) {

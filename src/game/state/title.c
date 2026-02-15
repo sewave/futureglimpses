@@ -431,6 +431,11 @@ static GuiScreen guiScreens[TITLE_MENU_STATE_COUNT] = {
 		[TITLE_MENU_EXIT] = {.elements = NULL, .elementsCount = 0}
 };
 
+static void title_render(GameContext *context, RenderQueue *renderQueue, GuiScreen *guiScreen) {
+	game_gui_render_queue_submit(context, renderQueue, guiScreen);
+	render_queue_submit_mouse(context, renderQueue);
+}
+
 GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue) {
 	titleMenuState = TITLE_MENU_INITIAL;
 	titleBackground = load_bitmap(TITLE_BACKGROUND_PATH, NULL);
@@ -440,22 +445,20 @@ GameStateEnum handle_init_title(GameContext *context, RenderQueue *renderQueue) 
 	}
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	game_snd_play_music(GAME_MUSIC_MENUS);
-	return GAME_STATE_TITLE;
+	title_render(context, renderQueue, &guiScreens[titleMenuState]);
+	return fade_in_init(context, GAME_STATE_TITLE, DEFAULT_FADE_SPEED);
 }
 
 GameStateEnum handle_title(GameContext *context, RenderQueue *renderQueue) {
 	GuiScreen *guiScreen = &guiScreens[titleMenuState];
 	game_gui_handle(context, guiScreen);
-
 	if (titleMenuState == TITLE_MENU_START_GAME) {
 		destroy_bitmap(titleBackground);
-		return GAME_STATE_INIT_SCENARIO_SELECT;
+		return fade_out_init(context, GAME_STATE_INIT_SCENARIO_SELECT, DEFAULT_FADE_SPEED);
 	} else if (titleMenuState == TITLE_MENU_EXIT) {
 		destroy_bitmap(titleBackground);
-		return GAME_STATE_EXIT;
+		return fade_out_init(context, GAME_STATE_EXIT, DEFAULT_FADE_SPEED / 2);
 	}
-
-	game_gui_render_queue_submit(context, renderQueue, guiScreen);
-	render_queue_submit_mouse(context, renderQueue);
+	title_render(context, renderQueue, guiScreen);
 	return GAME_STATE_TITLE;
 }
