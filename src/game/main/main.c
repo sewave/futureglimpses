@@ -73,10 +73,11 @@ int main_init() {
 		return PROGRAM_ERROR;
 	}
 	set_palette(black_palette);
+	video_fade_reset();
 	fps_init();
 	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	clear_bitmap(context.screenBuffer);
-	context.gameState = GAME_STATE_INIT_TITLE;
+	context.gameState = GAME_STATE_TITLE;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
 
@@ -84,25 +85,26 @@ int main_init() {
 }
 
 void main_loop() {
-	uint8_t redrawNeeded = FALSE;
 	timer_reset_ticks();
+	GameStateEnum oldState = NUM_GAME_STATES;
 	while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT) {
 		if (timer_has_ticks()) {
+			if(oldState != context.gameState) game_execute_init_state(&context);
+			oldState = context.gameState;
 			context.ticksToCatchup = timer_get_ticks();
 			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) context.ticksToCatchup = MAX_CATCHUP_TICKS;
 			timer_reset_ticks();
 			while (context.ticksToCatchup > 0) {
-				GameStateEnum oldState = context.gameState;
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
-				context.gameState = game_execute_state(&context, &renderQueue);
+				context.gameState = game_execute_update_state(&context);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
-				if(context.gameState != oldState) context.ticksToCatchup = 0;
+				if(oldState != context.gameState) break;
 			}
-			redrawNeeded = TRUE;
+			if(oldState == context.gameState) game_execute_render_state(&context, &renderQueue);
 		}
-		if (redrawNeeded) {
+		if (renderQueue.count > 0) {
 			render_queue_execute(&renderQueue, context.screenBuffer);
 			vsync();
 			acquire_screen();
@@ -112,9 +114,9 @@ void main_loop() {
 				stretch_blit(context.screenBuffer, screen, 0, 0, context.screenBuffer->w, context.screenBuffer->h, 0, 0, screen->w, screen->h);
 			#endif
 			release_screen();
-			redrawNeeded = FALSE;
 			fps_update();
 		}
+		video_fade_handle();
 	}
 }
 

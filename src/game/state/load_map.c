@@ -125,7 +125,7 @@ static void render_minimap(GameContext *context) {
 	}
 }
 
-GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
+GameStateEnum handle_load_map_update(GameContext *context) {
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
 	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
 
@@ -136,7 +136,7 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 
 	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
 		TRACE("Error loading map: %s\n", context->mapPath);
-		return GAME_STATE_INIT_SCENARIO_SELECT;
+		return GAME_STATE_SCENARIO_SELECT;
 	}
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
@@ -167,5 +167,5 @@ GameStateEnum handle_load_map(GameContext *context, RenderQueue *renderQueue) {
 		}
 	}
 
-	return GAME_STATE_INIT_PLAY_MAP;
+	return GAME_STATE_PLAY_MAP;
 }

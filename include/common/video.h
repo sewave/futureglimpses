@@ -13,4 +13,9 @@ typedef struct RGB_FILE_ENTRY {
 
 InitializationStatusEnum video_init_system(int width, int height, int depth);
 InitializationStatusEnum video_load_raw_palette(const char *filename, PALETTE p);
+void video_fade_reset();
+void video_fade_in_init(uint8_t speed, PALETTE palette);
+void video_fade_out_init(uint8_t speed);
+void video_fade_handle();
+
 #endif /* VIDEO_H */

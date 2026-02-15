@@ -523,7 +523,17 @@ static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_EXIT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
 };
 
-GameStateEnum handle_init_menu_map(GameContext *context, RenderQueue *renderQueue) {
+static void clean_up_menu() {
+	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+	destroy_bitmap(background);
+}
+
+void handle_menu_map_render(GameContext *context, RenderQueue *renderQueue) {
+	game_gui_render_queue_submit(context, renderQueue, &guiScreens[menuState]);
+	render_queue_submit_mouse(context, renderQueue);
+}
+
+void handle_menu_map_init(GameContext *context) {
 	BITMAP* screenBuffer = context->screenBuffer;
 	background = create_bitmap(screenBuffer->w, screenBuffer->h);
 	blit(screenBuffer, background, 0, 0, 0, 0, screenBuffer->w, screenBuffer->h);
@@ -534,22 +544,18 @@ GameStateEnum handle_init_menu_map(GameContext *context, RenderQueue *renderQueu
 	menuState = PAUSE_MENU_STATE_SELECT;
 	goMainMenu = FALSE;
 	goOS = FALSE;
-	return GAME_STATE_MENU_MAP;
 }
 
-static void clean_up_menu() {
-	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-	destroy_bitmap(background);
-}
-
-GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue) {
+GameStateEnum handle_menu_map_update(GameContext *context) {
 	game_gui_handle(context, &guiScreens[menuState]);
 	if(goMainMenu) {
 		clean_up_menu();
-		return GAME_STATE_INIT_TITLE;
+		video_fade_out_init(DEFAULT_FADE_SPEED);
+		return GAME_STATE_TITLE;
 	}
 	if(goOS) {
 		clean_up_menu();
+		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_EXIT;
 	}
 	if(menuState == PAUSE_MENU_STATE_EXIT) {
@@ -557,7 +563,5 @@ GameStateEnum handle_menu_map(GameContext *context, RenderQueue *renderQueue) {
 		destroy_bitmap(background);
 		return GAME_STATE_PLAY_MAP;
 	}
-	game_gui_render_queue_submit(context, renderQueue, &guiScreens[menuState]);
-	render_queue_submit_mouse(context, renderQueue);
 	return GAME_STATE_MENU_MAP;
 }

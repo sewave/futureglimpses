@@ -281,14 +281,14 @@ static void init_scenarios_folder(char *folder) {
 	state = SCENARIO_SELECT_BROWSE_STATE;
 }
 
-static void scenario_select_render(GameContext *context, RenderQueue *renderQueue, GuiScreen *guiScreen) {
-	game_gui_render_queue_submit(context, renderQueue, guiScreen);
+void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue) {
+	game_gui_render_queue_submit(context, renderQueue, &scenarioSelectGuiScreen);
 	render_queue_submit_mouse(context, renderQueue);
 	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
 }
 
-GameStateEnum handle_init_scenario_select(GameContext *context, RenderQueue *renderQueue) {
+void handle_scenario_select_init(GameContext *context) {
 	background = load_bitmap(SCENARIO_SELECT_BACKGROUND_PATH, NULL);
 	if (!background) {
 		TRACE("Error loading scenario select background bitmap: %s\n", SCENARIO_SELECT_BACKGROUND_PATH);
@@ -297,11 +297,10 @@ GameStateEnum handle_init_scenario_select(GameContext *context, RenderQueue *ren
 	
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	init_scenarios_folder(MAPS_FOLDER);
-	scenario_select_render(context, renderQueue, &scenarioSelectGuiScreen);
-	return fade_in_init(context, GAME_STATE_SCENARIO_SELECT, DEFAULT_FADE_SPEED);
+	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 
-GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQueue) {
+GameStateEnum handle_scenario_select_update(GameContext *context) {
 	game_gui_handle(context, &scenarioSelectGuiScreen);
 	
 	// Load test map as default for now
@@ -310,7 +309,8 @@ GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQu
 			free(context->mapPath);
 			context->mapPath = strdup(mapList->entries[scenarioSelected].path);
 			free_all();
-			return fade_out_init(context, GAME_STATE_LOAD_MAP, DEFAULT_FADE_SPEED);
+			video_fade_out_init(DEFAULT_FADE_SPEED);
+			return GAME_STATE_LOAD_MAP;
 			break;
 		}
 		case SCENARIO_SELECT_RELOAD_STATE: {
@@ -320,13 +320,12 @@ GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQu
 		}
 		case SCENARIO_SELECT_TITLE_STATE: {
 			free_all();
-			return fade_out_init(context, GAME_STATE_INIT_TITLE, DEFAULT_FADE_SPEED);
+			video_fade_out_init(DEFAULT_FADE_SPEED);
+			return GAME_STATE_TITLE;
 		}
 		default:
 			break;
 	}
-
-	scenario_select_render(context, renderQueue, &scenarioSelectGuiScreen);
 
 	return GAME_STATE_SCENARIO_SELECT;
 }

@@ -7,11 +7,11 @@ static int moveViewportCounter = 0;
 static GameStateEnum nextState;
 
 static void go_menu(GameContext* context) {
-	nextState = GAME_STATE_INIT_MENU_MAP;
+	nextState = GAME_STATE_MENU_MAP;
 }
 
 static void go_title(GameContext* context) {
-	nextState = GAME_STATE_INIT_TITLE;
+	nextState = GAME_STATE_TITLE;
 }
 
 #define PLAY_MENU_ELEMENTS 1
@@ -114,7 +114,7 @@ static GuiScreen guiScreenPlay = { .elements = playMenu, .elementsCount = PLAY_M
 static GuiScreen guiScreenWin = { .elements = winMenu, .elementsCount = WIN_MENU_ELEMENTS };
 static GuiScreen guiScreenLose = { .elements = loseMenu, .elementsCount = LOSE_MENU_ELEMENTS };
 
-static void game_update(GameContext *context, RenderQueue *renderQueue) {
+static void game_update(GameContext *context) {
 
 	// Inputs
 	// Command bar has related inputs so must be first
@@ -267,7 +267,7 @@ static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
 	}
 }
 
-static void game_render(GameContext *context, RenderQueue *renderQueue) {
+void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 	minimap_render(context, renderQueue);
 	render_queue_add_active_units(context, renderQueue);
 	render_queue_add_active_objects(context, renderQueue);
@@ -286,35 +286,27 @@ static void game_render(GameContext *context, RenderQueue *renderQueue) {
 	}
 }
 
-GameStateEnum handle_init_play_map(GameContext *context, RenderQueue *renderQueue) {
-	game_render(context, renderQueue);
-	return fade_in_init(context, GAME_STATE_PLAY_MAP, DEFAULT_FADE_SPEED);	
+void handle_play_map_init(GameContext *context) {
+	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 
-GameStateEnum handle_play_map(GameContext *context, RenderQueue *renderQueue) {
+GameStateEnum handle_play_map_update(GameContext *context) {
 	nextState = GAME_STATE_PLAY_MAP;
-	
-	if(context->gameResult == GAME_RESULT_ONGOING) {
-		game_update(context, renderQueue);
-	}
-	else {
-		if(context->gameResult == GAME_RESULT_VICTORY) {
+
+	switch(context->gameResult) {
+		case GAME_RESULT_ONGOING: {
+			game_update(context);
+			break;
+		}
+		case GAME_RESULT_VICTORY: {
 			game_gui_handle(context, &guiScreenWin);
+			break;
 		}
-		else if(context->gameResult == GAME_RESULT_DEFEAT) {
+		case GAME_RESULT_DEFEAT: {
 			game_gui_handle(context, &guiScreenLose);
+			break;
 		}
 	}
 
-	// If there are more ticks to draw, skip queue phase, ups performance
-	if (context->ticksToCatchup) return GAME_STATE_PLAY_MAP;
-
-	game_render(context, renderQueue);
-
-	if(nextState == GAME_STATE_INIT_TITLE) {
-		return fade_out_init(context, GAME_STATE_INIT_TITLE, DEFAULT_FADE_SPEED);
-	}
-	else {
-		return nextState;
-	}
+	return nextState;
 }

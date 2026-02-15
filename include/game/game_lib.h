@@ -24,5 +24,4 @@
 #include "game/building/building.h"
 #include "game/gui/gui.h"
 #include "game/main/main.h"
-#include "game/state/fade.h"
 #endif /* GAME_LIB_H */

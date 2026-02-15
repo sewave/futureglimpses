@@ -1,6 +1,17 @@
 #include <allegro/gfx.h>
+#include <allegro/color.h>
 #include "common/video.h"
 #include <stdio.h>
+
+typedef enum {
+	FADE_NONE,
+	FADE_IN,
+	FADE_OUT
+} FadeEnum;
+
+static RGB *fadePalette;
+static FadeEnum fadeType;
+static uint8_t fadeSpeed;
 
 InitializationStatusEnum video_init_system(int width, int height, int depth) {
 	printf("Initializing video...");
@@ -40,4 +51,32 @@ InitializationStatusEnum video_load_raw_palette(const char *filename, PALETTE p)
     }
     fclose(fp);
     return FUNCTION_OK;
+}
+
+void video_fade_reset() {
+    fadeType = FADE_NONE;
+    fadePalette = NULL;
+    fadeSpeed = 64;
+}
+
+void video_fade_handle() {
+	if (fadeType == FADE_NONE) return;
+	vsync();
+	if (fadeType == FADE_IN && fadePalette) {
+		fade_in(fadePalette, fadeSpeed);
+	} else {
+		if (fadeType == FADE_OUT) fade_out(fadeSpeed);
+	}
+	fadeType = FADE_NONE;
+}
+
+void video_fade_in_init(uint8_t speed, PALETTE palette) {
+	fadeType = FADE_IN;
+	fadeSpeed = speed;
+	fadePalette = palette;
+}
+
+void video_fade_out_init(uint8_t speed) {
+	fadeType = FADE_OUT;
+	fadeSpeed = speed;
 }

@@ -3,7 +3,8 @@
 
 #include "game/game.h"
 
-GameStateEnum handle_init_scenario_select(GameContext *context, RenderQueue *renderQueue);
-GameStateEnum handle_scenario_select(GameContext *context, RenderQueue *renderQueue);
+void handle_scenario_select_init(GameContext *context);
+GameStateEnum handle_scenario_select_update(GameContext *context);
+void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue);
 
 #endif /* SCENARIO_SELECT_H */
