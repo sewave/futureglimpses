@@ -25,6 +25,8 @@ typedef enum {
 	PAUSE_MENU_STATE_CONFIRM_TITLE,
 	PAUSE_MENU_STATE_CONFIRM_OS,
 	PAUSE_MENU_STATE_EXIT,
+	PAUSE_MENU_STATE_EXIT_OS,
+	PAUSE_MENU_STATE_EXIT_TITLE,
 	PAUSE_MENU_STATE_COUNT,
 } PauseMenuStateEnum;
 
@@ -32,7 +34,6 @@ static BITMAP* background;
 static BITMAP* menuBack;
 static PauseMenuStateEnum menuState;
 static MouseCursorStateEnum prevMouseCursorState;
-static uint8_t goMainMenu, goOS;
 
 static void sound_menu(GameContext* context) {
 	menuState = PAUSE_MENU_STATE_SOUND;
@@ -51,11 +52,11 @@ static void map_menu(GameContext* context) {
 }
 
 static void return_title(GameContext* context) {
-	goMainMenu = TRUE;
+	menuState = PAUSE_MENU_STATE_EXIT_TITLE;
 }
 
 static void exit_to_os(GameContext* context) {
-	goOS = TRUE;
+	menuState = PAUSE_MENU_STATE_EXIT_OS;
 }
 
 static void main_menu(GameContext* context) {
@@ -521,6 +522,8 @@ static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_CONFIRM_TITLE] = { .elements = confirmTitleMenu, .elementsCount = CONFIRM_TITLE_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_CONFIRM_OS] = { .elements = confirmOSMenu, .elementsCount = CONFIRM_OS_MENU_ELEMENTS },
 	[PAUSE_MENU_STATE_EXIT] = { .elements = mainMenu, .elementsCount = MAIN_MENU_ELEMENTS },
+	[PAUSE_MENU_STATE_EXIT_OS] = { .elements = NULL, .elementsCount = 0 },
+	[PAUSE_MENU_STATE_EXIT_TITLE] = { .elements = NULL, .elementsCount = 0 },
 };
 
 static void clean_up_menu() {
@@ -542,26 +545,35 @@ void handle_menu_map_init(GameContext *context) {
 	prevMouseCursorState = game_mouse_get_cursor_state();
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	menuState = PAUSE_MENU_STATE_SELECT;
-	goMainMenu = FALSE;
-	goOS = FALSE;
 }
 
 GameStateEnum handle_menu_map_update(GameContext *context) {
 	game_gui_handle(context, &guiScreens[menuState]);
-	if(goMainMenu) {
-		clean_up_menu();
-		video_fade_out_init(DEFAULT_FADE_SPEED);
-		return GAME_STATE_TITLE;
+	GameStateEnum nextState;
+	switch(menuState) {
+		case PAUSE_MENU_STATE_EXIT_TITLE: {
+			clean_up_menu();
+			video_fade_out_init(DEFAULT_FADE_SPEED);
+			nextState = GAME_STATE_TITLE;
+			break;
+		}
+		case PAUSE_MENU_STATE_EXIT_OS: {
+			clean_up_menu();
+			video_fade_out_init(DEFAULT_FADE_SPEED);
+			nextState = GAME_STATE_EXIT;
+			break;
+		}
+		case PAUSE_MENU_STATE_EXIT: {
+			game_mouse_set_cursor_state(prevMouseCursorState);
+			destroy_bitmap(background);
+			video_fade_in_skip_next();
+			nextState = GAME_STATE_PLAY_MAP;
+			break;
+		}
+		default: {
+			nextState = GAME_STATE_MENU_MAP;
+			break;
+		}
 	}
-	if(goOS) {
-		clean_up_menu();
-		video_fade_out_init(DEFAULT_FADE_SPEED);
-		return GAME_STATE_EXIT;
-	}
-	if(menuState == PAUSE_MENU_STATE_EXIT) {
-		game_mouse_set_cursor_state(prevMouseCursorState);
-		destroy_bitmap(background);
-		return GAME_STATE_PLAY_MAP;
-	}
-	return GAME_STATE_MENU_MAP;
+	return nextState;
 }

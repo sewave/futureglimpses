@@ -5,9 +5,11 @@
 
 static int moveViewportCounter = 0;
 static GameStateEnum nextState;
+static uint8_t renderBackground;
 
 static void go_menu(GameContext* context) {
 	nextState = GAME_STATE_MENU_MAP;
+	renderBackground = TRUE;
 }
 
 static void go_title(GameContext* context) {
@@ -275,24 +277,31 @@ void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 	game_cmd_bar_render_queue_submit(context, renderQueue);
 	message_render_queue_submit(renderQueue, context->gameFont);
 	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
-	if(nextState == GAME_STATE_PLAY_MAP) render_queue_submit_mouse(context, renderQueue);
-	if(context->gameResult != GAME_RESULT_ONGOING) {
-		if(context->gameResult == GAME_RESULT_VICTORY) {
-			game_gui_render_queue_submit(context, renderQueue, &guiScreenWin);
+	switch(context->gameResult) {
+		case GAME_RESULT_ONGOING: {
+			// No result screen, just regular gameplay UI
+			break;
 		}
-		else if(context->gameResult == GAME_RESULT_DEFEAT) {
+		case GAME_RESULT_VICTORY: {
+			game_gui_render_queue_submit(context, renderQueue, &guiScreenWin);
+			break;
+		}
+		case GAME_RESULT_DEFEAT: {
 			game_gui_render_queue_submit(context, renderQueue, &guiScreenLose);
+			break;
 		}
 	}
+	if(!renderBackground) render_queue_submit_mouse(context, renderQueue);
+	renderBackground = FALSE;
 }
 
 void handle_play_map_init(GameContext *context) {
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
+	renderBackground = FALSE;
+	nextState = GAME_STATE_PLAY_MAP;
 }
 
 GameStateEnum handle_play_map_update(GameContext *context) {
-	nextState = GAME_STATE_PLAY_MAP;
-
 	switch(context->gameResult) {
 		case GAME_RESULT_ONGOING: {
 			game_update(context);
@@ -307,6 +316,8 @@ GameStateEnum handle_play_map_update(GameContext *context) {
 			break;
 		}
 	}
+
+	if(renderBackground) return GAME_STATE_PLAY_MAP;
 
 	return nextState;
 }

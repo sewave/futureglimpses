@@ -1,17 +1,9 @@
 #include "game/game.h"
-#include "game/scenario/scenario_select.h"
-
-// TODO remove extern with proper header files for each state
-extern void handle_title_init(GameContext *context);
-extern GameStateEnum handle_title_update(GameContext *context);
-extern void handle_title_render(GameContext *context, RenderQueue *renderQueue);
-extern GameStateEnum handle_load_map_update(GameContext *context);
-extern void handle_play_map_init(GameContext *context);
-extern GameStateEnum handle_play_map_update(GameContext *context);
-extern void handle_play_map_render(GameContext *context, RenderQueue *renderQueue);
-extern void handle_menu_map_init(GameContext *context);
-extern GameStateEnum handle_menu_map_update(GameContext *context);
-extern void handle_menu_map_render(GameContext *context, RenderQueue *renderQueue);
+#include "game/state/scenario_select.h"
+#include "game/state/load_map.h"
+#include "game/state/play_map.h"
+#include "game/state/menu_map.h"
+#include "game/state/title.h"
 
 static GameState gameStatesTable[NUM_GAME_STATES] = {
 		[GAME_STATE_TITLE] = {.init = &handle_title_init, .update = &handle_title_update, .render = &handle_title_render},
@@ -38,18 +30,18 @@ void game_free_context(GameContext *context) {
 	}
 }
 
-GameStateEnum game_execute_update_state(GameContext *context) {
+GameStateEnum game_execute_state_update(GameContext *context) {
 	StateUpdateFunction updateFunction = gameStatesTable[context->gameState].update;
 	if (updateFunction) return updateFunction(context);
 	return context->gameState;
 }
 
-void game_execute_init_state(GameContext *context) {
+void game_execute_state_init(GameContext *context) {
 	StateInitFunction initFunction = gameStatesTable[context->gameState].init;
 	if (initFunction) initFunction(context);
 }
 
-void game_execute_render_state(GameContext *context, RenderQueue *renderQueue) {
+void game_execute_state_render(GameContext *context, RenderQueue *renderQueue) {
 	StateRenderFunction renderFunction = gameStatesTable[context->gameState].render;
 	if (renderFunction) renderFunction(context, renderQueue);
 }

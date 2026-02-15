@@ -86,10 +86,13 @@ int main_init() {
 
 void main_loop() {
 	timer_reset_ticks();
-	GameStateEnum oldState = NUM_GAME_STATES;
-	while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT) {
+	GameStateEnum oldState = GAME_STATE_EXIT;
+	do {
 		if (timer_has_ticks()) {
-			if(oldState != context.gameState) game_execute_init_state(&context);
+			if (oldState != context.gameState) {
+				game_execute_state_init(&context);
+				timer_reset_ticks();
+			}
 			oldState = context.gameState;
 			context.ticksToCatchup = timer_get_ticks();
 			if (context.ticksToCatchup > MAX_CATCHUP_TICKS) context.ticksToCatchup = MAX_CATCHUP_TICKS;
@@ -97,12 +100,12 @@ void main_loop() {
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
-				context.gameState = game_execute_update_state(&context);
+				context.gameState = game_execute_state_update(&context);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
 				if(oldState != context.gameState) break;
 			}
-			if(oldState == context.gameState) game_execute_render_state(&context, &renderQueue);
+			if (oldState == context.gameState) game_execute_state_render(&context, &renderQueue);
 		}
 		if (renderQueue.count > 0) {
 			render_queue_execute(&renderQueue, context.screenBuffer);
@@ -117,7 +120,7 @@ void main_loop() {
 			fps_update();
 		}
 		video_fade_handle();
-	}
+	} while (!close_is_pressed() && context.gameState != GAME_STATE_EXIT);
 }
 
 void main_clean() {

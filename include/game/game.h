@@ -285,9 +285,9 @@ typedef struct {
 } GameState;
 
 void game_free_context(GameContext *context);
-GameStateEnum game_execute_update_state(GameContext *context);
-void game_execute_init_state(GameContext *context);
-void game_execute_render_state(GameContext *context, RenderQueue *renderQueue);
+GameStateEnum game_execute_state_update(GameContext *context);
+void game_execute_state_init(GameContext *context);
+void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
 #define LOGIC_RATE_BPS 35
 #define SEC_TO_FRAMES(secs) 1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS)

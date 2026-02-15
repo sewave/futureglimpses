@@ -12,6 +12,7 @@ typedef enum {
 static RGB *fadePalette;
 static FadeEnum fadeType;
 static uint8_t fadeSpeed;
+static uint8_t skipFadeIn;
 
 InitializationStatusEnum video_init_system(int width, int height, int depth) {
 	printf("Initializing video...");
@@ -57,6 +58,7 @@ void video_fade_reset() {
     fadeType = FADE_NONE;
     fadePalette = NULL;
     fadeSpeed = 64;
+	skipFadeIn = FALSE;
 }
 
 void video_fade_handle() {
@@ -71,6 +73,10 @@ void video_fade_handle() {
 }
 
 void video_fade_in_init(uint8_t speed, PALETTE palette) {
+	if(skipFadeIn) {
+		skipFadeIn = FALSE;
+		return;
+	}
 	fadeType = FADE_IN;
 	fadeSpeed = speed;
 	fadePalette = palette;
@@ -79,4 +85,8 @@ void video_fade_in_init(uint8_t speed, PALETTE palette) {
 void video_fade_out_init(uint8_t speed) {
 	fadeType = FADE_OUT;
 	fadeSpeed = speed;
+}
+
+void video_fade_in_skip_next() {
+	skipFadeIn = TRUE;
 }
