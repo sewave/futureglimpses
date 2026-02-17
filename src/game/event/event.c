@@ -7,22 +7,39 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			if (damageTarget) game_unit_damage(context, unit->minDamage, unit->maxDamage, damageTarget);
 			break;
 		case EVENT_TYPE_SOUND:
-			if (unit->x >= context->xPosition / TILE_SIZE && unit->x <= (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE &&
-				unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE) {
-				game_snd_play_sound((GameSound) data);
-			}
+			if (game_spatial_unit_in_viewport(context, unit)) game_snd_play_sound((GameSound) data);
 			break;
 		case EVENT_TYPE_SPAWN_ARROW:
 			GameUnit *arrowTarget = game_unit_get_by_id(context, unit->targetId);
-			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit->controller, unit->x, unit->y, unit, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			if (arrowTarget) game_object_spawn(context, OBJ_TYPE_ARROW, unit->controller, unit->x * TILE_SIZE, unit->y * TILE_SIZE, unit, arrowTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
 		case EVENT_TYPE_SPAWN_FIREBALL:
 			GameUnit *fireballTarget = game_unit_get_by_id(context, unit->targetId);
-			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x, unit->y, unit, fireballTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			if (fireballTarget) game_object_spawn(context, OBJ_TYPE_FIREBALL, unit->controller, unit->x * TILE_SIZE, unit->y * TILE_SIZE, unit, fireballTarget, NO_TARGET_POSITION, NO_TARGET_POSITION);
 			break;
 		case EVENT_TYPE_WORK:
 			game_unit_work(context, unit);
 			break;
+		case EVENT_TYPE_WORK_SOUND: {
+			if (game_spatial_unit_in_viewport(context, unit)) {
+				if(unit->type == UNIT_TYPE_WORKER) {
+					WorkerData *workerData = &unit->typed.workerData;
+					if(workerData->targetConstruction != NO_TARGET_ID) {
+						game_snd_play_sound(GAME_SOUND_WORK);
+					}
+					else {
+						BoardTile* tile = &context->board[workerData->workplace.x][workerData->workplace.y];
+						if(tile->type == TILE_TYPE_WOOD) {
+							game_snd_play_sound(GAME_SOUND_CHOP);
+						}
+						else if(tile->type == TILE_TYPE_GOLD) {
+							game_snd_play_sound(GAME_SOUND_GOLD_HIT);
+						}
+					}
+				}
+			}
+			break;
+		}
 		case EVENT_TYPE_AREA_DAMAGE:
 			// Not used by units
 		break;
@@ -43,16 +60,15 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 		case EVENT_TYPE_AREA_DAMAGE:
 			game_unit_area_damage(context, object);
 			break;
-		case EVENT_TYPE_SOUND:
-			if (object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
-				object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH)) {
-				game_snd_play_sound((GameSound) data);
-			}
+		case EVENT_TYPE_SOUND: {
+			if (game_spatial_object_in_viewport(context, object)) game_snd_play_sound((GameSound) data);
 			break;
+		}
 		case EVENT_TYPE_SPAWN_ARROW:
 		case EVENT_TYPE_SPAWN_FIREBALL:
 		case EVENT_TYPE_WORK:
-			// Do nothing
+		case EVENT_TYPE_WORK_SOUND:
+			// Not used by objects, do nothing
 			break;
 	}
 }

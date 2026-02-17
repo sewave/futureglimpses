@@ -109,16 +109,16 @@ Object *game_object_spawn(GameContext *context, ObjectTypeEnum type, ControllerE
 	object->id = MAKE_ID(index, objectGenerations[index]);
 	object->controller = controller;
 	// Objects work in world coordinates
-	object->x = sourceX * TILE_SIZE;
-	object->y = sourceY * TILE_SIZE;
+	object->x = sourceX;
+	object->y = sourceY;
 	object->currentX = object->x;
 	object->currentY = object->y;
 	object->moveTimeCounter = 0;
 	object->isActive = TRUE;
 	if (target) {
 		object->targetId = target->id;
-		object->targetX = target->x * TILE_SIZE;
-		object->targetY = target->y * TILE_SIZE;
+		object->targetX = target->x * TILE_SIZE + ((target->tileSize - 1) * TILE_SIZE) / 2;
+		object->targetY = target->y * TILE_SIZE + ((target->tileSize - 1) * TILE_SIZE) / 2;
 	} else {
 		object->targetX = targetX * TILE_SIZE;
 		object->targetY = targetY * TILE_SIZE;
@@ -195,7 +195,7 @@ void game_objects_advance(GameContext *context) {
 				if (game_animation_finished(&object->animationStatus)) {
 					if (object->type == OBJ_TYPE_FIREBALL) {
 						GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
-						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE,
+						game_object_spawn(context, OBJ_TYPE_EXPLOSION, object->controller, object->targetX, object->targetY,
 										  sourceUnit, NULL, object->targetX / TILE_SIZE, object->targetY / TILE_SIZE);
 					}
 					else {
@@ -203,7 +203,7 @@ void game_objects_advance(GameContext *context) {
 							GameUnit* targetUnit = game_unit_get_by_id(context, object->targetId);
 							if(targetUnit) {
 								GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
-								game_object_spawn(context, OBJ_TYPE_ARROW_DAMAGE, object->controller, targetUnit->x, targetUnit->y,
+								game_object_spawn(context, OBJ_TYPE_ARROW_DAMAGE, object->controller, targetUnit->x * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2, targetUnit->y * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2,
 												  sourceUnit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 							}
 						}

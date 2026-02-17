@@ -91,6 +91,7 @@ typedef enum {
 	EVENT_TYPE_SPAWN_ARROW,
 	EVENT_TYPE_SPAWN_FIREBALL,
 	EVENT_TYPE_WORK,
+	EVENT_TYPE_WORK_SOUND,
 } EventType;
 
 typedef enum {

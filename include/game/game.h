@@ -310,6 +310,6 @@ void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
-#define WORKER_TIME SEC_TO_FRAMES(0.8)
+#define WORKER_TIME SEC_TO_FRAMES(0.7)
 
 #endif /* GAME_H */

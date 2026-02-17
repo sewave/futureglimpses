@@ -89,14 +89,16 @@ static AnimationData WORKER_ATTACK_ANIMATION_DATA = {
 static AnimationData WORKER_WORK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.5)},
+            {.duration = SEC_TO_FRAMES(0.3)},
             {.duration = SEC_TO_FRAMES(0.1)},
-            {.duration = SEC_TO_FRAMES(0.3)},
-            {.duration = SEC_TO_FRAMES(0.3)},
+            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.2)},
         },
 		.lastFrameIndex = 3,
-		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_WORK, .fireTime = SEC_TO_FRAMES(0.7)},
-                    {.type = EVENT_TYPE_WORK, .data = 0, .fireTime = WORKER_TIME}},
+		.events = {
+			{.type = EVENT_TYPE_WORK_SOUND, .data = 0, .fireTime = SEC_TO_FRAMES(0.5)},
+			{.type = EVENT_TYPE_WORK, .data = 0, .fireTime = WORKER_TIME},
+		},
 		.numEvents = 2,
 };
 

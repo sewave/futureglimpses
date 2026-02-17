@@ -99,3 +99,13 @@ uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, u
 	}
 	return FALSE;
 }
+
+uint8_t game_spatial_unit_in_viewport(const GameContext* context, const GameUnit* unit) {
+	return unit->x >= context->xPosition / TILE_SIZE && unit->x <= (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE &&
+		   unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE;
+}
+
+uint8_t game_spatial_object_in_viewport(const GameContext* context, const Object* object) {
+	return object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
+		   object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH);
+}

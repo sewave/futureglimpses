@@ -4,30 +4,31 @@
 
 // TODO add music
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
-		"assets/music/none.mid",
-        "assets/music/menus.mid",
-        "assets/music/none.mid",
-        "assets/music/none.mid",
-        "assets/music/map1.mid",
-        "assets/music/none.mid",
-        "assets/music/none.mid",
+		[GAME_MUSIC_CREDITS] = "assets/music/menus.mid",
+        [GAME_MUSIC_MENUS] = "assets/music/menus.mid",
+        [GAME_MUSIC_VICTORY] = "assets/music/menus.mid",
+        [GAME_MUSIC_DEFEAT] = "assets/music/menus.mid",
+        [GAME_MUSIC_MAP_1] = "assets/music/map1.mid",
+        [GAME_MUSIC_MAP_2] = "assets/music/menus.mid",
+        [GAME_MUSIC_MAP_3] = "assets/music/menus.mid",
 };
 
 // TODO add sounds
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
-		"assets/sound/click.wav",
-        "assets/sound/click.wav",
-        "assets/sound/ironhit.wav",
-        "assets/sound/chop.wav",
-        "assets/sound/work.wav",
-        "assets/sound/arrowthr.wav",
-        "assets/sound/click.wav",
-        "assets/sound/click.wav",
-        "assets/sound/click.wav",
-        "assets/sound/click.wav",
-        "assets/sound/die.wav",
-        "assets/sound/click.wav",
-        "assets/sound/click.wav",
+		[GAME_SOUND_SEA_WAVES] = "assets/sound/click.wav",
+        [GAME_SOUND_CLICK] = "assets/sound/click.wav",
+        [GAME_SOUND_IRON_HIT] = "assets/sound/ironhit.wav",
+        [GAME_SOUND_CHOP] = "assets/sound/chop.wav",
+        [GAME_SOUND_WORK] = "assets/sound/work.wav",
+        [GAME_SOUND_GOLD_HIT] = "assets/sound/goldhit.wav",
+        [GAME_SOUND_THROW_ARROW] = "assets/sound/arrowthr.wav",
+        [GAME_SOUND_ARROW_HIT] = "assets/sound/ironhit.wav",
+        [GAME_SOUND_FIREBALL_LAUNCH] = "assets/sound/click.wav",
+        [GAME_SOUND_FIREBALL_EXPLOSION] = "assets/sound/fbexplo.wav",
+        [GAME_SOUND_BUILDING_CRUMBLE] = "assets/sound/click.wav",
+        [GAME_SOUND_DIE] = "assets/sound/die.wav",
+        [GAME_SOUND_MY_LORD] = "assets/sound/click.wav",
+        [GAME_SOUND_YES] = "assets/sound/click.wav",
 };
 
 void game_snd_load_sounds() {
