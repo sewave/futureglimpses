@@ -12,8 +12,9 @@ static void go_menu(GameContext* context) {
 	renderBackground = TRUE;
 }
 
-static void go_title(GameContext* context) {
-	nextState = GAME_STATE_TITLE;
+static void go_results(GameContext* context) {
+	video_fade_out_init(DEFAULT_FADE_SPEED);
+	nextState = GAME_STATE_RESULTS;
 }
 
 #define PLAY_MENU_ELEMENTS 1
@@ -72,7 +73,7 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
-				.action = go_title
+				.action = go_results
 			}
 		}
 	},
@@ -106,7 +107,7 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		.typed = {
 			.button = {
 				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
-				.action = go_title
+				.action = go_results
 			}
 		}
 	},

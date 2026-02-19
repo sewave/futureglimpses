@@ -4,6 +4,7 @@
 #include "game/state/play_map.h"
 #include "game/state/menu_map.h"
 #include "game/state/title.h"
+#include "game/state/results.h"
 
 static GameState gameStatesTable[NUM_GAME_STATES] = {
 		[GAME_STATE_TITLE] = {.init = &handle_title_init, .update = &handle_title_update, .render = &handle_title_render},
@@ -11,6 +12,7 @@ static GameState gameStatesTable[NUM_GAME_STATES] = {
 		[GAME_STATE_LOAD_MAP] = {.init = NULL, .update = &handle_load_map_update, .render = NULL},
 		[GAME_STATE_PLAY_MAP] = {.init = &handle_play_map_init, .update = &handle_play_map_update, .render = &handle_play_map_render},
 		[GAME_STATE_MENU_MAP] = {.init = &handle_menu_map_init, .update = &handle_menu_map_update, .render = &handle_menu_map_render},
+		[GAME_STATE_RESULTS] = {.init = &handle_results_init, .update = &handle_results_update, .render = &handle_results_render},
 		[GAME_STATE_EXIT] = {.init = NULL, .update = NULL, .render = NULL} /* EXIT state */
 };
 
