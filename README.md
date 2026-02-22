@@ -4,7 +4,7 @@ Este trabajo incluye contenido modificado de "[Bitrimus Font](https://ggbot.itch
 
 Este trabajo incluye contenido modificado de "[Fantasy Battle Pack](https://mattwalkden.itch.io/fantasy-battle-pack)" por [Matt Walkden](https://mattwalkden.itch.io).
 
-Este trabajo incluye contenido modificado de "[Superpowers assets sound effects](https://opengameart.org/content/superpowers-assets-sound-effects)" - "5.wav (goldhit.wav), explosion-1.ogg (fbexplo.wav), 7.wav (ironhit.wav), hit-1.wav (work.wave), wood-2.wav (chop.wave), woosh-2.wav (arrowthr.wav) y scream-5.ogg (die.wav)" por [Sparklin Labs' Superpowers HTML5 game maker](http://superpowers-html5.com/), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+Este trabajo incluye contenido modificado de "[Superpowers assets sound effects](https://opengameart.org/content/superpowers-assets-sound-effects)" - "5.wav (goldhit.wav), explosion-1.ogg (fbexplo.wav), 7.wav (ironhit.wav), hit-1.wav (work.wav), wood-2.wav (chop.wav), woosh-2.wav (arrowthr.wav) y scream-5.ogg (die.wav)" por [Sparklin Labs' Superpowers HTML5 game maker](http://superpowers-html5.com/), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
 Este trabajo incluye contenido de "[DarkBasic Music Library](https://opengameart.org/content/darkbasic-music-library)" - "northern lights.mid (map1.mid)", "~bog~ tune.mid (menus.mid)" por [DarkBasic](https://darkbasic.com/), licenciado bajo [CC-BY-4.0+](https://creativecommons.org/licenses/by/4.0/).
 

@@ -77,7 +77,7 @@ int main_init() {
 	fps_init();
 	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	clear_bitmap(context.screenBuffer);
-	context.gameState = GAME_STATE_TITLE;
+	context.gameState = GAME_STATE_SPLASH;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
 
