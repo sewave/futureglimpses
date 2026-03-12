@@ -34,12 +34,12 @@ void game_state_splash_init(GameContext *context) {
 }
 
 GameStateEnum game_state_splash_update(GameContext *context) {
-	if (splashTicks < SPLASH_DURATION_TICKS) {
+	if (splashTicks < SPLASH_DURATION_TICKS && !keyboard_is_key_pressed(KEY_ESC)) {
 		splashTicks++;
 		calculate_splash_position();
         return GAME_STATE_SPLASH;
 	} else {
-        if (splashTicks < SPLASH_DURATION_TICKS + AFTER_SPLASH_DURATION_TICKS) {
+        if (splashTicks < SPLASH_DURATION_TICKS + AFTER_SPLASH_DURATION_TICKS && !keyboard_is_key_pressed(KEY_ESC)) {
             splashTicks++;
             return GAME_STATE_SPLASH;
         }
