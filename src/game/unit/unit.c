@@ -66,7 +66,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
-				{.used = {800, 100, 1}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
+				{.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -81,7 +81,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.8),
-				{.used = {900, 300, 1}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
+				{.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
