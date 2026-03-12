@@ -47,12 +47,50 @@ void game_map_free_data(MapData *map) {
 	free(map);
 }
 
+/**
+ * Helper function to read a string from the binary file. It first reads a uint16_t for the length,
+ * then reads the characters and null-terminates the string.
+ */
+static char *read_string_from_file(FILE *file) {
+	uint16_t length;
+	if (fread(&length, sizeof(uint16_t), 1, file) != 1) {
+		fprintf(stderr, "Error reading string length.\n");
+		return NULL;
+	}
+
+	char *str = (char *) malloc(length + 1);
+	if (!str) {
+		fprintf(stderr, "Error allocating memory for string with length %d.\n", length);
+		return NULL;
+	}
+
+	if (fread(str, sizeof(char), length, file) != length) {
+		fprintf(stderr, "Error reading string data with length %d.\n", length);
+		free(str);
+		return NULL;
+	}
+	str[length] = '\0';
+	return str;
+}
+
+static void *free_map_and_close_file(MapData *map, FILE *file) {
+	game_map_free_data(map);
+	fclose(file);
+	return NULL;
+}
+
+static void cleanup_metadata_load_error(char **title, char **description, FILE *file) {
+	*title = strdup("(error)");
+	*description = strdup("(error)");
+	if (file) fclose(file);
+}
+
 MapData *game_map_load_data(const char *filename) {
-	FILE *file_ptr = NULL;
+	FILE *filePtr = NULL;
 	MapData *map = NULL;
 
-	file_ptr = fopen(filename, "rb");
-	if (!file_ptr) {
+	filePtr = fopen(filename, "rb");
+	if (!filePtr) {
 		fprintf(stderr, "Error opening the binary map file '%s'", filename);
 		return NULL;
 	}
@@ -61,21 +99,21 @@ MapData *game_map_load_data(const char *filename) {
 	map = (MapData *) malloc(sizeof(MapData));
 	if (!map) {
 		fprintf(stderr, "Error: Could not allocate memory for MapData '%s'.\n", filename);
-		fclose(file_ptr);
+		fclose(filePtr);
 		return NULL;
 	}
 
 	// Read the header directly into the structure
-	if (fread(map, 2 * sizeof(uint16_t), 1, file_ptr) != 1) {
+	if (fread(map, 2 * sizeof(uint16_t), 1, filePtr) != 1) {
 		fprintf(stderr, "Error reading the map header.\n");
 		game_map_free_data(map);
-		fclose(file_ptr);
+		fclose(filePtr);
 		return NULL;
 	}
 
 	// If there are no layers, we stop here.
 	if (map->numTileLayers == 0 && map->numObjectLayers == 0) {
-		fclose(file_ptr);
+		fclose(filePtr);
 		return map;
 	}
 
@@ -85,7 +123,7 @@ MapData *game_map_load_data(const char *filename) {
 		if (!map->tileLayers) {
 			fprintf(stderr, "Error: Could not allocate memory for TileLayers array.\n");
 			game_map_free_data(map);
-			fclose(file_ptr);
+			fclose(filePtr);
 			return NULL;
 		}
 
@@ -93,10 +131,10 @@ MapData *game_map_load_data(const char *filename) {
 			TileLayer *currentLayer = &map->tileLayers[i];
 
 			// a. Read the layer header (width and height - 4 bytes)
-			if (fread(currentLayer, 4, 1, file_ptr) != 1) {
+			if (fread(currentLayer, 4, 1, filePtr) != 1) {
 				fprintf(stderr, "Error reading TileLayer header %d.\n", i);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 
@@ -108,15 +146,15 @@ MapData *game_map_load_data(const char *filename) {
 			if (!currentLayer->tiles) {
 				fprintf(stderr, "Error: Could not allocate memory for GIDs of layer %d.\n", i);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 
 			// c. Read all GIDs for the layer
-			if (fread(currentLayer->tiles, sizeof(uint16_t), tileCount, file_ptr) != tileCount) {
+			if (fread(currentLayer->tiles, sizeof(uint16_t), tileCount, filePtr) != tileCount) {
 				fprintf(stderr, "Error reading GID data for layer %d. Expected %zu GIDs.\n", i, tileCount);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 		}
@@ -128,7 +166,7 @@ MapData *game_map_load_data(const char *filename) {
 		if (!map->objectLayers) {
 			fprintf(stderr, "Error: Could not allocate memory for ObjectLayers array.\n");
 			game_map_free_data(map);
-			fclose(file_ptr);
+			fclose(filePtr);
 			return NULL;
 		}
 
@@ -136,10 +174,10 @@ MapData *game_map_load_data(const char *filename) {
 			ObjectLayer *currentLayer = &map->objectLayers[i];
 
 			// a. Read the number of objects (numObjects - 2 bytes)
-			if (fread(&currentLayer->numObjects, sizeof(uint16_t), 1, file_ptr) != 1) {
+			if (fread(&currentLayer->numObjects, sizeof(uint16_t), 1, filePtr) != 1) {
 				fprintf(stderr, "Error reading object count in ObjectLayer %d.\n", i);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 
@@ -151,15 +189,15 @@ MapData *game_map_load_data(const char *filename) {
 			if (!currentLayer->objects) {
 				fprintf(stderr, "Error: Could not allocate memory for objects in layer %d.\n", i);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 
 			// c. Read all objects (6 bytes per object)
-			if (fread(currentLayer->objects, sizeof(MapObject), object_count, file_ptr) != object_count) {
+			if (fread(currentLayer->objects, sizeof(MapObject), object_count, filePtr) != object_count) {
 				fprintf(stderr, "Error reading object data for layer %d. (Expected %zu)\n", i, object_count);
 				game_map_free_data(map);
-				fclose(file_ptr);
+				fclose(filePtr);
 				return NULL;
 			}
 
@@ -191,12 +229,18 @@ MapData *game_map_load_data(const char *filename) {
 		}
 	}
 
-	// 4. Load start resources, must be in sequence, gold wood gold wood
+	// Load map strings
+	map->title = read_string_from_file(filePtr);
+	if (!map->title) return free_map_and_close_file(map, filePtr);
+	map->description = read_string_from_file(filePtr);
+	if (!map->description) return free_map_and_close_file(map, filePtr);
+
+	// Load start resources, must be in sequence, gold wood gold wood
 	uint32_t resources[MAP_RESOURCES];
-	if (fread(resources, sizeof(uint32_t), MAP_RESOURCES, file_ptr) != MAP_RESOURCES) {
+	if (fread(resources, sizeof(uint32_t), MAP_RESOURCES, filePtr) != MAP_RESOURCES) {
 		fprintf(stderr, "Error reading resources.\n");
 		game_map_free_data(map);
-		fclose(file_ptr);
+		fclose(filePtr);
 		return NULL;
 	}
 	map->playerGold = resources[MAP_RESOURCE_PLAYER_GOLD_INDEX];
@@ -204,56 +248,9 @@ MapData *game_map_load_data(const char *filename) {
 	map->computerGold = resources[MAP_RESOURCE_COMPUTER_GOLD_INDEX];
 	map->computerWood = resources[MAP_RESOURCE_COMPUTER_WOOD_INDEX];
 
-	// 5. Load title and description strings as lines
-	// Read title length
-	uint16_t titleLength = 0;
-	if (fread(&titleLength, sizeof(uint16_t), 1, file_ptr) != 1) {
-		fprintf(stderr, "Error reading title length.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	// Allocate and read title string
-	map->title = (char *) malloc(titleLength + 1);
-	if (!map->title) {
-		fprintf(stderr, "Error allocating memory for title string.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	if (fread(map->title, sizeof(char), titleLength, file_ptr) != titleLength) {
-		fprintf(stderr, "Error reading title string.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	map->title[titleLength] = '\0';// Null-terminate the string
+	// TODO read new attributes
 
-	// Read description length
-	uint16_t descriptionLength = 0;
-	if (fread(&descriptionLength, sizeof(uint16_t), 1, file_ptr) != 1) {
-		fprintf(stderr, "Error reading description length.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	// Allocate and read description string
-	map->description = (char *) malloc(descriptionLength + 1);
-	if (!map->description) {
-		fprintf(stderr, "Error allocating memory for description string.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	if (fread(map->description, sizeof(char), descriptionLength, file_ptr) != descriptionLength) {
-		fprintf(stderr, "Error reading description string.\n");
-		game_map_free_data(map);
-		fclose(file_ptr);
-		return NULL;
-	}
-	map->description[descriptionLength] = '\0';// Null-terminate the string
-
-	fclose(file_ptr);
+	fclose(filePtr);
 	return map;
 }
 
@@ -261,8 +258,7 @@ void game_map_load_metadata(const char *filepath, char **title, char **descripti
 	FILE *fp = fopen(filepath, "rb");
 	if (!fp) {
 		fprintf(stderr, "Warning: Could not open map file %s\n", filepath);
-		*title = strdup("(error)");
-		*description = strdup("");
+		cleanup_metadata_load_error(title, description, NULL);
 		return;
 	}
 
@@ -270,9 +266,7 @@ void game_map_load_metadata(const char *filepath, char **title, char **descripti
 	MapData tempMap;
 	if (fread(&tempMap, 2 * sizeof(uint16_t), 1, fp) != 1) {
 		fprintf(stderr, "Warning: Could not read map header from %s\n", filepath);
-		*title = strdup("(error)");
-		*description = strdup("");
-		fclose(fp);
+		cleanup_metadata_load_error(title, description, fp);
 		return;
 	}
 
@@ -284,9 +278,7 @@ void game_map_load_metadata(const char *filepath, char **title, char **descripti
 		uint16_t layerDims[2];
 		if (fread(layerDims, sizeof(uint16_t), 2, fp) != 2) {
 			fprintf(stderr, "Warning: Could not read tile layer header\n");
-			fclose(fp);
-			*title = strdup("(error)");
-			*description = strdup("");
+			cleanup_metadata_load_error(title, description, fp);
 			return;
 		}
 		uint16_t width = layerDims[0];
@@ -295,9 +287,7 @@ void game_map_load_metadata(const char *filepath, char **title, char **descripti
 		// Skip all tile GIDs
 		if (fseek(fp, tileCount * sizeof(uint16_t), SEEK_CUR) != 0) {
 			fprintf(stderr, "Warning: Could not skip tile data\n");
-			fclose(fp);
-			*title = strdup("(error)");
-			*description = strdup("");
+			cleanup_metadata_load_error(title, description, fp);
 			return;
 		}
 	}
@@ -307,84 +297,30 @@ void game_map_load_metadata(const char *filepath, char **title, char **descripti
 		uint16_t numObjects;
 		if (fread(&numObjects, sizeof(uint16_t), 1, fp) != 1) {
 			fprintf(stderr, "Warning: Could not read object count\n");
-			fclose(fp);
-			*title = strdup("(error)");
-			*description = strdup("");
+			cleanup_metadata_load_error(title, description, fp);
 			return;
 		}
 		// Skip all objects
 		if (fseek(fp, numObjects * sizeof(MapObject), SEEK_CUR) != 0) {
 			fprintf(stderr, "Warning: Could not skip object data\n");
-			fclose(fp);
-			*title = strdup("(error)");
-			*description = strdup("");
+			cleanup_metadata_load_error(title, description, fp);
 			return;
 		}
 	}
 
-	// Skip resources (4 × 4 bytes = 16 bytes)
-	if (fseek(fp, 4 * sizeof(uint32_t), SEEK_CUR) != 0) {
-		fprintf(stderr, "Warning: Could not skip resources\n");
-		fclose(fp);
-		*title = strdup("(error)");
-		*description = strdup("");
-		return;
-	}
-
 	// Now read title
-	uint16_t titleLength = 0;
-	if (fread(&titleLength, sizeof(uint16_t), 1, fp) != 1) {
-		fprintf(stderr, "Warning: Could not read title length from %s\n", filepath);
-		*title = strdup("(no title)");
-		*description = strdup("");
-		fclose(fp);
+	*title = read_string_from_file(fp);
+	if (!title) {
+		fprintf(stderr, "Warning: Could not read title from %s\n", filepath);
+		cleanup_metadata_load_error(title, description, fp);
 		return;
 	}
-
-	char *titleBuf = (char *) malloc(titleLength + 1);
-	if (!titleBuf) {
-		fprintf(stderr, "Warning: Could not allocate memory for title\n");
-		*title = strdup("(error)");
-		*description = strdup("");
-		fclose(fp);
+	*description = read_string_from_file(fp);
+	if (!description) {
+		fprintf(stderr, "Warning: Could not read description from %s\n", filepath);
+		cleanup_metadata_load_error(title, description, fp);
 		return;
 	}
-
-	if (fread(titleBuf, sizeof(char), titleLength, fp) != titleLength) {
-		fprintf(stderr, "Warning: Could not read title data from %s\n", filepath);
-		free(titleBuf);
-		*title = strdup("(error)");
-		*description = strdup("");
-		fclose(fp);
-		return;
-	}
-	titleBuf[titleLength] = '\0';
-	*title = titleBuf;
-
-	// Read description
-	uint16_t descLength = 0;
-	if (fread(&descLength, sizeof(uint16_t), 1, fp) != 1) {
-		fprintf(stderr, "Warning: Could not read description length from %s\n", filepath);
-		*description = strdup("");
-		fclose(fp);
-		return;
-	}
-
-	char *descBuf = (char *) malloc(descLength + 1);
-	if (!descBuf) {
-		fprintf(stderr, "Warning: Could not allocate memory for description\n");
-		fclose(fp);
-		exit(PROGRAM_ERROR);
-	}
-
-	if (fread(descBuf, sizeof(char), descLength, fp) != descLength) {
-		fprintf(stderr, "Warning: Could not read description data from %s\n", filepath);
-		free(descBuf);
-		fclose(fp);
-		exit(PROGRAM_ERROR);
-	}
-	descBuf[descLength] = '\0';
-	*description = descBuf;
 
 	fclose(fp);
 }

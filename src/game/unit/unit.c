@@ -21,7 +21,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
 				.moveTime = SEC_TO_FRAMES(0.5),
-				{.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
+				.resources = {.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_SOLDIER,
@@ -36,7 +36,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.4),
-				{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
+				.resources = {.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_ARCHER,
@@ -51,7 +51,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.45),
-				{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
+				.resources = {.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_KNIGHT,
@@ -66,7 +66,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.3),
-				{.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
+				.resources = {.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_MAGE,
@@ -81,7 +81,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.8),
-				{.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
+				.resources = {.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_CITY_HALL,
@@ -96,7 +96,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(85), .foodProvided = 5},
+				.resources = {.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(85), .foodProvided = 5},
 		},
 		{
 				.type = UNIT_TYPE_FARM,
@@ -111,7 +111,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(33), .foodProvided = 4},
+				.resources = {.used = {500, 250, 0}, .time = SEC_TO_FRAMES(33), .foodProvided = 4},
 		},
 		{
 				.type = UNIT_TYPE_BARRACKS,
@@ -126,7 +126,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
+				.resources = {.used = {700, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -141,7 +141,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
+				.resources = {.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_STABLES,
@@ -156,7 +156,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
+				.resources = {.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 		},
 		{
 				.type = UNIT_TYPE_TOWER,
@@ -171,7 +171,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 0,
 				.reactionTime = 0,
 				.moveTime = 0,
-				{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
+				.resources = {.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
 		},
 };
 
@@ -290,6 +290,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->prevTargetId = NO_TARGET_ID;
 	unit->blinkTime = 0;
 	unit->isCustom = FALSE;
+	unit->mustSurvive = FALSE;
 
 	UnitData *data = &unitsData[type];
 	unit->type = data->type;

@@ -159,6 +159,7 @@ typedef struct {
 		WorkerData workerData;
 	} typed;
 	uint8_t isCustom;
+	uint8_t mustSurvive;
 	char name[CUSTOM_UNIT_NAME_LENGTH];
 } GameUnit;
 

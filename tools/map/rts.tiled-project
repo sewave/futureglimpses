@@ -11,6 +11,29 @@
     ],
     "propertyTypes": [
         {
+            "id": 3,
+            "name": "IA_MODE",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "IDLE",
+                "PASSIVE",
+                "AGGRESSIVE"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "name": "UNIT_CONTROLLER",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "UNIT_CONTROLLER_PLAYER",
+                "UNIT_CONTROLLER_AI"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 1,
             "name": "UNIT_TYPE",
             "storageType": "int",
@@ -27,17 +50,6 @@
                 "UNIT_TYPE_BLACKSMITH",
                 "UNIT_TYPE_STABLES",
                 "UNIT_TYPE_TOWER"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 2,
-            "name": "UNIT_CONTROLLER",
-            "storageType": "int",
-            "type": "enum",
-            "values": [
-                "UNIT_CONTROLLER_PLAYER",
-                "UNIT_CONTROLLER_AI"
             ],
             "valuesAsFlags": false
         }

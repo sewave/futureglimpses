@@ -10,9 +10,17 @@
  * - Width (U16)
  * - Height (U16)
  * - GIDs array (U16 * Width * Height)
+ * - Title length (U16)
+ * - Title string (N times)
+ * - Description length (U16)
+ * - Description string (N times)
+ * - Player Gold (U32)
+ * - Player Wood (U32)
+ * - Computer Gold (U32)
+ * - Computer Wood (U32)
  * * OBJECT LAYERS (M times):
  * - Num Objects (U16)
- * - Objects (K times): 
+ * - Objects (24 * K times): 
  * - UNIT_TYPE (U8, from obj.properties.UNIT_TYPE)
  * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
@@ -22,17 +30,12 @@
  * - maxHealth (U16)
  * - minDamage (U8)
  * - maxDamage (U8)
- * - Player Gold (U32)
- * - Player Wood (U32)
- * - Computer Gold (U32)
- * - Computer Wood (U32)
- * - Title length (U16)
- * - Title string (N times)
- * - Description length (U16)
- * - Description string (N times)
+ * - mustSurvive (U8)
+ * - padding (U8)
  * -----------------------------------------------------
  */
 let littleEndian = true; // Define Endianness for binary writes
+const OBJECT_DATA_SIZE = 24;
 
 function getUtf8Size(str) {
     var size = 0;
@@ -76,7 +79,7 @@ function writeUtf8String(view, offset, str) {
 /**
  * Calculates the exact size required for the ArrayBuffer
  * based on the map's content and the binary specification.
- * * @param {Tiled.Map} map The Tiled map object.
+ * @param {Tiled.Map} map The Tiled map object.
  * @returns {number} The total size in bytes.
  */
 function calculateTotalSize(map) {
@@ -103,8 +106,7 @@ function calculateTotalSize(map) {
 		// Object Layer Header: Num Objects (2)
 		size += 2;
 
-        // Object Data: TYPES (2) + X (2) + Y (2) + CUSTOM (1) + NAME (11) + minDamage (1) + MaxDamage (1) + Health (2)= 22 bytes per object
-        size += layer.objects.length * 22; 
+        size += layer.objects.length * OBJECT_DATA_SIZE;
 	}
 
 	// 4 resources of 32 bits
@@ -112,15 +114,96 @@ function calculateTotalSize(map) {
 
     var mapProperties = map.resolvedProperties();
 
-    var titleLength = getUtf8Size(mapProperties.TITLE || "");
+    var titleLength = getUtf8Size(mapProperties.MSG_TITLE || "");
     tiled.log(`Title length: ${titleLength}`);
     size += 2 + titleLength; // Title length (2) + title string bytes
 
-    var descriptionLength = getUtf8Size(mapProperties.DESCRIPTION || "");
+    var descriptionLength = getUtf8Size(mapProperties.MSG_DESCRIPTION || "");
     tiled.log(`Description length: ${descriptionLength}`);
     size += 2 + descriptionLength; // Description length (2) + description string bytes
 
 	return size;
+}
+
+/**
+ * Writes the binary data for a single object to the DataView.
+ * @param {DataView} view The DataView to write to.
+ * @param {number} offset The offset to start writing at.
+ * @param {Tiled.Object} obj The object to write.
+ * @param {Tiled.Map} map The Tiled map object.
+ */
+function writeObjectData(view, offset, obj, map) {
+    // A. Object UNIT_TYPE (U8) from properties
+    // If the UNIT_TYPE property is missing or null, default to 0.
+    const resolvedProperties = obj.resolvedProperties();
+
+    const objectType = resolvedProperties.UNIT_TYPE.value;
+    view.setUint8(offset, objectType, littleEndian);
+    offset += 1;
+
+    // B. Object UNIT_CONTROLLER (U8) from properties
+    // If the UNIT_CONTROLLER property is missing or null, default to 0.
+    const objectController = resolvedProperties.UNIT_CONTROLLER.value;
+    view.setUint8(offset, objectController, littleEndian);
+    offset += 1;
+
+    // C. Object X (U16) converted to tile units
+    const tileX = Math.floor(obj.x / map.tileWidth);
+    view.setUint16(offset, tileX, littleEndian);
+    offset += 2;
+
+    // D. Object Y (U16) converted to tile units
+    const tileY = Math.floor(obj.y / map.tileHeight);
+    view.setUint16(offset, tileY, littleEndian);
+    offset += 2;
+
+    // E. Is a custom object?   
+    const isCustom = (resolvedProperties.CUSTOM ? resolvedProperties.CUSTOM : false) ? 1 : 0;
+    tiled.log(`Custom: [` + isCustom + `]`);
+    view.setUint8(offset, isCustom, littleEndian);
+    offset += 1;
+
+    // F. Name, up to 10 bytes + end
+    var name = obj.name ? obj.name || "" : "";
+    while (getUtf8Size(name) > 10) {
+        name = name.substring(0, name.length - 1);
+    }
+    const nameLength = getUtf8Size(name);
+    tiled.log(`Name length: [` + nameLength + `]`);
+    while (getUtf8Size(name) < 10) {
+        name = name.padEnd(name.length + 1);
+    }
+    tiled.log(`Name: [` + name + `]`);
+    writeUtf8String(view, offset, name);
+    offset += nameLength;
+    // Finish string with 0es
+    for (let i = nameLength; i < 11; i++) {
+        view.setUint8(offset++, 0, littleEndian);
+    }
+
+    const maxHealth = resolvedProperties.MAX_HEALTH ? resolvedProperties.MAX_HEALTH : 0;
+    tiled.log(`maxHealth: [` + maxHealth + `]`);
+    view.setUint16(offset, maxHealth, littleEndian);
+    offset += 2;
+
+    const minDamage = resolvedProperties.MIN_DAMAGE ? resolvedProperties.MIN_DAMAGE : 0;
+    tiled.log(`minDamage: [` + minDamage + `]`);
+    view.setUint8(offset, minDamage, littleEndian);
+    offset += 1;
+
+    const maxDamage = resolvedProperties.MAX_DAMAGE ? resolvedProperties.MAX_DAMAGE : 0;
+    tiled.log(`minDamage: [` + maxDamage + `]`);
+    view.setUint8(offset, maxDamage, littleEndian);
+    offset += 1;
+
+    const mustSurvive = (resolvedProperties.MUST_SURVIVE ? resolvedProperties.MUST_SURVIVE : false) ? 1 : 0;
+    tiled.log(`Must Survive: [` + mustSurvive + `]`);
+    view.setUint8(offset, mustSurvive, littleEndian);
+    offset += 1;
+
+    // Padding, to align with C structs
+    view.setUint8(offset, 0, littleEndian);
+    offset += 1;
 }
 
 /**
@@ -151,7 +234,6 @@ function exportBinary(map) {
     view.setUint16(offset, objectLayers.length, littleEndian);
     offset += 2;
 	tiled.log(`Writed header`);
-
 
     // ===================================
     // 2. TILE LAYERS
@@ -191,91 +273,20 @@ function exportBinary(map) {
         offset += 2;
 
         for (let obj of layer.objects) {
-            // A. Object UNIT_TYPE (U8) from properties
-            // If the UNIT_TYPE property is missing or null, default to 0.
-			const resolvedProperties = obj.resolvedProperties();
-
-            const objectType = resolvedProperties.UNIT_TYPE.value;
-            view.setUint8(offset, objectType, littleEndian);
-            offset += 1;
-
-            // B. Object UNIT_CONTROLLER (U8) from properties
-            // If the UNIT_CONTROLLER property is missing or null, default to 0.
-            const objectController = resolvedProperties.UNIT_CONTROLLER.value;
-            view.setUint8(offset, objectController, littleEndian);
-            offset += 1;
-            
-            // C. Object X (U16) converted to tile units
-            const tileX = Math.floor(obj.x / map.tileWidth);
-            view.setUint16(offset, tileX, littleEndian);
-            offset += 2;
-            
-            // D. Object Y (U16) converted to tile units
-            const tileY = Math.floor(obj.y / map.tileHeight);
-            view.setUint16(offset, tileY, littleEndian);
-            offset += 2;
-
-            // E. Is a custom object?   
-            const isCustom = resolvedProperties.CUSTOM ? resolvedProperties.CUSTOM : 0;
-            tiled.log(`Custom: [` + isCustom + `]`);
-            view.setUint8(offset, isCustom, littleEndian);
-            offset += 1;
-
-            // F. Name, up to 10 bytes + end
-            var name = obj.name ? obj.name || "" : "";
-            while (getUtf8Size(name) > 10) {
-                name = name.substring(0, name.length - 1);
-            }
-            const nameLength = getUtf8Size(name);
-            tiled.log(`Name length: [` + nameLength + `]`);
-            while (getUtf8Size(name) < 10) {
-                name = name.padEnd(name.length + 1);
-            }
-            tiled.log(`Name: [` + name + `]`);
-            writeUtf8String(view, offset, name);
-            offset += nameLength;
-            // Finish string with 0es
-            for(let i = nameLength; i < 11; i++) {
-                view.setUint8(offset, 0, littleEndian);
-                offset += 1;
-            }
-
-            const maxHealth = resolvedProperties.MAX_HEALTH ? resolvedProperties.MAX_HEALTH : 0;
-            tiled.log(`maxHealth: [` + maxHealth + `]`);
-            view.setUint16(offset, maxHealth, littleEndian);
-            offset += 2;
-
-            const minDamage = resolvedProperties.MIN_DAMAGE ? resolvedProperties.MIN_DAMAGE : 0;
-            tiled.log(`minDamage: [` + minDamage + `]`);
-            view.setUint8(offset, minDamage, littleEndian);
-            offset += 1;
-
-            const maxDamage = resolvedProperties.MAX_DAMAGE ? resolvedProperties.MAX_DAMAGE : 0;
-            tiled.log(`minDamage: [` + maxDamage + `]`);
-            view.setUint8(offset, maxDamage, littleEndian);
-            offset += 1;
+            writeObjectData(view, offset, obj, map);
+            offset += OBJECT_DATA_SIZE;
         }
     }
 	tiled.log(`Writed objects`);
 
     // ===================================
-    // 4. MAP ATTRIBUTES (TITLE and DESCRIPTION)
+    // 4. MAP ATTRIBUTES (MSG_TITLE and MSG_DESCRIPTION)
     // ===================================
     tiled.log(`Writing map attributes`);
     var mapProperties = map.resolvedProperties();
 
-	// Write resources
-	view.setUint32(offset, mapProperties.PLAYER_GOLD || 0, littleEndian);
-	offset += 4;
-	view.setUint32(offset, mapProperties.PLAYER_WOOD || 0, littleEndian);
-	offset += 4;
-	view.setUint32(offset, mapProperties.COMPUTER_GOLD || 0, littleEndian);
-	offset += 4;
-	view.setUint32(offset, mapProperties.COMPUTER_WOOD || 0, littleEndian);
-	offset += 4;
-
     // A. TITLE
-    var titleStr = mapProperties.TITLE || "";
+    var titleStr = mapProperties.MSG_TITLE || "";
     var titleLength = getUtf8Size(titleStr);
     // Write Title Length (U16)
     view.setUint16(offset, titleLength, littleEndian);
@@ -286,7 +297,7 @@ function exportBinary(map) {
     tiled.log(`Writed title with length ${titleLength}`);
 
     // B. DESCRIPTION
-    var descriptionStr = mapProperties.DESCRIPTION || "";
+    var descriptionStr = mapProperties.MSG_DESCRIPTION || "";
     var descriptionLength = getUtf8Size(descriptionStr);
     // Write Description Length (U16)
     view.setUint16(offset, descriptionLength, littleEndian);
@@ -295,6 +306,27 @@ function exportBinary(map) {
     writeUtf8String(view, offset, descriptionStr);
     offset += descriptionLength;
     tiled.log(`Writed description with length ${descriptionLength}`);
+
+    // Write resources
+    var resGoldPlayer = mapProperties.RES_GOLD_PLAYER || 0;
+    var resWoodPlayer = mapProperties.RES_WOOD_PLAYER || 0;
+    var resGoldComputer = mapProperties.RES_GOLD_COMPUTER || 0;
+    var resWoodComputer = mapProperties.RES_WOOD_COMPUTER || 0;
+    view.setUint32(offset, resGoldPlayer, littleEndian);
+    tiled.log(`Writed resources for player gold: ${resGoldPlayer}`);
+    offset += 4;
+    view.setUint32(offset, resWoodPlayer, littleEndian);
+    tiled.log(`Writed resources for player wood: ${resWoodPlayer}`);
+    offset += 4;
+    view.setUint32(offset, resGoldComputer, littleEndian);
+    tiled.log(`Writed resources for computer gold: ${resGoldComputer}`);
+    offset += 4;
+    view.setUint32(offset, resWoodComputer, littleEndian);
+    tiled.log(`Writed resources for computer wood: ${resWoodComputer}`);
+    offset += 4;
+
+    // TODO write new attributes
+
     tiled.log(`Writed map attributes`);
 
     // --- Final Check ---
@@ -302,7 +334,7 @@ function exportBinary(map) {
         throw new Error(`Critical Write Error: Final offset (${offset}) does not match calculated size (${totalSize}).`);
     }
 
-    return buffer; 
+    return buffer;
 }
 
 let Tiled2FutureGlimpsesExporter = {

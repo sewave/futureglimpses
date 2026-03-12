@@ -14,6 +14,7 @@ typedef struct {
 	uint16_t maxHealth;
 	uint8_t minDamage;
 	uint8_t maxDamage;
+	uint8_t mustSurvive;
 } MapObject;
 
 typedef struct {

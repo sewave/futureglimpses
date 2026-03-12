@@ -4,12 +4,21 @@
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
-  <property name="COMPUTER_GOLD" type="int" value="100000"/>
-  <property name="COMPUTER_WOOD" type="int" value="100000"/>
-  <property name="DESCRIPTION" value="Bla bla bla long description, a very long description. En un lugar de la mancha, de cuyo nombre no quiero acordarme."/>
-  <property name="PLAYER_GOLD" type="int" value="123456"/>
-  <property name="PLAYER_WOOD" type="int" value="234567"/>
-  <property name="TITLE" value="Test map ñ"/>
+  <property name="ENABLE_BARRACK" type="bool" value="true"/>
+  <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
+  <property name="ENABLE_FARM" type="bool" value="true"/>
+  <property name="ENABLE_STABLE" type="bool" value="true"/>
+  <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="IA_MODE" type="int" propertytype="IA_MODE" value="0"/>
+  <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
+  <property name="MSG_LOSE" value=""/>
+  <property name="MSG_TITLE" value="The map title"/>
+  <property name="MSG_WIN" value=""/>
+  <property name="PEACE_TIME" type="int" value="0"/>
+  <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
+  <property name="RES_GOLD_PLAYER" type="int" value="123456"/>
+  <property name="RES_WOOD_COMPUTER" type="int" value="100000"/>
+  <property name="RES_WOOD_PLAYER" type="int" value="234567"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="257" source="units/units.tsx"/>
@@ -68,7 +77,7 @@
 129,130,131,132,1,145,146,147,148,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,129,130,131,132,129,130,131,132,129,130,2,3,195,9,10,11,12,12,11,12,9,10,10,11,12,9,10,11,153,154,155,156,195,
 129,130,3,4,1,145,146,147,148,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,130,131,132,129,130,131,132,129,130,131,132,129,130,2,3,195,195,9,10,11,12,11,12,9,10,10,11,12,9,10,11,153,154,155,156,195,
 1,2,3,4,1,145,146,147,148,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,3,196,195,9,10,11,12,11,12,9,10,10,11,12,9,10,11,153,154,155,156,195,
-1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,132,195,9,10,11,12,11,12,9,10,10,11,12,9,10,11,153,154,155,156,195,
+1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,132,195,9,10,11,12,11,12,3,10,10,11,12,9,10,11,153,154,155,156,195,
 1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,195,9,9,10,12,11,12,9,10,10,11,12,9,10,11,12,9,10,11,195,
 1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,38,11,12,11,12,11,12,9,10,10,11,12,9,10,11,12,9,10,11,195,
 1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,38,10,12,11,12,11,12,9,10,10,11,12,9,10,11,12,9,10,11,195,
@@ -86,12 +95,13 @@
  <objectgroup id="2" name="Units/Buildings">
   <object id="71" template="units/P_Worker.tx" x="848" y="848"/>
   <object id="72" template="units/P_Worker.tx" x="848" y="864"/>
-  <object id="73" template="units/P_Knight.tx" name="Triturador" x="816" y="832">
+  <object id="73" template="units/P_Knight.tx" name="Triturador" x="816" y="832" visible="1">
    <properties>
-    <property name="CUSTOM" type="int" value="1"/>
+    <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="120"/>
     <property name="MAX_HEALTH" type="int" value="9999"/>
     <property name="MIN_DAMAGE" type="int" value="12"/>
+    <property name="MUST_SURVIVE" type="bool" value="false"/>
    </properties>
   </object>
   <object id="94" template="buildings/C_City_Hall.tx" x="48" y="208"/>
@@ -119,10 +129,11 @@
   <object id="136" template="units/C_Mage.tx" x="304" y="176"/>
   <object id="158" template="units/P_Archer.tx" name="Rajafieras" x="784" y="864">
    <properties>
-    <property name="CUSTOM" type="int" value="1"/>
+    <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="60"/>
     <property name="MAX_HEALTH" type="int" value="9999"/>
     <property name="MIN_DAMAGE" type="int" value="50"/>
+    <property name="MUST_SURVIVE" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
