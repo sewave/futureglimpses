@@ -36,6 +36,8 @@ typedef struct {
 
 	char * title;
     char * description;
+	char * win;
+	char * lose;
 
 	TileLayer *tileLayers;
 	ObjectLayer *objectLayers;

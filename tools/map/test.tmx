@@ -11,9 +11,9 @@
   <property name="ENABLE_TOWER" type="bool" value="true"/>
   <property name="IA_MODE" type="int" propertytype="IA_MODE" value="0"/>
   <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
-  <property name="MSG_LOSE" value=""/>
+  <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="The map title"/>
-  <property name="MSG_WIN" value=""/>
+  <property name="MSG_WIN" value="You win"/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="123456"/>

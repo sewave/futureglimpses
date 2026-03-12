@@ -31,7 +31,7 @@
  * - minDamage (U8)
  * - maxDamage (U8)
  * - mustSurvive (U8)
- * - padding (U8)
+ * - padding (U8) to align with C structs
  * -----------------------------------------------------
  */
 let littleEndian = true; // Define Endianness for binary writes
@@ -122,6 +122,14 @@ function calculateTotalSize(map) {
     tiled.log(`Description length: ${descriptionLength}`);
     size += 2 + descriptionLength; // Description length (2) + description string bytes
 
+    var msgWinLength = getUtf8Size(mapProperties.MSG_WIN || "");
+    tiled.log(`Win length: ${msgWinLength}`);
+    size += 2 + msgWinLength;
+
+    var msgLoseLength = getUtf8Size(mapProperties.MSG_LOSE || "");
+    tiled.log(`Lose length: ${msgLoseLength}`);
+    size += 2 + msgLoseLength;
+
 	return size;
 }
 
@@ -200,10 +208,18 @@ function writeObjectData(view, offset, obj, map) {
     tiled.log(`Must Survive: [` + mustSurvive + `]`);
     view.setUint8(offset, mustSurvive, littleEndian);
     offset += 1;
+}
 
-    // Padding, to align with C structs
-    view.setUint8(offset, 0, littleEndian);
-    offset += 1;
+function writeStringAndLength(view, offset, name, string) {
+    var length = getUtf8Size(string);
+    // Write Title Length (U16)
+    view.setUint16(offset, length, littleEndian);
+    offset += 2;
+    // Write Title String (UTF-8 bytes)
+    writeUtf8String(view, offset, string);
+    offset += length;
+    tiled.log(`Writed ${name} with length ${length}`);
+    return length + 2;
 }
 
 /**
@@ -285,27 +301,11 @@ function exportBinary(map) {
     tiled.log(`Writing map attributes`);
     var mapProperties = map.resolvedProperties();
 
-    // A. TITLE
-    var titleStr = mapProperties.MSG_TITLE || "";
-    var titleLength = getUtf8Size(titleStr);
-    // Write Title Length (U16)
-    view.setUint16(offset, titleLength, littleEndian);
-    offset += 2;
-    // Write Title String (UTF-8 bytes)
-    writeUtf8String(view, offset, titleStr);
-    offset += titleLength;
-    tiled.log(`Writed title with length ${titleLength}`);
-
-    // B. DESCRIPTION
-    var descriptionStr = mapProperties.MSG_DESCRIPTION || "";
-    var descriptionLength = getUtf8Size(descriptionStr);
-    // Write Description Length (U16)
-    view.setUint16(offset, descriptionLength, littleEndian);
-    offset += 2;
-    // Write Description String (UTF-8 bytes)
-    writeUtf8String(view, offset, descriptionStr);
-    offset += descriptionLength;
-    tiled.log(`Writed description with length ${descriptionLength}`);
+    // Map strings
+    offset += writeStringAndLength(view, offset, "title", mapProperties.MSG_TITLE || "");
+    offset += writeStringAndLength(view, offset, "description", mapProperties.MSG_DESCRIPTION || "");
+    offset += writeStringAndLength(view, offset, "win", mapProperties.MSG_WIN || "");
+    offset += writeStringAndLength(view, offset, "lose", mapProperties.MSG_LOSE || "");
 
     // Write resources
     var resGoldPlayer = mapProperties.RES_GOLD_PLAYER || 0;

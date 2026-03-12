@@ -13,14 +13,17 @@
 void game_map_free_data(MapData *map) {
 	if (!map) return;
 
-	if (map->title) {
-		free(map->title);
-		map->title = NULL;
-	}
-	if (map->description) {
-		free(map->description);
-		map->description = NULL;
-	}
+	free(map->title);
+	map->title = NULL;
+	free(map->description);
+	map->description = NULL;
+
+	free(map->win);
+	map->win = NULL;
+
+	free(map->lose);
+	map->lose = NULL;
+
 
 	if (map->tileLayers) {
 		for (int i = 0; i < map->numTileLayers; i++) {
@@ -234,6 +237,10 @@ MapData *game_map_load_data(const char *filename) {
 	if (!map->title) return free_map_and_close_file(map, filePtr);
 	map->description = read_string_from_file(filePtr);
 	if (!map->description) return free_map_and_close_file(map, filePtr);
+	map->win = read_string_from_file(filePtr);
+	if (!map->win) return free_map_and_close_file(map, filePtr);
+	map->lose = read_string_from_file(filePtr);
+	if (!map->lose) return free_map_and_close_file(map, filePtr);
 
 	// Load start resources, must be in sequence, gold wood gold wood
 	uint32_t resources[MAP_RESOURCES];
