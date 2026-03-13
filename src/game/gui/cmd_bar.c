@@ -455,14 +455,13 @@ static void game_cmd_bar_add_common(CommandBarButton cmdBarButtons[CMD_BAR_BUTTO
 }
 
 static void game_cmd_bar_handle_building_select_buttons(GameContext *context) {
-	context->cmdBarButtons[buttonIndex++] = FARM_CMD_BUTTON;
-	context->cmdBarButtons[buttonIndex++] = BARRACKS_CMD_BUTTON;
-	if (unitCount[UNIT_TYPE_BARRACKS]) context->cmdBarButtons[buttonIndex++] = BLACKSMITH_CMD_BUTTON;
-	if (unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = STABLES_CMD_BUTTON;
-	if (unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TOWER_CMD_BUTTON;
+	if(context->map.enableFarm) context->cmdBarButtons[buttonIndex++] = FARM_CMD_BUTTON;
+	if(context->map.enableBarracks) context->cmdBarButtons[buttonIndex++] = BARRACKS_CMD_BUTTON;
+	if (context->map.enableBlacksmith && unitCount[UNIT_TYPE_BARRACKS]) context->cmdBarButtons[buttonIndex++] = BLACKSMITH_CMD_BUTTON;
+	if (context->map.enableStables && unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = STABLES_CMD_BUTTON;
+	if (context->map.enableTower && unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TOWER_CMD_BUTTON;
 	context->cmdBarButtons[buttonIndex++] = CANCEL_SELECT_BUILDING_CMD_BUTTON;
 }
-
 
 static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, const char *innerText,
 								   int x, int y, uint8_t isHp) {

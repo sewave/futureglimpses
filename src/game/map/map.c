@@ -9,6 +9,13 @@
 #define MAP_RESOURCE_PLAYER_WOOD_INDEX 1
 #define MAP_RESOURCE_COMPUTER_GOLD_INDEX 2
 #define MAP_RESOURCE_COMPUTER_WOOD_INDEX 3
+#define MAP_OPTIONS 6
+#define MAP_OPTION_ENABLE_BARRACKS_INDEX 0
+#define MAP_OPTION_ENABLE_BLACKSMITH_INDEX 1
+#define MAP_OPTION_ENABLE_FARM_INDEX 2
+#define MAP_OPTION_ENABLE_STABLES_INDEX 3
+#define MAP_OPTION_ENABLE_TOWER_INDEX 4
+#define MAP_OPTION_IA_MODE_INDEX 5
 
 void game_map_free_data(MapData *map) {
 	if (!map) return;
@@ -255,7 +262,28 @@ MapData *game_map_load_data(const char *filename) {
 	map->computerGold = resources[MAP_RESOURCE_COMPUTER_GOLD_INDEX];
 	map->computerWood = resources[MAP_RESOURCE_COMPUTER_WOOD_INDEX];
 
-	// TODO read new attributes
+	// Read map options
+	uint8_t mapOptions[MAP_OPTIONS];
+	if (fread(mapOptions, sizeof(uint8_t), MAP_OPTIONS, filePtr) != MAP_OPTIONS) {
+		fprintf(stderr, "Error reading map options.\n");
+		game_map_free_data(map);
+		fclose(filePtr);
+		return NULL;
+	}
+	map->enableBarracks = mapOptions[MAP_OPTION_ENABLE_BARRACKS_INDEX];
+	map->enableBlacksmith = mapOptions[MAP_OPTION_ENABLE_BLACKSMITH_INDEX];
+	map->enableFarm = mapOptions[MAP_OPTION_ENABLE_FARM_INDEX];
+	map->enableStables = mapOptions[MAP_OPTION_ENABLE_STABLES_INDEX];
+	map->enableTower = mapOptions[MAP_OPTION_ENABLE_TOWER_INDEX];
+	map->iaMode = mapOptions[MAP_OPTION_IA_MODE_INDEX];
+
+	// Peace time
+	if (fread(&map->peaceTime, sizeof(uint16_t), 1, filePtr) != 1) {
+		fprintf(stderr, "Error reading map peace time.\n");
+		game_map_free_data(map);
+		fclose(filePtr);
+		return NULL;
+	}
 
 	fclose(filePtr);
 	return map;

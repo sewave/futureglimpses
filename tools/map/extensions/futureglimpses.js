@@ -18,6 +18,13 @@
  * - Player Wood (U32)
  * - Computer Gold (U32)
  * - Computer Wood (U32)
+ * - Enable barracks (U8)
+ * - Enable blacksmith (U8)
+ * - Enable farm (U8)
+ * - Enable stables (U8)
+ * - Enable tower (U8)
+ * - IA Mode (U8)
+ * - Peace time (U16)
  * * OBJECT LAYERS (M times):
  * - Num Objects (U16)
  * - Objects (24 * K times): 
@@ -111,6 +118,8 @@ function calculateTotalSize(map) {
 
 	// 4 resources of 32 bits
 	size += 4 * 4;
+    // Other attributes
+    size += 8;
 
     var mapProperties = map.resolvedProperties();
 
@@ -165,8 +174,8 @@ function writeObjectData(view, offset, obj, map) {
     view.setUint16(offset, tileY, littleEndian);
     offset += 2;
 
-    // E. Is a custom object?   
-    const isCustom = (resolvedProperties.CUSTOM ? resolvedProperties.CUSTOM : false) ? 1 : 0;
+    // E. Is a custom object?
+    const isCustom = resolvedProperties.CUSTOM || false;
     tiled.log(`Custom: [` + isCustom + `]`);
     view.setUint8(offset, isCustom, littleEndian);
     offset += 1;
@@ -204,7 +213,7 @@ function writeObjectData(view, offset, obj, map) {
     view.setUint8(offset, maxDamage, littleEndian);
     offset += 1;
 
-    const mustSurvive = (resolvedProperties.MUST_SURVIVE ? resolvedProperties.MUST_SURVIVE : false) ? 1 : 0;
+    const mustSurvive = resolvedProperties.MUST_SURVIVE || false;
     tiled.log(`Must Survive: [` + mustSurvive + `]`);
     view.setUint8(offset, mustSurvive, littleEndian);
     offset += 1;
@@ -325,7 +334,28 @@ function exportBinary(map) {
     tiled.log(`Writed resources for computer wood: ${resWoodComputer}`);
     offset += 4;
 
-    // TODO write new attributes
+    var enableBarracks = mapProperties.ENABLE_BARRACKS || false;
+    var enableBlacksmith = mapProperties.ENABLE_BLACKSMITH || false;
+    var enableFarm = mapProperties.ENABLE_FARM || false;
+    var enableStables = mapProperties.ENABLE_STABLES || false;
+    var enableTower = mapProperties.ENABLE_TOWER || false;
+    var iaMode = mapProperties.IA_MODE ? mapProperties.IA_MODE.value : 0;
+    var peaceTime = mapProperties.PEACE_TIME || 0;
+    view.setUint8(offset++, enableBarracks, littleEndian);
+    tiled.log(`Writed enableBarracks: ${enableBarracks}`);
+    view.setUint8(offset++, enableBlacksmith, littleEndian);
+    tiled.log(`Writed enableBlacksmith: ${enableBlacksmith}`);
+    view.setUint8(offset++, enableFarm, littleEndian);
+    tiled.log(`Writed enableFarm: ${enableFarm}`);
+    view.setUint8(offset++, enableStables, littleEndian);
+    tiled.log(`Writed enableStables: ${enableStables}`);
+    view.setUint8(offset++, enableTower, littleEndian);
+    tiled.log(`Writed enableTower: ${enableTower}`);
+    view.setUint8(offset++, iaMode, littleEndian);
+    tiled.log(`Writed iaMode: ${iaMode}`);
+    view.setUint16(offset, peaceTime, littleEndian);
+    tiled.log(`Writed peaceTime: ${peaceTime}`);
+    offset += 2;
 
     tiled.log(`Writed map attributes`);
 

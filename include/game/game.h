@@ -225,6 +225,16 @@ typedef struct {
 typedef struct {
 	char * title;
 	char * description;
+	char *win;
+	char *lose;
+
+	uint8_t enableBarracks;
+	uint8_t enableBlacksmith;
+	uint8_t enableFarm;
+	uint8_t enableStables;
+	uint8_t enableTower;
+	uint8_t iaMode;
+	uint16_t peaceTime;
 } GameMap;
 
 typedef struct {

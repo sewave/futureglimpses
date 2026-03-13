@@ -89,17 +89,25 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 
 	free(context->map.title);
 	free(context->map.description);
+	free(context->map.win);
+	free(context->map.lose);
 	context->map.title = strdup(map->title);
 	context->map.description = strdup(map->description);
-
-	// TODO load WIN/LOSS messages
+	context->map.win = strdup(map->win);
+	context->map.lose = strdup(map->lose);
 
 	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, map->playerGold);
 	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, map->playerWood);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_GOLD, map->computerGold);
 	resource_set_amount(context, UNIT_CONTROLLER_AI, RESOURCE_TYPE_WOOD, map->computerWood);
 
-	// TODO read new attributes
+	context->map.enableBarracks = map->enableBarracks;
+	context->map.enableBlacksmith = map->enableBlacksmith;
+	context->map.enableFarm = map->enableFarm;
+	context->map.enableStables = map->enableStables;
+	context->map.enableTower = map->enableTower;
+	context->map.iaMode = map->iaMode;
+	context->map.peaceTime = map->peaceTime;
 
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;
