@@ -104,7 +104,7 @@ static void setBlinkPosition(GameContext *context, int x, int y) {
 }
 
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
-	// TODO spawn mouse confirmation object
+	if(isContextual && game_selection_one_enemy_selected(context)) return;
 	// Contextual action
 	// Get board situation
 	int boardXPosition = game_spatial_get_board_x_position(context->xPosition, mouseX);
@@ -355,14 +355,15 @@ void game_selection_handle_input(GameContext *context) {
 			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
 				UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 				GameUnit *foundUnit = game_unit_get_by_id(context, id);
-				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER) {
+				if (foundUnit) {
 					switch (selectionMode) {
 						case SELECTION_SET:
 							game_selection_clear(context);
 							game_selection_add_unit(context, foundUnit);
 							break;
 						case SELECTION_ADD:
-							game_selection_add_unit(context, foundUnit);
+							if(!game_selection_one_enemy_selected(context) && !foundUnit->isBuilding
+								&& !game_selection_one_own_building_selected(context)) game_selection_add_unit(context, foundUnit);
 							break;
 						case SELECTION_REMOVE:
 							game_selection_remove_unit(context, foundUnit);
@@ -387,7 +388,7 @@ void game_selection_handle_input(GameContext *context) {
 			int tileMinY = clamp(worldBoxMinY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 			int tileMaxY = clamp(worldBoxMaxY / TILE_SIZE, BOARD_Y_MIN, BOARD_Y_MAX);
 
-			if (selectionMode == SELECTION_SET) game_selection_clear(context);
+			if (selectionMode == SELECTION_SET || game_selection_one_enemy_selected(context)) game_selection_clear(context);
 
 			for (int row = tileMinY; row <= tileMaxY; row++) {
 				for (int col = tileMinX; col <= tileMaxX; col++) {
@@ -405,4 +406,18 @@ void game_selection_handle_input(GameContext *context) {
 			}
 		}
 	}
+}
+
+uint8_t game_selection_one_enemy_selected(GameContext* context) {
+	if (context->selectedUnitCount != 1) return FALSE;
+	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+	if (unit && unit->isActive && unit->controller == UNIT_CONTROLLER_AI) return TRUE;
+	return FALSE;
+}
+
+uint8_t game_selection_one_own_building_selected(GameContext* context) {
+	if (context->selectedUnitCount != 1) return FALSE;
+	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
+	if (unit && unit->isActive && unit->controller == UNIT_CONTROLLER_PLAYER && unit->isBuilding) return TRUE;
+	return FALSE;	
 }

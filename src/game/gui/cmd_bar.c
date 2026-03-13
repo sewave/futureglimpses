@@ -664,7 +664,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		unitCount[i] = 0;
 	}
 
-	if (context->selectedUnitCount == 0) {
+	if (context->selectedUnitCount == 0 || game_selection_one_enemy_selected(context)) {
 		game_cmd_bar_clear_build_placing(&context->buildPlacing);
 		return;
 	}
