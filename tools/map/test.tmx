@@ -4,12 +4,12 @@
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
+  <property name="AI_MODE" type="int" value="0"/>
   <property name="ENABLE_BARRACKS" type="bool" value="true"/>
   <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
-  <property name="IA_MODE" type="int" propertytype="IA_MODE" value="0"/>
   <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
   <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="The map title"/>

@@ -339,7 +339,7 @@ function exportBinary(map) {
     var enableFarm = mapProperties.ENABLE_FARM || false;
     var enableStables = mapProperties.ENABLE_STABLES || false;
     var enableTower = mapProperties.ENABLE_TOWER || false;
-    var iaMode = mapProperties.IA_MODE ? mapProperties.IA_MODE.value : 0;
+    var aiMode = mapProperties.AI_MODE ? mapProperties.AI_MODE.value : 0;
     var peaceTime = mapProperties.PEACE_TIME || 0;
     view.setUint8(offset++, enableBarracks, littleEndian);
     tiled.log(`Writed enableBarracks: ${enableBarracks}`);
@@ -351,8 +351,8 @@ function exportBinary(map) {
     tiled.log(`Writed enableStables: ${enableStables}`);
     view.setUint8(offset++, enableTower, littleEndian);
     tiled.log(`Writed enableTower: ${enableTower}`);
-    view.setUint8(offset++, iaMode, littleEndian);
-    tiled.log(`Writed iaMode: ${iaMode}`);
+    view.setUint8(offset++, aiMode, littleEndian);
+    tiled.log(`Writed aiMode: ${aiMode}`);
     view.setUint16(offset, peaceTime, littleEndian);
     tiled.log(`Writed peaceTime: ${peaceTime}`);
     offset += 2;
