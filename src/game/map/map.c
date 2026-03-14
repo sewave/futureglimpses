@@ -15,7 +15,7 @@
 #define MAP_OPTION_ENABLE_FARM_INDEX 2
 #define MAP_OPTION_ENABLE_STABLES_INDEX 3
 #define MAP_OPTION_ENABLE_TOWER_INDEX 4
-#define MAP_OPTION_IA_MODE_INDEX 5
+#define MAP_OPTION_AI_MODE_INDEX 5
 
 void game_map_free_data(MapData *map) {
 	if (!map) return;
@@ -275,7 +275,7 @@ MapData *game_map_load_data(const char *filename) {
 	map->enableFarm = mapOptions[MAP_OPTION_ENABLE_FARM_INDEX];
 	map->enableStables = mapOptions[MAP_OPTION_ENABLE_STABLES_INDEX];
 	map->enableTower = mapOptions[MAP_OPTION_ENABLE_TOWER_INDEX];
-	map->iaMode = mapOptions[MAP_OPTION_IA_MODE_INDEX];
+	map->aiMode = mapOptions[MAP_OPTION_AI_MODE_INDEX];
 
 	// Peace time
 	if (fread(&map->peaceTime, sizeof(uint16_t), 1, filePtr) != 1) {

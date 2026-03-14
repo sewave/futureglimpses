@@ -161,4 +161,10 @@ typedef enum {
 	TILE_TYPE_WALL,
 } TileTypeEnum;
 
+typedef enum {
+	AI_MODE_IDLE,
+	AI_MODE_PASSIVE,
+	AI_MODE_AGGRESSIVE,
+} AIModeEnum;
+
 #endif /* GAME_ENUMS_H */

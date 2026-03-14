@@ -106,8 +106,8 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	context->map.enableFarm = map->enableFarm;
 	context->map.enableStables = map->enableStables;
 	context->map.enableTower = map->enableTower;
-	context->map.iaMode = map->iaMode;
-	context->map.peaceTime = map->peaceTime;
+	context->map.aiMode = (AIModeEnum) map->aiMode;
+	context->map.peaceTime = SEC_TO_FRAMES(map->peaceTime);
 
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;

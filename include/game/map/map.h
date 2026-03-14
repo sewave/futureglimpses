@@ -44,7 +44,7 @@ typedef struct {
 	uint8_t enableFarm;
 	uint8_t enableStables;
 	uint8_t enableTower;
-	uint8_t iaMode;
+	uint8_t aiMode;
 	uint16_t peaceTime;
 
 	TileLayer *tileLayers;

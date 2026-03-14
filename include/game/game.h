@@ -233,8 +233,8 @@ typedef struct {
 	uint8_t enableFarm;
 	uint8_t enableStables;
 	uint8_t enableTower;
-	uint8_t iaMode;
-	uint16_t peaceTime;
+	AIModeEnum aiMode;
+	uint32_t peaceTime;
 } GameMap;
 
 typedef struct {
@@ -243,6 +243,12 @@ typedef struct {
 	uint16_t altTile;
 	uint16_t data;
 } BoardTile;
+
+typedef struct {
+	uint16_t attackCounter;
+	uint16_t peaceCounter;
+	uint8_t currentWaveUnits;
+} AIData;
 
 typedef struct {
 	BITMAP *screenBuffer;
@@ -283,6 +289,7 @@ typedef struct {
 	char* mapPath;
 	Position targetPosition;
 	uint8_t targetBlinkTime;
+	AIData aiData;
 } GameContext;
 
 typedef GameStateEnum (*StateUpdateFunction)(GameContext *);

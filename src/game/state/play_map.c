@@ -300,6 +300,7 @@ void handle_play_map_init(GameContext *context) {
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 	renderBackground = FALSE;
 	nextState = GAME_STATE_PLAY_MAP;
+	game_strategy_ai_init(context);
 }
 
 GameStateEnum handle_play_map_update(GameContext *context) {

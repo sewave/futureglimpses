@@ -197,17 +197,6 @@ static AnimationProperties BIG_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
 		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
 };
 
-static AnimationProperties BIG_BUILDING_CREATE_PROPERTIES[DIRECTIONS_COUNT] = {
-        // DIRECTION_NORTH
-		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
-        // DIRECTION_EAST
-		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
-        // DIRECTION_SOUTH
-		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
-        // DIRECTION_WEST
-		{.startFrame = 1, .xRepos = 0, .yRepos = 0},
-};
-
 static AnimationProperties SMALL_BUILDING_PROPERTIES[DIRECTIONS_COUNT] = {
         // DIRECTION_NORTH
 		{.startFrame = 0, .xRepos = 0, .yRepos = 0},
