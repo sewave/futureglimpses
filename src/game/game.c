@@ -1,14 +1,16 @@
 #include "game/game.h"
+#include "game/state/splash.h"
+#include "game/state/intro.h"
+#include "game/state/title.h"
 #include "game/state/scenario_select.h"
 #include "game/state/load_map.h"
 #include "game/state/play_map.h"
 #include "game/state/menu_map.h"
-#include "game/state/title.h"
 #include "game/state/results.h"
-#include "game/state/splash.h"
 
 static GameState gameStatesTable[NUM_GAME_STATES] = {
 		[GAME_STATE_SPLASH] = {.init = &game_state_splash_init, .update = &game_state_splash_update, .render = &game_state_splash_render},
+		[GAME_STATE_INTRO] = {.init = &game_state_intro_init, .update = &game_state_intro_update, .render = &game_state_intro_render},
 		[GAME_STATE_TITLE] = {.init = &handle_title_init, .update = &handle_title_update, .render = &handle_title_render},
 		[GAME_STATE_SCENARIO_SELECT] = {.init = &handle_scenario_select_init, .update = &handle_scenario_select_update, .render = &handle_scenario_select_render},
 		[GAME_STATE_LOAD_MAP] = {.init = NULL, .update = &handle_load_map_update, .render = NULL},

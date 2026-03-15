@@ -43,22 +43,16 @@ GameStateEnum game_state_splash_update(GameContext *context) {
             splashTicks++;
             return GAME_STATE_SPLASH;
         }
-		if (splashBackground) {
-			destroy_bitmap(splashBackground);
-			splashBackground = NULL;
-		}
-		if (splashMask) {
-			destroy_bitmap(splashMask);
-			splashMask = NULL;
-		}
+		destroy_bitmap(splashBackground);
+		splashBackground = NULL;
+		destroy_bitmap(splashMask);
+		splashMask = NULL;
 		video_fade_out_init(DEFAULT_FADE_SPEED);
-		return GAME_STATE_TITLE;
+		return GAME_STATE_INTRO;
 	}
 }
 
 void game_state_splash_render(GameContext *context, RenderQueue *renderQueue) {
-	if (splashBackground && splashMask) {
-        render_queue_submit_sprite(renderQueue, 0, splashBackground, splashX, splashY, RND_FLAG_NORMAL);
-        render_queue_submit_sprite(renderQueue, 1, splashMask, 0, 0, RND_FLAG_NORMAL);
-	}
+	render_queue_submit_sprite(renderQueue, 0, splashBackground, splashX, splashY, RND_FLAG_NORMAL);
+	render_queue_submit_sprite(renderQueue, 1, splashMask, 0, 0, RND_FLAG_NORMAL);
 }
