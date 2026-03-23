@@ -116,8 +116,9 @@ void game_state_intro_render(GameContext *context, RenderQueue *renderQueue) {
 	for(int i = 0; i < numLines; i++) {
 		int lineY = linesY[i];
 		if(lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
+			int length = text_length(context->gameFont, lines[i]);
 			render_queue_submit_text(
-				renderQueue, 1, context->gameFont, lines[i], LINE_X, lineY,
+				renderQueue, 1, context->gameFont, lines[i], (GAME_INTERNAL_WIDTH - length) / 2, lineY,
 				linesColor[i], TRANSPARENT_INDEX
 			);
 		}

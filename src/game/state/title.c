@@ -4,6 +4,8 @@
 #include <allegro.h>
 
 #define TITLE_BACKGROUND_PATH "assets/ui/title.pcx"
+#define TITLE_TEXT_ES_PATH "assets/ui/t_txt_es.pcx"
+#define TITLE_TEXT_EN_PATH "assets/ui/t_txt_en.pcx"
 
 typedef enum {
 	TITLE_MENU_INITIAL,
@@ -18,7 +20,32 @@ typedef enum {
 } TitleMenuStateEnum;
 
 static TitleMenuStateEnum titleMenuState;
+// TODO title text as background based on language
 static BITMAP *titleBackground;
+static BITMAP *titleText;
+
+static void load_title_text_image(GameContext *context) {
+	char* titleTextPath;
+	switch (context->config.language) {
+		case LANGUAGE_SPANISH:
+			titleTextPath = TITLE_TEXT_ES_PATH;
+			break;
+		case LANGUAGE_ENGLISH:
+		default:
+			titleTextPath = TITLE_TEXT_EN_PATH;
+			break;
+	}
+	titleText = load_bitmap(titleTextPath, NULL);
+	if (!titleText) {
+		fprintf(stderr, "Error loading title text bitmap: %s\n", titleTextPath);
+		exit(EXIT_FAILURE);
+	}
+}
+
+static void set_reload_language(GameContext *context, uint8_t value) {
+	game_config_set_language(context, value);
+	load_title_text_image(context);
+}
 
 static void start_game(GameContext *context) {
 	titleMenuState = TITLE_MENU_START_GAME;
@@ -62,13 +89,18 @@ static void credits(GameContext* context) {
 #define TITLE_MENU_WIDTH 170
 #define TITLE_MENU_HEIGHT 115
 
-#define TITLE_MENU_ELEMENTS 5
+#define TITLE_MENU_ELEMENTS 6
 
 static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+	{
+		.x = 20, .y = 10, .z = 1,
+		.type = GUI_ELEMENT_SPRITE,
+		.typed = { .image = { .bitmap = &titleText } }
 	},
     {
         .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
@@ -132,13 +164,18 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
     },
 };
 
-#define TITLE_MENU_OPTIONS_ELEMENTS 4
+#define TITLE_MENU_OPTIONS_ELEMENTS 5
 
 static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+	{
+		.x = 20, .y = 10, .z = 1,
+		.type = GUI_ELEMENT_SPRITE,
+		.typed = { .image = { .bitmap = &titleText } }
 	},
     {
         .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
@@ -187,13 +224,18 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
     },
 };
 
-#define TITLE_MENU_CONFIRM_EXIT_ELEMENTS 4
+#define TITLE_MENU_CONFIRM_EXIT_ELEMENTS 5
 
 static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+	{
+		.x = 20, .y = 10, .z = 1,
+		.type = GUI_ELEMENT_SPRITE,
+		.typed = { .image = { .bitmap = &titleText } }
 	},
 	{
 		.x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y, .z = 1,
@@ -236,13 +278,18 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 	},
 };
 
-#define TITLE_MENU_SOUND_ELEMENTS 4
+#define TITLE_MENU_SOUND_ELEMENTS 5
 
 static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+	{
+		.x = 20, .y = 10, .z = 1,
+		.type = GUI_ELEMENT_SPRITE,
+		.typed = { .image = { .bitmap = &titleText } }
 	},
     {
         .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
@@ -295,13 +342,18 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 	},
 };
 
-#define GAMEPLAY_MENU_ELEMENTS 4
+#define GAMEPLAY_MENU_ELEMENTS 5
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &titleBackground } }
+	},
+	{
+		.x = 20, .y = 10, .z = 1,
+		.type = GUI_ELEMENT_SPRITE,
+		.typed = { .image = { .bitmap = &titleText } }
 	},
     {
         .x = TITLE_MENU_BUTTON_X, .y = TITLE_MENU_START_Y + TITLE_MENU_SPACING * 3, .z = 1,
@@ -358,7 +410,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
 				},
 				.getValue = game_config_get_language,
-				.setValue = game_config_set_language
+				.setValue = set_reload_language
 			}
 		}
 	},
@@ -443,6 +495,7 @@ void handle_title_init(GameContext *context) {
 		fprintf(stderr, "Error loading title background bitmap: %s\n", TITLE_BACKGROUND_PATH);
 		exit(EXIT_FAILURE);
 	}
+	load_title_text_image(context);
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	game_snd_play_music(GAME_MUSIC_MENUS);
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
@@ -453,10 +506,12 @@ GameStateEnum handle_title_update(GameContext *context) {
 	game_gui_handle(context, guiScreen);
 	if (titleMenuState == TITLE_MENU_START_GAME) {
 		destroy_bitmap(titleBackground);
+		destroy_bitmap(titleText);
 		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_SCENARIO_SELECT;
 	} else if (titleMenuState == TITLE_MENU_EXIT) {
 		destroy_bitmap(titleBackground);
+		destroy_bitmap(titleText);
 		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_EXIT;
 	}

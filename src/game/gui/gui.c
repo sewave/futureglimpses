@@ -589,6 +589,10 @@ void game_gui_render_queue_submit(GameContext *context, RenderQueue *renderQueue
 											  fillRectangle->color);
 				break;
 			}
+			case GUI_ELEMENT_SPRITE: {
+				render_queue_submit_sprite(renderQueue, z, *element->typed.image.bitmap, element->x, element->y, RND_FLAG_NORMAL);
+				break;
+			}
 		}
 	}
 }

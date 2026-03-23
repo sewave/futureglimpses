@@ -31,6 +31,7 @@ typedef enum {
     GUI_ELEMENT_CUSTOM_TEXT_ROWS,
     GUI_ELEMENT_RECTANGLE,
     GUI_ELEMENT_FILL_RECTANGLE,
+    GUI_ELEMENT_SPRITE,
 } GuiElementType;
 
 typedef struct {
