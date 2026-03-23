@@ -105,7 +105,12 @@ GameStateEnum game_state_intro_update(GameContext *context) {
 	calculate_line_colors();
 	if(linesY[numLines - 1] < -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
 		free_lines();
-		video_fade_out_init(DEFAULT_FADE_SPEED);
+		if(keyboard_is_key_pressed(KEY_ESC)) {
+			video_fade_out_init(DEFAULT_FADE_SPEED);
+		}
+		else {
+			video_fade_out_init(64);
+		}
 		return GAME_STATE_TITLE;
 	}
 	return GAME_STATE_INTRO;

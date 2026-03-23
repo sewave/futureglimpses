@@ -59,6 +59,7 @@ void resource_deduct_amount(GameContext *context, ControllerEnum controller, Res
 }
 
 static void resource_update_available_food(GameContext *context, ControllerEnum controller) {
+	if(controller >= UNIT_CONTROLLERS_COUNT) return;
 	uint32_t maxFood = context->resources[controller].quantity[RESOURCE_TYPE_MAX_FOOD];
 	uint32_t usedFood = context->resources[controller].quantity[RESOURCE_TYPE_USED_FOOD];
 	uint32_t availableFood;
