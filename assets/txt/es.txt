@@ -93,3 +93,5 @@ Derrota
 Tú
 Enemigo
 Estadísticas
+Elige escenario:
+Descripción:

@@ -93,3 +93,5 @@ Defeat
 You
 Enemy
 Stats
+Select scenario:
+Description:

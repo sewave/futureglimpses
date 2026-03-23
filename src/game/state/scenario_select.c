@@ -115,13 +115,29 @@ static void go_title_action(GameContext *context) {
 	state = SCENARIO_SELECT_TITLE_STATE;
 }
 
-#define SCENARIO_SELECT_ELEMENTS 10
+#define SCENARIO_SELECT_ELEMENTS 12
 
 static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &background } }
+	},
+	{
+		.x = LEFT_BACK_X, .y = GUI_BODY_Y - 15, .z = 1,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_SELECT_SCENARIO,
+		.textColor = PAL_COLOR_YELLOW,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	{
+		.x = RIGHT_BACK_X, .y = GUI_BODY_Y - 15, .z = 1,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_SCENARIO_DESCRIPTION,
+		.textColor = PAL_COLOR_YELLOW,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
 	},
 	{
 		.x = GUI_BAR_X, .y = GUI_BODY_Y, .z = 10,
