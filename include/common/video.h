@@ -18,5 +18,6 @@ void video_fade_in_init(uint8_t speed, PALETTE palette);
 void video_fade_in_skip_next();
 void video_fade_out_init(uint8_t speed);
 void video_fade_handle();
+int video_color_get_best_match(int r, int g, int b, PALETTE palette);
 
 #endif /* VIDEO_H */

@@ -14,6 +14,10 @@ static FadeEnum fadeType;
 static uint8_t fadeSpeed;
 static uint8_t skipFadeIn;
 
+static int video_get_color_distance(RGB *source, RGB *target) {
+	return abs(source->r - target->r) + abs(source->g - target->g) + abs(source->b - target->b);
+}
+
 InitializationStatusEnum video_init_system(int width, int height, int depth) {
 	printf("Initializing video...");
 	set_color_depth(depth);
@@ -89,4 +93,18 @@ void video_fade_out_init(uint8_t speed) {
 
 void video_fade_in_skip_next() {
 	skipFadeIn = TRUE;
+}
+
+int video_color_get_best_match(int r, int g, int b, PALETTE palette) {
+	int color = 1;
+	RGB target = (RGB) {.r = r, .g = g, .b = b};
+	int distance = video_get_color_distance(&palette[color], &target);
+	for (int i = 1; i < PALETTE_ENTRIES; i++) {
+		int newDistance = video_get_color_distance(&palette[i], &target);
+		if (newDistance < distance) {
+			color = i;
+			distance = newDistance;
+		}
+	}
+	return color;
 }
