@@ -5,7 +5,8 @@
     },
     "activeFile": "test.tmx",
     "expandedProjectPaths": [
-        "."
+        ".",
+        "buildings"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -37,7 +38,7 @@
         },
         "buildings/big_buildings.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInEditor": 5.5
         },
         "buildings/small_buildings.tsx": {
             "scaleInDock": 1,
@@ -55,11 +56,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 583.3333333333334,
-                "y": 796.6666666666665
+                "x": 267.16666666666663,
+                "y": 135.33333333333331
             }
         },
         "tileset.tsx": {
@@ -97,9 +98,9 @@
     "property.type": "string",
     "recentFiles": [
         "test.tmx",
+        "buildings/big_buildings.tsx",
         "base.tmx",
         "win.tmx",
-        "buildings/big_buildings.tsx",
         "buildings/small_buildings.tsx",
         "units/units.tsx",
         "Archer_Blue1.tsx",
