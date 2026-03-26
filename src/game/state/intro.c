@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "game/state/intro.h"
 #include <allegro.h>
+#include "common/starfield.h"
 
 #define LINE_X 4
 #define LINE_Y_SPACING 10
@@ -12,30 +13,44 @@
 #define INTRO_TEXT_FILE_ES "assets/txt/intro_es.txt"
 #define INTRO_TEXT_FILE_EN "assets/txt/intro_en.txt"
 #define TEXTOUT_EX_BOX_BUFFER 2048
+#define STAR_SPEED 6
+#define NUM_STARS 128
 static char buffer[TEXTOUT_EX_BOX_BUFFER];
 
 static uint8_t numLines;
-static char ** lines;
-static int * linesY;
-static int * linesColor;
+static char **lines;
+static int *linesY;
+static int *linesColor;
+static int *colors;
+
+static void init_colors(PALETTE palette) {
+    for(int i = 0; i < NUM_COLORS; i++) {
+        int colorTone = (i * 63) / NUM_COLORS;
+        colors[i] = video_color_get_best_match(colorTone, colorTone, colorTone, palette);
+    }
+}
 
 static void calculate_line_colors() {
-	for(int i = 0; i < numLines; i++) {
-		int color = MAX_COLOR - ((abs(linesY[i] - LINE_Y_HALF) * MAX_COLOR) / LINE_Y_HALF);
-		if(color < 0) color = 0;
-		int colorTone = (color * 255) / MAX_COLOR;
-		linesColor[i] = makecol8(colorTone, colorTone, colorTone);
+	for (int i = 0; i < numLines; i++) {
+		int lineY = linesY[i];
+		if (lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
+			int color = MAX_COLOR - ((abs(linesY[i] - LINE_Y_HALF) * MAX_COLOR) / LINE_Y_HALF);
+			if (color < 0) color = 0;
+			linesColor[i] = colors[color];
+		}
 	}
 }
 
 static void free_lines() {
-	for(int i = 0; i < numLines; i++) free(lines[i]);
+	for (int i = 0; i < numLines; i++) free(lines[i]);
 	free(lines);
 	lines = NULL;
 	free(linesY);
 	linesY = NULL;
 	free(linesColor);
 	linesColor = NULL;
+	free(colors);
+	colors = NULL;
 }
 
 static uint8_t get_number_of_lines(const char *filename) {
@@ -51,16 +66,16 @@ static uint8_t get_number_of_lines(const char *filename) {
 	return currentTextId;
 }
 
-static char** load_text_lines(const char *filename) {
-	char ** lines = (char **) calloc(numLines, sizeof(char *));
+static char **load_text_lines(const char *filename) {
+	char **lines = (char **) calloc(numLines, sizeof(char *));
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
 		fprintf(stderr, "Error reading intro text from [%s].\n", filename);
 		fclose(file);
 		exit(PROGRAM_ERROR);
 	}
-	for(int i = 0; i < numLines; i++) {
-		if(fgets(buffer, sizeof(buffer), file) == NULL) {
+	for (int i = 0; i < numLines; i++) {
+		if (fgets(buffer, sizeof(buffer), file) == NULL) {
 			fprintf(stderr, "Error reading intro text lines from [%s].\n", filename);
 			fclose(file);
 			exit(PROGRAM_ERROR);
@@ -92,25 +107,25 @@ void game_state_intro_init(GameContext *context) {
 
 	linesColor = (int *) calloc(numLines, sizeof(int *));
 	linesY = (int *) calloc(numLines, sizeof(int *));
+	colors = (int *) calloc(NUM_COLORS, sizeof(int *));
+	init_colors(context->mainPalette);
 	int lineY = LINE_Y_START + LINE_Y_SPACING;
-	for(int i = 0; i < numLines; i++) {
+	for (int i = 0; i < numLines; i++) {
 		linesY[i] = lineY;
 		lineY += LINE_Y_SPACING;
 	}
+	starfield_init_stars(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT, NUM_STARS, STAR_SPEED, context->mainPalette);
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 
 GameStateEnum game_state_intro_update(GameContext *context) {
-	for(int i = 0; i < numLines; i++) linesY[i]--;
+	for (int i = 0; i < numLines; i++) linesY[i]--;
 	calculate_line_colors();
-	if(linesY[numLines - 1] < -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
+	starfield_update_stars();
+	if (linesY[numLines - 1] < -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
 		free_lines();
-		if(keyboard_is_key_pressed(KEY_ESC)) {
-			video_fade_out_init(DEFAULT_FADE_SPEED);
-		}
-		else {
-			video_fade_out_init(64);
-		}
+		starfield_free_stars();
+		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_TITLE;
 	}
 	return GAME_STATE_INTRO;
@@ -118,14 +133,16 @@ GameStateEnum game_state_intro_update(GameContext *context) {
 
 void game_state_intro_render(GameContext *context, RenderQueue *renderQueue) {
 	render_queue_submit_rect_fill(renderQueue, 0, 0, 0, GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT, PAL_COLOR_BLACK);
-	for(int i = 0; i < numLines; i++) {
+	for (int i = 0; i < numLines; i++) {
 		int lineY = linesY[i];
-		if(lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
+		if (lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
 			int length = text_length(context->gameFont, lines[i]);
 			render_queue_submit_text(
-				renderQueue, 1, context->gameFont, lines[i], (GAME_INTERNAL_WIDTH - length) / 2, lineY,
-				linesColor[i], TRANSPARENT_INDEX
-			);
+					renderQueue, 10, context->gameFont, lines[i], (GAME_INTERNAL_WIDTH - length) / 2, lineY,
+					linesColor[i], TRANSPARENT_INDEX);
 		}
 	}
+	starfield_draw_stars(renderQueue);
+	snprintf(buffer, sizeof(buffer), "FPS: %.1f", fps_get());
+	render_queue_submit_text(renderQueue, 9999, context->gameFont, buffer, 260, 180, PAL_COLOR_WHITE, -1);
 }
