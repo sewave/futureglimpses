@@ -5,7 +5,7 @@
 #include "common/starfield.h"
 
 #define LINE_X 4
-#define LINE_Y_SPACING 10
+#define LINE_Y_SPACING 20
 #define LINE_Y_START GAME_INTERNAL_HEIGHT
 #define LINE_Y_HALF (GAME_INTERNAL_HEIGHT / 2)
 #define NUM_COLORS 17
