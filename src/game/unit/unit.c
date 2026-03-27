@@ -216,6 +216,10 @@ GameUnit *game_unit_get_by_id(GameContext *context, UnitId id) {
 void game_unit_destroy(GameContext *context, UnitId id) {
 	GameUnit *unit = game_unit_get_by_id(context, id);
 	if (unit && unit->isActive) {
+		if(unit->mustSurvive) {
+			if(unit->controller == UNIT_CONTROLLER_PLAYER) context->gameResult = GAME_RESULT_DEFEAT;
+			else context->gameResult = GAME_RESULT_VICTORY;
+		}
 		unit->isActive = FALSE;
 		for(int i = unit->x; i < unit->x + unit->tileSize; i++) {
 			for(int j = unit->y; j < unit->y + unit->tileSize; j++) {
