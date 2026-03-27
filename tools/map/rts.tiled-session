@@ -56,11 +56,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 3,
-            "selectedLayer": 1,
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 267.16666666666663,
-                "y": 135.33333333333331
+                "x": 892.75,
+                "y": 826.5
             }
         },
         "tileset.tsx": {
@@ -95,7 +95,7 @@
         "test.tmx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "string",
+    "property.type": "AI_MODE",
     "recentFiles": [
         "test.tmx",
         "buildings/big_buildings.tsx",

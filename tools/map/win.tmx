@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="160">
  <editorsettings>
-  <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../assets/map/win.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
@@ -10,10 +10,10 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
-  <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
-  <property name="MSG_LOSE" value="You lose"/>
-  <property name="MSG_TITLE" value="The map title"/>
-  <property name="MSG_WIN" value="You win"/>
+  <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos."/>
+  <property name="MSG_LOSE" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
+  <property name="MSG_TITLE" value="Vas a ganar"/>
+  <property name="MSG_WIN" value="Ganas. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
   <property name="PEACE_TIME" type="int" value="120"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="123456"/>
@@ -104,29 +104,8 @@
     <property name="MUST_SURVIVE" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="94" template="buildings/C_City_Hall.tx" x="48" y="208"/>
-  <object id="115" template="units/C_Worker.tx" x="240" y="240"/>
-  <object id="116" template="units/C_Soldier.tx" x="256" y="240"/>
-  <object id="117" template="units/C_Archer.tx" x="272" y="240"/>
-  <object id="118" template="units/C_Knight.tx" x="288" y="240"/>
-  <object id="119" template="units/C_Mage.tx" x="304" y="240"/>
-  <object id="120" template="buildings/C_Barracks.tx" x="192" y="128"/>
-  <object id="121" template="buildings/C_Stables.tx" x="144" y="224"/>
-  <object id="122" template="buildings/C_Farm.tx" x="16" y="64"/>
-  <object id="123" template="buildings/C_Blacksmith.tx" x="16" y="96"/>
-  <object id="124" template="buildings/C_Tower.tx" x="224" y="64"/>
   <object id="125" template="buildings/P_City_Hall.tx" x="896" y="912"/>
   <object id="126" template="units/P_Worker.tx" x="848" y="880"/>
-  <object id="127" template="units/C_Worker.tx" x="240" y="208"/>
-  <object id="128" template="units/C_Soldier.tx" x="256" y="208"/>
-  <object id="129" template="units/C_Archer.tx" x="272" y="208"/>
-  <object id="130" template="units/C_Knight.tx" x="288" y="208"/>
-  <object id="131" template="units/C_Mage.tx" x="304" y="208"/>
-  <object id="132" template="units/C_Worker.tx" x="240" y="176"/>
-  <object id="133" template="units/C_Soldier.tx" x="256" y="176"/>
-  <object id="134" template="units/C_Archer.tx" x="272" y="176"/>
-  <object id="135" template="units/C_Knight.tx" x="288" y="176"/>
-  <object id="136" template="units/C_Mage.tx" x="304" y="176"/>
   <object id="158" template="units/P_Archer.tx" name="Rajafieras" x="784" y="864">
    <properties>
     <property name="CUSTOM" type="bool" value="true"/>
@@ -136,6 +115,5 @@
     <property name="MUST_SURVIVE" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="159" template="buildings/C_Barracks.tx" x="96" y="192"/>
  </objectgroup>
 </map>
