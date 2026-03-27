@@ -3,6 +3,8 @@
 #include "game/game_lib.h"
 #include <allegro.h>
 
+#define RESULT_MESSAGE_X_OFFSET 5
+
 static int moveViewportCounter = 0;
 static GameStateEnum nextState;
 static uint8_t renderBackground;
@@ -15,6 +17,14 @@ static void go_menu(GameContext* context) {
 static void go_results(GameContext* context) {
 	video_fade_out_init(DEFAULT_FADE_SPEED);
 	nextState = GAME_STATE_RESULTS;
+}
+
+static char* get_win_text(const GameContext* context) {
+	return context->map.win;
+}
+
+static char* get_lose_text(const GameContext* context) {
+	return context->map.lose;
 }
 
 #define PLAY_MENU_ELEMENTS 1
@@ -43,7 +53,7 @@ static BITMAP* menuBack;
 #define BUTTON_CONFIRM_RESULT_X (MENU_BACK_X + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 2)
 #define BUTTON_CONFIRM_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
 
-#define WIN_MENU_ELEMENTS 3
+#define WIN_MENU_ELEMENTS 4
 #define MINIMAP_CENTER_OFFSET_X 8
 #define MINIMAP_CENTER_OFFSET_Y 6
 
@@ -63,7 +73,21 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
-		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 902,
+		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 902,
+		.type = GUI_ELEMENT_CUSTOM_TEXT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.customText = {
+				.text = get_win_text,
+				.maxHeight = MENU_BACK_HEIGHT  - 3 * MENU_TITLE_Y_OFFSET,
+				.maxWidth = MENU_BACK_WIDTH - 2 * RESULT_MESSAGE_X_OFFSET
+			}
+		}
+	},
+	{
+		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 903,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_RESULT_WIN_ACCEPT,
 		.textColor = PAL_COLOR_WHITE,
@@ -72,14 +96,14 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.hotkey = KEY_V,
 		.typed = {
 			.button = {
-				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
+				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH , .height = BUTTON_HEIGHT },
 				.action = go_results
 			}
 		}
 	},
 };
 
-#define LOSE_MENU_ELEMENTS 3
+#define LOSE_MENU_ELEMENTS 4
 
 static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 	{
@@ -95,6 +119,20 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		.textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
+	},
+	{
+		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 902,
+		.type = GUI_ELEMENT_CUSTOM_TEXT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.customText = {
+				.text = get_lose_text,
+				.maxHeight = MENU_BACK_HEIGHT  - 3 * MENU_TITLE_Y_OFFSET,
+				.maxWidth = MENU_BACK_WIDTH - 2 * RESULT_MESSAGE_X_OFFSET
+			}
+		}
 	},
 	{
 		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 902,
@@ -247,7 +285,6 @@ static void game_update(GameContext *context) {
 		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 		context->gameResult = GAME_RESULT_VICTORY;
 	}
-	// TODO win/loss results screen
 }
 
 static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
