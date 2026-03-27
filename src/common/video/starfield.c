@@ -52,7 +52,10 @@ void starfield_draw_stars(RenderQueue *renderQueue) {
 		int sx = ((s->x << STAR_RESOLUTION) / s->z) + (width / 2);
 		int sy = ((s->y << STAR_RESOLUTION) / s->z) + (height / 2);
 		int color = colors[MAX_COLOR - (s->z * MAX_COLOR) / MAX_Z];
-		render_queue_submit_rect_fill(renderQueue, 1, sx, sy, sx + 1, sy + 1, color);
+		int size = 0;
+		if(s->z <  (2 * MAX_Z) / 3) size = 1;
+		if(s->z <  (1 * MAX_Z) / 3) size = 2;
+		render_queue_submit_rect_fill(renderQueue, 1, sx, sy, sx + size, sy + size, color);
 	}
 }
 
