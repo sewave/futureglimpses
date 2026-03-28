@@ -4,7 +4,7 @@
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
-  <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
+  <property name="AI_MODE" type="int" propertytype="AI_MODE" value="2"/>
   <property name="ENABLE_BARRACKS" type="bool" value="true"/>
   <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
   <property name="ENABLE_FARM" type="bool" value="true"/>
@@ -14,7 +14,7 @@
   <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="The map title"/>
   <property name="MSG_WIN" value="You win"/>
-  <property name="PEACE_TIME" type="int" value="120"/>
+  <property name="PEACE_TIME" type="int" value="5"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="123456"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="100000"/>
@@ -111,7 +111,7 @@
   <object id="118" template="units/C_Knight.tx" x="288" y="240"/>
   <object id="119" template="units/C_Mage.tx" x="304" y="240"/>
   <object id="120" template="buildings/C_Barracks.tx" x="192" y="128"/>
-  <object id="121" template="buildings/C_Stables.tx" x="144" y="224"/>
+  <object id="121" template="buildings/C_Stables.tx" x="144" y="224" opacity="0.93"/>
   <object id="122" template="buildings/C_Farm.tx" x="16" y="64"/>
   <object id="123" template="buildings/C_Blacksmith.tx" x="16" y="96"/>
   <object id="124" template="buildings/C_Tower.tx" x="224" y="64"/>

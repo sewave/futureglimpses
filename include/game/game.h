@@ -258,6 +258,8 @@ typedef struct {
 	int desiredWorkers;
 	UnitPosition initialBuildings[MAX_AI_HANDLED_BUILDINGS];
 	int initialBuildingsCount;
+	AIAttackBuildEnum attackBuild;
+	AIBuildStateEnum buildState;
 } AIData;
 
 typedef struct {

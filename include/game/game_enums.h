@@ -168,4 +168,17 @@ typedef enum {
 	AI_MODE_AGGRESSIVE,
 } AIModeEnum;
 
+typedef enum {
+	AI_ATTACK,
+	AI_BUILD
+} AIAttackBuildEnum;
+
+typedef enum {
+	BUILD_STATE_CREATE_WORKERS,
+	BUILD_STATE_BUILDER_WORKERS,
+	BUILD_STATE_HARVEST_WORKERS,
+	BUILD_STATE_TRAIN_UNITS,
+	BUILD_STATE_COUNT,
+} AIBuildStateEnum;
+
 #endif /* GAME_ENUMS_H */
