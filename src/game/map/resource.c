@@ -8,8 +8,9 @@
 #define BASE_TEN_NUMER 10
 #define FOOD_USE_FORMAT "%u/%u"
 #define FOOD_USE_SURPASSED_FORMAT "^005%u^001/%u"
-#define WORKER_RESOURCE_GATHER 5
-#define WORKER_RESOURCE_GATHER_MAX 10
+#define WORKER_RESOURCE_WOOD_GATHER 3
+#define WORKER_RESOURCE_GOLD_GATHER 10
+#define WORKER_RESOURCE_GATHER_MAX 100
 
 static int RESOURCE_TEXT_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{89, 1},
@@ -158,25 +159,30 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker) {
 			case TILE_TYPE_WOOD:
 				if (workerData->carriedResourceType == RESOURCE_TYPE_WOOD || workerData->carriedResourceQty == 0) {
 					workerData->carriedResourceType = RESOURCE_TYPE_WOOD;
-					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GATHER, 0,
-						WORKER_RESOURCE_GATHER_MAX);
+					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_WOOD_GATHER, 0,
+														   WORKER_RESOURCE_GATHER_MAX);
+				}
+				if (tile->data >= WORKER_RESOURCE_WOOD_GATHER) {
+					tile->data -= WORKER_RESOURCE_WOOD_GATHER;
+				} else {
+					tile->data = 0;
 				}
 				break;
 			case TILE_TYPE_GOLD:
 				if (workerData->carriedResourceType == RESOURCE_TYPE_GOLD || workerData->carriedResourceQty == 0) {
 					workerData->carriedResourceType = RESOURCE_TYPE_GOLD;
-					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GATHER, 0,
-						WORKER_RESOURCE_GATHER_MAX);
+					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GOLD_GATHER, 0,
+														   WORKER_RESOURCE_GATHER_MAX);
+				}
+				if (tile->data >= WORKER_RESOURCE_GOLD_GATHER) {
+					tile->data -= WORKER_RESOURCE_GOLD_GATHER;
+				} else {
+					tile->data = 0;
 				}
 				break;
 			default:
 				return;
 				break;
-		}
-		if (tile->data >= WORKER_RESOURCE_GATHER) {
-			tile->data -= WORKER_RESOURCE_GATHER;
-		} else {
-			tile->data = 0;
 		}
 		if (tile->data == 0) {
 			tile->type = TILE_TYPE_WALKABLE;
@@ -196,9 +202,7 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker) {
 
 			// Search the nearest city hall on active units to drop the resources
 			GameUnit *closeCityHall = game_unit_get_nearest_unit_type(context, worker, UNIT_TYPE_CITY_HALL, worker->controller);
-			if (closeCityHall) {
-				game_unit_command_move(worker, closeCityHall, closeCityHall->x, closeCityHall->y);
-			}
+			if (closeCityHall) game_unit_command_move(worker, closeCityHall, closeCityHall->x, closeCityHall->y);
 		}
 		else {
 			if(tile->data == 0) {
