@@ -41,6 +41,7 @@
 #define TILESET_TILES_COLOR_WIDTH 16
 #define TILESET_TILES_COLOR_HEIGHT 16
 #define CUSTOM_UNIT_NAME_LENGTH 11
+#define MAX_AI_HANDLED_BUILDINGS 256
 
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
@@ -245,9 +246,18 @@ typedef struct {
 } BoardTile;
 
 typedef struct {
+	UnitTypeEnum type;
+	uint16_t x, y;
+} UnitPosition;
+
+typedef struct {
 	uint16_t attackCounter;
 	uint16_t peaceCounter;
-	uint8_t currentWaveUnits;
+	int currentWaveUnits;
+	int initialFood;
+	int desiredWorkers;
+	UnitPosition initialBuildings[MAX_AI_HANDLED_BUILDINGS];
+	int initialBuildingsCount;
 } AIData;
 
 typedef struct {

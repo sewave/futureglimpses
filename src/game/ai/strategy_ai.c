@@ -4,15 +4,27 @@
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 32
 
+static void game_strategy_ai_create_workers(GameContext *context) {
+	// TODO: Have 25% of initial food on workers (Fixed by map)
+}
+
+static void game_strategy_ai_builder_workers(GameContext *context) {
+	// TODO: Have 2-4 workers repair/reconstruct buildings (can steal from other tasks)
+}
+
+static void game_strategy_ai_harvester_workers(GameContext *context) {
+	// TODO: Have remaining workers with assigned tasks 50/50 gold/wood
+}
+
+static void game_strategy_ai_train_units(GameContext *context) {
+	// TODO: Create units on barracks/tower
+}
+
 static void game_strategy_ai_build_train(GameContext *context) {
-	// TODO, everything except send attacks
-	// Map must have all required buildings, so we train, harvest, repair and rebuild
-	// Training goes:
-	// 1) Have 10% of initial food on workers (Fixed by map)
-	// 2) Have 1-2 workers repair/construct buildings (can steal from other tasks)
-	// 3) Have remaining workers with assigned tasks 50/50 gold/wood
-	// 4) Rebuild destroyed buildings (check list), if there is enemy here, attack, else build (if has the resources)
-	// 5) Train units (and send them somewhere?)
+	game_strategy_ai_create_workers(context);
+	game_strategy_ai_builder_workers(context);
+	game_strategy_ai_harvester_workers(context);
+	game_strategy_ai_train_units(context);
 }
 
 static void game_strategy_ai_attack(GameContext *context) {
@@ -53,11 +65,24 @@ static void game_strategy_ai_attack(GameContext *context) {
 		}
 	}
 	if (target) {
-		for (int i = 0; i < foundUnitsCount; i++) {
-			GameUnit* unit = foundUnits[i];
-			game_unit_command_move_attack(unit, target, 0, 0);
-		}
+		for (int i = 0; i < foundUnitsCount; i++) game_unit_command_move_attack(foundUnits[i], target, 0, 0);
 		context->aiData.currentWaveUnits++;
+	}
+}
+
+static void game_strategy_ai_scan_buildings(GameContext *context) {
+	context->aiData.initialBuildingsCount = 0;
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI &&  unit->isBuilding) {
+			context->aiData.initialBuildings[context->aiData.initialBuildingsCount++] = (UnitPosition) {
+				.type = unit->type,
+				.x = unit->x,
+				.y = unit->y,
+			};
+			if (context->aiData.initialBuildingsCount == MAX_AI_HANDLED_BUILDINGS) break;
+		}
 	}
 }
 
@@ -65,8 +90,9 @@ void game_strategy_ai_init(GameContext *context) {
 	context->aiData.attackCounter = 0;
     context->aiData.peaceCounter = 0;
 	context->aiData.currentWaveUnits = FIRST_WAVE_UNITS;
-	// TODO init all ai variables
-	// TODO scan buildings to track rebuild later
+	context->aiData.initialFood = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_MAX_FOOD];
+	context->aiData.desiredWorkers = context->aiData.initialFood / 4; // 25% must be workers
+	game_strategy_ai_scan_buildings(context);
 }
 
 void game_strategy_ai_execute(GameContext *context) {

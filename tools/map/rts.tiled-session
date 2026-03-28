@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "test.tmx",
+    "activeFile": "win.tmx",
     "expandedProjectPaths": [
         ".",
         "buildings"
@@ -56,15 +56,15 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 892.75,
-                "y": 826.5
+                "x": 318.33333333333337,
+                "y": 267.66666666666663
             }
         },
         "tileset.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5,
             "scaleInEditor": 2
         },
         "units/units.tsx": {
@@ -73,10 +73,10 @@
         },
         "win.tmx": {
             "scale": 0.605810546875,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 511.7111308132506,
-                "y": 151.0373176432659
+                "x": 801.405658096236,
+                "y": 655.3203836543887
             }
         }
     },
@@ -92,22 +92,24 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "test.tmx"
+        "test.tmx",
+        "win.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
         "test.tmx",
+        "win.tmx",
+        "tileset.tsx",
         "buildings/big_buildings.tsx",
         "base.tmx",
-        "win.tmx",
         "buildings/small_buildings.tsx",
         "units/units.tsx",
         "Archer_Blue1.tsx",
-        "tileset.tsx",
         "FullTileset.tsx",
         "sin nombre.tmx"
     ],
+    "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 0,
