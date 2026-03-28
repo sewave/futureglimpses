@@ -187,6 +187,16 @@ static void game_update(GameContext *context) {
 			resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 		}
 		if (keyboard_is_key_pressed(KEY_F12)) nextState = GAME_STATE_LOAD_MAP;
+		if (keyboard_is_key_pressed(KEY_DEL)) {
+			for (int i = 0; i < context->selectedUnitCount; i++) {
+				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+				if (unit && unit->isActive && unit->state != UNIT_STATE_DIE) {
+					unit->health = 0;
+					unit->state = UNIT_STATE_DIE;
+					game_animation_unit_set(unit);
+				}
+			}
+		}
 	}
 
 	game_selection_handle_slots(context);
@@ -275,15 +285,12 @@ static void game_update(GameContext *context) {
 		GameUnit *unit = context->activeUnits[i];
 		if (unit == NULL || unit->controller == UNIT_CONTROLLER_PLAYER) playerUnitsCount++;
 	}
-	if(playerUnitsCount == 0) {
+	if(playerUnitsCount == 0) context->gameResult = GAME_RESULT_DEFEAT;
+	if (playerUnitsCount == context->activeUnitCount) context->gameResult = GAME_RESULT_VICTORY;
+	// We can enter here via unit count or others
+	if(context->gameResult == GAME_RESULT_DEFEAT || context->gameResult == GAME_RESULT_VICTORY) {
 		menuBack = game_gfx_get_menu_back();
 		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-		context->gameResult = GAME_RESULT_DEFEAT;
-	}
-	else if (playerUnitsCount == context->activeUnitCount) {
-		menuBack = game_gfx_get_menu_back();
-		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-		context->gameResult = GAME_RESULT_VICTORY;
 	}
 }
 
