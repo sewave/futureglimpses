@@ -176,6 +176,7 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 		unit->prevY = unit->y;
 		unit->state = unit->nextState;
 		unit->nextState = UNIT_STATE_IDLE;
+		if(unit->controller == UNIT_CONTROLLER_PLAYER) game_unit_explore(context, unit);
 		game_animation_unit_set(unit);
 	}
 }

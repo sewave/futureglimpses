@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="167">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="218">
  <editorsettings>
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -136,5 +136,26 @@
     <property name="MUST_SURVIVE" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="197" template="units/P_Archer.tx" x="656" y="672"/>
+  <object id="198" template="units/P_Archer.tx" x="608" y="688"/>
+  <object id="199" template="units/P_Archer.tx" x="656" y="704"/>
+  <object id="200" template="units/P_Archer.tx" x="688" y="720"/>
+  <object id="201" template="units/P_Archer.tx" x="592" y="736"/>
+  <object id="202" template="units/P_Archer.tx" x="480" y="704"/>
+  <object id="203" template="units/P_Archer.tx" x="400" y="736"/>
+  <object id="204" template="units/P_Archer.tx" x="352" y="800"/>
+  <object id="205" template="units/P_Archer.tx" x="656" y="432"/>
+  <object id="206" template="units/P_Archer.tx" x="656" y="464"/>
+  <object id="207" template="units/P_Archer.tx" x="656" y="480"/>
+  <object id="208" template="units/P_Archer.tx" x="656" y="496"/>
+  <object id="209" template="units/P_Archer.tx" x="656" y="512"/>
+  <object id="210" template="units/P_Archer.tx" x="656" y="528"/>
+  <object id="211" template="units/P_Archer.tx" x="656" y="544"/>
+  <object id="212" template="units/P_Archer.tx" x="656" y="560"/>
+  <object id="213" template="units/P_Archer.tx" x="672" y="576"/>
+  <object id="214" template="units/P_Archer.tx" x="688" y="608"/>
+  <object id="215" template="units/P_Archer.tx" x="688" y="624"/>
+  <object id="216" template="units/P_Archer.tx" x="704" y="672"/>
+  <object id="217" template="units/P_Archer.tx" x="720" y="688"/>
  </objectgroup>
 </map>

@@ -188,11 +188,13 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker) {
 			tile->type = TILE_TYPE_WALKABLE;
 			tile->tile = tile->altTile;
 			context->walkabilityGrid[workerData->workplace.x][workerData->workplace.y] = WALKABILITY_FREE;
-			blit(game_gfx_get_tileset(), context->renderedBoard,
-				(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
-				workerData->workplace.x * TILE_SIZE, workerData->workplace.y * TILE_SIZE,
-				TILE_SIZE, TILE_SIZE);
-			putpixel(context->renderedMinimap, workerData->workplace.x, workerData->workplace.y, context->minimapColors[tile->tile]);
+			if(context->boardExploration[workerData->workplace.x][workerData->workplace.y] == BOARD_EXPLORED) {
+				blit(game_gfx_get_tileset(), context->renderedBoard,
+					(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
+					workerData->workplace.x * TILE_SIZE, workerData->workplace.y * TILE_SIZE,
+					TILE_SIZE, TILE_SIZE);
+				putpixel(context->renderedMinimap, workerData->workplace.x, workerData->workplace.y, context->minimapColors[tile->tile]);
+			}
 		}
 
 		if (workerData->carriedResourceQty >= WORKER_RESOURCE_GATHER_MAX) {

@@ -13,7 +13,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = FALSE,
 				.minAttackRange = 0,
 				.maxAttackRange = 1,
-				.sightRange = 5,
+				.sightRange = 3,
 				.health = 50,
 				.maxHealth = 50,
 				.tileSize = 1,
@@ -28,7 +28,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = FALSE,
 				.minAttackRange = 0,
 				.maxAttackRange = 1,
-				.sightRange = 6,
+				.sightRange = 3,
 				.health = 100,
 				.maxHealth = 100,
 				.tileSize = 1,
@@ -43,7 +43,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = FALSE,
 				.minAttackRange = 1,
 				.maxAttackRange = 5,
-				.sightRange = 7,
+				.sightRange = 4,
 				.health = 75,
 				.maxHealth = 75,
 				.tileSize = 1,
@@ -58,7 +58,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = FALSE,
 				.minAttackRange = 0,
 				.maxAttackRange = 1,
-				.sightRange = 6,
+				.sightRange = 3,
 				.health = 120,
 				.maxHealth = 120,
 				.tileSize = 1,
@@ -73,7 +73,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = FALSE,
 				.minAttackRange = 2,
 				.maxAttackRange = 8,
-				.sightRange = 10,
+				.sightRange = 5,
 				.health = 80,
 				.maxHealth = 80,
 				.tileSize = 1,
@@ -88,7 +88,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 10,
+				.sightRange = 5,
 				.health = 1000,
 				.maxHealth = 1000,
 				.tileSize = 3,
@@ -103,7 +103,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 5,
+				.sightRange = 3,
 				.health = 500,
 				.maxHealth = 500,
 				.tileSize = 2,
@@ -118,7 +118,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 8,
+				.sightRange = 3,
 				.health = 800,
 				.maxHealth = 800,
 				.tileSize = 3,
@@ -133,7 +133,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 6,
+				.sightRange = 0,
 				.health = 650,
 				.maxHealth = 650,
 				.tileSize = 2,
@@ -148,7 +148,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 7,
+				.sightRange = 0,
 				.health = 850,
 				.maxHealth = 850,
 				.tileSize = 3,
@@ -163,7 +163,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 6,
+				.sightRange = 3,
 				.health = 750,
 				.maxHealth = 750,
 				.tileSize = 2,
@@ -496,4 +496,30 @@ GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, 
 		}
 	}
 	return closestUnit;
+}
+
+void game_unit_explore(GameContext *context, GameUnit *unit) {
+	for (int x = unit->x - unit->sightRange; x <= unit->x + unit->sightRange; x++) {
+		for (int y = unit->y - unit->sightRange; y <= unit->y + unit->sightRange; y++) {
+			if (context->boardExploration[x][y] == BOARD_UNEXPLORED &&
+				(abs(x - unit->x) < unit->sightRange || abs(y - unit->y) < unit->sightRange)) {
+				BoardTile *tile = &context->board[x][y];
+				blit(game_gfx_get_tileset(), context->renderedBoard,
+				(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
+				x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+				putpixel(context->renderedMinimap, x, y, context->minimapColors[tile->tile]);
+				context->boardExploration[x][y] = BOARD_EXPLORED;
+			}
+		}
+	}
+}
+
+uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit) {
+	if(unit->controller == UNIT_CONTROLLER_PLAYER) return TRUE;
+	for(int x = 0; x < unit->tileSize; x++) {
+		for(int y = 0; y < unit->tileSize; y++) {
+			if(context->boardExploration[unit->x + x][unit->y + y] == BOARD_EXPLORED) return TRUE;
+		}
+	}
+	return FALSE;
 }

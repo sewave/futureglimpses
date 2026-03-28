@@ -75,7 +75,8 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 		GameUnit *unit = *activeUnits;
 		int unitSize = unit->tileSize * TILE_SIZE;
 		if (unit->y <= cameraMaxY && unit->x <= cameraMaxX &&
-			unit->x >= cameraMinX - unitSize && unit->y >= cameraMinY - unitSize) {
+			unit->x >= cameraMinX - unitSize && unit->y >= cameraMinY - unitSize &&
+			game_unit_is_visible(context, unit)) {
 			AnimationStatus *animationStatus = &unit->animationStatus;
 			AnimationProperties *prop = animationStatus->animation.prop;
 			int unitWorldX, unitWorldY;

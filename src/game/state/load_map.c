@@ -123,19 +123,6 @@ static void render_minimap(GameContext *context) {
 			context->minimapColors[x + y * TILESET_TILES_COLOR_WIDTH] = getpixel(minimapImage, x, y);
 		}
 	}
-
-	BITMAP* tileSet = game_gfx_get_tileset();
-	for (int x = 0; x < BOARD_WIDTH; x++) {
-		for (int y = 0; y < BOARD_HEIGHT; y++) {
-			int tile = context->board[x][y].tile;
-			blit(
-					tileSet, context->renderedBoard,
-					(tile % TILE_SIZE) * TILE_SIZE, (tile / TILE_SIZE) * TILE_SIZE,
-					x * TILE_SIZE, y * TILE_SIZE,
-					TILE_SIZE, TILE_SIZE);
-			putpixel(context->renderedMinimap, x, y, context->minimapColors[tile]);
-		}
-	}
 }
 
 GameStateEnum handle_load_map_update(GameContext *context) {
@@ -154,9 +141,11 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
+	rectfill(context->renderedBoard, 0, 0, context->renderedBoard->w, context->renderedBoard->h, PAL_COLOR_BLACK);
 
 	if (context->renderedMinimap) { destroy_bitmap(context->renderedMinimap); }
 	context->renderedMinimap = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
+	rectfill(context->renderedMinimap, 0, 0, context->renderedMinimap->w, context->renderedMinimap->h, PAL_COLOR_BLACK);
 
 	if (context->renderedMinimapUnits) { destroy_bitmap(context->renderedMinimapUnits); }
 	context->renderedMinimapUnits = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
@@ -178,6 +167,11 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 			game_selection_clear(context);
 			break;
 		}
+	}
+
+	for (int i = 0; i < context->activeUnitCount; i++) {
+		GameUnit *unit = context->activeUnits[i];
+		if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) game_unit_explore(context, unit);
 	}
 
 	return GAME_STATE_PLAY_MAP;

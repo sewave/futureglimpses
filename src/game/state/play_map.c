@@ -301,6 +301,7 @@ static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
 	GameUnit **activeUnits = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
+		if(!game_unit_is_visible(context, unit)) continue;
 		int color = unit->controller == UNIT_CONTROLLER_PLAYER ? PAL_COLOR_GREEN : PAL_COLOR_RED;
 		if (unit->tileSize == 1) {
 			putpixel(context->renderedMinimapUnits, unit->x, unit->y, color);
