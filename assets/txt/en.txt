@@ -90,8 +90,19 @@ Credits line number 2
 Credits line number 3
 Victory
 Defeat
-You
-Enemy
-Stats
 Select scenario:
 Description:
+You
+___
+Enemy
+_____
+Stats
+_____
+Units trained
+Enemies killed
+Buildings constructed
+Buildings destroyed
+Gold harvested
+Wood harvested
+Gold spent
+Wood spent

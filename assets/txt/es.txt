@@ -90,8 +90,19 @@ Línea de créditos núm. 2
 Línea de créditos núm. 3
 Victoria
 Derrota
-Tú
-Enemigo
-Estadísticas
 Elige escenario:
 Descripción:
+Tú
+__
+Enemigo
+_______
+Estadísticas
+____________
+Unidades entrenadas
+Enemigos eliminados
+Edificios construidos
+Edificios destruidos
+Oro recolectado
+Madera recolectada
+Oro gastado
+Madera gastada
