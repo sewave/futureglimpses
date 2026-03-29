@@ -20,7 +20,6 @@ typedef enum {
 } TitleMenuStateEnum;
 
 static TitleMenuStateEnum titleMenuState;
-// TODO title text as background based on language
 static BITMAP *titleBackground;
 static BITMAP *titleText;
 

@@ -179,7 +179,7 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 	int tileY = game_spatial_get_board_y_position(context->yPosition, mouseY);
 	UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 	GameUnit *sourceUnit = game_unit_get_by_id(context, id);
-	if (sourceUnit && !sourceUnit->isBuilding && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
+	if (sourceUnit && !sourceUnit->isBuilding && !sourceUnit->isCustom && sourceUnit->controller == UNIT_CONTROLLER_PLAYER) {
 		UnitTypeEnum targetType = sourceUnit->type;
 		game_selection_clear(context);
 		int tileMinX = clamp(context->xPosition / TILE_SIZE, BOARD_X_MIN, BOARD_X_MAX);
@@ -191,7 +191,8 @@ static void handle_viewport_select_all_of_same_type(GameContext *context, int mo
 				UnitId id = context->walkabilityGrid[col][row];
 				if (id < HANDLE_ID_THRESHOLD) continue;
 				GameUnit *foundUnit = game_unit_get_by_id(context, id);
-				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER && foundUnit->type == targetType) {
+				if (foundUnit && foundUnit->controller == UNIT_CONTROLLER_PLAYER &&
+					foundUnit->type == targetType && !foundUnit->isCustom) {
 					game_selection_add_unit(context, foundUnit);
 				}
 			}
