@@ -109,3 +109,13 @@ uint8_t game_spatial_object_in_viewport(const GameContext* context, const Object
 	return object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
 		   object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH);
 }
+
+uint8_t game_spatial_unit_target_in_attack_range(GameUnit* unit, GameUnit* target) {
+	return (game_spatial_unit_in_range(unit, target, unit->maxAttackRange) &&
+		!game_spatial_unit_in_range(unit, target, unit->minAttackRange));
+}
+
+uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int targetY) {
+	return (game_spatial_target_in_range(unit, targetX, targetY, unit->maxAttackRange) &&
+		!game_spatial_target_in_range(unit, targetX, targetY, unit->minAttackRange));
+}
