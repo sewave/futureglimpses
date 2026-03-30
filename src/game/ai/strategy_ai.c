@@ -6,19 +6,19 @@
 #define MAX_WAVE_UNITS 16
 
 static void game_strategy_ai_create_workers(GameContext *context) {
-	// TODO: Have 25% of initial food on workers (Fixed by map)
+	// TODO Have 25% of initial food on workers (Fixed by map)
 }
 
 static void game_strategy_ai_builder_workers(GameContext *context) {
-	// TODO: Have 2-4 workers repair/reconstruct buildings (can steal from other tasks)
+	// TODO Have 2-4 workers repair/reconstruct buildings (can steal from other tasks)
 }
 
 static void game_strategy_ai_harvester_workers(GameContext *context) {
-	// TODO: Have remaining workers with assigned tasks 50/50 gold/wood
+	// TODO Have remaining workers with assigned tasks 50/50 gold/wood
 }
 
 static void game_strategy_ai_train_units(GameContext *context) {
-	// TODO: Create units on barracks/tower, only if at least there is money for a worker or all desired workers are trained
+	// TODO Create units on barracks/tower, only if at least there is money for a worker or all desired workers are trained
 }
 
 static void game_strategy_ai_build_train(GameContext *context) {

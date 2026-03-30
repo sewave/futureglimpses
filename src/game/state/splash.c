@@ -31,6 +31,7 @@ void game_state_splash_init(GameContext *context) {
 	}
 	calculate_splash_position();
     set_palette(context->mainPalette);
+	game_snd_play_music(GAME_MUSIC_INTRO);
 }
 
 GameStateEnum game_state_splash_update(GameContext *context) {

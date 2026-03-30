@@ -3,10 +3,10 @@
 #include "common/sound.h"
 
 #define MOD_VOICES 4
-#define GAME_VOICES 8
+#define GAME_VOICES 4
 
 typedef enum {
-	GAME_MUSIC_CREDITS,
+	GAME_MUSIC_INTRO,
 	GAME_MUSIC_MENUS,
 	GAME_MUSIC_VICTORY,
 	GAME_MUSIC_DEFEAT,
@@ -17,7 +17,6 @@ typedef enum {
 } GameMusic;
 
 typedef enum {
-	GAME_SOUND_SEA_WAVES,
 	GAME_SOUND_CLICK,
 	GAME_SOUND_IRON_HIT,
 	GAME_SOUND_CHOP,

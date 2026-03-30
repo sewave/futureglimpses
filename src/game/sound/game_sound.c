@@ -2,27 +2,25 @@
 #include "game/sound/game_sound.h"
 #include <stdio.h>
 
-// TODO add music
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
-		[GAME_MUSIC_CREDITS] = "assets/music/menus.mid",
+        [GAME_MUSIC_INTRO] = "assets/music/intro.mid",
         [GAME_MUSIC_MENUS] = "assets/music/menus.mid",
-        [GAME_MUSIC_VICTORY] = "assets/music/menus.mid",
-        [GAME_MUSIC_DEFEAT] = "assets/music/menus.mid",
+        [GAME_MUSIC_VICTORY] = "assets/music/victory.mid",
+        [GAME_MUSIC_DEFEAT] = "assets/music/defeat.mid",
         [GAME_MUSIC_MAP_1] = "assets/music/map1.mid",
-        [GAME_MUSIC_MAP_2] = "assets/music/menus.mid",
-        [GAME_MUSIC_MAP_3] = "assets/music/menus.mid",
+        [GAME_MUSIC_MAP_2] = "assets/music/map2.mid",
+        [GAME_MUSIC_MAP_3] = "assets/music/map3.mid",
 };
 
-// TODO add sounds
+// TODO add sounds for fireball launch, building crumble, my lord and yes
 const char* gameSoundFilenames [GAME_SOUNDS_COUNT] = {
-		[GAME_SOUND_SEA_WAVES] = "assets/sound/click.wav",
         [GAME_SOUND_CLICK] = "assets/sound/click.wav",
         [GAME_SOUND_IRON_HIT] = "assets/sound/ironhit.wav",
         [GAME_SOUND_CHOP] = "assets/sound/chop.wav",
         [GAME_SOUND_WORK] = "assets/sound/work.wav",
         [GAME_SOUND_GOLD_HIT] = "assets/sound/goldhit.wav",
         [GAME_SOUND_THROW_ARROW] = "assets/sound/arrowthr.wav",
-        [GAME_SOUND_ARROW_HIT] = "assets/sound/ironhit.wav",
+        [GAME_SOUND_ARROW_HIT] = "assets/sound/arrowhit.wav",
         [GAME_SOUND_FIREBALL_LAUNCH] = "assets/sound/click.wav",
         [GAME_SOUND_FIREBALL_EXPLOSION] = "assets/sound/fbexplo.wav",
         [GAME_SOUND_BUILDING_CRUMBLE] = "assets/sound/click.wav",
