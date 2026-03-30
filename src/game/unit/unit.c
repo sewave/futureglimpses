@@ -360,8 +360,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 	}
 
-	// TODO spawn sound? building placed / unit ready
-
+	if(unit->isBuilding) game_snd_play_sound(GAME_SOUND_BUILDING_CRUMBLE);
 	return unit;
 }
 

@@ -1,2 +1,2 @@
-Test campaign title plus
-Lorem ipsum dolor sit amet consectetur.
+Campaña de inicio
+Una campaña para aprender a jugar, desde lo más sencillo.

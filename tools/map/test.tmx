@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="218">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="235">
  <editorsettings>
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -157,5 +157,17 @@
   <object id="215" template="units/P_Archer.tx" x="688" y="624"/>
   <object id="216" template="units/P_Archer.tx" x="704" y="672"/>
   <object id="217" template="units/P_Archer.tx" x="720" y="688"/>
+  <object id="223" template="units/P_Archer.tx" x="192" y="704"/>
+  <object id="224" template="units/P_Archer.tx" x="224" y="704"/>
+  <object id="225" template="units/P_Archer.tx" x="208" y="704"/>
+  <object id="226" template="units/P_Archer.tx" x="240" y="704"/>
+  <object id="227" template="units/P_Archer.tx" x="256" y="704"/>
+  <object id="228" template="units/P_Archer.tx" x="272" y="704"/>
+  <object id="229" template="units/C_Archer.tx" x="192" y="736"/>
+  <object id="230" template="units/C_Archer.tx" x="208" y="736"/>
+  <object id="231" template="units/C_Archer.tx" x="240" y="736"/>
+  <object id="232" template="units/C_Archer.tx" x="224" y="736"/>
+  <object id="233" template="units/C_Archer.tx" x="256" y="736"/>
+  <object id="234" template="units/C_Archer.tx" x="272" y="736"/>
  </objectgroup>
 </map>

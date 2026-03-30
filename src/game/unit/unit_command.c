@@ -50,10 +50,11 @@ void game_unit_command_move(GameUnit *unit, GameUnit *target, int16_t targetX, i
 void game_unit_command_move_attack(GameUnit *unit, GameUnit *target, int16_t targetX, int16_t targetY) {
     if(target) {
         unit->targetId = target->id;
-        unit->targetX = target->x;
-        unit->targetY = target->y;
+        unit->targetX = NO_TARGET_POSITION;
+        unit->targetY = NO_TARGET_POSITION;
     }
     else {
+        unit->targetId = NO_TARGET_ID;
         unit->targetX = targetX;
         unit->targetY = targetY;
     }

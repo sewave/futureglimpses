@@ -59,8 +59,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 318.33333333333337,
-                "y": 267.66666666666663
+                "x": 296.33333333333337,
+                "y": 687
             }
         },
         "tileset.tsx": {
@@ -80,7 +80,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/testcmp",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
