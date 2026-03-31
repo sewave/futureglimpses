@@ -118,7 +118,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 0,
-				.sightRange = 3,
+				.sightRange = 5,
 				.health = 800,
 				.maxHealth = 800,
 				.tileSize = 3,
@@ -357,7 +357,8 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 
 	if(unit->controller == UNIT_CONTROLLER_PLAYER && !unit->isBuilding) {
 		message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
-		SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+			SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+		game_unit_explore(context, unit);
 	}
 
 	if(unit->isBuilding) game_snd_play_sound(GAME_SOUND_BUILDING_CRUMBLE);
@@ -498,10 +499,17 @@ GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, 
 }
 
 void game_unit_explore(GameContext *context, GameUnit *unit) {
-	for (int x = unit->x - unit->sightRange; x <= unit->x + unit->sightRange; x++) {
-		for (int y = unit->y - unit->sightRange; y <= unit->y + unit->sightRange; y++) {
+	int halfTiles = (unit->tileSize - 1) / 2;
+	int xCenter = unit->x + halfTiles;
+	int yCenter = unit->y + halfTiles;
+	int xMin = clamp(xCenter - unit->sightRange, BOARD_X_MIN, BOARD_X_MAX);
+	int xMax = clamp(xCenter + unit->sightRange, BOARD_X_MIN, BOARD_X_MAX);
+	int yMin = clamp(yCenter - unit->sightRange, BOARD_Y_MIN, BOARD_Y_MAX);
+	int yMax = clamp(yCenter + unit->sightRange, BOARD_Y_MIN, BOARD_Y_MAX);
+	for (int x = xMin; x <= xMax; x++) {
+		for (int y = yMin; y <= yMax; y++) {
 			if (context->boardExploration[x][y] == BOARD_UNEXPLORED &&
-				(abs(x - unit->x) < unit->sightRange || abs(y - unit->y) < unit->sightRange)) {
+				(abs(x - xCenter) < unit->sightRange || abs(y - yCenter) < unit->sightRange)) {
 				BoardTile *tile = &context->board[x][y];
 				blit(game_gfx_get_tileset(), context->renderedBoard,
 				(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,

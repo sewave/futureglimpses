@@ -174,5 +174,6 @@ void building_complete(GameContext *context, GameUnit *building) {
     if(building->controller == UNIT_CONTROLLER_PLAYER) {
         message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + building->type),
             SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+		game_unit_explore(context, building);
     }
 }

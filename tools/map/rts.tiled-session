@@ -59,8 +59,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 296.33333333333337,
-                "y": 687
+                "x": 512,
+                "y": 511.66666666666663
             }
         },
         "tileset.tsx": {
@@ -72,11 +72,11 @@
             "scaleInEditor": 8
         },
         "win.tmx": {
-            "scale": 0.605810546875,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 801.405658096236,
-                "y": 655.3203836543887
+                "x": 974.2424242424242,
+                "y": 531.8181818181818
             }
         }
     },
@@ -98,8 +98,8 @@
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
-        "test.tmx",
         "win.tmx",
+        "test.tmx",
         "tileset.tsx",
         "buildings/big_buildings.tsx",
         "base.tmx",

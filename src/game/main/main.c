@@ -5,6 +5,15 @@
 static RenderQueue renderQueue;
 static GameContext context;
 
+static void get_minimap_colors(GameContext *context) {
+	BITMAP *tilesetColors = game_gfx_get_tileset_colors();
+	for (int x = 0; x < TILESET_TILES_COLOR_WIDTH; x++) {
+		for (int y = 0; y < TILESET_TILES_COLOR_HEIGHT; y++) {
+			context->minimapColors[x + y * TILESET_TILES_COLOR_WIDTH] = getpixel(tilesetColors, x, y);
+		}
+	}
+}
+
 int main_init() {
     printf("Starting %s v%s...\n", GAME_TITLE, VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
@@ -80,6 +89,7 @@ int main_init() {
 	context.gameState = GAME_STATE_SPLASH;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
+	get_minimap_colors(&context);
 
 	return PROGRAM_OK;
 }

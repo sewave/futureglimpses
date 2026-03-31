@@ -195,8 +195,8 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 			game_unit_command_idle(unit);
 			return;
 		}
-		targetX = targetUnit->x;
-		targetY = targetUnit->y;
+		targetX = targetUnit->x + (targetUnit->tileSize - 1) / 2;
+		targetY = targetUnit->y + (targetUnit->tileSize - 1) / 2;
 	}
 
 	if (unit->x == targetX && unit->y == targetY) {

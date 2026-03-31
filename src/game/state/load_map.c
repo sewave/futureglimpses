@@ -115,16 +115,6 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	return INITIALIZATION_OK;
 }
 
-static void render_minimap(GameContext *context) {
-	// Generate the LUT for the tileset pixel colors
-	BITMAP *minimapImage = game_gfx_get_tileset_colors();
-	for (int x = 0; x < TILESET_TILES_COLOR_WIDTH; x++) {
-		for (int y = 0; y < TILESET_TILES_COLOR_HEIGHT; y++) {
-			context->minimapColors[x + y * TILESET_TILES_COLOR_WIDTH] = getpixel(minimapImage, x, y);
-		}
-	}
-}
-
 GameStateEnum handle_load_map_update(GameContext *context) {
 	memset(context->boardExploration, BOARD_UNEXPLORED, sizeof(context->boardExploration));
 	memset(context->walkabilityGrid, WALKABILITY_FREE, sizeof(context->walkabilityGrid));
@@ -133,11 +123,6 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 	game_objects_init(context);
 	game_selection_init(context);
 	resource_reset(context);
-
-	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
-		TRACE("Error loading map: %s\n", context->mapPath);
-		return GAME_STATE_SCENARIO_SELECT;
-	}
 
 	if (context->renderedBoard) { destroy_bitmap(context->renderedBoard); }
 	context->renderedBoard = create_bitmap(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE);
@@ -150,7 +135,10 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 	if (context->renderedMinimapUnits) { destroy_bitmap(context->renderedMinimapUnits); }
 	context->renderedMinimapUnits = create_bitmap(BOARD_WIDTH, BOARD_HEIGHT);
 
-	render_minimap(context);
+	if(load_map(context, context->mapPath) == INITIALIZATION_ERROR) {
+		TRACE("Error loading map: %s\n", context->mapPath);
+		return GAME_STATE_SCENARIO_SELECT;
+	}
 
 	context->isDebugEnabled = FALSE;
 	context->gameResult = GAME_RESULT_ONGOING;

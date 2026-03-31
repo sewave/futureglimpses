@@ -637,7 +637,8 @@ static void game_cmd_bar_handle_placing(GameContext *context) {
 		context->buildPlacing.canBuild = TRUE;
 		for(int xOff = 0; xOff < context->buildPlacing.size; xOff++) {
 			for(int yOff = 0; yOff < context->buildPlacing.size; yOff++) {
-				if(context->walkabilityGrid[x + xOff][y + yOff] == WALKABILITY_FREE) {
+				if(context->walkabilityGrid[x + xOff][y + yOff] == WALKABILITY_FREE
+					&& context->boardExploration[x + xOff][y + yOff] == BOARD_EXPLORED) {
 					context->buildPlacing.placeResult[xOff][yOff] = TRUE;
 				}
 				else {

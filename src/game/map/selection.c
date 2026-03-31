@@ -356,7 +356,7 @@ void game_selection_handle_input(GameContext *context) {
 			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
 				UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 				GameUnit *foundUnit = game_unit_get_by_id(context, id);
-				if (foundUnit) {
+				if (foundUnit && context->boardExploration[tileX][tileY] == BOARD_EXPLORED) {
 					switch (selectionMode) {
 						case SELECTION_SET:
 							game_selection_clear(context);
