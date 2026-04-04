@@ -12,16 +12,16 @@
 #define WORKER_RESOURCE_GOLD_GATHER 10
 #define WORKER_RESOURCE_GATHER_MAX 100
 
-static int RESOURCE_TEXT_LOCATIONS[PRINTED_RESOURCES][2] = {
-		{89, 1},
-		{136, 1},
-		{186, 1}};
+static int RESOURCE_TEXT_LOCATIONS[UNIT_CONTROLLERS_COUNT][PRINTED_RESOURCES][2] = {
+		{ {89, 1}, {136, 1}, {186, 1} },
+		{ {89, 12}, {136, 12}, {186, 12} }
+	};
 static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{79, 2},
 		{126, 2},
 		{176, 2}};
 
-static char resourceBuffers[RESOURCE_TYPES_COUNT][16];
+static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPES_COUNT][16];
 
 void resource_reset(GameContext *context) {
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
@@ -123,31 +123,38 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 				RESOURCE_ICONS_LOCATIONS[i][1], RND_FLAG_NORMAL);
 	}
 
+	int controllers = 1;
+	if(context->isDebugEnabled) controllers = UNIT_CONTROLLERS_COUNT;
+
 	// Render resources
-	for (int i = 0; i < BASIC_RESOURCES; i++) {
-		itoa(context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[i], resourceBuffers[i], BASE_TEN_NUMER);
-		render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
-				context->gameFont, resourceBuffers[i],
-				RESOURCE_TEXT_LOCATIONS[i][0], RESOURCE_TEXT_LOCATIONS[i][1],
-				PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+	for(int controller = 0; controller < controllers; controller++) {
+		for (int i = 0; i < BASIC_RESOURCES; i++) {
+			itoa(context->resources[controller].uiQuantity[i], resourceBuffers[controller][i], BASE_TEN_NUMER);
+			render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
+					context->gameFont, resourceBuffers[controller][i],
+					RESOURCE_TEXT_LOCATIONS[controller][i][0], RESOURCE_TEXT_LOCATIONS[controller][i][1],
+					PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+		}
 	}
 
 	// Render food usage
-	uint32_t usedFood = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_USED_FOOD];
-	uint32_t maxFood = context->resources[UNIT_CONTROLLER_PLAYER].uiQuantity[RESOURCE_TYPE_MAX_FOOD];
-	char* foodFormat;
-	if(usedFood > maxFood) {
-		foodFormat = FOOD_USE_SURPASSED_FORMAT;
-	} else {
-		foodFormat = FOOD_USE_FORMAT;
+	for (int controller = 0; controller < controllers; controller++) {
+		uint32_t usedFood = context->resources[controller].uiQuantity[RESOURCE_TYPE_USED_FOOD];
+		uint32_t maxFood = context->resources[controller].uiQuantity[RESOURCE_TYPE_MAX_FOOD];
+		char *foodFormat;
+		if (usedFood > maxFood) {
+			foodFormat = FOOD_USE_SURPASSED_FORMAT;
+		} else {
+			foodFormat = FOOD_USE_FORMAT;
+		}
+		snprintf(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD]),
+				 foodFormat, usedFood, maxFood);
+		render_queue_submit_text_multicolor_shadow(renderQueue, RESOURCES_Z, context->gameFont,
+												   resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD],
+												   RESOURCE_TEXT_LOCATIONS[controller][RESOURCE_TYPE_AVAILABLE_FOOD][0],
+												   RESOURCE_TEXT_LOCATIONS[controller][RESOURCE_TYPE_AVAILABLE_FOOD][1],
+												   PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 	}
-	snprintf(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD]),
-			 foodFormat, usedFood, maxFood);
-	render_queue_submit_text_multicolor_shadow(renderQueue, RESOURCES_Z, context->gameFont,
-			resourceBuffers[RESOURCE_TYPE_AVAILABLE_FOOD],
-			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][0],
-			RESOURCE_TEXT_LOCATIONS[RESOURCE_TYPE_AVAILABLE_FOOD][1],
-			PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 }
 
 void resource_unit_harvest(GameContext *context, GameUnit *worker) {
@@ -157,11 +164,13 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker) {
 		BoardTile *tile = &context->board[workerData->workplace.x][workerData->workplace.y];
 		switch (tile->type) {
 			case TILE_TYPE_WOOD:
-				if (workerData->carriedResourceType == RESOURCE_TYPE_WOOD || workerData->carriedResourceQty == 0) {
-					workerData->carriedResourceType = RESOURCE_TYPE_WOOD;
-					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_WOOD_GATHER, 0,
-														   WORKER_RESOURCE_GATHER_MAX);
+				if(workerData->carriedResourceType != RESOURCE_TYPE_WOOD) {
+					// We will convert to wood, 50% of resources lost to balance
+					workerData->carriedResourceQty = workerData->carriedResourceQty / 2;
 				}
+				workerData->carriedResourceType = RESOURCE_TYPE_WOOD;
+				workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_WOOD_GATHER, 0,
+														WORKER_RESOURCE_GATHER_MAX);
 				if (tile->data >= WORKER_RESOURCE_WOOD_GATHER) {
 					tile->data -= WORKER_RESOURCE_WOOD_GATHER;
 				} else {
@@ -169,11 +178,13 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker) {
 				}
 				break;
 			case TILE_TYPE_GOLD:
-				if (workerData->carriedResourceType == RESOURCE_TYPE_GOLD || workerData->carriedResourceQty == 0) {
-					workerData->carriedResourceType = RESOURCE_TYPE_GOLD;
-					workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GOLD_GATHER, 0,
-														   WORKER_RESOURCE_GATHER_MAX);
+				if(workerData->carriedResourceType != RESOURCE_TYPE_GOLD) {
+					// We will convert to gold, 50% of resources lost to balance
+					workerData->carriedResourceQty = workerData->carriedResourceQty / 2;
 				}
+				workerData->carriedResourceType = RESOURCE_TYPE_GOLD;
+				workerData->carriedResourceQty = clamp(workerData->carriedResourceQty + WORKER_RESOURCE_GOLD_GATHER, 0,
+														WORKER_RESOURCE_GATHER_MAX);
 				if (tile->data >= WORKER_RESOURCE_GOLD_GATHER) {
 					tile->data -= WORKER_RESOURCE_GOLD_GATHER;
 				} else {

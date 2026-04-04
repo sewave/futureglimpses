@@ -4,8 +4,10 @@
 #define ATTACK_WAVE_FRAMES SEC_TO_FRAMES(60) / 2
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 16
-#define CONSTRUCTION_WORKERS 4
 #define SEARCH_RESOURCE_MULTIPLIER 5
+#define MIN_GOLD_TRAINING_BUDGET 1000
+
+static uint8_t trainRanged = FALSE;
 
 static GameUnit* game_strategy_ai_get_computer_town_hall(GameContext *context) {
 	GameUnit **activeList = context->activeUnits;
@@ -130,7 +132,13 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 	
 	UnitPosition *buildingToRebuild = game_strategy_ai_find_building_to_rebuild(context);
 	if (buildingToRebuild) {
-		building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
+		int workerGoldCost = game_unit_get_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
+		int buildingGoldCost = game_unit_get_resources(buildingToRebuild->type)->used[RESOURCE_TYPE_GOLD];
+		int gold = context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD];
+		// Reserve at least worker cost
+		if (gold >= workerGoldCost + buildingGoldCost) {
+			building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
+		}
 	}
 
 	GameUnit* buildingToWork = game_strategy_ai_find_building_to_construct(context);
@@ -139,8 +147,11 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 	if (buildingToWork) {
 		// Send the first workers to work
 		int assignedWorkers = game_strategy_ai_count_computer_workers_repairing(context);
+		// Max 20% of workers repairing
+		int maxWorkers = context->aiData.desiredWorkers / 5;
+		if(maxWorkers < 1) maxWorkers = 1;
 		GameUnit **activeList = context->activeUnits;
-		for (int i = 0; i < context->activeUnitCount && assignedWorkers < CONSTRUCTION_WORKERS; i++, activeList++) {
+		for (int i = 0; i < context->activeUnitCount && assignedWorkers < maxWorkers; i++, activeList++) {
 			GameUnit *unit = *activeList;
 			if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
 				WorkerData *workerData = &unit->typed.workerData;
@@ -185,12 +196,21 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 			if(workerData->job != WORKER_JOB_REPAIR) workerCount++;
 		}
 	}
-	int desiredWoodWorkers = workerCount / 2;
+	// 70 % gold, 30 % wood
+	int desiredWoodWorkers = (workerCount * 30) / 100;
 	int desiredGoldWorkers = workerCount - desiredWoodWorkers;
-	int goldToWoodWorkersToChange = abs(desiredWoodWorkers - currentWoodWorkers);
-	int woodToGoldWorkersToChange = abs(desiredGoldWorkers - currentGoldWorkers);
-	int otherToGoldWorkersToChange = desiredGoldWorkers - currentGoldWorkers - goldToWoodWorkersToChange;
-	int otherToWoodWorkersToChange = desiredWoodWorkers - currentWoodWorkers - woodToGoldWorkersToChange;
+	int excessGoldWorkers = 0;
+	if(desiredGoldWorkers < currentGoldWorkers) {
+		excessGoldWorkers = currentGoldWorkers - desiredGoldWorkers;
+	}
+	int excessWoodWorkers = 0;
+	if(desiredWoodWorkers < currentWoodWorkers) {
+		excessWoodWorkers = currentWoodWorkers - desiredWoodWorkers;
+	}
+	int idleWorkersToGold = desiredGoldWorkers - currentGoldWorkers - excessWoodWorkers;
+	if(idleWorkersToGold < 0) idleWorkersToGold = 0;
+	int idleWorkersToWood = desiredWoodWorkers - currentWoodWorkers - excessGoldWorkers;
+	if(idleWorkersToWood < 0) idleWorkersToWood = 0;
 	// Change only needed workers, to avoid too much worker movement and loss of efficiency
 	activeList = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
@@ -198,21 +218,21 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
 			WorkerData *workerData = &unit->typed.workerData;
 			if (workerData->job != WORKER_JOB_REPAIR) {
-				if (workerData->job == WORKER_JOB_WOOD && woodToGoldWorkersToChange > 0) {
+				if (workerData->job == WORKER_JOB_WOOD && excessWoodWorkers > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
-					woodToGoldWorkersToChange--;
+					excessWoodWorkers--;
 				}
-				else if (workerData->job == WORKER_JOB_GOLD && goldToWoodWorkersToChange > 0) {
+				else if (workerData->job == WORKER_JOB_GOLD && excessGoldWorkers > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
-					goldToWoodWorkersToChange--;
+					excessGoldWorkers--;
 				}
-				else if (workerData->job == WORKER_JOB_NONE && otherToGoldWorkersToChange > 0) {
+				else if (workerData->job == WORKER_JOB_NONE && idleWorkersToGold > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
-					otherToGoldWorkersToChange--;
+					idleWorkersToGold--;
 				}
-				else if (workerData->job == WORKER_JOB_NONE && otherToWoodWorkersToChange > 0) {
+				else if (workerData->job == WORKER_JOB_NONE && idleWorkersToWood > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
-					otherToWoodWorkersToChange--;
+					idleWorkersToWood--;
 				}
 			}
 		}
@@ -220,7 +240,36 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 }
 
 static void game_strategy_ai_train_units(GameContext *context) {
-	// TODO Create units on barracks/tower, only if at least there is money for a worker or all desired workers are trained
+	uint8_t allWorkersTrained = game_strategy_ai_count_computer_workers(context) >= context->aiData.desiredWorkers;
+	int workerGoldCost = game_unit_get_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
+	// Must have at least worker gold cost and reserve
+	if(context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD] <
+		workerGoldCost + MIN_GOLD_TRAINING_BUDGET) return;
+	uint8_t archersAvailable = context->map.enableBlacksmith && game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_BLACKSMITH);
+	uint8_t knightsAvailable = context->map.enableStables && game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_STABLES);
+
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding &&
+			unit->state == BUILDING_STATE_COMPLETED && !unit->typed.buildingData.isTraining) {
+			int gold = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_GOLD];
+			if(unit->type == UNIT_TYPE_TOWER) {
+				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_resources(UNIT_TYPE_MAGE)->used[RESOURCE_TYPE_GOLD]) {
+					building_add_to_train_queue(context, unit, UNIT_TYPE_MAGE);
+				}
+			}
+			if (unit->type == UNIT_TYPE_BARRACKS) {
+				UnitTypeEnum typeToTrain = UNIT_TYPE_SOLDIER;
+				if(trainRanged && archersAvailable) typeToTrain = UNIT_TYPE_ARCHER;
+				if(!trainRanged && knightsAvailable) typeToTrain = UNIT_TYPE_KNIGHT;
+				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_resources(typeToTrain)->used[RESOURCE_TYPE_GOLD]) {
+					building_add_to_train_queue(context, unit, typeToTrain);
+					trainRanged = !trainRanged;
+				}
+			}
+		}
+	}
 }
 
 static void game_strategy_ai_build_train(GameContext *context) {
@@ -240,7 +289,7 @@ static void game_strategy_ai_attack(GameContext *context) {
 	GameUnit **activeList = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 		GameUnit *unit = *activeList;
-		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI) {
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && !unit->isBuilding && unit->type != UNIT_TYPE_WORKER) {
 			foundUnits[foundUnitsCount++] = unit;
 			if (foundUnitsCount == context->aiData.currentWaveUnits) break;
 		}

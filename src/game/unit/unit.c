@@ -526,3 +526,12 @@ uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit) {
 	}
 	return FALSE;
 }
+
+uint8_t game_unit_exists(GameContext *context, ControllerEnum controller, UnitTypeEnum type) {
+	GameUnit **activeUnits = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+		GameUnit *otherUnit = *activeUnits;
+		if (otherUnit->type == type && otherUnit->controller == controller) return TRUE;
+	}
+	return FALSE;
+}

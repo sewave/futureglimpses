@@ -43,4 +43,5 @@ void game_unit_work(GameContext* context, GameUnit* worker);
 GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, UnitTypeEnum type, ControllerEnum controller);
 void game_unit_explore(GameContext *context, GameUnit *unit);
 uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit);
+uint8_t game_unit_exists(GameContext *context, ControllerEnum controller, UnitTypeEnum type);
 #endif /* UNIT_H */
