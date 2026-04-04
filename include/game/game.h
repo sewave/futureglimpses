@@ -125,6 +125,7 @@ typedef struct {
 	Position workplace;
 	uint8_t carriedResourceQty;
 	ResourceTypeEnum carriedResourceType;
+	WorkerJobEnum job;
 } WorkerData;
 
 typedef struct {
@@ -319,7 +320,11 @@ GameStateEnum game_execute_state_update(GameContext *context);
 void game_execute_state_init(GameContext *context);
 void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
+#ifdef DOS
 #define LOGIC_RATE_BPS 35
+#else
+#define LOGIC_RATE_BPS 60
+#endif
 #define SEC_TO_FRAMES(secs) 1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS)
 #define MAX_CATCHUP_TICKS 5
 // First MB is special so we check for 7 more

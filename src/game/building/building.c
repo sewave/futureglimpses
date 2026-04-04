@@ -81,9 +81,11 @@ static UnitResourcesData* building_check_unit_resources(GameContext *context, Co
     UnitResourcesData* unitResources = game_unit_get_resources(unitType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
 		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
-			message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
+			if(controller == UNIT_CONTROLLER_PLAYER) {
+				message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_FOOD + i),
 								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
-			game_snd_play_sound(GAME_SOUND_NOT_VALID);
+				game_snd_play_sound(GAME_SOUND_NOT_VALID);
+			}
 			return NULL;
 		}
 	}
@@ -101,9 +103,26 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 			resource_deduct_amount(context, building->controller, i, unitResources->used[i]);
 		}
 	} else {
-		message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),
-							 QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+		if(building->controller == UNIT_CONTROLLER_PLAYER) {
+			message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),
+								QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+		}
 	}
+}
+
+GameUnit* building_place_building(GameContext *context, UnitTypeEnum buildingType, ControllerEnum controller, uint16_t x, uint16_t y) {
+	// Check funds and food
+	UnitResourcesData* unitResources = building_check_unit_resources(context, controller, buildingType);
+	if(!unitResources) return NULL;
+
+	GameUnit *building = game_unit_spawn(context, buildingType, controller, x, y);
+	if (building) {
+		// Deduct resources but not food
+		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
+			resource_deduct_amount(context, controller, i, unitResources->used[i]);
+		}
+	}
+	return building;
 }
 
 void building_handle_placing_input(GameContext *context) {
@@ -111,31 +130,20 @@ void building_handle_placing_input(GameContext *context) {
 
     if(context->mouseStatus.isRightPressed) {
         context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
-        
     }
     else {
         if(context->mouseStatus.isLeftPressed && context->buildPlacing.canBuild) {
-            // Check resources
-            UnitResourcesData* unitResources = building_check_unit_resources(context, UNIT_CONTROLLER_PLAYER,
-                context->buildPlacing.building);
-			if (unitResources) {
-				// Spawn building
-				GameUnit *building = game_unit_spawn(context, context->buildPlacing.building,
-													 UNIT_CONTROLLER_PLAYER, context->buildPlacing.x, context->buildPlacing.y);
-				if (building) {
-					// Deduct resources
-					for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
-						resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i]);
-					}
-					if(!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
-						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
-					}
-					// Send worker to build it
-					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
-					if(worker) {
-						worker->typed.workerData.targetConstruction = building->id;
-						game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
-					}
+			GameUnit* building = building_place_building(context, context->buildPlacing.building, UNIT_CONTROLLER_PLAYER,
+				context->buildPlacing.x, context->buildPlacing.y);
+			if (building) {
+				if(!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
+					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+				}
+				// Send selected worker to build it
+				GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
+				if(worker) {
+					worker->typed.workerData.targetConstruction = building->id;
+					game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
 				}
 			}
 		}

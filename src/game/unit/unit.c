@@ -315,6 +315,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		workerData->carriedResourceType = RESOURCE_TYPE_NONE;
 		workerData->carriedResourceQty = 0;
 		workerData->workplace = (Position) {.x = NO_TARGET_POSITION, .y = NO_TARGET_POSITION};
+		workerData->job = WORKER_JOB_NONE;
 	}
 
 	if(unit->isBuilding) {
@@ -510,12 +511,7 @@ void game_unit_explore(GameContext *context, GameUnit *unit) {
 		for (int y = yMin; y <= yMax; y++) {
 			if (context->boardExploration[x][y] == BOARD_UNEXPLORED &&
 				(abs(x - xCenter) < unit->sightRange || abs(y - yCenter) < unit->sightRange)) {
-				BoardTile *tile = &context->board[x][y];
-				blit(game_gfx_get_tileset(), context->renderedBoard,
-				(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
-				x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-				putpixel(context->renderedMinimap, x, y, context->minimapColors[tile->tile]);
-				context->boardExploration[x][y] = BOARD_EXPLORED;
+					game_spatial_explore_position(context, x, y);
 			}
 		}
 	}

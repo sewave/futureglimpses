@@ -181,4 +181,11 @@ typedef enum {
 	BUILD_STATE_COUNT,
 } AIBuildStateEnum;
 
+typedef enum {
+	WORKER_JOB_NONE,
+	WORKER_JOB_GOLD,
+	WORKER_JOB_WOOD,
+	WORKER_JOB_REPAIR,
+} WorkerJobEnum;
+
 #endif /* GAME_ENUMS_H */

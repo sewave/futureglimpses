@@ -119,3 +119,12 @@ uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int tar
 	return (game_spatial_target_in_range(unit, targetX, targetY, unit->maxAttackRange) &&
 		!game_spatial_target_in_range(unit, targetX, targetY, unit->minAttackRange));
 }
+
+void game_spatial_explore_position(GameContext* context, uint16_t x, uint16_t y) {
+	BoardTile *tile = &context->board[x][y];
+	blit(game_gfx_get_tileset(), context->renderedBoard,
+			(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
+			x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	putpixel(context->renderedMinimap, x, y, context->minimapColors[tile->tile]);
+	context->boardExploration[x][y] = BOARD_EXPLORED;
+}

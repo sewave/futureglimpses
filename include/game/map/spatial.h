@@ -28,4 +28,5 @@ uint8_t game_spatial_unit_in_viewport(const GameContext* context, const GameUnit
 uint8_t game_spatial_object_in_viewport(const GameContext* context, const Object* object);
 uint8_t game_spatial_unit_target_in_attack_range(GameUnit* unit, GameUnit* target);
 uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int targetY);
+void game_spatial_explore_position(GameContext* context, uint16_t x, uint16_t y);
 #endif /* SPATIAL_H */

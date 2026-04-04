@@ -174,6 +174,15 @@ static void game_update(GameContext *context) {
 	// Resource debug keys
 	if(keyboard_is_key_pressed(KEY_G)) context->isDebugEnabled ^= TRUE;
 	if(context->isDebugEnabled) {
+		if(keyboard_is_key_pressed(KEY_F11)) {
+			for(int x = 0; x < BOARD_WIDTH; x++) {
+				for(int y = 0; y < BOARD_HEIGHT; y++) {
+					if(context->boardExploration[x][y] == BOARD_UNEXPLORED) {
+						game_spatial_explore_position(context, x, y);
+					}
+				}
+			}
+		}
 		if (keyboard_is_key_pressed(KEY_6)) {
 			resource_add_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, 1000);
 		}

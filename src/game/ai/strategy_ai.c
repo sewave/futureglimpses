@@ -4,17 +4,219 @@
 #define ATTACK_WAVE_FRAMES SEC_TO_FRAMES(60) / 2
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 16
+#define CONSTRUCTION_WORKERS 4
+#define SEARCH_RESOURCE_MULTIPLIER 5
+
+static GameUnit* game_strategy_ai_get_computer_town_hall(GameContext *context) {
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_CITY_HALL) {
+			return unit;
+		}
+	}
+	return NULL;
+}
+
+static int game_strategy_ai_count_computer_workers(GameContext *context) {
+	int count = 0;
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			count++;
+		}
+	}
+	// We also count workers in training and queued, to avoid overcommitting resources
+	GameUnit *townHall = game_strategy_ai_get_computer_town_hall(context);
+	if (townHall) {
+		if (townHall->typed.buildingData.isTraining && townHall->typed.buildingData.trainUnit == UNIT_TYPE_WORKER) count++;
+		for (int i = 0; i < townHall->typed.buildingData.queueNextIndex; i++) {
+			if (townHall->typed.buildingData.queue[i] == UNIT_TYPE_WORKER) count++;
+		}
+	}
+	return count;
+}
 
 static void game_strategy_ai_create_workers(GameContext *context) {
-	// TODO Have 25% of initial food on workers (Fixed by map)
+	if(game_strategy_ai_count_computer_workers(context) < context->aiData.desiredWorkers) {
+		GameUnit *townHall = game_strategy_ai_get_computer_town_hall(context);
+		// AI doesn't need queue, so add only if we are not training already,
+		// this helps to save resources and distribute them better between creating workers
+		// and other units
+		if (townHall && !townHall->typed.buildingData.isTraining) {
+			building_add_to_train_queue(context, townHall, UNIT_TYPE_WORKER);
+		}
+	}
+}
+
+static UnitPosition* game_strategy_ai_find_building_to_rebuild(GameContext *context) {
+	for(int i = 0; i < context->aiData.initialBuildingsCount; i++) {
+		UnitPosition *buildingPos = &context->aiData.initialBuildings[i];
+		GameUnit *building = game_unit_get_by_id(context, context->walkabilityGrid[buildingPos->x][buildingPos->y]);
+		if (!building || building->health < building->maxHealth / 2) {
+			return buildingPos;
+		}
+	}
+	return NULL;
+}
+
+static GameUnit* game_strategy_ai_find_building_to_repair(GameContext *context) {
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding &&
+			unit->health < unit->maxHealth && unit->state == BUILDING_STATE_COMPLETED) {
+			return unit;
+		}
+	}
+	return NULL;
+}
+
+static GameUnit* game_strategy_ai_find_building_to_construct(GameContext *context) {
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
+			return unit;
+		}
+	}
+	return NULL;
+}
+
+static GameUnit* game_strategy_ai_find_first_worker(GameContext *context) {
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			return unit;
+		}
+	}
+	return NULL;
+}
+
+static int game_strategy_ai_count_computer_workers_repairing(GameContext *context) {
+	int count = 0;
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			if (unit->typed.workerData.job == WORKER_JOB_REPAIR) count++;
+		}
+	}
+	return count;
 }
 
 static void game_strategy_ai_builder_workers(GameContext *context) {
-	// TODO Have 2-4 workers repair/reconstruct buildings (can steal from other tasks)
+	GameUnit * builder = game_strategy_ai_find_first_worker(context);
+	if (!builder) return;
+
+	// We must clear builder workers that have completed their jobs
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			WorkerData *workerData = &unit->typed.workerData;
+			if (workerData->job == WORKER_JOB_REPAIR) {
+				GameUnit *targetConstruction = game_unit_get_by_id(context, workerData->targetConstruction);
+				if (!targetConstruction || targetConstruction->health >= targetConstruction->maxHealth) {
+					workerData->targetConstruction = NO_TARGET_ID;
+					workerData->job = WORKER_JOB_NONE;
+					game_unit_command_idle(unit);
+				}
+			}
+		}
+	}
+	
+	UnitPosition *buildingToRebuild = game_strategy_ai_find_building_to_rebuild(context);
+	if (buildingToRebuild) {
+		building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
+	}
+
+	GameUnit* buildingToWork = game_strategy_ai_find_building_to_construct(context);
+	if(!buildingToWork) buildingToWork = game_strategy_ai_find_building_to_repair(context);
+
+	if (buildingToWork) {
+		// Send the first workers to work
+		int assignedWorkers = game_strategy_ai_count_computer_workers_repairing(context);
+		GameUnit **activeList = context->activeUnits;
+		for (int i = 0; i < context->activeUnitCount && assignedWorkers < CONSTRUCTION_WORKERS; i++, activeList++) {
+			GameUnit *unit = *activeList;
+			if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+				WorkerData *workerData = &unit->typed.workerData;
+				if (workerData->targetConstruction == NO_TARGET_ID) {
+					workerData->targetConstruction = buildingToWork->id;
+					workerData->job = WORKER_JOB_REPAIR;
+					game_unit_command_move(unit, buildingToWork, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					assignedWorkers++;
+				}
+			}
+		}
+	}
+
+}
+
+static void game_strategy_ai_send_worker_to_harvest(GameContext *context, GameUnit *worker, WorkerJobEnum job) {
+	Position resourcePos = {NO_TARGET_POSITION, NO_TARGET_POSITION};
+	if (job == WORKER_JOB_GOLD) {
+		resourcePos = resource_find_first_around_unit(
+			context, worker, TILE_TYPE_GOLD, worker->sightRange * SEARCH_RESOURCE_MULTIPLIER);
+	}
+	else if (job == WORKER_JOB_WOOD) {
+		resourcePos = resource_find_first_around_unit(
+			context, worker, TILE_TYPE_WOOD, worker->sightRange * SEARCH_RESOURCE_MULTIPLIER);
+	}
+	if (resourcePos.x != NO_TARGET_POSITION && resourcePos.y != NO_TARGET_POSITION) {
+		worker->typed.workerData.workplace = resourcePos;
+		worker->typed.workerData.job = job;
+		game_unit_command_move(worker, NULL, resourcePos.x, resourcePos.y);
+	}
 }
 
 static void game_strategy_ai_harvester_workers(GameContext *context) {
-	// TODO Have remaining workers with assigned tasks 50/50 gold/wood
+	int currentWoodWorkers = 0, currentGoldWorkers = 0, workerCount = 0;
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			WorkerData *workerData = &unit->typed.workerData;
+			if (workerData->job == WORKER_JOB_WOOD) currentWoodWorkers++;
+			else if (workerData->job == WORKER_JOB_GOLD) currentGoldWorkers++;
+			if(workerData->job != WORKER_JOB_REPAIR) workerCount++;
+		}
+	}
+	int desiredWoodWorkers = workerCount / 2;
+	int desiredGoldWorkers = workerCount - desiredWoodWorkers;
+	int goldToWoodWorkersToChange = abs(desiredWoodWorkers - currentWoodWorkers);
+	int woodToGoldWorkersToChange = abs(desiredGoldWorkers - currentGoldWorkers);
+	int otherToGoldWorkersToChange = desiredGoldWorkers - currentGoldWorkers - goldToWoodWorkersToChange;
+	int otherToWoodWorkersToChange = desiredWoodWorkers - currentWoodWorkers - woodToGoldWorkersToChange;
+	// Change only needed workers, to avoid too much worker movement and loss of efficiency
+	activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		GameUnit *unit = *activeList;
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
+			WorkerData *workerData = &unit->typed.workerData;
+			if (workerData->job != WORKER_JOB_REPAIR) {
+				if (workerData->job == WORKER_JOB_WOOD && woodToGoldWorkersToChange > 0) {
+					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
+					woodToGoldWorkersToChange--;
+				}
+				else if (workerData->job == WORKER_JOB_GOLD && goldToWoodWorkersToChange > 0) {
+					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
+					goldToWoodWorkersToChange--;
+				}
+				else if (workerData->job == WORKER_JOB_NONE && otherToGoldWorkersToChange > 0) {
+					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
+					otherToGoldWorkersToChange--;
+				}
+				else if (workerData->job == WORKER_JOB_NONE && otherToWoodWorkersToChange > 0) {
+					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
+					otherToWoodWorkersToChange--;
+				}
+			}
+		}
+	}
 }
 
 static void game_strategy_ai_train_units(GameContext *context) {

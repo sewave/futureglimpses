@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="238">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="247">
  <editorsettings>
   <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -169,8 +169,17 @@
   <object id="232" template="units/C_Archer.tx" x="224" y="736"/>
   <object id="233" template="units/C_Archer.tx" x="256" y="736"/>
   <object id="234" template="units/C_Archer.tx" x="272" y="736"/>
-  <object id="235" template="buildings/C_Farm.tx" x="704" y="1008"/>
-  <object id="236" template="buildings/C_Farm.tx" x="736" y="1008"/>
-  <object id="237" template="buildings/C_Farm.tx" x="768" y="1008"/>
+  <object id="235" template="buildings/C_Farm.tx" x="128" y="288"/>
+  <object id="236" template="buildings/C_Farm.tx" x="160" y="288"/>
+  <object id="237" template="buildings/C_Farm.tx" x="192" y="288"/>
+  <object id="238" template="buildings/C_Farm.tx" x="96" y="256"/>
+  <object id="239" template="buildings/C_Farm.tx" x="128" y="256"/>
+  <object id="240" template="buildings/C_Farm.tx" x="16" y="240"/>
+  <object id="241" template="buildings/C_Farm.tx" x="16" y="208"/>
+  <object id="242" template="buildings/C_Farm.tx" x="48" y="240"/>
+  <object id="243" template="buildings/C_Farm.tx" x="48" y="64"/>
+  <object id="244" template="buildings/C_Farm.tx" x="16" y="128"/>
+  <object id="245" template="buildings/C_Farm.tx" x="48" y="96"/>
+  <object id="246" template="buildings/C_Farm.tx" x="48" y="128"/>
  </objectgroup>
 </map>

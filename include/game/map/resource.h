@@ -14,5 +14,6 @@ void resource_deduct_food(GameContext *context, ControllerEnum controller, uint8
 void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQueue);
 void resource_unit_harvest(GameContext *context, GameUnit *worker);
 void resource_search_for_work(GameContext *context, GameUnit *worker);
+Position resource_find_first_around_unit(GameContext *context, GameUnit *unit, TileTypeEnum resourceType, uint8_t maxDistance);
 
 #endif /* RESOURCE_H */
