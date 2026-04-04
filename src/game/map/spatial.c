@@ -106,8 +106,9 @@ uint8_t game_spatial_unit_in_explored_viewport(const GameContext *context, const
 		unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE;
 }
 
-uint8_t game_spatial_object_in_viewport(const GameContext* context, const Object* object) {
-	return object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
+uint8_t game_spatial_object_in_explored_viewport(const GameContext *context, const Object *object) {
+	return context->boardExploration[object->x][object->y] == BOARD_EXPLORED &&
+		   object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
 		   object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH);
 }
 

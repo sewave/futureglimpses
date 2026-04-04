@@ -61,7 +61,7 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 			game_unit_area_damage(context, object);
 			break;
 		case EVENT_TYPE_SOUND: {
-			if (game_spatial_object_in_viewport(context, object)) game_snd_play_sound((GameSound) data);
+			if (game_spatial_object_in_explored_viewport(context, object)) game_snd_play_sound((GameSound) data);
 			break;
 		}
 		case EVENT_TYPE_SPAWN_ARROW:
