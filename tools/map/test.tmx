@@ -124,18 +124,18 @@
     <property name="MUST_SURVIVE" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="223" template="units/P_Archer.tx" x="192" y="704"/>
-  <object id="224" template="units/P_Archer.tx" x="224" y="704"/>
-  <object id="225" template="units/P_Archer.tx" x="208" y="704"/>
-  <object id="226" template="units/P_Archer.tx" x="240" y="704"/>
-  <object id="227" template="units/P_Archer.tx" x="256" y="704"/>
-  <object id="228" template="units/P_Archer.tx" x="272" y="704"/>
-  <object id="229" template="units/C_Archer.tx" x="192" y="736"/>
-  <object id="230" template="units/C_Archer.tx" x="208" y="736"/>
-  <object id="231" template="units/C_Archer.tx" x="240" y="736"/>
-  <object id="232" template="units/C_Archer.tx" x="224" y="736"/>
-  <object id="233" template="units/C_Archer.tx" x="256" y="736"/>
-  <object id="234" template="units/C_Archer.tx" x="272" y="736"/>
+  <object id="223" template="units/P_Archer.tx" x="512" y="592"/>
+  <object id="224" template="units/P_Archer.tx" x="544" y="592"/>
+  <object id="225" template="units/P_Archer.tx" x="528" y="592"/>
+  <object id="226" template="units/P_Archer.tx" x="560" y="592"/>
+  <object id="227" template="units/P_Archer.tx" x="576" y="592"/>
+  <object id="228" template="units/P_Archer.tx" x="592" y="592"/>
+  <object id="229" template="units/C_Archer.tx" x="512" y="624"/>
+  <object id="230" template="units/C_Archer.tx" x="528" y="624"/>
+  <object id="231" template="units/C_Archer.tx" x="560" y="624"/>
+  <object id="232" template="units/C_Archer.tx" x="544" y="624"/>
+  <object id="233" template="units/C_Archer.tx" x="576" y="624"/>
+  <object id="234" template="units/C_Archer.tx" x="592" y="624"/>
   <object id="235" template="buildings/C_Farm.tx" x="208" y="64"/>
   <object id="236" template="buildings/C_Farm.tx" x="176" y="96"/>
   <object id="239" template="buildings/C_Farm.tx" x="176" y="64"/>

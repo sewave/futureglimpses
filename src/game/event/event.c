@@ -7,7 +7,7 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			if (damageTarget) game_unit_damage(context, unit->minDamage, unit->maxDamage, damageTarget);
 			break;
 		case EVENT_TYPE_SOUND:
-			if (game_spatial_unit_in_viewport(context, unit)) game_snd_play_sound((GameSound) data);
+			if (game_spatial_unit_in_explored_viewport(context, unit)) game_snd_play_sound((GameSound) data);
 			break;
 		case EVENT_TYPE_SPAWN_ARROW:
 			GameUnit *arrowTarget = game_unit_get_by_id(context, unit->targetId);
@@ -21,7 +21,7 @@ void game_event_unit_process(GameContext *context, EventType eventType, GameUnit
 			game_unit_work(context, unit);
 			break;
 		case EVENT_TYPE_WORK_SOUND: {
-			if (game_spatial_unit_in_viewport(context, unit)) {
+			if (game_spatial_unit_in_explored_viewport(context, unit)) {
 				if(unit->type == UNIT_TYPE_WORKER) {
 					WorkerData *workerData = &unit->typed.workerData;
 					if(workerData->targetConstruction != NO_TARGET_ID) {

@@ -24,7 +24,7 @@ uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, 
 uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPosition);
 uint16_t game_spatial_get_board_y_position(uint16_t cameraPosition, int cursorPosition);
 uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, uint16_t x, uint16_t y);
-uint8_t game_spatial_unit_in_viewport(const GameContext* context, const GameUnit* unit);
+uint8_t game_spatial_unit_in_explored_viewport(const GameContext *context, const GameUnit *unit);
 uint8_t game_spatial_object_in_viewport(const GameContext* context, const Object* object);
 uint8_t game_spatial_unit_target_in_attack_range(GameUnit* unit, GameUnit* target);
 uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int targetY);

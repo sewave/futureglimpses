@@ -18,7 +18,7 @@ typedef struct {
 typedef struct {
 	UnitTypeEnum type;
 	uint8_t isBuilding;
-	uint8_t minAttackRange, maxAttackRange, sightRange;
+	uint8_t minAttackRange, maxAttackRange, sightRange, exploreRange;
 	uint16_t health, maxHealth;
 	uint8_t tileSize;
 	uint8_t minDamage;
