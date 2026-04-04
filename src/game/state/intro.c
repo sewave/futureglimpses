@@ -13,8 +13,9 @@
 #define INTRO_TEXT_FILE_ES "assets/txt/intro_es.txt"
 #define INTRO_TEXT_FILE_EN "assets/txt/intro_en.txt"
 #define TEXTOUT_EX_BOX_BUFFER 2048
-#define STAR_SPEED 6
+#define STAR_SPEED SEC_TO_FRAMES(0.1)
 #define NUM_STARS 128
+#define TEXT_PIXEL_FRAMES SEC_TO_FRAMES(0.04)
 static char buffer[TEXTOUT_EX_BOX_BUFFER];
 
 static uint8_t numLines;
@@ -22,6 +23,7 @@ static char **lines;
 static int *linesY;
 static int *linesColor;
 static int *colors;
+static int textFramesCounter;
 
 static void init_colors(PALETTE palette) {
     for(int i = 0; i < NUM_COLORS; i++) {
@@ -116,11 +118,18 @@ void game_state_intro_init(GameContext *context) {
 	}
 	starfield_init_stars(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT, NUM_STARS, STAR_SPEED, context->mainPalette);
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
+	textFramesCounter = 0;
 }
 
 GameStateEnum game_state_intro_update(GameContext *context) {
-	for (int i = 0; i < numLines; i++) linesY[i]--;
-	calculate_line_colors();
+	textFramesCounter++;
+	if (textFramesCounter >= TEXT_PIXEL_FRAMES) {
+		textFramesCounter = 0;
+		for (int i = 0; i < numLines; i++) {
+			if (linesY[i] > -LINE_Y_SPACING) linesY[i]--;
+		}
+		calculate_line_colors();
+	}
 	starfield_update_stars();
 	if (linesY[numLines - 1] < -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
 		free_lines();
