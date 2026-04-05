@@ -272,13 +272,6 @@ static void game_strategy_ai_train_units(GameContext *context) {
 	}
 }
 
-static void game_strategy_ai_build_train(GameContext *context) {
-	game_strategy_ai_create_workers(context);
-	game_strategy_ai_builder_workers(context);
-	game_strategy_ai_harvester_workers(context);
-	game_strategy_ai_train_units(context);
-}
-
 static void game_strategy_ai_attack(GameContext *context) {
 	if (++context->aiData.peaceCounter < context->map.peaceTime) return;
 	if (++context->aiData.attackCounter < ATTACK_WAVE_FRAMES) return;
@@ -342,37 +335,35 @@ void game_strategy_ai_init(GameContext *context) {
 	context->aiData.attackCounter = 0;
 	context->aiData.peaceCounter = 0;
 	context->aiData.currentWaveUnits = FIRST_WAVE_UNITS;
-	context->aiData.attackBuild = AI_BUILD;
-	context->aiData.buildState = BUILD_STATE_CREATE_WORKERS;
+	context->aiData.state = AI_STATE_CREATE_WORKERS;
 	context->aiData.initialFood = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_MAX_FOOD];
 	context->aiData.desiredWorkers = context->aiData.initialFood / 4; // 25% must be workers
 	game_strategy_ai_scan_buildings(context);
 }
 
 void game_strategy_ai_execute(GameContext *context) {
-	if (context->aiData.attackBuild == AI_ATTACK) {
-		context->aiData.attackBuild = AI_BUILD;
-		// Cycle through build states, one frame will only do one action
-		context->aiData.buildState = (context->aiData.buildState + 1) % BUILD_STATE_COUNT;
-	} else {
-		context->aiData.attackBuild = AI_ATTACK;
-	}
-	switch (context->map.aiMode) {
-		case AI_MODE_IDLE: {
-			// We do nothing :D
+	if (context->map.aiMode == AI_MODE_IDLE) return;
+	switch (context->aiData.state) {
+		case AI_STATE_CREATE_WORKERS: {
+			game_strategy_ai_create_workers(context);
 			break;
 		}
-		case AI_MODE_PASSIVE: {
-			if (context->aiData.attackBuild == AI_BUILD) game_strategy_ai_build_train(context);
+		case AI_STATE_BUILDER_WORKERS: {
+			game_strategy_ai_builder_workers(context);
 			break;
 		}
-		case AI_MODE_AGGRESSIVE: {
-			if (context->aiData.attackBuild == AI_ATTACK) {
-				game_strategy_ai_attack(context);
-			} else {
-				game_strategy_ai_build_train(context);
-			}
+		case AI_STATE_HARVESTER_WORKERS: {
+			game_strategy_ai_harvester_workers(context);
+			break;
+		}
+		case AI_STATE_TRAIN_UNITS: {
+			game_strategy_ai_train_units(context);
+			break;
+		}
+		case AI_STATE_SEND_ATTACK_UNITS: {
+			if (context->map.aiMode == AI_MODE_AGGRESSIVE) game_strategy_ai_attack(context);
 			break;
 		}
 	}
+	context->aiData.state = (context->aiData.state + 1) % AI_STATE_COUNT;
 }
