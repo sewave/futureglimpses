@@ -261,8 +261,8 @@ static void game_strategy_ai_train_units(GameContext *context) {
 			}
 			if (unit->type == UNIT_TYPE_BARRACKS) {
 				UnitTypeEnum typeToTrain = UNIT_TYPE_SOLDIER;
-				if(trainRanged && archersAvailable) typeToTrain = UNIT_TYPE_ARCHER;
-				if(!trainRanged && knightsAvailable) typeToTrain = UNIT_TYPE_KNIGHT;
+				if(trainRanged && archersAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, UNIT_TYPE_ARCHER)) typeToTrain = UNIT_TYPE_ARCHER;
+				if(!trainRanged && knightsAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, UNIT_TYPE_KNIGHT)) typeToTrain = UNIT_TYPE_KNIGHT;
 				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_resources(typeToTrain)->used[RESOURCE_TYPE_GOLD]) {
 					building_add_to_train_queue(context, unit, typeToTrain);
 					trainRanged = !trainRanged;
@@ -364,6 +364,8 @@ void game_strategy_ai_execute(GameContext *context) {
 			if (context->map.aiMode == AI_MODE_AGGRESSIVE) game_strategy_ai_attack(context);
 			break;
 		}
+		default:
+			break;
 	}
 	context->aiData.state = (context->aiData.state + 1) % AI_STATE_COUNT;
 }

@@ -15,5 +15,5 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 void resource_unit_harvest(GameContext *context, GameUnit *worker);
 void resource_search_for_work(GameContext *context, GameUnit *worker);
 Position resource_find_first_around_unit(GameContext *context, GameUnit *unit, TileTypeEnum resourceType, uint8_t maxDistance);
-
+uint8_t resource_has_enough_for_unit(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType);
 #endif /* RESOURCE_H */
