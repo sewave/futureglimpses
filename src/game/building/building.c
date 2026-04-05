@@ -82,7 +82,7 @@ static UnitResourcesData* building_check_unit_resources(GameContext *context, Co
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
 		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
 			if(controller == UNIT_CONTROLLER_PLAYER) {
-				message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_FOOD + i),
+				message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
 								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 				game_snd_play_sound(GAME_SOUND_NOT_VALID);
 			}
