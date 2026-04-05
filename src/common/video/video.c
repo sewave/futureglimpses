@@ -31,6 +31,9 @@ InitializationStatusEnum video_init_system(int width, int height, int depth) {
 #ifdef DOS
 	}
 #endif
+#ifndef DOS
+	set_display_switch_mode(SWITCH_BACKGROUND);
+#endif
 	return INITIALIZATION_OK;
 }
 
