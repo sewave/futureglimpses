@@ -18,7 +18,7 @@ typedef struct {
 
 static BoardTileDefinition boardTileConversion[] = {
 		{.minTile = 0x00, .maxTile = 0x7F, .altTileOffset = 0, .tileType = TILE_TYPE_WALKABLE, .data = 0},
-		{.minTile = 0x80, .maxTile = 0x8F, .altTileOffset = -0x20, .tileType = TILE_TYPE_WOOD, .data = 100},
+		{.minTile = 0x80, .maxTile = 0x8F, .altTileOffset = -0x20, .tileType = TILE_TYPE_WOOD, .data = 300},
 		{.minTile = 0x90, .maxTile = 0x9F, .altTileOffset = -0x20, .tileType = TILE_TYPE_GOLD, .data = 5000},
 		{.minTile = 0xA0, .maxTile = 0xBF, .altTileOffset = 0, .tileType = TILE_TYPE_BLOCKED, .data = 0},
 		{.minTile = 0xC0, .maxTile = 0xDF, .altTileOffset = -0xC0, .tileType = TILE_TYPE_WALL, .data = 50},
