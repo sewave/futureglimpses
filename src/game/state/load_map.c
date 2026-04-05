@@ -7,6 +7,7 @@
 #define MESSAGES_Y 175
 #define MESSAGES_Y_INC -14
 #define MESSAGES_Z UI_Z_ORDER + 900
+#define INITIAL_EXPLORE_MULTIPLIER 2
 
 typedef struct {
 	uint16_t minTile, maxTile;
@@ -159,7 +160,7 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 
 	for (int i = 0; i < context->activeUnitCount; i++) {
 		GameUnit *unit = context->activeUnits[i];
-		if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) game_unit_explore(context, unit);
+		if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) game_unit_explore_extended(context, unit, INITIAL_EXPLORE_MULTIPLIER);
 	}
 
 	return GAME_STATE_PLAY_MAP;

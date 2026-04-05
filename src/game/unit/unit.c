@@ -511,22 +511,27 @@ GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, 
 	return closestUnit;
 }
 
-void game_unit_explore(GameContext *context, GameUnit *unit) {
+void game_unit_explore_extended(GameContext *context, GameUnit *unit, int multipliedRange) {
 	int halfTiles = (unit->tileSize - 1) / 2;
 	int xCenter = unit->x + halfTiles;
 	int yCenter = unit->y + halfTiles;
-	int xMin = clamp(xCenter - unit->exploreRange, BOARD_X_MIN, BOARD_X_MAX);
-	int xMax = clamp(xCenter + unit->exploreRange, BOARD_X_MIN, BOARD_X_MAX);
-	int yMin = clamp(yCenter - unit->exploreRange, BOARD_Y_MIN, BOARD_Y_MAX);
-	int yMax = clamp(yCenter + unit->exploreRange, BOARD_Y_MIN, BOARD_Y_MAX);
+	int range = unit->exploreRange * multipliedRange;
+	int xMin = clamp(xCenter - range, BOARD_X_MIN, BOARD_X_MAX);
+	int xMax = clamp(xCenter + range, BOARD_X_MIN, BOARD_X_MAX);
+	int yMin = clamp(yCenter - range, BOARD_Y_MIN, BOARD_Y_MAX);
+	int yMax = clamp(yCenter + range, BOARD_Y_MIN, BOARD_Y_MAX);
 	for (int x = xMin; x <= xMax; x++) {
 		for (int y = yMin; y <= yMax; y++) {
 			if (context->boardExploration[x][y] == BOARD_UNEXPLORED &&
-				(abs(x - xCenter) < unit->exploreRange || abs(y - yCenter) < unit->exploreRange)) {
+				(abs(x - xCenter) < range || abs(y - yCenter) < range)) {
 					game_spatial_explore_position(context, x, y);
 			}
 		}
 	}
+}
+
+void game_unit_explore(GameContext *context, GameUnit *unit) {
+	game_unit_explore_extended(context, unit, 1);
 }
 
 uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit) {
