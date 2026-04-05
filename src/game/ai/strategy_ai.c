@@ -1,7 +1,6 @@
 #include "game/ai/strategy_ai.h"
 
-// One frame checks attacks, one frame checks build options
-#define ATTACK_WAVE_FRAMES SEC_TO_FRAMES(60) / 2
+#define ATTACK_WAVE_FRAMES SEC_TO_FRAMES(60 * 5) / AI_STATE_COUNT
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 16
 #define SEARCH_RESOURCE_MULTIPLIER 5
@@ -240,6 +239,8 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 }
 
 static void game_strategy_ai_train_units(GameContext *context) {
+	// Start training after peace time
+	if (context->aiData.peaceCounter < context->map.peaceTime) return;
 	uint8_t allWorkersTrained = game_strategy_ai_count_computer_workers(context) >= context->aiData.desiredWorkers;
 	int workerGoldCost = game_unit_get_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
 	// Must have at least worker gold cost and reserve
