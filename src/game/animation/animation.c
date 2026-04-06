@@ -121,15 +121,15 @@ static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 static AnimationData MAGE_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-            {.duration = SEC_TO_FRAMES(0.2)},
-            {.duration = SEC_TO_FRAMES(0.8)},
-            {.duration = SEC_TO_FRAMES(0.1)},
-            {.duration = SEC_TO_FRAMES(0.2)},
+            {.duration = SEC_TO_FRAMES(0.6)},
+            {.duration = SEC_TO_FRAMES(1)},
+            {.duration = SEC_TO_FRAMES(0.3)},
+            {.duration = SEC_TO_FRAMES(0.5)},
         },
 		.lastFrameIndex = 3,
 		.events = {
-			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_FIREBALL_LAUNCH, .fireTime = SEC_TO_FRAMES(0.9)},
-			{.type = EVENT_TYPE_SPAWN_FIREBALL, .data = 0, .fireTime = SEC_TO_FRAMES(0.9)}},
+			{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_FIREBALL_LAUNCH, .fireTime = SEC_TO_FRAMES(1.9)},
+			{.type = EVENT_TYPE_SPAWN_FIREBALL, .data = 0, .fireTime = SEC_TO_FRAMES(1.9)}},
 		.numEvents = 2,
 };
 
