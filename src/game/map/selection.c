@@ -111,41 +111,41 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 	int boardYPosition = game_spatial_get_board_y_position(context->yPosition, mouseY);
 	MouseCursorStateEnum mouseState = game_mouse_get_cursor_state();
 
-	UnitId target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
+	UnitId target = NULL_HANDLE;
+	if(context->boardExploration[boardXPosition][boardYPosition] == BOARD_EXPLORED) {
+		target = game_selection_get_in_position_or_previous(context, boardXPosition, boardYPosition);
+	}
 
 	if (target < HANDLE_ID_THRESHOLD) {
 		// Not unit position, depending on the tile, we move or interact with resource
 		for (int i = 0; i < context->selectedUnitCount; i++) {
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 			if (!unit) continue;
-			if (target == WALKABILITY_FREE) {
-				if(unit->type == UNIT_TYPE_WORKER) {
+			if(unit->type == UNIT_TYPE_WORKER) {
+				BoardTile* tile = &context->board[boardXPosition][boardYPosition];
+				if (tile->type == TILE_TYPE_GOLD || tile->type == TILE_TYPE_WOOD) {
+					setBlinkPosition(context, boardXPosition, boardYPosition);
+					unit->typed.workerData.workplace.x = boardXPosition;
+					unit->typed.workerData.workplace.y = boardYPosition;
+					game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+					continue;
+				} else {
 					unit->typed.workerData.workplace.x = NO_TARGET_POSITION;
 					unit->typed.workerData.workplace.y = NO_TARGET_POSITION;
 					unit->typed.workerData.targetConstruction = NO_TARGET_ID;
 				}
-				if (isContextual) {
+			}
+			if (isContextual) {
+				game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+				setBlinkPosition(context, boardXPosition, boardYPosition);
+			} else {
+				if (mouseState == MOUSE_CURSOR_ATTACK) {
+					game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
+					setBlinkPosition(context, boardXPosition, boardYPosition);
+				}
+				if (mouseState == MOUSE_CURSOR_TARGET) {
 					game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
 					setBlinkPosition(context, boardXPosition, boardYPosition);
-				} else {
-					if (mouseState == MOUSE_CURSOR_ATTACK) {
-						game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
-						setBlinkPosition(context, boardXPosition, boardYPosition);
-					}
-					if (mouseState == MOUSE_CURSOR_TARGET) {
-						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
-						setBlinkPosition(context, boardXPosition, boardYPosition);
-					}
-				}
-			} else {
-				if(unit->type == UNIT_TYPE_WORKER) {
-					BoardTile* tile = &context->board[boardXPosition][boardYPosition];
-					if (tile->type == TILE_TYPE_GOLD || tile->type == TILE_TYPE_WOOD) {
-						setBlinkPosition(context, boardXPosition, boardYPosition);
-						unit->typed.workerData.workplace.x = boardXPosition;
-						unit->typed.workerData.workplace.y = boardYPosition;
-						game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
-					}
 				}
 			}
 		}
