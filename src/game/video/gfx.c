@@ -12,6 +12,7 @@
 #define OVERTILES_FILE "assets/gfx/ui/otiles.pcx"
 #define MENU_BACK_FILE "assets/gfx/ui/back/menuback.pcx"
 #define UNIT_ICONS_FILE "assets/gfx/ui/unicons.pcx"
+#define RESOURCE_HOVER_FILE "assets/gfx/ui/reshover.pcx"
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
 
@@ -26,6 +27,7 @@ static RLE_SPRITE *unitIcons[GAME_UNIT_ICON_COUNT];
 static BITMAP *tileSet;
 static BITMAP *tileSetColors;
 static BITMAP *menuBack;
+static BITMAP *resHover;
 
 static const char *spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
 		"assets/gfx/unit/workerb.pcx",
@@ -181,6 +183,10 @@ InitializationStatusEnum game_gfx_load_all() {
 	if (!menuBack) return INITIALIZATION_ERROR;
 	common_print_init_step();
 
+	resHover = load_bitmap(RESOURCE_HOVER_FILE, NULL);
+	if (!resHover) return INITIALIZATION_ERROR;
+	common_print_init_step();
+
 	common_print_ok_steps();
 
 	return INITIALIZATION_OK;
@@ -263,4 +269,8 @@ BITMAP *game_gfx_get_menu_back() {
 
 RLE_SPRITE *game_gfx_get_unit_icon(GameUnitIconEnum unitIcon) {
 	return unitIcons[unitIcon];
+}
+
+BITMAP *game_gfx_get_resource_hover() {
+	return resHover;
 }

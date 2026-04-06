@@ -4,10 +4,17 @@
 #include <allegro.h>
 
 #define RESULT_MESSAGE_X_OFFSET 5
+#define TOOLTIP_TEXT_X_OFFSET 5
+#define TOOLTIP_TEXT_Y_OFFSET 5
+#define TOOLTIP_Z (UI_Z_ORDER + 1000)
 
 static int moveViewportCounter = 0;
 static GameStateEnum nextState;
 static uint8_t renderBackground;
+static char tooltipQtyBuffer[16];
+static const char *tooltipText;
+static uint8_t showResourceTooltip;
+static int tooltipX, tooltipY;
 
 static void go_menu(GameContext* context) {
 	nextState = GAME_STATE_MENU_MAP;
@@ -155,6 +162,44 @@ static GuiScreen guiScreenPlay = { .elements = playMenu, .elementsCount = PLAY_M
 static GuiScreen guiScreenWin = { .elements = winMenu, .elementsCount = WIN_MENU_ELEMENTS };
 static GuiScreen guiScreenLose = { .elements = loseMenu, .elementsCount = LOSE_MENU_ELEMENTS };
 
+static void handle_hover(GameContext *context) {
+	showResourceTooltip = FALSE;
+	MouseCursorStateEnum mouseState = game_mouse_get_cursor_state();
+	if(mouseState != MOUSE_CURSOR_IDLE || !keyboard_is_key_down(KEY_TAB)) return;
+	int mouseX = context->mouseStatus.x;
+	int mouseY = context->mouseStatus.y;
+	// If we are not on the viewport, return
+	if(mouseY < VIEWPORT_Y_MIN || mouseY > VIEWPORT_Y_MAX ||
+		mouseX < VIEWPORT_X_MIN || mouseX > VIEWPORT_X_MAX) return;
+	// If we hover on a resource, we show the name and the quantity of the resource in the tooltip
+	int boardXPosition = game_spatial_get_board_x_position(context->xPosition, mouseX);
+	int boardYPosition = game_spatial_get_board_y_position(context->yPosition, mouseY);
+	if(context->boardExploration[boardXPosition][boardYPosition] == BOARD_UNEXPLORED) return;
+	BoardTile* tile = &context->board[boardXPosition][boardYPosition];
+	if (tile->type == TILE_TYPE_GOLD || tile->type == TILE_TYPE_WOOD) {
+		itoa(tile->data, tooltipQtyBuffer, BASE_TEN_NUMBER);
+		tooltipText = text_get_by_id(tile->type == TILE_TYPE_GOLD ? GAME_TEXT_ID_GOLD : GAME_TEXT_ID_WOOD);
+		showResourceTooltip = TRUE;
+		// Position tooltip above the mouse cursor, with some offset
+		// Tooltip should not go outside screen bounds
+		BITMAP * resourceHover = game_gfx_get_resource_hover();
+		tooltipX = mouseX + resourceHover->w >= GAME_INTERNAL_WIDTH ? GAME_INTERNAL_WIDTH - resourceHover->w : mouseX;
+		tooltipY = mouseY - resourceHover->h < 0 ? 0 : mouseY - resourceHover->h;
+	}
+}
+
+static void render_tooltip(GameContext *context, RenderQueue *renderQueue) {
+	if (!showResourceTooltip) return;
+	BITMAP * resourceHover = game_gfx_get_resource_hover();
+	render_queue_submit_solid(renderQueue, TOOLTIP_Z, resourceHover, tooltipX, tooltipY);
+	render_queue_submit_text_shadow(renderQueue, TOOLTIP_Z + 1, context->gameFont, tooltipText,
+		tooltipX + TOOLTIP_TEXT_X_OFFSET, tooltipY + TOOLTIP_TEXT_Y_OFFSET,
+		PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+	render_queue_submit_text_shadow(renderQueue, TOOLTIP_Z + 1, context->gameFont, tooltipQtyBuffer,
+		tooltipX + TOOLTIP_TEXT_X_OFFSET, tooltipY + TOOLTIP_TEXT_Y_OFFSET + context->gameFont->height,
+		PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+}
+
 static void game_update(GameContext *context) {
 
 	// Inputs
@@ -162,6 +207,7 @@ static void game_update(GameContext *context) {
 	game_cmd_bar_handle_buttons(context);
 	game_mouse_handle_status_change(context);
 	game_gui_handle(context, &guiScreenPlay);
+	handle_hover(context);
 	if(context->targetBlinkTime) {
 		context->targetBlinkTime--;
 	}
@@ -332,6 +378,7 @@ void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 	game_cmd_bar_render_queue_submit(context, renderQueue);
 	message_render_queue_submit(renderQueue, context->gameFont);
 	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
+	render_tooltip(context, renderQueue);
 	switch(context->gameResult) {
 		case GAME_RESULT_ONGOING: {
 			// No result screen, just regular gameplay UI
