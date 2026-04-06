@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="173">
  <editorsettings>
-  <export target="../../assets/map/testcmp/tcmp1.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../assets/map/testcmp/tcmp1.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
@@ -20,10 +20,10 @@
   <property name="RES_WOOD_COMPUTER" type="int" value="0"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
  </properties>
- <tileset firstgid="1" source="tileset.tsx"/>
- <tileset firstgid="257" source="units/units.tsx"/>
- <tileset firstgid="267" source="buildings/big_buildings.tsx"/>
- <tileset firstgid="273" source="buildings/small_buildings.tsx"/>
+ <tileset firstgid="1" source="../../tileset.tsx"/>
+ <tileset firstgid="257" source="../../units/units.tsx"/>
+ <tileset firstgid="267" source="../../buildings/big_buildings.tsx"/>
+ <tileset firstgid="273" source="../../buildings/small_buildings.tsx"/>
  <layer id="1" name="Map" width="64" height="64">
   <data encoding="csv">
 129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,
@@ -93,18 +93,18 @@
 </data>
  </layer>
  <objectgroup id="2" name="Units/Buildings">
-  <object id="160" template="units/C_Soldier.tx" x="608" y="752"/>
-  <object id="161" template="units/C_Soldier.tx" x="624" y="736"/>
-  <object id="162" template="units/C_Soldier.tx" x="752" y="544"/>
-  <object id="163" template="units/C_Soldier.tx" x="784" y="512"/>
-  <object id="164" template="units/C_Soldier.tx" x="592" y="96"/>
-  <object id="165" template="units/C_Soldier.tx" x="80" y="912"/>
-  <object id="166" template="units/C_Soldier.tx" x="128" y="880"/>
-  <object id="167" template="units/C_Soldier.tx" x="144" y="944"/>
-  <object id="168" template="buildings/P_City_Hall.tx" x="400" y="416"/>
-  <object id="169" template="units/P_Worker.tx" x="336" y="416"/>
-  <object id="170" template="units/P_Worker.tx" x="352" y="416"/>
-  <object id="171" template="units/P_Worker.tx" x="368" y="416"/>
-  <object id="172" template="units/P_Worker.tx" x="352" y="432"/>
+  <object id="160" template="../../units/C_Soldier.tx" x="608" y="752"/>
+  <object id="161" template="../../units/C_Soldier.tx" x="624" y="736"/>
+  <object id="162" template="../../units/C_Soldier.tx" x="752" y="544"/>
+  <object id="163" template="../../units/C_Soldier.tx" x="784" y="512"/>
+  <object id="164" template="../../units/C_Soldier.tx" x="592" y="96"/>
+  <object id="165" template="../../units/C_Soldier.tx" x="80" y="912"/>
+  <object id="166" template="../../units/C_Soldier.tx" x="128" y="880"/>
+  <object id="167" template="../../units/C_Soldier.tx" x="144" y="944"/>
+  <object id="168" template="../../buildings/P_City_Hall.tx" x="400" y="416"/>
+  <object id="169" template="../../units/P_Worker.tx" x="336" y="416"/>
+  <object id="170" template="../../units/P_Worker.tx" x="352" y="416"/>
+  <object id="171" template="../../units/P_Worker.tx" x="368" y="416"/>
+  <object id="172" template="../../units/P_Worker.tx" x="352" y="432"/>
  </objectgroup>
 </map>

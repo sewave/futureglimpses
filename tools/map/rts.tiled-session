@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "win.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         ".",
-        "buildings"
+        "Test Campaign"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -21,6 +21,34 @@
         "FullTileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 2
+        },
+        "Test Campaign/1-starting.tmx": {
+            "scale": 0.6457031249999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.8451300665457,
+                "y": 511.84513006654566
+            }
+        },
+        "Test Campaign/buildings/big_buildings.tsx": {
+            "scaleInDock": 1
+        },
+        "Test Campaign/buildings/small_buildings.tsx": {
+            "scaleInDock": 1
+        },
+        "Test Campaign/tcmp1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 305,
+                "y": 377
+            }
+        },
+        "Test Campaign/tileset.tsx": {
+            "scaleInDock": 1
+        },
+        "Test Campaign/units/units.tsx": {
+            "scaleInDock": 1
         },
         "base.tmx": {
             "expandedObjectLayers": [
@@ -44,12 +72,83 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "clash.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": -135.25,
+                "y": 729.25
+            }
+        },
+        "maps/Test Campaign/1-starting.tmx": {
+            "scale": 0.5083984375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.3933922397233,
+                "y": 512.3933922397233
+            }
+        },
+        "maps/base.tmx": {
+            "scale": 0.5083984375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.3933922397233,
+                "y": 512.3933922397234
+            }
+        },
+        "maps/buildings/big_buildings.tsx": {
+            "scaleInDock": 1
+        },
+        "maps/buildings/small_buildings.tsx": {
+            "scaleInDock": 1
+        },
+        "maps/clash.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 516.6666666666666,
+                "y": 485.99999999999994
+            }
+        },
+        "maps/test.tmx": {
+            "scale": 0.5083984375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.3933922397233,
+                "y": 811.3714944295043
+            }
+        },
+        "maps/tileset.tsx": {
+            "scaleInDock": 1
+        },
+        "maps/units/units.tsx": {
+            "scaleInDock": 1
+        },
+        "maps/win.tmx": {
+            "scale": 0.5083984375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.3933922397233,
+                "y": 811.3714944295043
+            }
+        },
         "sin nombre.tmx": {
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 512,
                 "y": 714
+            }
+        },
+        "tcmp1.tmx": {
+            "scale": 0.6457031249999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 391.04658197217185,
+                "y": 511.84513006654566
             }
         },
         "test.tmx": {
@@ -75,8 +174,8 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 974.2424242424242,
-                "y": 531.8181818181818
+                "x": 1174.2424242424242,
+                "y": 1053.030303030303
             }
         }
     },
@@ -92,22 +191,22 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "test.tmx",
-        "win.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
-        "test.tmx",
+        "maps/Test Campaign/1-starting.tmx",
+        "maps/test.tmx",
+        "maps/base.tmx",
+        "maps/win.tmx",
+        "clash.tmx",
+        "Test Campaign/1-starting.tmx",
+        "Test Campaign/tcmp1.tmx",
+        "tcmp1.tmx",
         "win.tmx",
         "tileset.tsx",
-        "buildings/big_buildings.tsx",
-        "base.tmx",
-        "buildings/small_buildings.tsx",
-        "units/units.tsx",
-        "Archer_Blue1.tsx",
-        "FullTileset.tsx",
-        "sin nombre.tmx"
+        "test.tmx",
+        "buildings/big_buildings.tsx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

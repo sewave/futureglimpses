@@ -20,10 +20,10 @@
   <property name="RES_WOOD_COMPUTER" type="int" value="100000"/>
   <property name="RES_WOOD_PLAYER" type="int" value="234567"/>
  </properties>
- <tileset firstgid="1" source="tileset.tsx"/>
- <tileset firstgid="257" source="units/units.tsx"/>
- <tileset firstgid="267" source="buildings/big_buildings.tsx"/>
- <tileset firstgid="273" source="buildings/small_buildings.tsx"/>
+ <tileset firstgid="1" source="../tileset.tsx"/>
+ <tileset firstgid="257" source="../units/units.tsx"/>
+ <tileset firstgid="267" source="../buildings/big_buildings.tsx"/>
+ <tileset firstgid="273" source="../buildings/small_buildings.tsx"/>
  <layer id="1" name="Map" width="64" height="64">
   <data encoding="csv">
 195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,
@@ -93,9 +93,9 @@
 </data>
  </layer>
  <objectgroup id="2" name="Units/Buildings">
-  <object id="71" template="units/P_Worker.tx" x="848" y="848"/>
-  <object id="72" template="units/P_Worker.tx" x="848" y="864"/>
-  <object id="73" template="units/P_Knight.tx" name="Triturador" x="816" y="832" visible="1">
+  <object id="71" template="../units/P_Worker.tx" x="848" y="848"/>
+  <object id="72" template="../units/P_Worker.tx" x="848" y="864"/>
+  <object id="73" template="../units/P_Knight.tx" name="Triturador" x="816" y="832" visible="1">
    <properties>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="120"/>
@@ -104,9 +104,9 @@
     <property name="MUST_SURVIVE" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="125" template="buildings/P_City_Hall.tx" x="896" y="912"/>
-  <object id="126" template="units/P_Worker.tx" x="848" y="880"/>
-  <object id="158" template="units/P_Archer.tx" name="Rajafieras" x="784" y="864">
+  <object id="125" template="../buildings/P_City_Hall.tx" x="896" y="912"/>
+  <object id="126" template="../units/P_Worker.tx" x="848" y="880"/>
+  <object id="158" template="../units/P_Archer.tx" name="Rajafieras" x="784" y="864">
    <properties>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="60"/>

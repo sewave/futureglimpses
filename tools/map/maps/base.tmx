@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" class="The test map" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="126">
+<map version="1.10" tiledversion="1.12.1" class="The test map" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="126">
  <editorsettings>
-  <export target="../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../assets/map/base.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
-  <property name="COMPUTER_GOLD" type="int" value="100000"/>
-  <property name="COMPUTER_WOOD" type="int" value="100000"/>
-  <property name="DESCRIPTION" value="Bla bla bla long description"/>
-  <property name="PLAYER_GOLD" type="int" value="123456"/>
-  <property name="PLAYER_WOOD" type="int" value="234567"/>
-  <property name="TITLE" value="Título"/>
+  <property name="AI_MODE" type="int" propertytype="AI_MODE" value="2"/>
+  <property name="ENABLE_BARRACKS" type="bool" value="true"/>
+  <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
+  <property name="ENABLE_FARM" type="bool" value="true"/>
+  <property name="ENABLE_STABLES" type="bool" value="true"/>
+  <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
+  <property name="MSG_LOSE" value="You lose"/>
+  <property name="MSG_TITLE" value="The map title"/>
+  <property name="MSG_WIN" value="You win"/>
+  <property name="PEACE_TIME" type="int" value="30"/>
+  <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
+  <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
+  <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
+  <property name="RES_WOOD_PLAYER" type="int" value="500"/>
  </properties>
- <tileset firstgid="1" source="tileset.tsx"/>
- <tileset firstgid="257" source="units/units.tsx"/>
- <tileset firstgid="267" source="buildings/big_buildings.tsx"/>
- <tileset firstgid="273" source="buildings/small_buildings.tsx"/>
+ <tileset firstgid="1" source="../tileset.tsx"/>
+ <tileset firstgid="257" source="../units/units.tsx"/>
+ <tileset firstgid="267" source="../buildings/big_buildings.tsx"/>
+ <tileset firstgid="273" source="../buildings/small_buildings.tsx"/>
  <layer id="1" name="Map" width="64" height="64">
   <data encoding="csv">
 195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,132,129,130,131,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,
@@ -84,32 +93,32 @@
 </data>
  </layer>
  <objectgroup id="2" name="Units/Buildings">
-  <object id="71" template="units/P_Worker.tx" x="848" y="848"/>
-  <object id="72" template="units/P_Worker.tx" x="928" y="864"/>
-  <object id="73" template="units/P_Worker.tx" x="880" y="864"/>
-  <object id="74" template="units/P_Worker.tx" x="768" y="896"/>
-  <object id="94" template="buildings/C_City_Hall.tx" x="32" y="160"/>
-  <object id="105" template="buildings/P_Tower.tx" x="832" y="960"/>
-  <object id="106" template="buildings/P_Farm.tx" x="768" y="960"/>
-  <object id="107" template="buildings/P_Barracks.tx" x="816" y="1008"/>
-  <object id="108" template="buildings/P_Blacksmith.tx" x="800" y="960"/>
-  <object id="109" template="buildings/P_Stables.tx" x="864" y="1008"/>
-  <object id="110" template="buildings/P_City_Hall.tx" x="768" y="1008"/>
-  <object id="111" template="units/P_Archer.tx" x="800" y="896"/>
-  <object id="112" template="units/P_Soldier.tx" x="784" y="896"/>
-  <object id="113" template="units/P_Knight.tx" x="816" y="896"/>
-  <object id="114" template="units/P_Mage.tx" x="832" y="896"/>
-  <object id="115" template="units/C_Worker.tx" x="240" y="240"/>
-  <object id="116" template="units/C_Soldier.tx" x="256" y="240"/>
-  <object id="117" template="units/C_Archer.tx" x="272" y="240"/>
-  <object id="118" template="units/C_Knight.tx" x="288" y="240"/>
-  <object id="119" template="units/C_Mage.tx" x="304" y="240"/>
-  <object id="120" template="buildings/C_Barracks.tx" x="80" y="160"/>
-  <object id="121" template="buildings/C_Stables.tx" x="128" y="160"/>
-  <object id="122" template="buildings/C_Farm.tx" x="32" y="192"/>
-  <object id="123" template="buildings/C_Blacksmith.tx" x="64" y="192"/>
-  <object id="124" template="buildings/C_Tower.tx" x="96" y="192"/>
-  <object id="125" template="units/P_Worker.tx" name="Custom" x="800" y="848">
+  <object id="71" template="../units/P_Worker.tx" x="848" y="848"/>
+  <object id="72" template="../units/P_Worker.tx" x="928" y="864"/>
+  <object id="73" template="../units/P_Worker.tx" x="880" y="864"/>
+  <object id="74" template="../units/P_Worker.tx" x="768" y="896"/>
+  <object id="94" template="../buildings/C_City_Hall.tx" x="32" y="160"/>
+  <object id="105" template="../buildings/P_Tower.tx" x="832" y="960"/>
+  <object id="106" template="../buildings/P_Farm.tx" x="768" y="960"/>
+  <object id="107" template="../buildings/P_Barracks.tx" x="816" y="1008"/>
+  <object id="108" template="../buildings/P_Blacksmith.tx" x="800" y="960"/>
+  <object id="109" template="../buildings/P_Stables.tx" x="864" y="1008"/>
+  <object id="110" template="../buildings/P_City_Hall.tx" x="768" y="1008"/>
+  <object id="111" template="../units/P_Archer.tx" x="800" y="896"/>
+  <object id="112" template="../units/P_Soldier.tx" x="784" y="896"/>
+  <object id="113" template="../units/P_Knight.tx" x="816" y="896"/>
+  <object id="114" template="../units/P_Mage.tx" x="832" y="896"/>
+  <object id="115" template="../units/C_Worker.tx" x="240" y="240"/>
+  <object id="116" template="../units/C_Soldier.tx" x="256" y="240"/>
+  <object id="117" template="../units/C_Archer.tx" x="272" y="240"/>
+  <object id="118" template="../units/C_Knight.tx" x="288" y="240"/>
+  <object id="119" template="../units/C_Mage.tx" x="304" y="240"/>
+  <object id="120" template="../buildings/C_Barracks.tx" x="80" y="160"/>
+  <object id="121" template="../buildings/C_Stables.tx" x="128" y="160"/>
+  <object id="122" template="../buildings/C_Farm.tx" x="32" y="192"/>
+  <object id="123" template="../buildings/C_Blacksmith.tx" x="64" y="192"/>
+  <object id="124" template="../buildings/C_Tower.tx" x="96" y="192"/>
+  <object id="125" template="../units/P_Worker.tx" name="Custom" x="800" y="848">
    <properties>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="32"/>
