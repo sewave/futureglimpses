@@ -162,10 +162,23 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			uint8_t showHealthBar = unit->state != UNIT_STATE_DIE && ((lifeBarSetting != LIFE_BAR_NEVER &&
 												   (lifeBarSetting == LIFE_BAR_ALWAYS || (lifeBarSetting == LIFE_BAR_DAMAGED && unit->health < unit->maxHealth))) ||
 												  keyboard_is_key_down(KEY_ALT));
+			int iconOffset = 0;									  
 			if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.carriedResourceQty > 0) {
 				RLE_SPRITE* resourceIcon = game_gfx_get_unit_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
+				if(showHealthBar) iconOffset = resourceIcon->w;
 				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 1, resourceIcon,
-						unitTileXCamera - showHealthBar * resourceIcon->w, unitTileYCamera - resourceIcon->h);
+						unitTileXCamera - iconOffset, unitTileYCamera - resourceIcon->h);
+			}
+			if(unit->isCustom) {
+				RLE_SPRITE* customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
+				if(iconOffset == 0 && showHealthBar) {
+					iconOffset = customIcon->w;
+				} else {
+					if(iconOffset != 0) iconOffset += customIcon->w;
+				}
+				
+				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 1, customIcon,
+						unitTileXCamera - iconOffset, unitTileYCamera - customIcon->h);
 			}
 			if (showHealthBar) {
 				int healthBarColor = PAL_COLOR_DARK_GREEN;
