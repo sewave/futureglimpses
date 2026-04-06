@@ -295,6 +295,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->direction = DIRECTION_SOUTH;
 	unit->reactionTimeCounter = 0;
 	unit->moveTimeCounter = 0;
+	unit->idleTimeCounter = 0;
 	unit->isActive = TRUE;
 	unit->isSelected = FALSE;
 	unit->targetX = NO_TARGET_POSITION;

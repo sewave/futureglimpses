@@ -5,6 +5,7 @@
 #define MAX_WAVE_UNITS 16
 #define SEARCH_RESOURCE_MULTIPLIER 5
 #define MIN_GOLD_TRAINING_BUDGET 1000
+#define MAX_WORKER_IDLE_TIME SEC_TO_FRAMES(10) / AI_STATE_COUNT
 
 static uint8_t trainRanged = FALSE;
 
@@ -190,6 +191,23 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 		GameUnit *unit = *activeList;
 		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
 			WorkerData *workerData = &unit->typed.workerData;
+			if(unit->state == UNIT_STATE_IDLE) {
+				unit->idleTimeCounter++;
+				// If the worker is idle for too long, we reset its job to try
+				// to find a new resource if the previous one was depleted
+				// or unit is stuck for some reason, this also helps to
+				// recover workers that got stuck trying to repair or build
+				if(unit->idleTimeCounter > MAX_WORKER_IDLE_TIME) {
+					unit->idleTimeCounter = 0;
+					workerData->job = WORKER_JOB_NONE;
+					workerData->workplace.x = NO_TARGET_POSITION;
+					workerData->workplace.y = NO_TARGET_POSITION;
+					workerData->targetConstruction = NO_TARGET_ID;
+				}
+			}
+			else {
+				unit->idleTimeCounter = 0;
+			}
 			if (workerData->job == WORKER_JOB_WOOD) currentWoodWorkers++;
 			else if (workerData->job == WORKER_JOB_GOLD) currentGoldWorkers++;
 			if(workerData->job != WORKER_JOB_REPAIR) workerCount++;

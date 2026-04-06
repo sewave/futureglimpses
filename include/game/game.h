@@ -152,6 +152,7 @@ typedef struct {
 
 	uint16_t reactionTime;
 	uint16_t reactionTimeCounter;
+	uint16_t idleTimeCounter;
 	uint16_t moveTime;
 	uint16_t moveTimeAnim;
 	uint16_t moveTimeCounter;
