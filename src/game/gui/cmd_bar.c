@@ -37,7 +37,6 @@
 
 #define BUILDING_RESOURCES 2
 #define RESOURCES_Z UI_Z_ORDER + 600
-#define BASE_TEN_NUMER 10
 #define RESOURCE_LOCATIONS_TEXT_X_OFF 10
 #define RESOURCE_LOCATIONS_TEXT_Y_OFF -1
 #define BUILDING_RESOURCE_X_OFF 28
@@ -613,7 +612,7 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 			render_queue_submit_sprite(
 					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), pos.x + xOff,
 					pos.y, RND_FLAG_NORMAL);
-			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMER);
+			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMBER);
 			render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
 									 font, resourceBuffers[i],
 									 pos.x + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,

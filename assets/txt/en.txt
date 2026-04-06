@@ -106,3 +106,5 @@ Gold harvested
 Wood harvested
 Gold spent
 Wood spent
+Gold
+Wood

@@ -106,3 +106,5 @@ Oro recolectado
 Madera recolectada
 Oro gastado
 Madera gastada
+Oro
+Madera

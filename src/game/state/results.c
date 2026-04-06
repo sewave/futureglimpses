@@ -5,7 +5,6 @@
 #define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8
 #define CONTROLLER_STAT_MAX_LENGTH 16
-#define BASE_TEN_NUMER 10
 #define UNITS_TRAINED_INDEX 0
 #define ENEMIES_KILLED_INDEX 1
 #define BUILDINGS_CONSTRUCTED_INDEX 2
@@ -155,8 +154,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][UNITS_TRAINED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].unitsTrained, resultNumbers[i][UNITS_TRAINED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][UNITS_TRAINED_INDEX].length = text_length(context->gameFont, resultNumbers[i][UNITS_TRAINED_INDEX].text);
+		itoa(context->stats[i].unitsTrained, resultNumbers[i][UNITS_TRAINED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][UNITS_TRAINED_INDEX].length = text_length(context->gameFont, resultNumbers[i][UNITS_TRAINED_INDEX].text);
         
         if(context->stats[i].enemiesKilled < context->stats[otherController].enemiesKilled) {
             resultNumbers[i][ENEMIES_KILLED_INDEX].color = PAL_COLOR_RED;
@@ -165,8 +164,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][ENEMIES_KILLED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].enemiesKilled, resultNumbers[i][ENEMIES_KILLED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][ENEMIES_KILLED_INDEX].length = text_length(context->gameFont, resultNumbers[i][ENEMIES_KILLED_INDEX].text);
+		itoa(context->stats[i].enemiesKilled, resultNumbers[i][ENEMIES_KILLED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][ENEMIES_KILLED_INDEX].length = text_length(context->gameFont, resultNumbers[i][ENEMIES_KILLED_INDEX].text);
         
         if(context->stats[i].buildingsConstructed < context->stats[otherController].buildingsConstructed) {
             resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].color = PAL_COLOR_RED;
@@ -175,8 +174,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].buildingsConstructed, resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].length = text_length(context->gameFont, resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].text);
+		itoa(context->stats[i].buildingsConstructed, resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].length = text_length(context->gameFont, resultNumbers[i][BUILDINGS_CONSTRUCTED_INDEX].text);
         
         if(context->stats[i].buildingsDestroyed < context->stats[otherController].buildingsDestroyed) {
             resultNumbers[i][BUILDINGS_DESTROYED_INDEX].color = PAL_COLOR_RED;
@@ -185,8 +184,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][BUILDINGS_DESTROYED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].buildingsDestroyed, resultNumbers[i][BUILDINGS_DESTROYED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][BUILDINGS_DESTROYED_INDEX].length = text_length(context->gameFont, resultNumbers[i][BUILDINGS_DESTROYED_INDEX].text);
+		itoa(context->stats[i].buildingsDestroyed, resultNumbers[i][BUILDINGS_DESTROYED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][BUILDINGS_DESTROYED_INDEX].length = text_length(context->gameFont, resultNumbers[i][BUILDINGS_DESTROYED_INDEX].text);
         
         if(context->stats[i].resourcesGathered[RESOURCE_TYPE_GOLD] < context->stats[otherController].resourcesGathered[RESOURCE_TYPE_GOLD]) {
             resultNumbers[i][GOLD_GATHERED_INDEX].color = PAL_COLOR_RED;
@@ -195,8 +194,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][GOLD_GATHERED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].resourcesGathered[RESOURCE_TYPE_GOLD], resultNumbers[i][GOLD_GATHERED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][GOLD_GATHERED_INDEX].length = text_length(context->gameFont, resultNumbers[i][GOLD_GATHERED_INDEX].text);
+		itoa(context->stats[i].resourcesGathered[RESOURCE_TYPE_GOLD], resultNumbers[i][GOLD_GATHERED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][GOLD_GATHERED_INDEX].length = text_length(context->gameFont, resultNumbers[i][GOLD_GATHERED_INDEX].text);
         
         if(context->stats[i].resourcesGathered[RESOURCE_TYPE_WOOD] < context->stats[otherController].resourcesGathered[RESOURCE_TYPE_WOOD]) {
             resultNumbers[i][WOOD_GATHERED_INDEX].color = PAL_COLOR_RED;
@@ -205,8 +204,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][WOOD_GATHERED_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].resourcesGathered[RESOURCE_TYPE_WOOD], resultNumbers[i][WOOD_GATHERED_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][WOOD_GATHERED_INDEX].length = text_length(context->gameFont, resultNumbers[i][WOOD_GATHERED_INDEX].text);
+		itoa(context->stats[i].resourcesGathered[RESOURCE_TYPE_WOOD], resultNumbers[i][WOOD_GATHERED_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][WOOD_GATHERED_INDEX].length = text_length(context->gameFont, resultNumbers[i][WOOD_GATHERED_INDEX].text);
         
         if(context->stats[i].resourcesSpent[RESOURCE_TYPE_GOLD] < context->stats[otherController].resourcesSpent[RESOURCE_TYPE_GOLD]) {
             resultNumbers[i][GOLD_SPENT_INDEX].color = PAL_COLOR_RED;
@@ -215,8 +214,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][GOLD_SPENT_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].resourcesSpent[RESOURCE_TYPE_GOLD], resultNumbers[i][GOLD_SPENT_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][GOLD_SPENT_INDEX].length = text_length(context->gameFont, resultNumbers[i][GOLD_SPENT_INDEX].text);
+		itoa(context->stats[i].resourcesSpent[RESOURCE_TYPE_GOLD], resultNumbers[i][GOLD_SPENT_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][GOLD_SPENT_INDEX].length = text_length(context->gameFont, resultNumbers[i][GOLD_SPENT_INDEX].text);
         
         if(context->stats[i].resourcesSpent[RESOURCE_TYPE_WOOD] < context->stats[otherController].resourcesSpent[RESOURCE_TYPE_WOOD]) {
             resultNumbers[i][WOOD_SPENT_INDEX].color = PAL_COLOR_RED;
@@ -225,8 +224,8 @@ void handle_results_init(GameContext *context) {
         } else {
             resultNumbers[i][WOOD_SPENT_INDEX].color = PAL_COLOR_GRAY;
         }
-        itoa(context->stats[i].resourcesSpent[RESOURCE_TYPE_WOOD], resultNumbers[i][WOOD_SPENT_INDEX].text, BASE_TEN_NUMER);
-        resultNumbers[i][WOOD_SPENT_INDEX].length = text_length(context->gameFont, resultNumbers[i][WOOD_SPENT_INDEX].text);
+		itoa(context->stats[i].resourcesSpent[RESOURCE_TYPE_WOOD], resultNumbers[i][WOOD_SPENT_INDEX].text, BASE_TEN_NUMBER);
+		resultNumbers[i][WOOD_SPENT_INDEX].length = text_length(context->gameFont, resultNumbers[i][WOOD_SPENT_INDEX].text);
     }
     game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
     if(context->gameResult == GAME_RESULT_VICTORY) {

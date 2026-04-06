@@ -5,7 +5,6 @@
 #define BASIC_RESOURCES 2
 #define PRINTED_RESOURCES 3
 #define RESOURCES_Z UI_Z_ORDER + 600
-#define BASE_TEN_NUMER 10
 #define FOOD_USE_FORMAT "%u/%u"
 #define FOOD_USE_SURPASSED_FORMAT "^005%u^001/%u"
 #define WORKER_RESOURCE_WOOD_GATHER 3
@@ -129,7 +128,7 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 	// Render resources
 	for(int controller = 0; controller < controllers; controller++) {
 		for (int i = 0; i < BASIC_RESOURCES; i++) {
-			itoa(context->resources[controller].uiQuantity[i], resourceBuffers[controller][i], BASE_TEN_NUMER);
+			itoa(context->resources[controller].uiQuantity[i], resourceBuffers[controller][i], BASE_TEN_NUMBER);
 			render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
 					context->gameFont, resourceBuffers[controller][i],
 					RESOURCE_TEXT_LOCATIONS[controller][i][0], RESOURCE_TEXT_LOCATIONS[controller][i][1],
