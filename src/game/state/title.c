@@ -3,9 +3,9 @@
 #include "game/game_lib.h"
 #include <allegro.h>
 
-#define TITLE_BACKGROUND_PATH "assets/ui/title.pcx"
-#define TITLE_TEXT_ES_PATH "assets/ui/t_txt_es.pcx"
-#define TITLE_TEXT_EN_PATH "assets/ui/t_txt_en.pcx"
+#define TITLE_BACKGROUND_PATH "assets/gfx/ui/back/title.pcx"
+#define TITLE_TEXT_ES_PATH "assets/gfx/ui/t_txt_es.pcx"
+#define TITLE_TEXT_EN_PATH "assets/gfx/ui/t_txt_en.pcx"
 
 typedef enum {
 	TITLE_MENU_INITIAL,

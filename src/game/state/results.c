@@ -2,7 +2,7 @@
 #include "game/game_lib.h"
 #include <allegro.h>
 
-#define RESULTS_BACKGROUND_PATH "assets/ui/results.pcx"
+#define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8
 #define CONTROLLER_STAT_MAX_LENGTH 16
 #define BASE_TEN_NUMER 10

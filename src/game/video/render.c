@@ -163,9 +163,9 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 												   (lifeBarSetting == LIFE_BAR_ALWAYS || (lifeBarSetting == LIFE_BAR_DAMAGED && unit->health < unit->maxHealth))) ||
 												  keyboard_is_key_down(KEY_ALT));
 			if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.carriedResourceQty > 0) {
-				BITMAP* resourceIcon = game_gfx_get_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
-				render_queue_submit_sprite(renderQueue, UI_Z_ORDER + 1, resourceIcon,
-						unitTileXCamera - showHealthBar * resourceIcon->w, unitTileYCamera - resourceIcon->h, RND_FLAG_NORMAL);
+				RLE_SPRITE* resourceIcon = game_gfx_get_unit_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
+				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 1, resourceIcon,
+						unitTileXCamera - showHealthBar * resourceIcon->w, unitTileYCamera - resourceIcon->h);
 			}
 			if (showHealthBar) {
 				int healthBarColor = PAL_COLOR_DARK_GREEN;

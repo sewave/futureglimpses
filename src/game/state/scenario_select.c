@@ -4,7 +4,7 @@
 #include "game/scenario/scenario_select_map.h"
 #include <allegro.h>
 
-#define SCENARIO_SELECT_BACKGROUND_PATH "assets/ui/select.pcx"
+#define SCENARIO_SELECT_BACKGROUND_PATH "assets/gfx/ui/back/select.pcx"
 #define SCENARIO_SELECT_MAPS 10
 #define GUI_BODY_Y 20
 #define GUI_BAR_X 152

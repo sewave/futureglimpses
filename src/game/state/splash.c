@@ -1,8 +1,8 @@
 #include "game/state/splash.h"
 #include <allegro.h>
 
-#define SPLASH_BACKGROUND_PATH "assets/ui/wave.pcx"
-#define SPLASH_MASK_PATH "assets/ui/wavesoft.pcx"
+#define SPLASH_BACKGROUND_PATH "assets/gfx/ui/back/wave.pcx"
+#define SPLASH_MASK_PATH "assets/gfx/ui/back/wavesoft.pcx"
 
 static const int SPLASH_DURATION_TICKS = 2 * LOGIC_RATE_BPS;
 static const int AFTER_SPLASH_DURATION_TICKS = 2 * LOGIC_RATE_BPS;

@@ -4,13 +4,14 @@
 #include <allegro/datafile.h>
 #include <stdio.h>
 
-#define CMD_BAR_BUTTONS_FILE "assets/ui/cmdbtns.pcx"
-#define FRAME_FILE "assets/ui/back.pcx"
+#define CMD_BAR_BUTTONS_FILE "assets/gfx/ui/cmdbtns.pcx"
+#define FRAME_FILE "assets/gfx/ui/back/frame.pcx"
 #define TILESET_FILE "assets/gfx/tileset.pcx"
 #define TILESET_COLORS_FILE "assets/gfx/tilesetm.pcx"
-#define ICONS_FILE "assets/ui/icons.pcx"
-#define OVERTILES_FILE "assets/ui/otiles.pcx"
-#define MENU_BACK_FILE "assets/ui/menuback.pcx"
+#define ICONS_FILE "assets/gfx/ui/icons.pcx"
+#define OVERTILES_FILE "assets/gfx/ui/otiles.pcx"
+#define MENU_BACK_FILE "assets/gfx/ui/back/menuback.pcx"
+#define UNIT_ICONS_FILE "assets/gfx/ui/unicons.pcx"
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
 
@@ -21,6 +22,7 @@ static BITMAP *frame;
 static BITMAP *cmdBarButtons;
 static BITMAP *icons[GAME_ICON_COUNT];
 static BITMAP *overtiles[GAME_OVERTILE_COUNT];
+static RLE_SPRITE *unitIcons[GAME_UNIT_ICON_COUNT];
 static BITMAP *tileSet;
 static BITMAP *tileSetColors;
 static BITMAP *menuBack;
@@ -75,6 +77,8 @@ static const SquareSize objectSquares[OBJ_TYPE_NUMBER] = {
 		{16, 16}, {16, 16}, {48, 48}, {16, 16},
 };
 
+static const SquareSize iconSquare = {8, 8};
+
 static void game_gfx_destroy_sheet(SpriteSheet * spriteSheet) {
 	if (spriteSheet->numFrames > 0 && spriteSheet->frames != NULL) {
 		for(int i = 0; i < spriteSheet->numFrames; i++) destroy_rle_sprite(spriteSheet->frames[i]);
@@ -82,6 +86,17 @@ static void game_gfx_destroy_sheet(SpriteSheet * spriteSheet) {
 		spriteSheet->frames = NULL;
 		spriteSheet->numFrames = 0;
 	}
+}
+
+static RLE_SPRITE* game_gfx_get_rle_sprite_from_partial_bitmap(BITMAP *bitmap, SquareSize frameSize, int frameIndex) {
+	int width = bitmap->w / frameSize.width;
+	int x = (frameIndex % width) * frameSize.width;
+	int y = (frameIndex / width) * frameSize.height;
+	BITMAP* frameBitmap = create_bitmap(frameSize.width, frameSize.height);
+	blit(bitmap, frameBitmap, x, y, 0, 0, frameSize.width, frameSize.height);
+	RLE_SPRITE* sprite = get_rle_sprite(frameBitmap);
+	destroy_bitmap(frameBitmap);
+	return sprite;
 }
 
 static uint8_t game_gfx_load_sprite_sheet(SpriteSheet * spriteSheet, const char *spriteSheetFilename, SquareSize frameSize) {
@@ -93,16 +108,9 @@ static uint8_t game_gfx_load_sprite_sheet(SpriteSheet * spriteSheet, const char 
 	spriteSheet->numFrames = width * height;
 	spriteSheet->frames = (RLE_SPRITE **) calloc(spriteSheet->numFrames, sizeof(RLE_SPRITE*));
 
-	int frame = 0;
-	for(int y = 0; y < height; y++) {
-		for(int x = 0; x < width; x++) {
-			BITMAP* frameBitmap = create_bitmap(frameSize.width, frameSize.height);
-			blit(framesBitmap, frameBitmap, x * frameSize.width, y * frameSize.height, 0, 0, frameSize.width, frameSize.height);
-			spriteSheet->frames[frame] = get_rle_sprite(frameBitmap);
-			destroy_bitmap(frameBitmap);
-			frame++;
-		}
-	}
+	for(int frame = 0; frame < spriteSheet->numFrames; frame++) {
+		spriteSheet->frames[frame] = game_gfx_get_rle_sprite_from_partial_bitmap(framesBitmap, frameSize, frame);
+	} 
 	destroy_bitmap(framesBitmap);
 	return TRUE;
 }
@@ -116,6 +124,16 @@ InitializationStatusEnum game_gfx_load_all() {
 		common_print_init_step();
 	}
 	common_print_ok_steps();
+
+	printf("Loading unit icons [");
+	BITMAP* unitIconsSheet = load_bitmap(UNIT_ICONS_FILE, NULL);
+	if (!unitIconsSheet) return INITIALIZATION_ERROR;
+	for (int i = 0; i < GAME_UNIT_ICON_COUNT; i++) {
+		unitIcons[i] = game_gfx_get_rle_sprite_from_partial_bitmap(unitIconsSheet, iconSquare, i);
+		common_print_init_step();
+	}
+	common_print_ok_steps();
+	destroy_bitmap(unitIconsSheet);
 
 	printf("Loading objects gfx [");
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
@@ -172,6 +190,12 @@ void game_gfx_destroy_all() {
 	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
 		game_gfx_destroy_sheet(&spriteSheetsBlue[i]);
 		game_gfx_destroy_sheet(&spriteSheetsRed[i]);
+	}
+	for (int i = 0; i < GAME_UNIT_ICON_COUNT; i++) {
+		if (unitIcons[i] != NULL) {
+			destroy_rle_sprite(unitIcons[i]);
+			unitIcons[i] = NULL;
+		}
 	}
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
 		game_gfx_destroy_sheet(&spriteSheetsObject[i]);
@@ -235,4 +259,8 @@ BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile) {
 
 BITMAP *game_gfx_get_menu_back() {
 	return menuBack;
+}
+
+RLE_SPRITE *game_gfx_get_unit_icon(GameUnitIconEnum unitIcon) {
+	return unitIcons[unitIcon];
 }
