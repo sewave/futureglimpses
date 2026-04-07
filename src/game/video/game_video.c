@@ -32,10 +32,10 @@ static RGB firstColors[FIRST_COLORS] = {
     {.r = 0, .g = 16, .b = 16, .filler = 0},
     // CMD_BUTTON
     {.r = 0, .g = 26, .b = 38, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
-    // UNUSED
-    {.r = 0, .g = 0, .b = 0, .filler = 0},
+    // PLAYER
+    {.r = 0, .g = 0, .b = 51, .filler = 0},
+    // COMPUTER
+    {.r = 38, .g = 0, .b = 0, .filler = 0},
     // UNUSED
     {.r = 0, .g = 0, .b = 0, .filler = 0},
     // UNUSED

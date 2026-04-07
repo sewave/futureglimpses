@@ -36,6 +36,8 @@ typedef enum {
 	PAL_COLOR_TURQUOISE,
 	PAL_COLOR_DARK_TURQUOISE,
 	PAL_COLOR_CMD_BUTTON,
+	PAL_COLOR_PLAYER,
+	PAL_COLOR_COMPUTER,
 } PalColorsEnum;
 
 InitializationStatusEnum game_video_load_universal_pal();

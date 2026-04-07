@@ -489,11 +489,14 @@ static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int val
 							 PAL_COLOR_WHITE);
 }
 
-static void game_render_unit_stats_background(RenderQueue *renderQueue) {
+static void game_render_unit_stats_background(GameContext *context, RenderQueue *renderQueue) {
+	int backgroundColor = PAL_COLOR_PLAYER;
+	if(game_selection_one_enemy_selected(context)) backgroundColor = PAL_COLOR_COMPUTER;
+
 	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 1, 
 		UNIT_SHEET_BACK_X, UNIT_SHEET_BACK_Y,
 		UNIT_SHEET_BACK_X + UNIT_SHEET_BACK_WIDTH, UNIT_SHEET_BACK_Y + UNIT_SHEET_BACK_HEIGHT,
-		PAL_COLOR_CMD_BUTTON
+		backgroundColor
 	);
 	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BACKGROUND + 2, 
 		UNIT_SHEET_BACK_X, UNIT_SHEET_BACK_Y,
@@ -515,7 +518,7 @@ static void game_render_unit_stats_background(RenderQueue *renderQueue) {
 static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, RenderQueue *renderQueue) {
 	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 	if (unit) {
-		game_render_unit_stats_background(renderQueue);
+		game_render_unit_stats_background(context, renderQueue);
 
 		// Unit name
 		const char* name;
@@ -574,7 +577,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 }
 
 static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {
-	game_render_unit_stats_background(renderQueue);
+	game_render_unit_stats_background(context, renderQueue);
 	snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
 	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 							 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
