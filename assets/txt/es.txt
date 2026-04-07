@@ -22,6 +22,7 @@ Cancelar acción (^004ESC^001)
 Construir (^004B^001)
 ^004R^001eparar
 Recolectar (^004H^001)
+Cancelar entrenamiento (^004ESC^001)
 Entrenar Obrero (^004W^001)
 Entrenar ^004S^001oldado
 Entrenar ^004A^001rquero

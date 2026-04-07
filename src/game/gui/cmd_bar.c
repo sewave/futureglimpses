@@ -67,6 +67,33 @@ static void handle_train_unit(void *ctxVoid, uint8_t fixedDat) {
 	}
 }
 
+static void return_resources_for_cancelled_unit(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType) {
+	UnitResourcesData* unitResources = game_unit_get_resources(unitType);
+	for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
+		resource_add_amount(context, controller, i, unitResources->used[i]);
+	}
+}
+
+static void handle_cancel_all_unit_training(void *ctxVoid, uint8_t fixedDat) {
+	GameContext *context = (GameContext *) ctxVoid;
+	if (context->selectedUnitCount == 1) {
+		GameUnit *building = game_unit_get_by_id(context, context->selectedUnits[0]);
+		if (building) {
+			// Cancel all the queue and return resources for all the units in the queue,
+			// including the one in training
+			if(building->typed.buildingData.isTraining) {
+				return_resources_for_cancelled_unit(context, building->controller, building->typed.buildingData.trainUnit);
+				building->typed.buildingData.isTraining = FALSE;
+			}
+
+			for (int i = 0; i < building->typed.buildingData.queueNextIndex; i++) {
+				return_resources_for_cancelled_unit(context, building->controller, building->typed.buildingData.queue[i]);
+			}
+			building->typed.buildingData.queueNextIndex = 0;
+		}
+	}
+}
+
 static void handle_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
@@ -424,6 +451,20 @@ static const CommandBarButton TOWER_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton CANCEL_ALL_TRAIN_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
+		.isActive = TRUE,
+		.action = handle_cancel_all_unit_training,
+		.hotkeyIndex = KEY_ESC,
+		.hotkey = "ESC",
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_ALL_TRAINING,
+		.fixedParam = 0,
+		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
+		.sheetOffsetY = 0,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
 	if(building->state == BUILDING_STATE_COMPLETED) {
 		switch (building->type) {
@@ -440,6 +481,9 @@ static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit 
 				break;
 			default:
 				break;
+		}
+		if(building->typed.buildingData.isTraining || building->typed.buildingData.queueNextIndex > 0) {
+			context->cmdBarButtons[buttonIndex++] = CANCEL_ALL_TRAIN_CMD_BUTTON;
 		}
 	}
 	else {
