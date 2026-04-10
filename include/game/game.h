@@ -44,6 +44,8 @@
 #define CUSTOM_UNIT_NAME_LENGTH 11
 #define MAX_AI_HANDLED_BUILDINGS 256
 
+#define PATHFINDING_HISTORY_SIZE 16
+
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
 	uint32_t uiQuantity[RESOURCE_TYPES_COUNT];
@@ -130,6 +132,17 @@ typedef struct {
 } WorkerData;
 
 typedef struct {
+	int8_t lastDir;
+    uint16_t lastPositionsX[PATHFINDING_HISTORY_SIZE];
+    uint16_t lastPositionsY[PATHFINDING_HISTORY_SIZE];
+    int historyIdx;
+    int frustration;
+    int lastDistSq;
+	uint16_t pathTargetX;
+	uint16_t pathTargetY;
+} PathfindingData;
+
+typedef struct {
 	UnitId id;
 	uint8_t isActive, isSelected, isBuilding;
 	UnitTypeEnum type;
@@ -165,6 +178,7 @@ typedef struct {
 	uint8_t isCustom;
 	uint8_t mustSurvive;
 	char name[CUSTOM_UNIT_NAME_LENGTH];
+	PathfindingData pathfindingData;
 } GameUnit;
 
 typedef uint32_t ObjectId;

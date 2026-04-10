@@ -347,6 +347,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		unit->health = data->health;
 		unit->state = UNIT_STATE_IDLE;
 		unit->nextState = UNIT_STATE_IDLE;
+		game_unit_path_init(unit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 	}
 
 	resource_add_food_usage(context, unit->controller, data->resources.used[RESOURCE_TYPE_AVAILABLE_FOOD]);
