@@ -279,6 +279,14 @@ typedef struct {
 } AIData;
 
 typedef struct {
+	uint8_t showMessage;
+	uint16_t cooldown;
+	uint16_t xPosition, yPosition;
+	uint16_t blinkCounter, currentBlinkCounter;
+	uint8_t blinkShowing;
+} PlayerAttackedData;
+
+typedef struct {
 	BITMAP *screenBuffer;
 	PALETTE mainPalette;
 	GameStateEnum gameState;
@@ -318,6 +326,7 @@ typedef struct {
 	Position targetPosition;
 	uint8_t targetBlinkTime;
 	AIData aiData;
+	PlayerAttackedData playerAttackedData;
 } GameContext;
 
 typedef GameStateEnum (*StateUpdateFunction)(GameContext *);

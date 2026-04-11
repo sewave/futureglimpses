@@ -347,6 +347,7 @@ static void game_update(GameContext *context) {
 		menuBack = game_gfx_get_menu_back();
 		game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	}
+	player_attacked_update(&context->playerAttackedData);
 }
 
 static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
@@ -379,6 +380,7 @@ void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 	message_render_queue_submit(renderQueue, context->gameFont);
 	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
 	render_tooltip(context, renderQueue);
+	player_attacked_render(&context->playerAttackedData, renderQueue);
 	switch(context->gameResult) {
 		case GAME_RESULT_ONGOING: {
 			// No result screen, just regular gameplay UI

@@ -11,6 +11,7 @@
 #include "game/unit/unit_ai.h"
 #include "game/unit/unit_command.h"
 #include "game/unit/unit_path.h"
+#include "game/unit/player_attacked.h"
 #include "game/video/gfx.h"
 #include "game/video/render.h"
 #include "game/event/event.h"

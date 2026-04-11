@@ -413,6 +413,9 @@ void game_unit_damage(GameContext *context, uint8_t minDamage, uint8_t maxDamage
 	} else {
 		target->health -= damage;
 	}
+	if(target->controller == UNIT_CONTROLLER_PLAYER) {
+		player_attacked_register_attack(&context->playerAttackedData, target->x, target->y);
+	}
 }
 
 void game_unit_area_damage(GameContext *context, Object *object) {
@@ -430,6 +433,9 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 				}
 				else {
 					game_unit_damage(context, object->minDamage / AREA_DAMAGE_REDUCTION, object->maxDamage / AREA_DAMAGE_REDUCTION, target);
+				}
+				if(target->controller == UNIT_CONTROLLER_PLAYER) {
+					player_attacked_register_attack(&context->playerAttackedData, target->x, target->y);
 				}
 				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 				if (target->state == UNIT_STATE_IDLE && sourceUnit

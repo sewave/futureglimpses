@@ -109,3 +109,4 @@ Gold spent
 Wood spent
 Gold
 Wood
+You are under attack!
