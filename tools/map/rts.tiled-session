@@ -113,6 +113,14 @@
                 "y": 485.99999999999994
             }
         },
+        "maps/laber.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 262.5,
+                "y": 689.5
+            }
+        },
         "maps/test.tmx": {
             "scale": 5.5,
             "selectedLayer": 1,
@@ -195,18 +203,18 @@
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
-        "maps/Test Campaign/1-starting.tmx",
-        "maps/test.tmx",
+        "maps/clash.tmx",
         "maps/base.tmx",
+        "maps/laber.tmx",
+        "maps/Test Campaign/1-starting.tmx",
         "maps/win.tmx",
+        "maps/test.tmx",
         "clash.tmx",
         "Test Campaign/1-starting.tmx",
         "Test Campaign/tcmp1.tmx",
         "tcmp1.tmx",
         "win.tmx",
-        "tileset.tsx",
-        "test.tmx",
-        "buildings/big_buildings.tsx"
+        "tileset.tsx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

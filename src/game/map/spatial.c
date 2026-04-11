@@ -64,11 +64,11 @@ uint8_t game_spatial_filter_enemy_units_in_attack_range(const GameContext* conte
 }
 
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range) {
-	uint8_t sourceTileRadius = source->tileSize / 2;
-	uint8_t targetTileRadius = target->tileSize / 2;
-	uint32_t xDist = (source->x + sourceTileRadius) - (target->x + targetTileRadius);
-	uint32_t yDist = (source->y + sourceTileRadius) - (target->y + targetTileRadius);
-	uint32_t expandedRange = range + sourceTileRadius + targetTileRadius;
+	int sourceTileRadius = source->tileSize / 2;
+	int targetTileRadius = target->tileSize / 2;
+	int xDist = (source->x + sourceTileRadius) - (target->x + targetTileRadius);
+	int yDist = (source->y + sourceTileRadius) - (target->y + targetTileRadius);
+	int expandedRange = range + sourceTileRadius + targetTileRadius;
 	return expandedRange * expandedRange >= (xDist * xDist + yDist * yDist);
 }
 

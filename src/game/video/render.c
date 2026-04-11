@@ -166,7 +166,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			if(unit->type == UNIT_TYPE_WORKER && unit->typed.workerData.carriedResourceQty > 0) {
 				RLE_SPRITE* resourceIcon = game_gfx_get_unit_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
 				if(showHealthBar) iconOffset = resourceIcon->w;
-				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 1, resourceIcon,
+				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 5, resourceIcon,
 						unitTileXCamera - iconOffset, unitTileYCamera - resourceIcon->h);
 			}
 			if(unit->isCustom) {
@@ -285,7 +285,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 
 	resource_render_queue_submit_ui(context, renderQueue);
 
-	// Target position blinkingg square
+	// Target position blinking square
 	if(context->targetPosition.x != NO_TARGET_POSITION && context->targetPosition.y != NO_TARGET_POSITION &&
 		context->targetBlinkTime && context->targetBlinkTime % BLINK_MOD < BLINK_FRAMES) {
 		uint16_t cameraMinX = context->xPosition / TILE_SIZE;
