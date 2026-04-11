@@ -163,5 +163,7 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 		if (unit && unit->controller == UNIT_CONTROLLER_PLAYER) game_unit_explore_extended(context, unit, INITIAL_EXPLORE_MULTIPLIER);
 	}
 
+	player_attacked_init(&context->playerAttackedData);
+
 	return GAME_STATE_PLAY_MAP;
 }

@@ -4,6 +4,15 @@
 #define ATTACK_SHOWN_TICKS SEC_TO_FRAMES(8)
 #define BLINK_TICKS SEC_TO_FRAMES(1)
 
+void player_attacked_init(PlayerAttackedData *playerAttackedData) {
+    playerAttackedData->showMessage = FALSE;
+    playerAttackedData->cooldown = 0;
+    playerAttackedData->xPosition = 0;
+    playerAttackedData->yPosition = 0;
+    playerAttackedData->blinkCounter = 0;
+    playerAttackedData->blinkShowing = TRUE;
+}
+
 void player_attacked_update(PlayerAttackedData *playerAttackedData) {
     if(playerAttackedData->cooldown > COOLDOWN_TICKS) playerAttackedData->cooldown = 0;
     if(playerAttackedData->cooldown > 0) playerAttackedData->cooldown--;
