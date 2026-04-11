@@ -376,7 +376,6 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		game_unit_explore(context, unit);
 	}
 
-	if(unit->isBuilding) game_snd_play_sound(GAME_SOUND_BUILDING_CRUMBLE);
 	return unit;
 }
 

@@ -117,6 +117,7 @@ GameUnit* building_place_building(GameContext *context, UnitTypeEnum buildingTyp
 
 	GameUnit *building = game_unit_spawn(context, buildingType, controller, x, y);
 	if (building) {
+		game_snd_play_sound(GAME_SOUND_BUILDING_BUILD);
 		// Deduct resources but not food
 		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_deduct_amount(context, controller, i, unitResources->used[i]);
