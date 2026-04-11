@@ -35,10 +35,10 @@ void player_attacked_render(PlayerAttackedData *playerAttackedData, RenderQueue 
         playerAttackedData->blinkCounter++;
     }
     int circleRadius;
-    if(playerAttackedData->blinkShowing) circleRadius = 2; else circleRadius = 1;
-    render_queue_submit_circle(renderQueue, UI_Z_ORDER + 600,
+    if(playerAttackedData->blinkShowing) circleRadius = 3; else circleRadius = 1;
+    render_queue_submit_circle(renderQueue, UI_Z_ORDER + 505,
         playerAttackedData->xPosition + MINIMAP_X_POS,
         playerAttackedData->yPosition + MINIMAP_Y_POS,
-        circleRadius, PAL_COLOR_RED);
+        circleRadius, PAL_COLOR_VIOLET);
 }
 

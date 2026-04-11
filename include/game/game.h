@@ -325,6 +325,7 @@ typedef struct {
 	char* mapPath;
 	Position targetPosition;
 	uint8_t targetBlinkTime;
+	int blinkColor;
 	AIData aiData;
 	PlayerAttackedData playerAttackedData;
 } GameContext;

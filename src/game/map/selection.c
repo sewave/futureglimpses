@@ -86,23 +86,6 @@ static void game_selection_load_from_slot(GameContext *context, SelectionSlotInd
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 }
 
-static void set_blink_position(GameContext *context, int x, int y) {
-	context->targetPosition.x = x;
-	context->targetPosition.y = y;
-	context->targetBlinkTime = BLINK_TIME;
-}
-
-static void player_move_unit_to_position(GameContext *context, GameUnit *unit, int x, int y) {
-	game_unit_command_move(unit, NULL, x, y);
-	set_blink_position(context, x, y);
-	game_snd_play_sound(GAME_SOUND_AJUM);
-}
-
-static void player_move_attack_unit_to_position(GameContext *context, GameUnit *unit, int x, int y) {
-	game_unit_command_move_attack(unit, NULL, x, y);
-	game_snd_play_sound(GAME_SOUND_AJUM);
-}
-
 static void handle_target_selection(GameContext *context, GameUnit *unit, GameUnit *targetUnit) {
 	if (unit->type == UNIT_TYPE_WORKER && targetUnit->isBuilding) {
 		unit->typed.workerData.targetConstruction = targetUnit->id;
@@ -111,7 +94,7 @@ static void handle_target_selection(GameContext *context, GameUnit *unit, GameUn
 			return;
 		}
 	}
-	player_move_unit_to_position(context, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+	game_unit_command_move_player(context, unit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
 }
 
 static void handle_viewport_mouse_action(GameContext *context, int mouseX, int mouseY, uint8_t isContextual) {
@@ -138,7 +121,7 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 				if (targetIsResource) {
 					unit->typed.workerData.workplace.x = boardXPosition;
 					unit->typed.workerData.workplace.y = boardYPosition;
-					player_move_unit_to_position(context, unit, boardXPosition, boardYPosition);
+					game_unit_command_move_player(context, unit, NULL, boardXPosition, boardYPosition);
 					continue;
 				} else {
 					unit->typed.workerData.workplace.x = NO_TARGET_POSITION;
@@ -147,12 +130,12 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 				}
 			}
 			if (isContextual) {
-				player_move_unit_to_position(context, unit, boardXPosition, boardYPosition);
+				game_unit_command_move_player(context, unit, NULL, boardXPosition, boardYPosition);
 			} else {
 				if (mouseState == MOUSE_CURSOR_ATTACK) {
-					player_move_attack_unit_to_position(context, unit, boardXPosition, boardYPosition);
+					game_unit_command_move_attack_player(context, unit, NULL, boardXPosition, boardYPosition);
 				}
-				if (mouseState == MOUSE_CURSOR_TARGET) player_move_unit_to_position(context, unit, boardXPosition, boardYPosition);
+				if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move_player(context, unit, NULL, boardXPosition, boardYPosition);
 			}
 		}
 	} else {
@@ -165,13 +148,13 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 				if (!unit || unit->isBuilding) continue;
 				if (isContextual) {
 					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
-						player_move_attack_unit_to_position(context, unit, targetUnit->x, targetUnit->y);
+						game_unit_command_move_attack_player(context, unit, targetUnit, targetUnit->x, targetUnit->y);
 					} else {
 						handle_target_selection(context, unit, targetUnit);
 					}
 				} else {
 					if (mouseState == MOUSE_CURSOR_ATTACK) {
-						player_move_attack_unit_to_position(context, unit, targetUnit->x, targetUnit->y);
+						game_unit_command_move_attack_player(context, unit, targetUnit, targetUnit->x, targetUnit->y);
 					}
 					if (mouseState == MOUSE_CURSOR_TARGET) handle_target_selection(context, unit, targetUnit);
 				}

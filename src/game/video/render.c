@@ -256,7 +256,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 
 	// Minimap viewport window
 	render_queue_submit_rect(renderQueue,
-							 UI_Z_ORDER + 503,
+							 UI_Z_ORDER + 600,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
@@ -297,7 +297,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 			int unitTileXCamera = context->targetPosition.x * TILE_SIZE - context->xPosition + VIEWPORT_X_OFFSET;
 			int unitTileYCamera = context->targetPosition.y * TILE_SIZE - context->yPosition + VIEWPORT_Y_OFFSET;	
 			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera, unitTileXCamera + TILE_SIZE,
-				unitTileYCamera + TILE_SIZE, PAL_COLOR_GREEN);
+				unitTileYCamera + TILE_SIZE, context->blinkColor);
 		}
 	}
 }

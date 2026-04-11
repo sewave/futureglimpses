@@ -12,6 +12,25 @@ static void game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitState)
 	}
 }
 
+static void set_blink_position(GameContext *context, int x, int y, int color) {
+	context->targetPosition.x = x;
+	context->targetPosition.y = y;
+	context->targetBlinkTime = BLINK_TIME;
+	context->blinkColor = color;
+}
+
+void game_unit_command_move_player(GameContext *context, GameUnit *unit, GameUnit* target, int x, int y) {
+	game_unit_command_move(unit, target, x, y);
+	set_blink_position(context, x, y, PAL_COLOR_GREEN);
+	game_snd_play_sound(GAME_SOUND_AJUM);
+}
+
+void game_unit_command_move_attack_player(GameContext *context, GameUnit *unit, GameUnit* target, int x, int y) {
+	game_unit_command_move_attack(unit, target, x, y);
+	if(!target) set_blink_position(context, x, y, PAL_COLOR_RED);
+	game_snd_play_sound(GAME_SOUND_AJUM);
+}
+
 void game_unit_command_idle(GameUnit *unit) {
     unit->reactionTimeCounter = 0;
     game_unit_set_state_or_next(unit, UNIT_STATE_IDLE);

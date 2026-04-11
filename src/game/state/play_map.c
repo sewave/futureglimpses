@@ -288,8 +288,8 @@ static void game_update(GameContext *context) {
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 				if (!unit) continue;
-				if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack(unit, NULL, boardXPosition, boardYPosition);
-				if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move(unit, NULL, boardXPosition, boardYPosition);
+				if (mouseState == MOUSE_CURSOR_ATTACK) game_unit_command_move_attack_player(context, unit, NULL, boardXPosition, boardYPosition);
+				if (mouseState == MOUSE_CURSOR_TARGET) game_unit_command_move_player(context, unit, NULL, boardXPosition, boardYPosition);
 			}
 			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 		}
