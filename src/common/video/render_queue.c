@@ -160,6 +160,16 @@ void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2,
 	}
 }
 
+void render_queue_submit_circle(RenderQueue *queue, int z, int x1, int y1, int radius, int color) {
+	RenderCommand *cmd = render_queue_get_next_command(queue, z, RND_CMD_CIRCLE);
+	if (cmd) {
+		cmd->data.circle.x1 = x1;
+		cmd->data.circle.y1 = y1;
+		cmd->data.circle.radius = radius;
+		cmd->data.circle.color = color;
+	}
+}
+
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background) {
 	render_queue_submit_text_shadow(queue, z, font, text, x, y, color, background, TRANSPARENT_COLOR);
 }
@@ -280,6 +290,13 @@ void render_queue_execute(RenderQueue *queue, BITMAP *target) {
 						 cmd->data.rectFill.x2, cmd->data.rectFill.y2,
 						 cmd->data.rectFill.color);
 				break;
+			case RND_CMD_CIRCLE: {
+				circle(target,
+					   cmd->data.circle.x1, cmd->data.circle.y1,
+					   cmd->data.circle.radius,
+					   cmd->data.circle.color);
+				break;
+			}
 			case RND_CMD_TEXT:
 				if (cmd->data.text.shadowColor != TRANSPARENT_COLOR) {
 					textout_ex(target,

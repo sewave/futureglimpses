@@ -24,6 +24,7 @@ typedef enum {
     RND_CMD_LINE,
 	RND_CMD_RECT,
 	RND_CMD_RECT_FILL,
+    RND_CMD_CIRCLE,
 	RND_CMD_TEXT,
     RND_CMD_ENCLOSED_TEXT,
 	RND_CMD_TEXT_MULTICOLOR,
@@ -83,6 +84,11 @@ typedef struct {
 } RenderRectCommand;
 
 typedef struct {
+    int x1, y1, radius;
+    int color;
+} RenderCircleCommand;
+
+typedef struct {
     FONT *font;
     const char* text;
     int x, y;
@@ -111,6 +117,7 @@ typedef struct {
 		RenderRectFillCommand rectFill;
         RenderLineCommand line;
 		RenderRectCommand rect;
+        RenderCircleCommand circle;
         RenderTextCommand text;
         RenderEnclosedTextCommand enclosedText;
         RenderClearCommand clear;
@@ -134,6 +141,7 @@ void render_queue_submit_rle_sprite(RenderQueue *queue, int z, RLE_SPRITE *rleSP
 void render_queue_submit_line(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_rect(RenderQueue *queue, int z, int x1, int y1, int x2, int y2, int color);
 void render_queue_submit_rect_fill(RenderQueue* queue, int z, int x1, int y1, int x2, int y2, int color);
+void render_queue_submit_circle(RenderQueue *queue, int z, int x1, int y1, int radius, int color);
 void render_queue_submit_clear(RenderQueue* queue, int z, int color);
 void render_queue_submit_solid(RenderQueue* queue, int z, BITMAP* bmp, int x, int y);
 void render_queue_submit_text(RenderQueue *queue, int z, FONT *font, const char *text, int x, int y, int color, int background);
