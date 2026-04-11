@@ -1,11 +1,11 @@
 #include "game/ai/strategy_ai.h"
 
-#define ATTACK_WAVE_FRAMES SEC_TO_FRAMES(60 * 5) / AI_STATE_COUNT
+#define ATTACK_WAVE_FRAMES (SEC_TO_FRAMES(60) / AI_STATE_COUNT)
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 16
 #define SEARCH_RESOURCE_MULTIPLIER 5
 #define MIN_GOLD_TRAINING_BUDGET 1000
-#define MAX_WORKER_IDLE_TIME SEC_TO_FRAMES(10) / AI_STATE_COUNT
+#define MAX_WORKER_IDLE_TIME (SEC_TO_FRAMES(30) / AI_STATE_COUNT)
 
 static uint8_t trainRanged = FALSE;
 
@@ -191,7 +191,7 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 		GameUnit *unit = *activeList;
 		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->type == UNIT_TYPE_WORKER) {
 			WorkerData *workerData = &unit->typed.workerData;
-			if(unit->state == UNIT_STATE_IDLE) {
+			if(unit->state != UNIT_STATE_WORK) {
 				unit->idleTimeCounter++;
 				// If the worker is idle for too long, we reset its job to try
 				// to find a new resource if the previous one was depleted
@@ -307,29 +307,42 @@ static void game_strategy_ai_attack(GameContext *context) {
 		}
 	}
 	if (foundUnitsCount != context->aiData.currentWaveUnits) return;
-
+	int foundX = foundUnits[0]->x;
+	int foundY = foundUnits[0]->y;
 	// Now we search player CH, or if not found first active unit
 	GameUnit *target = NULL;
 	activeList = context->activeUnits;
+	// Search player town hall closer to the first found unit
+	int closestTargetDistance = INT16_MAX;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 		GameUnit *unit = *activeList;
 		if (unit->isActive && unit->controller == UNIT_CONTROLLER_PLAYER && unit->type == UNIT_TYPE_CITY_HALL) {
-			target = unit;
-			break;
+			int distance = abs(unit->x - foundX) + abs(unit->y - foundY);
+			if (distance < closestTargetDistance) {
+				closestTargetDistance = distance;
+				target = unit;
+			}
 		}
 	}
 	if (!target) {
 		activeList = context->activeUnits;
+		// No town hall found, attack any player unit, closest to the first found unit
+		closestTargetDistance = INT16_MAX;
 		for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 			GameUnit *unit = *activeList;
 			if (unit->isActive && unit->controller == UNIT_CONTROLLER_PLAYER) {
-				target = unit;
-				break;
+				int distance = abs(unit->x - foundX) + abs(unit->y - foundY);
+				if (distance < closestTargetDistance) {
+					closestTargetDistance = distance;
+					target = unit;
+				}
 			}
 		}
 	}
 	if (target) {
-		for (int i = 0; i < foundUnitsCount; i++) game_unit_command_move_attack(foundUnits[i], target, 0, 0);
+		for (int i = 0; i < foundUnitsCount; i++) {
+			game_unit_command_move_attack(foundUnits[i], target, NO_TARGET_POSITION, NO_TARGET_POSITION);
+		}
 		context->aiData.currentWaveUnits++;
 	}
 }
