@@ -21,7 +21,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 2,
 				.maxDamage = 4,
 				.reactionTime = SEC_TO_FRAMES(1),
-				.moveTime = SEC_TO_FRAMES(0.5),
+				.moveTime = SEC_TO_FRAMES(0.6),
 				.resources = {.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
 		},
 		{
@@ -37,7 +37,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 8,
 				.maxDamage = 12,
 				.reactionTime = SEC_TO_FRAMES(0.5),
-				.moveTime = SEC_TO_FRAMES(0.4),
+				.moveTime = SEC_TO_FRAMES(0.5),
 				.resources = {.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
 		},
 		{
@@ -53,7 +53,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 6,
 				.maxDamage = 10,
 				.reactionTime = SEC_TO_FRAMES(0.7),
-				.moveTime = SEC_TO_FRAMES(0.45),
+				.moveTime = SEC_TO_FRAMES(0.55),
 				.resources = {.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
 		},
 		{
@@ -69,7 +69,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 10,
 				.maxDamage = 15,
 				.reactionTime = SEC_TO_FRAMES(0.4),
-				.moveTime = SEC_TO_FRAMES(0.3),
+				.moveTime = SEC_TO_FRAMES(0.4),
 				.resources = {.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
 		},
 		{
