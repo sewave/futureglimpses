@@ -203,8 +203,13 @@ void game_objects_advance(GameContext *context) {
 							GameUnit* targetUnit = game_unit_get_by_id(context, object->targetId);
 							if(targetUnit) {
 								GameUnit* sourceUnit = game_unit_get_by_id(context, object->ownerId);
-								game_object_spawn(context, OBJ_TYPE_ARROW_DAMAGE, object->controller, targetUnit->x * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2, targetUnit->y * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2,
+								Object *damageObject = game_object_spawn(context, OBJ_TYPE_ARROW_DAMAGE, object->controller, targetUnit->x * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2, targetUnit->y * TILE_SIZE + ((targetUnit->tileSize - 1) * TILE_SIZE) / 2,
 												  sourceUnit, targetUnit, NO_TARGET_POSITION, NO_TARGET_POSITION);
+								// Arrow damage object takes the direction of the arrow for correct animation mirroring
+								if(damageObject) {
+									damageObject->direction = object->direction;
+									game_animation_object_set(damageObject);
+								}
 							}
 						}
 					}
