@@ -341,7 +341,7 @@ static void game_strategy_ai_attack(GameContext *context) {
 	}
 	if (target) {
 		for (int i = 0; i < foundUnitsCount; i++) {
-			game_unit_command_move_attack(foundUnits[i], target, NO_TARGET_POSITION, NO_TARGET_POSITION);
+			game_unit_command_move_attack(foundUnits[i], NULL, target->x, target->y);
 		}
 		context->aiData.currentWaveUnits++;
 	}
