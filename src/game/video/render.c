@@ -177,7 +177,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 					if(iconOffset != 0) iconOffset += customIcon->w;
 				}
 				
-				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 1, customIcon,
+				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 10, customIcon,
 						unitTileXCamera - iconOffset, unitTileYCamera - customIcon->h);
 			}
 			if (showHealthBar) {
