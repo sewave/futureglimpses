@@ -84,18 +84,18 @@
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
-            "scale": 0.5,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 515,
-                "y": 331
+                "x": 485,
+                "y": 704.5
             }
         },
         "maps/base.tmx": {
             "scale": 0.5083984375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.3933922397233,
+                "x": 511.40991164041486,
                 "y": 512.3933922397234
             }
         },
@@ -122,11 +122,14 @@
             }
         },
         "maps/test.tmx": {
-            "scale": 5.5,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 791.7272727272727,
-                "y": 846.0909090909091
+                "x": 788,
+                "y": 150.25
             }
         },
         "maps/tileset.tsx": {
@@ -187,7 +190,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/testcmp",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -203,12 +206,12 @@
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
-        "maps/clash.tmx",
         "maps/base.tmx",
-        "maps/laber.tmx",
         "maps/Test Campaign/1-starting.tmx",
-        "maps/win.tmx",
         "maps/test.tmx",
+        "maps/clash.tmx",
+        "maps/laber.tmx",
+        "maps/win.tmx",
         "clash.tmx",
         "Test Campaign/1-starting.tmx",
         "Test Campaign/tcmp1.tmx",
