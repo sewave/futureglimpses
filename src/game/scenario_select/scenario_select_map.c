@@ -89,6 +89,28 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 	return 0;
 }
 
+static int map_compare(const void *a, const void *b) {
+	const MapEntry *entryA = (const MapEntry *) a;
+	const MapEntry *entryB = (const MapEntry *) b;
+
+	// Sort by type: FOLDER_UP < FOLDER < FILE
+	if (entryA->type != entryB->type) {
+		return (entryA->type == MAP_ENTRY_FOLDER_UP) ? -1 :
+			   (entryB->type == MAP_ENTRY_FOLDER_UP) ? 1 :
+			   (entryA->type == MAP_ENTRY_FOLDER) ? -1 : 1;
+	}
+
+	// If types are the same, sort by title
+	return strcmp(entryA->title, entryB->title);
+}
+
+static void sort_map_entries(MapList* mapList) {
+	if (!mapList || mapList->count <= 1) return;
+
+	// Sort the entries by type first (folders up, then folders, then files), then by title string ascending
+	qsort(mapList->entries, mapList->count, sizeof(MapEntry), map_compare);
+}
+
 int scenario_select_load_maps(const char *path, MapList **mapList) {
 	if (!path || !mapList) {
 		TRACE("Error: Invalid parameters to scenario_select_load_maps\n");
@@ -128,7 +150,10 @@ int scenario_select_load_maps(const char *path, MapList **mapList) {
 	snprintf(pattern, sizeof(pattern), FGM_FILTER, path);
 	for_each_file_ex(pattern, FA_ARCH, FA_DIREC, file_iterator_callback, &ctx);
 
+	sort_map_entries(newMapList);
+
 	*mapList = newMapList;
+
 	return 0;
 }
 
