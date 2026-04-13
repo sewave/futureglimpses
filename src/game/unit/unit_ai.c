@@ -209,21 +209,24 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 		return;
 	}
 
-	uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
-													   game_spatial_filter_enemy_units, unit, foundUnits,
-													   1);
-	if (foundUnitsCount > 0) {
-		for (int i = 0; i < foundUnitsCount; i++) {
-			GameUnit *target = foundUnits[i];
-			if (!game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
-				unit->prevTargetX = targetX;
-				unit->prevTargetY = targetY;
-				unit->prevTargetId = unit->targetId;
-				game_unit_command_attack(unit, target, UNIT_STATE_MOVE_ATTACK);
-				return;
+	// If we ara not attacking a concrete unit, fight against any enemy unit in the way
+	if(!targetUnit) {
+		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
+														game_spatial_filter_enemy_units, unit, foundUnits, 1);
+		if (foundUnitsCount > 0) {
+			for (int i = 0; i < foundUnitsCount; i++) {
+				GameUnit *target = foundUnits[i];
+				if (!game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
+					unit->prevTargetX = targetX;
+					unit->prevTargetY = targetY;
+					unit->prevTargetId = unit->targetId;
+					game_unit_command_attack(unit, target, UNIT_STATE_MOVE_ATTACK);
+					return;
+				}
 			}
 		}
 	}
+
 	if (game_unit_path_find(context, unit, targetX, targetY)) {
 		game_unit_command_set_move_anim(unit, UNIT_STATE_MOVE_ATTACK);
 	}
