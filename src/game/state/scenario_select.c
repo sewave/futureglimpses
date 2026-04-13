@@ -13,13 +13,8 @@
 #define GUI_DESCRIPTION_X 168
 #define GUI_DESCRIPTION_MAX_WIDTH 140
 #define GUI_DESCRIPTION_MAX_HEIGHT 160
-#define BUTTON_RETURN_WIDTH 50
-#define BUTTON_RETURN_X 100
-#define BUTTON_RETURN_Y 155
-
-#define BUTTON_PLAY_WIDTH 50
-#define BUTTON_PLAY_X 40
-#define BUTTON_PLAY_Y 155
+#define BUTTON_RETURN_Y 175
+#define BUTTON_PLAY_Y 145
 
 #define LEFT_BACK_X GUI_ROWS_X - 2
 #define LEFT_BACK_Y GUI_BODY_Y - 2
@@ -189,7 +184,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_RETURN_X, .y = BUTTON_RETURN_Y, .z = 10,
+		.x = LEFT_BACK_X, .y = BUTTON_RETURN_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_RETURN,
 		.textColor = PAL_COLOR_WHITE,
@@ -198,13 +193,13 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 		.hotkey = KEY_R,
 		.typed = {
 			.button = {
-				.size = { .width = BUTTON_RETURN_WIDTH, .height = BUTTON_HEIGHT },
+				.size = { .width = LEFT_BACK_WIDTH, .height = BUTTON_HEIGHT },
 				.action = go_title_action
 			}
 		}
 	},
 	{
-		.x = BUTTON_PLAY_X, .y = BUTTON_PLAY_Y, .z = 10,
+		.x = LEFT_BACK_X, .y = BUTTON_PLAY_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_MENU_START_GAME,
 		.textColor = PAL_COLOR_WHITE,
@@ -213,7 +208,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 		.hotkey = KEY_A,
 		.typed = {
 			.button = {
-				.size = { .width = BUTTON_PLAY_WIDTH, .height = BUTTON_HEIGHT },
+				.size = { .width = LEFT_BACK_WIDTH, .height = BUTTON_HEIGHT },
 				.action = select_scenario_action
 			}
 		}

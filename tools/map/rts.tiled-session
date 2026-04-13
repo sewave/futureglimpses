@@ -91,6 +91,14 @@
                 "y": 704.5
             }
         },
+        "maps/Test Campaign/2-archers.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 469,
+                "y": 275.5
+            }
+        },
         "maps/base.tmx": {
             "scale": 0.5083984375,
             "selectedLayer": 0,
@@ -190,7 +198,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/testcmp",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -206,6 +214,7 @@
     "project": "rts.tiled-project",
     "property.type": "AI_MODE",
     "recentFiles": [
+        "maps/Test Campaign/2-archers.tmx",
         "maps/base.tmx",
         "maps/Test Campaign/1-starting.tmx",
         "maps/test.tmx",
@@ -216,8 +225,7 @@
         "Test Campaign/1-starting.tmx",
         "Test Campaign/tcmp1.tmx",
         "tcmp1.tmx",
-        "win.tmx",
-        "tileset.tsx"
+        "win.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
