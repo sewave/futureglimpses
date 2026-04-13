@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="160">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="160">
  <editorsettings>
-  <export target="../../assets/map/win.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../assets/map/win.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
@@ -10,7 +10,7 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
-  <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos."/>
+  <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquet maximus mattis. Aliquam non elementum nisl, id dictum arcu. Sed rutrum purus a finibus luctus. Nam aliquet et sapien sed ultrices. Sed blandit interdum arcu in interdum. Aenean ac sem."/>
   <property name="MSG_LOSE" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
   <property name="MSG_TITLE" value="Vas a ganar"/>
   <property name="MSG_WIN" value="Ganas. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
