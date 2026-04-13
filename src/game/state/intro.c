@@ -8,6 +8,7 @@
 #define LINE_Y_SPACING 20
 #define LINE_Y_START GAME_INTERNAL_HEIGHT
 #define LINE_Y_HALF (GAME_INTERNAL_HEIGHT / 2)
+#define LINE_Z 10
 #define NUM_COLORS 17
 #define MAX_COLOR (NUM_COLORS - 1)
 #define INTRO_TEXT_FILE_ES "assets/txt/intro_es.txt"
@@ -22,6 +23,7 @@ static uint8_t numLines;
 static char **lines;
 static int *linesY;
 static int *linesColor;
+static int *linesX;
 static int *colors;
 static int textFramesCounter;
 
@@ -47,6 +49,8 @@ static void free_lines() {
 	for (int i = 0; i < numLines; i++) free(lines[i]);
 	free(lines);
 	lines = NULL;
+	free(linesX);
+	linesX = NULL;
 	free(linesY);
 	linesY = NULL;
 	free(linesColor);
@@ -68,8 +72,9 @@ static uint8_t get_number_of_lines(const char *filename) {
 	return currentTextId;
 }
 
-static char **load_text_lines(const char *filename) {
+static char **load_text_lines(GameContext *context, const char *filename) {
 	char **lines = (char **) calloc(numLines, sizeof(char *));
+	linesX = (int *) calloc(numLines, sizeof(int *));
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
 		fprintf(stderr, "Error reading intro text from [%s].\n", filename);
@@ -86,24 +91,25 @@ static char **load_text_lines(const char *filename) {
 		size_t len = strlen(buffer);
 		if (len > 0 && buffer[len - 1] == '\n') buffer[len - 1] = '\0';
 		lines[i] = strdup(buffer);
+		linesX[i] = (GAME_INTERNAL_WIDTH - text_length(context->gameFont, lines[i])) / 2;
 	}
 	fclose(file);
 	return lines;
 }
 
-static void load_lines_from_file(const char *filename) {
+static void load_lines_from_file(GameContext *context, const char *filename) {
 	numLines = get_number_of_lines(filename);
-	lines = load_text_lines(filename);
+	lines = load_text_lines(context, filename);
 }
 
 void game_state_intro_init(GameContext *context) {
 	switch (context->config.language) {
 		case LANGUAGE_SPANISH:
-			load_lines_from_file(INTRO_TEXT_FILE_ES);
+			load_lines_from_file(context, INTRO_TEXT_FILE_ES);
 			break;
 		case LANGUAGE_ENGLISH:
 		default:
-			load_lines_from_file(INTRO_TEXT_FILE_EN);
+			load_lines_from_file(context, INTRO_TEXT_FILE_EN);
 			break;
 	}
 
@@ -131,7 +137,7 @@ GameStateEnum game_state_intro_update(GameContext *context) {
 		calculate_line_colors();
 	}
 	starfield_update_stars();
-	if (linesY[numLines - 1] < -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
+	if (linesY[numLines - 1] <= -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
 		free_lines();
 		starfield_free_stars();
 		video_fade_out_init(DEFAULT_FADE_SPEED);
@@ -141,17 +147,14 @@ GameStateEnum game_state_intro_update(GameContext *context) {
 }
 
 void game_state_intro_render(GameContext *context, RenderQueue *renderQueue) {
-	render_queue_submit_rect_fill(renderQueue, 0, 0, 0, GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT, PAL_COLOR_BLACK);
+	render_queue_submit_clear(renderQueue, 0, PAL_COLOR_BLACK);
 	for (int i = 0; i < numLines; i++) {
 		int lineY = linesY[i];
 		if (lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
-			int length = text_length(context->gameFont, lines[i]);
 			render_queue_submit_text(
-					renderQueue, 10, context->gameFont, lines[i], (GAME_INTERNAL_WIDTH - length) / 2, lineY,
+					renderQueue, LINE_Z, context->gameFont, lines[i], linesX[i], lineY,
 					linesColor[i], TRANSPARENT_INDEX);
 		}
 	}
 	starfield_draw_stars(renderQueue);
-	snprintf(buffer, sizeof(buffer), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, 9999, context->gameFont, buffer, 260, 180, PAL_COLOR_WHITE, -1);
 }
