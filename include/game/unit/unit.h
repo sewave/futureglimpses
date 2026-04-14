@@ -13,7 +13,7 @@ typedef struct {
 	uint16_t used[UNIT_USED_RESOURCES];
     uint8_t foodProvided;
 	uint16_t time;
-} UnitResourcesData;
+} TrainingResourcesData;
 
 typedef struct {
 	UnitTypeEnum type;
@@ -25,7 +25,6 @@ typedef struct {
 	uint8_t maxDamage;
 	uint16_t reactionTime;
 	uint16_t moveTime;
-	UnitResourcesData resources;
 } UnitData;
 
 GameUnit *game_unit_get_by_id(GameContext *context, UnitId handle);
@@ -37,7 +36,7 @@ void game_unit_face_position(GameUnit* unit, uint16_t x, uint16_t y);
 void game_unit_damage(GameContext *gameContext, uint8_t minDamage, uint8_t maxDamage, GameUnit* target);
 void game_unit_area_damage(GameContext* context, Object* object);
 void game_unit_process_all(GameContext *context);
-UnitResourcesData* game_unit_get_resources(UnitTypeEnum type);
+TrainingResourcesData *game_unit_get_training_resources(TrainingTypeEnum type);
 UnitData* game_unit_get_data(UnitTypeEnum type);
 void game_unit_work(GameContext* context, GameUnit* worker);
 GameUnit* game_unit_get_nearest_unit_type(GameContext *context, GameUnit *unit, UnitTypeEnum type, ControllerEnum controller);

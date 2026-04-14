@@ -267,10 +267,9 @@ void resource_search_for_work(GameContext *context, GameUnit *worker) {
 }
 
 uint8_t resource_has_enough_for_unit(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType) {
-	UnitResourcesData* unitResources = game_unit_get_resources(unitType);
+	TrainingResourcesData *unitResources = game_unit_get_training_resources(unitType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
 		if (unitResources->used[i] >= context->resources[controller].quantity[i]) return FALSE;
 	}
 	return TRUE;
 }
-

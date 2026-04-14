@@ -33,19 +33,19 @@ static Position game_building_get_spawn_position(GameContext *context, GameUnit 
 	}
 }
 
-static uint8_t building_queue_training(GameUnit *building, UnitTypeEnum unitType) {
+static uint8_t building_queue_training(GameUnit *building, TrainingTypeEnum trainingType) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	if (buildingData->queueNextIndex >= MAX_BUILDING_QUEUE) return FALSE;
-	buildingData->queue[buildingData->queueNextIndex++] = unitType;
+	buildingData->queue[buildingData->queueNextIndex++] = trainingType;
 	return TRUE;
 }
 
-static void building_start_training(GameUnit *building, UnitTypeEnum unitType) {
+static void building_start_training(GameUnit *building, TrainingTypeEnum trainingType) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	buildingData->isTraining = TRUE;
-	buildingData->trainUnit = unitType;
+	buildingData->trainingType = trainingType;
 	buildingData->currentTicks = 0;
-	buildingData->targetTicks = game_unit_get_resources(unitType)->time;
+	buildingData->targetTicks = game_unit_get_training_resources(trainingType)->time;
 }
 
 void building_update(GameContext *context, GameUnit *building) {
@@ -54,9 +54,9 @@ void building_update(GameContext *context, GameUnit *building) {
 		buildingData->currentTicks++;
 		if (buildingData->currentTicks >= buildingData->targetTicks) {
 			if (resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
-									game_unit_get_resources(buildingData->trainUnit)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
+									game_unit_get_training_resources(buildingData->trainingType)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
 				Position spawn = game_building_get_spawn_position(context, building);
-				GameUnit* newUnit = game_unit_spawn(context, buildingData->trainUnit, building->controller, spawn.x, spawn.y);
+				GameUnit* newUnit = game_unit_spawn(context, buildingData->trainingType, building->controller, spawn.x, spawn.y);
 				if(newUnit && building->targetX != NO_TARGET_POSITION && building->targetY != NO_TARGET_POSITION) {
 					game_unit_command_move(newUnit, NULL, building->targetX, building->targetY);
 				}
@@ -77,8 +77,8 @@ void building_update(GameContext *context, GameUnit *building) {
 	}
 }
 
-static UnitResourcesData* building_check_unit_resources(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType) {
-    UnitResourcesData* unitResources = game_unit_get_resources(unitType);
+static TrainingResourcesData* building_check_unit_resources(GameContext *context, ControllerEnum controller, TrainingTypeEnum trainingType) {
+    TrainingResourcesData* unitResources = game_unit_get_training_resources(trainingType);
 	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
 		if (!resource_has_enough(context, controller, i, unitResources->used[i])) {
 			if(controller == UNIT_CONTROLLER_PLAYER) {
@@ -92,12 +92,12 @@ static UnitResourcesData* building_check_unit_resources(GameContext *context, Co
     return unitResources;
 }
 
-void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitTypeEnum unitType) {
+void building_add_to_train_queue(GameContext *context, GameUnit *building, TrainingTypeEnum trainingType) {
 	// Check funds and food
-    UnitResourcesData* unitResources = building_check_unit_resources(context, building->controller, unitType);
+    TrainingResourcesData* unitResources = building_check_unit_resources(context, building->controller, trainingType);
     if(!unitResources) return;
 
-	if (building_queue_training(building, unitType)) {
+	if (building_queue_training(building, trainingType)) {
 		// Deduct resources but not food
 		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_deduct_amount(context, building->controller, i, unitResources->used[i]);
@@ -112,7 +112,7 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, UnitT
 
 GameUnit* building_place_building(GameContext *context, UnitTypeEnum buildingType, ControllerEnum controller, uint16_t x, uint16_t y) {
 	// Check funds and food
-	UnitResourcesData* unitResources = building_check_unit_resources(context, controller, buildingType);
+	TrainingResourcesData* unitResources = building_check_unit_resources(context, controller, buildingType);
 	if(!unitResources) return NULL;
 
 	GameUnit *building = game_unit_spawn(context, buildingType, controller, x, y);
@@ -167,7 +167,7 @@ void building_add_construction(GameContext *context, GameUnit *building) {
 }
 
 void building_repair(GameContext *context, GameUnit *building) {
-    UnitResourcesData* resources = game_unit_get_resources(building->type);
+    TrainingResourcesData* resources = game_unit_get_training_resources(building->type);
     uint16_t targetTicks = resources->time;
     uint32_t currentTicks = (((uint32_t) building->health * targetTicks) / building->maxHealth) + WORKER_TIME;
 	building->health = (currentTicks * building->maxHealth) / targetTicks;
@@ -178,8 +178,8 @@ void building_complete(GameContext *context, GameUnit *building) {
     building->state = BUILDING_STATE_COMPLETED;
     game_animation_unit_set(building);
     // Provide food on completition
-    UnitData* data = game_unit_get_data(building->type);
-    resource_add_food_provided(context, building->controller, data->resources.foodProvided);
+	TrainingResourcesData* trainingData = game_unit_get_training_resources(building->type);
+    resource_add_food_provided(context, building->controller, trainingData->foodProvided);
     if(building->controller == UNIT_CONTROLLER_PLAYER) {
         message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + building->type),
             SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);

@@ -32,9 +32,9 @@ static int game_strategy_ai_count_computer_workers(GameContext *context) {
 	// We also count workers in training and queued, to avoid overcommitting resources
 	GameUnit *townHall = game_strategy_ai_get_computer_town_hall(context);
 	if (townHall) {
-		if (townHall->typed.buildingData.isTraining && townHall->typed.buildingData.trainUnit == UNIT_TYPE_WORKER) count++;
+		if (townHall->typed.buildingData.isTraining && townHall->typed.buildingData.trainingType == TRAINING_TYPE_WORKER) count++;
 		for (int i = 0; i < townHall->typed.buildingData.queueNextIndex; i++) {
-			if (townHall->typed.buildingData.queue[i] == UNIT_TYPE_WORKER) count++;
+			if (townHall->typed.buildingData.queue[i] == TRAINING_TYPE_WORKER) count++;
 		}
 	}
 	return count;
@@ -47,7 +47,7 @@ static void game_strategy_ai_create_workers(GameContext *context) {
 		// this helps to save resources and distribute them better between creating workers
 		// and other units
 		if (townHall && !townHall->typed.buildingData.isTraining) {
-			building_add_to_train_queue(context, townHall, UNIT_TYPE_WORKER);
+			building_add_to_train_queue(context, townHall, TRAINING_TYPE_WORKER);
 		}
 	}
 }
@@ -132,8 +132,8 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 	
 	UnitPosition *buildingToRebuild = game_strategy_ai_find_building_to_rebuild(context);
 	if (buildingToRebuild) {
-		int workerGoldCost = game_unit_get_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
-		int buildingGoldCost = game_unit_get_resources(buildingToRebuild->type)->used[RESOURCE_TYPE_GOLD];
+		int workerGoldCost = game_unit_get_training_resources(TRAINING_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
+		int buildingGoldCost = game_unit_get_training_resources(buildingToRebuild->type)->used[RESOURCE_TYPE_GOLD];
 		int gold = context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD];
 		// Reserve at least worker cost
 		if (gold >= workerGoldCost + buildingGoldCost) {
@@ -260,7 +260,7 @@ static void game_strategy_ai_train_units(GameContext *context) {
 	// Start training after peace time
 	if (context->aiData.peaceCounter < context->map.peaceTime) return;
 	uint8_t allWorkersTrained = game_strategy_ai_count_computer_workers(context) >= context->aiData.desiredWorkers;
-	int workerGoldCost = game_unit_get_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
+	int workerGoldCost = game_unit_get_training_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
 	// Must have at least worker gold cost and reserve
 	if(context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD] <
 		workerGoldCost + MIN_GOLD_TRAINING_BUDGET) return;
@@ -274,15 +274,15 @@ static void game_strategy_ai_train_units(GameContext *context) {
 			unit->state == BUILDING_STATE_COMPLETED && !unit->typed.buildingData.isTraining) {
 			int gold = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_GOLD];
 			if(unit->type == UNIT_TYPE_TOWER) {
-				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_resources(UNIT_TYPE_MAGE)->used[RESOURCE_TYPE_GOLD]) {
-					building_add_to_train_queue(context, unit, UNIT_TYPE_MAGE);
+				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_training_resources(UNIT_TYPE_MAGE)->used[RESOURCE_TYPE_GOLD]) {
+					building_add_to_train_queue(context, unit, TRAINING_TYPE_MAGE);
 				}
 			}
 			if (unit->type == UNIT_TYPE_BARRACKS) {
-				UnitTypeEnum typeToTrain = UNIT_TYPE_SOLDIER;
-				if(trainRanged && archersAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, UNIT_TYPE_ARCHER)) typeToTrain = UNIT_TYPE_ARCHER;
-				if(!trainRanged && knightsAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, UNIT_TYPE_KNIGHT)) typeToTrain = UNIT_TYPE_KNIGHT;
-				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_resources(typeToTrain)->used[RESOURCE_TYPE_GOLD]) {
+				TrainingTypeEnum typeToTrain = TRAINING_TYPE_SOLDIER;
+				if(trainRanged && archersAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_ARCHER)) typeToTrain = TRAINING_TYPE_ARCHER;
+				if(!trainRanged && knightsAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_KNIGHT)) typeToTrain = TRAINING_TYPE_KNIGHT;
+				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_training_resources(typeToTrain)->used[RESOURCE_TYPE_GOLD]) {
 					building_add_to_train_queue(context, unit, typeToTrain);
 					trainRanged = !trainRanged;
 				}

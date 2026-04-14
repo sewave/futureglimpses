@@ -63,12 +63,12 @@ static void handle_train_unit(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
 	if (context->selectedUnitCount == 1) {
 		GameUnit *building = game_unit_get_by_id(context, context->selectedUnits[0]);
-		if (building) building_add_to_train_queue(context, building, (UnitTypeEnum) fixedDat);
+		if (building) building_add_to_train_queue(context, building, (TrainingTypeEnum) fixedDat);
 	}
 }
 
-static void return_resources_for_cancelled_unit(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType) {
-	UnitResourcesData* unitResources = game_unit_get_resources(unitType);
+static void return_resources_for_cancelled_unit(GameContext *context, ControllerEnum controller, TrainingTypeEnum trainingType) {
+	TrainingResourcesData *unitResources = game_unit_get_training_resources(trainingType);
 	for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 		resource_add_amount(context, controller, i, unitResources->used[i]);
 	}
@@ -82,7 +82,7 @@ static void handle_cancel_all_unit_training(void *ctxVoid, uint8_t fixedDat) {
 			// Cancel all the queue and return resources for all the units in the queue,
 			// including the one in training
 			if(building->typed.buildingData.isTraining) {
-				return_resources_for_cancelled_unit(context, building->controller, building->typed.buildingData.trainUnit);
+				return_resources_for_cancelled_unit(context, building->controller, building->typed.buildingData.trainingType);
 				building->typed.buildingData.isTraining = FALSE;
 			}
 
@@ -124,7 +124,7 @@ static void handle_build_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 	if (unit) {
 		// Return used resources
-		UnitResourcesData* unitResources = game_unit_get_resources(unit->type);
+		TrainingResourcesData *unitResources = game_unit_get_training_resources(unit->type);
 		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_add_amount(context, unit->controller, i, unitResources->used[i]);
 		}
@@ -586,7 +586,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 			if (buildingData->isTraining) {
 				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
 									   buildingData->currentTicks, buildingData->targetTicks,
-									   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainUnit),
+									   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainingType),
 									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 			}
 			if (buildingData->queueNextIndex > 0) {
@@ -646,11 +646,13 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 			HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 
 	if (button->type == CMD_BAR_BTN_TYPE_CREATE) {
-		UnitTypeEnum unitType = (UnitTypeEnum) button->fixedParam;
-		UnitData *unitData = game_unit_get_data(unitType);
+		TrainingTypeEnum unitType = (TrainingTypeEnum) button->fixedParam;
+		UnitData *unitData = NULL;
+		if(unitType < TRAINING_TYPE_UPDATE_SOLDIER) unitData = game_unit_get_data((UnitTypeEnum) unitType);
+		TrainingResourcesData *trainingResources = game_unit_get_training_resources(unitType);
 		int totalResources = UNIT_USED_RESOURCES;
 		int xOff = 0;
-		if(unitData->isBuilding) {
+		if(unitData && unitData->isBuilding) {
 			xOff = BUILDING_RESOURCE_X_OFF;
 			totalResources = BUILDING_RESOURCES;
 		}
@@ -659,7 +661,7 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 			render_queue_submit_sprite(
 					renderQueue, RESOURCES_Z, game_gfx_get_icon(i), pos.x + xOff,
 					pos.y, RND_FLAG_NORMAL);
-			itoa(unitData->resources.used[i], resourceBuffers[i], BASE_TEN_NUMBER);
+			itoa(trainingResources->used[i], resourceBuffers[i], BASE_TEN_NUMBER);
 			render_queue_submit_text_shadow(renderQueue, RESOURCES_Z,
 									 font, resourceBuffers[i],
 									 pos.x + RESOURCE_LOCATIONS_TEXT_X_OFF + xOff,

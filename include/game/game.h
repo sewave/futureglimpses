@@ -115,9 +115,9 @@ typedef uint32_t UnitId;
 #define MAX_BUILDING_QUEUE 8
 typedef struct {
 	uint8_t isTraining;
-	UnitTypeEnum trainUnit;
+	TrainingTypeEnum trainingType;
 	uint8_t queueNextIndex;
-	UnitTypeEnum queue[MAX_BUILDING_QUEUE];
+	TrainingTypeEnum queue[MAX_BUILDING_QUEUE];
 	uint16_t currentTicks;
 	uint16_t targetTicks;
 	uint32_t addedHealth;
