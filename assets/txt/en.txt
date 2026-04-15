@@ -38,6 +38,10 @@ Build ^004B^001arracks
 Build Blacks^004m^001ith
 Build ^004S^001tables
 Build ^004T^001ower
+Research upgraded ^004S^001oldier
+Research upgraded ^004A^001rcher
+Research upgraded ^004K^001night
+Research upgraded ^004M^001age
 Not enough gold, harvest more gold.
 Not enough wood, chop more trees.
 Not enough food, build more farms.

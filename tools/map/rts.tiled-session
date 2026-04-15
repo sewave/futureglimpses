@@ -96,15 +96,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 478.33333333333326,
-                "y": 474.99999999999994
+                "y": 149.66666666666663
             }
         },
         "maps/base.tmx": {
-            "scale": 0.5083984375,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.40991164041486,
-                "y": 512.3933922397234
+                "x": 711.5,
+                "y": 689.5
             }
         },
         "maps/buildings/big_buildings.tsx": {
