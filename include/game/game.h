@@ -158,6 +158,7 @@ typedef struct {
 	uint8_t tileSize;
 	uint8_t minDamage;
 	uint8_t maxDamage;
+	uint8_t isUpgraded;
 
 	uint16_t targetX, targetY;
 	uint16_t prevTargetX, prevTargetY;
@@ -287,6 +288,11 @@ typedef struct {
 } PlayerAttackedData;
 
 typedef struct {
+	uint8_t researchable;
+	uint8_t enabled;
+} GameUnitUpgrade;
+
+typedef struct {
 	BITMAP *screenBuffer;
 	PALETTE mainPalette;
 	GameStateEnum gameState;
@@ -328,6 +334,7 @@ typedef struct {
 	int blinkColor;
 	AIData aiData;
 	PlayerAttackedData playerAttackedData;
+	GameUnitUpgrade upgrades[UNIT_CONTROLLERS_COUNT][UNIT_TYPE_NUMBER];
 } GameContext;
 
 typedef GameStateEnum (*StateUpdateFunction)(GameContext *);

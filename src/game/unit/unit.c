@@ -187,10 +187,10 @@ static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
 		{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 		{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 		{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
-		{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
-		{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
-		{.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
-		{.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
+		{.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
+		{.used = {2000, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
+		{.used = {2500, 500, 0}, .time = SEC_TO_FRAMES(90), .foodProvided = 0},
+		{.used = {3000, 1000, 0}, .time = SEC_TO_FRAMES(110), .foodProvided = 0},
 };
 
 static int game_unit_find_free_index(GameUnit units[]) {
@@ -218,6 +218,12 @@ void game_units_init(GameContext *context) {
 	context->activeUnitCount = 0;
 	context->selectedUnitCount = 0;
 	nextFreeIndex = 0;
+	// Initialize upgrades to false
+	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
+		for (int j = 0; j < UNIT_TYPE_NUMBER; j++) {
+			context->upgrades[i][j] = (GameUnitUpgrade){.researchable = FALSE, .enabled = FALSE};
+		}
+	}
 }
 
 GameUnit *game_unit_get_by_id(GameContext *context, UnitId id) {
@@ -349,7 +355,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		buildingData->queueNextIndex = 0;
 		buildingData->addedHealth = unit->health;
 		buildingData->currentTicks = 0;
-		buildingData->targetTicks = trainingData->time;
+		buildingData->targetTicks = 0;
 	}
 	else {
 		unit->health = data->health;
@@ -382,6 +388,19 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_SPAWNED_WORKER + unit->type),
 			SPAWN_SHOW_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 		game_unit_explore(context, unit);
+	}
+
+	// If the controller has the update for the unit, set flag and upgrade stats
+	GameUnitUpgrade *upgrade = &context->upgrades[controller][unit->type];
+	if(upgrade->enabled) {
+		// Apply upgrade effects here. For simplicity, let's say it increases health and damage by 50%
+		unit->health = unit->maxHealth = (uint16_t)((unit->maxHealth * 3) / 2);
+		unit->minDamage = (uint8_t)((unit->minDamage * 3) / 2);
+		unit->maxDamage = (uint8_t)((unit->maxDamage * 3) / 2);
+		unit->isUpgraded = TRUE;
+	}
+	else {
+		unit->isUpgraded = FALSE;
 	}
 
 	return unit;

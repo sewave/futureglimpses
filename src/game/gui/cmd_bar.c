@@ -35,11 +35,11 @@
 #define UNIT_SHEET_Z_ORDER_SHEET_TEXT UI_Z_ORDER + 510
 #define UNIT_SHEET_Z_ORDER_BAR_RECT UI_Z_ORDER + 511
 
-#define BUILDING_RESOURCES 2
+#define NO_UNIT_RESOURCES 2
 #define RESOURCES_Z UI_Z_ORDER + 600
 #define RESOURCE_LOCATIONS_TEXT_X_OFF 10
 #define RESOURCE_LOCATIONS_TEXT_Y_OFF -1
-#define BUILDING_RESOURCE_X_OFF 28
+#define NO_UNIT_RESOURCE_X_OFF 28
 
 static Position RESOURCE_LOCATIONS[UNIT_USED_RESOURCES] = {
 		{220, 190},
@@ -438,32 +438,64 @@ static const CommandBarButton STABLES_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton TOWER_CMD_BUTTON = {
-		.type = CMD_BAR_BTN_TYPE_CREATE,
-		.isActive = TRUE,
-		.action = handle_build_place_button,
-		.hotkeyIndex = KEY_T,
-		.hotkey = "T",
-		.hoverTextId = GAME_TEXT_ID_BUILD_TOWER,
-		.fixedParam = UNIT_TYPE_TOWER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 9,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
-		.state = CMD_BAR_BTN_STATE_IDLE};
+	.type = CMD_BAR_BTN_TYPE_CREATE,
+	.isActive = TRUE,
+	.action = handle_build_place_button,
+	.hotkeyIndex = KEY_T,
+	.hotkey = "T",
+	.hoverTextId = GAME_TEXT_ID_BUILD_TOWER,
+	.fixedParam = UNIT_TYPE_TOWER,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 9,
+	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+	.x = CMD_BAR_BUTTON_INITIAL_X,
+	.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
+
+static const CommandBarButton UPGRADE_SOLDIER_CMD_BUTTON = {
+	.type = CMD_BAR_BTN_TYPE_CREATE,
+	.isActive = TRUE,
+	.action = handle_train_unit,
+	.hotkeyIndex = KEY_S,
+	.hotkey = "S",
+	.hoverTextId = GAME_TEXT_ID_RESEARCH_SOLDIER,
+	.fixedParam = TRAINING_TYPE_UPGRADE_SOLDIER,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 8,
+	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
+	.x = CMD_BAR_BUTTON_INITIAL_X,
+	.y = CMD_BAR_BUTTON_INITIAL_Y,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
+
+static const CommandBarButton UPGRADE_ARCHER_CMD_BUTTON = {
+	.type = CMD_BAR_BTN_TYPE_CREATE,
+	.isActive = TRUE,
+	.action = handle_train_unit,
+	.hotkeyIndex = KEY_A,
+	.hotkey = "A",
+	.hoverTextId = GAME_TEXT_ID_RESEARCH_ARCHER,
+	.fixedParam = TRAINING_TYPE_UPGRADE_ARCHER,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 9,
+	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
+	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+	.y = CMD_BAR_BUTTON_INITIAL_Y,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
 
 static const CommandBarButton CANCEL_ALL_TRAIN_CMD_BUTTON = {
-		.type = CMD_BAR_BTN_TYPE_ACTION,
-		.isActive = TRUE,
-		.action = handle_cancel_all_unit_training,
-		.hotkeyIndex = KEY_ESC,
-		.hotkey = "ESC",
-		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_ALL_TRAINING,
-		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = 0,
-		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
-		.state = CMD_BAR_BTN_STATE_IDLE};
+	.type = CMD_BAR_BTN_TYPE_ACTION,
+	.isActive = TRUE,
+	.action = handle_cancel_all_unit_training,
+	.hotkeyIndex = KEY_ESC,
+	.hotkey = "ESC",
+	.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_ALL_TRAINING,
+	.fixedParam = 0,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
+	.sheetOffsetY = 0,
+	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+	.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
 
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
 	if(building->state == BUILDING_STATE_COMPLETED) {
@@ -476,9 +508,21 @@ static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit 
 				if (unitCount[UNIT_TYPE_BLACKSMITH] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_ARCHER_CMD_BUTTON;
 				if (unitCount[UNIT_TYPE_STABLES] > 0) context->cmdBarButtons[buttonIndex++] = TRAIN_KNIGHT_CMD_BUTTON;
 				break;
-			case UNIT_TYPE_TOWER:
+			case UNIT_TYPE_TOWER: {
 				context->cmdBarButtons[buttonIndex++] = TRAIN_MAGE_CMD_BUTTON;
+				// TODO update mages
 				break;
+			}
+			case UNIT_TYPE_BLACKSMITH: {
+				// TODO update soldier and archer conditions
+				context->cmdBarButtons[buttonIndex++] = UPGRADE_SOLDIER_CMD_BUTTON;
+				context->cmdBarButtons[buttonIndex++] = UPGRADE_ARCHER_CMD_BUTTON;
+				break;
+			}
+			case UNIT_TYPE_STABLES: {
+				// TODO update knight
+				break;
+			}
 			default:
 				break;
 		}
@@ -648,13 +692,13 @@ static void game_cmd_bar_render_queue_submit_btn_info(RenderQueue *renderQueue, 
 	if (button->type == CMD_BAR_BTN_TYPE_CREATE) {
 		TrainingTypeEnum unitType = (TrainingTypeEnum) button->fixedParam;
 		UnitData *unitData = NULL;
-		if(unitType < TRAINING_TYPE_UPDATE_SOLDIER) unitData = game_unit_get_data((UnitTypeEnum) unitType);
+		if (unitType < TRAINING_TYPE_UPGRADE_SOLDIER) unitData = game_unit_get_data((UnitTypeEnum) unitType);
 		TrainingResourcesData *trainingResources = game_unit_get_training_resources(unitType);
 		int totalResources = UNIT_USED_RESOURCES;
 		int xOff = 0;
-		if(unitData && unitData->isBuilding) {
-			xOff = BUILDING_RESOURCE_X_OFF;
-			totalResources = BUILDING_RESOURCES;
+		if(unitType >= TRAINING_TYPE_UPGRADE_SOLDIER || (unitData && unitData->isBuilding)) {
+			xOff = NO_UNIT_RESOURCE_X_OFF;
+			totalResources = NO_UNIT_RESOURCES;
 		}
 		for (int i = 0; i < totalResources; i++) {
 			Position pos = RESOURCE_LOCATIONS[i];

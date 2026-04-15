@@ -169,8 +169,13 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 5, resourceIcon,
 						unitTileXCamera - iconOffset, unitTileYCamera - resourceIcon->h);
 			}
-			if(unit->isCustom) {
-				RLE_SPRITE* customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
+			if(unit->isCustom || unit->isUpgraded) {
+				RLE_SPRITE* customIcon;
+				if(unit->isCustom) {
+					customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
+				} else {
+					customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_FUTURE);
+				}
 				if(iconOffset == 0 && showHealthBar) {
 					iconOffset = customIcon->w;
 				} else {

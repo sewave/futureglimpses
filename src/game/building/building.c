@@ -53,16 +53,28 @@ void building_update(GameContext *context, GameUnit *building) {
 	if (buildingData->isTraining) {
 		buildingData->currentTicks++;
 		if (buildingData->currentTicks >= buildingData->targetTicks) {
-			if (resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
-									game_unit_get_training_resources(buildingData->trainingType)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
-				Position spawn = game_building_get_spawn_position(context, building);
-				GameUnit* newUnit = game_unit_spawn(context, buildingData->trainingType, building->controller, spawn.x, spawn.y);
-				if(newUnit && building->targetX != NO_TARGET_POSITION && building->targetY != NO_TARGET_POSITION) {
-					game_unit_command_move(newUnit, NULL, building->targetX, building->targetY);
-				}
-			    buildingData->isTraining = FALSE;
+			if (buildingData->trainingType >= TRAINING_TYPE_UPGRADE_SOLDIER) {
+				// It's an upgrade, enable it and move on to the next in queue
+				UnitTypeEnum unitType = buildingData->trainingType - TRAINING_TYPE_UPGRADE_SOLDIER + TRAINING_TYPE_SOLDIER;
+				context->upgrades[building->controller][unitType].enabled = TRUE;
+				buildingData->isTraining = FALSE;
 			} else {
-				buildingData->currentTicks--;
+				if (resource_has_enough(context, building->controller, RESOURCE_TYPE_AVAILABLE_FOOD,
+										game_unit_get_training_resources(buildingData->trainingType)->used[RESOURCE_TYPE_AVAILABLE_FOOD])) {
+					Position spawnPosition = game_building_get_spawn_position(context, building);
+					GameUnit *newUnit = game_unit_spawn(context, buildingData->trainingType, building->controller, spawnPosition.x, spawnPosition.y);
+					if(newUnit) {
+						buildingData->isTraining = FALSE;
+						if(building->targetX != NO_TARGET_POSITION && building->targetY != NO_TARGET_POSITION) {
+							game_unit_command_move(newUnit, NULL, building->targetX, building->targetY);
+						}
+					}
+					else {
+						buildingData->currentTicks--;
+					}
+				} else {
+					buildingData->currentTicks--;
+				}
 			}
 		}
 	}
@@ -155,7 +167,10 @@ void building_add_construction(GameContext *context, GameUnit *building) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	buildingData->currentTicks += WORKER_TIME;
 
-	uint32_t newAddedHealth = ((uint32_t) buildingData->currentTicks * building->maxHealth) / buildingData->targetTicks;
+	uint32_t newAddedHealth = 0;
+	if (buildingData->targetTicks > 0) {
+		newAddedHealth = ((uint32_t) buildingData->currentTicks * building->maxHealth) / buildingData->targetTicks;
+	}
 	uint32_t healthInc = newAddedHealth - buildingData->addedHealth;
     buildingData->addedHealth = newAddedHealth;
 	building->health += healthInc;
