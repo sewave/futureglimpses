@@ -199,7 +199,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 
 				render_queue_submit_rect_fill(
 						renderQueue,
-						UI_Z_ORDER + 1,
+						UI_Z_ORDER + 21,
 						unitTileXCamera + HEALTH_BAR_BORDER,
 						healthBarYInit,
 						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
@@ -207,7 +207,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 						healthBarColor);
 				render_queue_submit_rect_fill(
 						renderQueue,
-						UI_Z_ORDER,
+						UI_Z_ORDER + 20,
 						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
 						healthBarYInit,
 						unitTileXCamera + HEALTH_BAR_BORDER + HEALTH_BAR_LENGTH * unit->tileSize - 3 * HEALTH_BAR_BORDER,
