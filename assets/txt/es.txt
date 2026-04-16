@@ -1,8 +1,8 @@
 %d unidades
 %d/%d
 %d %%
-Daño: %d-%d
-Rango: %d-%d
+%d-%d
+%d-%d
 Obrero
 Soldado
 Arquero

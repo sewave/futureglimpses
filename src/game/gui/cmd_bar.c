@@ -50,9 +50,9 @@ static uint8_t buttonIndex;
 static uint8_t unitCount[UNIT_TYPE_NUMBER] = {0};
 static uint8_t trainings[TRAINING_TYPE_NUMBER] = {0};
 static char unitHpText[16];
-static char unitDamageText[32];
-static char unitAtRangeText[32];
-static char unitsText[32];
+static char unitDamageText[16];
+static char unitAtRangeText[16];
+static char unitsText[16];
 static char resourceBuffers[RESOURCE_TYPES_COUNT][8];
 
 static void game_cmd_bar_clear_build_placing(BuildPlacing *buildPlacing) {
@@ -645,76 +645,90 @@ static void game_render_unit_stats_background(GameContext *context, RenderQueue 
 	);
 }
 
+#define RANGE_SEPARATOR "-"
+#define HEALTH_SEPARATOR "/"
+
+static void print_separated_numbers(char *buffer, char* separator, int min, int max) {
+	itoa(min, buffer, BASE_TEN_NUMBER);
+	int length = strlen(buffer);
+	buffer[length++] = *separator;
+	itoa(max, buffer + length, BASE_TEN_NUMBER);
+}
+
 static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, RenderQueue *renderQueue) {
 	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
-	if (unit) {
-		game_render_unit_stats_background(context, renderQueue);
+	if (!unit) return;
+	game_render_unit_stats_background(context, renderQueue);
 
-		// Unit name
-		const char* name;
+	// Unit name
+	const char* name;
+	if(unit->isCustom) {
+		name = unit->name;
+	}
+	else {
+		name = text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type);
+	}
+	int namePostionX = UNIT_SHEET_COL_ONE_X;
+	if(unit->isCustom || unit->isUpgraded) {
+		RLE_SPRITE* customIcon;
 		if(unit->isCustom) {
-			name = unit->name;
+			customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
+		} else {
+			customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_FUTURE);
 		}
-		else {
-			name = text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type);
-		}
-		int namePostionX = UNIT_SHEET_COL_ONE_X;
-		if(unit->isCustom || unit->isUpgraded) {
-			RLE_SPRITE* customIcon;
-			if(unit->isCustom) {
-				customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
-			} else {
-				customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_FUTURE);
-			}
-			render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 510, customIcon,
-					namePostionX, UNIT_SHEET_ROW_ONE_Y + 1);
-			namePostionX += customIcon->w + 1;
-		}
-		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, name,
-								 namePostionX, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, customIcon,
+				namePostionX, UNIT_SHEET_ROW_ONE_Y + 1);
+		namePostionX += customIcon->w + 1;
+	}
+	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, name,
+								namePostionX, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
-		// Unit HP bar
-		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
-		game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
-							   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
+	// Unit HP bar
+	print_separated_numbers(unitHpText, HEALTH_SEPARATOR, unit->health, unit->maxHealth);
+	game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
+							UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
 
-		// If we are a building training show bar
-		if (unit->isBuilding) {
-			BuildingData *buildingData = &unit->typed.buildingData;
-			if (buildingData->isTraining) {
-				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
-									   buildingData->currentTicks, buildingData->targetTicks,
-									   text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainingType),
-									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
-			}
-			if (buildingData->queueNextIndex > 0) {
-				snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
-				render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
-										 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-			}
-			// If building is in construction, show progress
-			if(unit->state == BUILDING_STATE_CONSTRUCT) {
-				game_cmd_bar_queue_bar(renderQueue, context->gameFont,
-									   buildingData->currentTicks, buildingData->targetTicks,
-									   text_get_by_id(GAME_TEXT_ID_BUILDING_COMPLETATION),
-									   UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
-			}
+	// If we are a building training show bar
+	if (unit->isBuilding) {
+		BuildingData *buildingData = &unit->typed.buildingData;
+		if (buildingData->isTraining) {
+			game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+									buildingData->currentTicks, buildingData->targetTicks,
+									text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainingType),
+									UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 		}
+		if (buildingData->queueNextIndex > 0) {
+			snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+										UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
+		// If building is in construction, show progress
+		if(unit->state == BUILDING_STATE_CONSTRUCT) {
+			game_cmd_bar_queue_bar(renderQueue, context->gameFont,
+									buildingData->currentTicks, buildingData->targetTicks,
+									text_get_by_id(GAME_TEXT_ID_BUILDING_COMPLETATION),
+									UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
+		}
+	}
 
-		// Unit data
-		if (unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
-			snprintf(unitAtRangeText, sizeof(unitAtRangeText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_RANGE), unit->minAttackRange, unit->maxAttackRange);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText,
-									 UNIT_SHEET_COL_ONE_X,
-									 UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-		}
-
-		if (unit->minDamage > 0 || unit->maxDamage > 0) {
-			snprintf(unitDamageText, sizeof(unitDamageText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_DAMAGE), unit->minDamage, unit->maxDamage);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
-									 UNIT_SHEET_COL_ONE_X,
-									 UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-		}
+	// Unit data
+	if (unit->minAttackRange > 0 || unit->maxAttackRange > 0) {
+		RLE_SPRITE* rangeIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_RANGE);
+		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, rangeIcon,
+			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y);
+		print_separated_numbers(unitAtRangeText, RANGE_SEPARATOR,unit->minAttackRange, unit->maxAttackRange);
+		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText,
+									UNIT_SHEET_COL_ONE_X + rangeIcon->w + 1,
+									UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+	}
+	if (unit->minDamage > 0 || unit->maxDamage > 0) {
+		RLE_SPRITE* attackIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ATTACK);
+		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, attackIcon,
+				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y);
+		print_separated_numbers(unitDamageText, RANGE_SEPARATOR, unit->minDamage, unit->maxDamage);
+		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
+									UNIT_SHEET_COL_ONE_X + attackIcon->w + 1,
+									UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 }
 

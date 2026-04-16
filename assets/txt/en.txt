@@ -1,8 +1,8 @@
 %d units
 %d/%d
 %d %%
-Dmg: %d-%d
-Range: %d-%d
+%d-%d
+%d-%d
 Worker
 Soldier
 Archer
