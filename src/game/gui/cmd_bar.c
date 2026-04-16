@@ -658,8 +658,20 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 		else {
 			name = text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + unit->type);
 		}
+		int namePostionX = UNIT_SHEET_COL_ONE_X;
+		if(unit->isCustom || unit->isUpgraded) {
+			RLE_SPRITE* customIcon;
+			if(unit->isCustom) {
+				customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_CUSTOM);
+			} else {
+				customIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_FUTURE);
+			}
+			render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER + 510, customIcon,
+					namePostionX, UNIT_SHEET_ROW_ONE_Y + 1);
+			namePostionX += customIcon->w + 1;
+		}
 		render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, name,
-								 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+								 namePostionX, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
 		// Unit HP bar
 		snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP), unit->health, unit->maxHealth);
