@@ -48,6 +48,7 @@ static Position RESOURCE_LOCATIONS[UNIT_USED_RESOURCES] = {
 
 static uint8_t buttonIndex;
 static uint8_t unitCount[UNIT_TYPE_NUMBER] = {0};
+static uint8_t trainings[TRAINING_TYPE_NUMBER] = {0};
 static char unitHpText[16];
 static char unitDamageText[32];
 static char unitAtRangeText[32];
@@ -482,6 +483,36 @@ static const CommandBarButton UPGRADE_ARCHER_CMD_BUTTON = {
 	.state = CMD_BAR_BTN_STATE_IDLE
 };
 
+static const CommandBarButton UPGRADE_KNIGHT_CMD_BUTTON = {
+	.type = CMD_BAR_BTN_TYPE_CREATE,
+	.isActive = TRUE,
+	.action = handle_train_unit,
+	.hotkeyIndex = KEY_K,
+	.hotkey = "K",
+	.hoverTextId = GAME_TEXT_ID_RESEARCH_KNIGHT,
+	.fixedParam = TRAINING_TYPE_UPGRADE_KNIGHT,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 10,
+	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
+	.x = CMD_BAR_BUTTON_INITIAL_X,
+	.y = CMD_BAR_BUTTON_INITIAL_Y,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
+
+static const CommandBarButton UPGRADE_MAGE_CMD_BUTTON = {
+	.type = CMD_BAR_BTN_TYPE_CREATE,
+	.isActive = TRUE,
+	.action = handle_train_unit,
+	.hotkeyIndex = KEY_M,
+	.hotkey = "M",
+	.hoverTextId = GAME_TEXT_ID_RESEARCH_MAGE,
+	.fixedParam = TRAINING_TYPE_UPGRADE_MAGE,
+	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 11,
+	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
+	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+	.y = CMD_BAR_BUTTON_INITIAL_Y,
+	.state = CMD_BAR_BTN_STATE_IDLE
+};
+
 static const CommandBarButton CANCEL_ALL_TRAIN_CMD_BUTTON = {
 	.type = CMD_BAR_BTN_TYPE_ACTION,
 	.isActive = TRUE,
@@ -510,17 +541,28 @@ static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit 
 				break;
 			case UNIT_TYPE_TOWER: {
 				context->cmdBarButtons[buttonIndex++] = TRAIN_MAGE_CMD_BUTTON;
-				// TODO update mages
+				GameUnitUpgrade *mageUpgrade = &context->upgrades[building->controller][UNIT_TYPE_MAGE];
+				if(!mageUpgrade->enabled && mageUpgrade->researchable && !trainings[TRAINING_TYPE_UPGRADE_MAGE]) {
+					context->cmdBarButtons[buttonIndex++] = UPGRADE_MAGE_CMD_BUTTON;
+				}
 				break;
 			}
 			case UNIT_TYPE_BLACKSMITH: {
-				// TODO update soldier and archer conditions
-				context->cmdBarButtons[buttonIndex++] = UPGRADE_SOLDIER_CMD_BUTTON;
-				context->cmdBarButtons[buttonIndex++] = UPGRADE_ARCHER_CMD_BUTTON;
+				GameUnitUpgrade *soldierUpgrade = &context->upgrades[building->controller][UNIT_TYPE_SOLDIER];
+				GameUnitUpgrade *archerUpgrade = &context->upgrades[building->controller][UNIT_TYPE_ARCHER];
+				if(!soldierUpgrade->enabled && soldierUpgrade->researchable && !trainings[TRAINING_TYPE_UPGRADE_SOLDIER]) {
+					context->cmdBarButtons[buttonIndex++] = UPGRADE_SOLDIER_CMD_BUTTON;
+				}
+				if(!archerUpgrade->enabled && archerUpgrade->researchable && !trainings[TRAINING_TYPE_UPGRADE_ARCHER]) {
+					context->cmdBarButtons[buttonIndex++] = UPGRADE_ARCHER_CMD_BUTTON;
+				}
 				break;
 			}
 			case UNIT_TYPE_STABLES: {
-				// TODO update knight
+				GameUnitUpgrade *knightUpgrade = &context->upgrades[building->controller][UNIT_TYPE_KNIGHT];
+				if(!knightUpgrade->enabled && knightUpgrade->researchable && !trainings[TRAINING_TYPE_UPGRADE_KNIGHT]) {
+					context->cmdBarButtons[buttonIndex++] = UPGRADE_KNIGHT_CMD_BUTTON;
+				}
 				break;
 			}
 			default:
@@ -753,9 +795,8 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		context->cmdBarButtons[i].isActive = FALSE;
 	}
 	buttonIndex = 0;
-	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
-		unitCount[i] = 0;
-	}
+	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) unitCount[i] = 0;
+	for(int i = 0; i < TRAINING_TYPE_NUMBER; i++) trainings[i] = 0;
 
 	if (context->selectedUnitCount == 0 || game_selection_one_enemy_selected(context)) {
 		game_cmd_bar_clear_build_placing(&context->buildPlacing);
@@ -769,15 +810,23 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		if (context->selectedUnitCount == 1) {
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 			if (unit) {
-				GameUnit **activeUnits = context->activeUnits;
-				for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
-					GameUnit *unit = *activeUnits;
-					if (unit && unit->controller == UNIT_CONTROLLER_PLAYER && 
-						(!unit->isBuilding || unit->state == BUILDING_STATE_COMPLETED)) {
-						unitCount[unit->type]++;
-					}
-				}
 				if (unit->isBuilding) {
+					GameUnit **activeUnits = context->activeUnits;
+					for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
+						GameUnit *unit = *activeUnits;
+						if (unit && unit->controller == UNIT_CONTROLLER_PLAYER && 
+							(!unit->isBuilding || unit->state == BUILDING_STATE_COMPLETED)) {
+							unitCount[unit->type]++;
+							if(unit->isBuilding) {
+								if(unit->typed.buildingData.isTraining) {
+									trainings[unit->typed.buildingData.trainingType]++;
+								}
+								for(int j = 0; j < unit->typed.buildingData.queueNextIndex; j++) {
+									trainings[unit->typed.buildingData.queue[j]]++;
+								}
+							}
+						}
+					}
 					game_cmd_bar_clear_build_placing(&context->buildPlacing);
 					game_cmd_bar_handle_building_buttons(context, unit);
 				} else {

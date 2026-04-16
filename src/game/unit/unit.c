@@ -219,9 +219,10 @@ void game_units_init(GameContext *context) {
 	context->selectedUnitCount = 0;
 	nextFreeIndex = 0;
 	// Initialize upgrades to false
+	// TODO researcheable = FALSE when loading from map
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
 		for (int j = 0; j < UNIT_TYPE_NUMBER; j++) {
-			context->upgrades[i][j] = (GameUnitUpgrade){.researchable = FALSE, .enabled = FALSE};
+			context->upgrades[i][j] = (GameUnitUpgrade){.researchable = TRUE, .enabled = FALSE};
 		}
 	}
 }

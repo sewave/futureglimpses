@@ -12,7 +12,7 @@ const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
         [GAME_MUSIC_MAP_3] = "assets/music/map3.mid",
 };
 
-// TODO add sounds for fireball launch, building, not valid, my lord and yes
+// TODO add sounds for fireball launch and not valid
 const char *gameSoundFilenames[GAME_SOUNDS_COUNT] = {
 		[GAME_SOUND_CLICK] = "assets/sound/click.wav",
 		[GAME_SOUND_IRON_HIT] = "assets/sound/ironhit.wav",
