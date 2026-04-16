@@ -52,7 +52,7 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 			GameUnit *damageTarget = game_unit_get_by_id(context, object->targetId);
 			if (damageTarget) {
 				game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
-				if(damageTarget->state == UNIT_STATE_IDLE) {
+				if(damageTarget->state == UNIT_STATE_IDLE && damageTarget->targetId == NO_TARGET_ID) {
 					game_unit_command_move_attack(damageTarget, NULL, object->x / TILE_SIZE, object->y / TILE_SIZE);
 				}
 			}

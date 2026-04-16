@@ -20,7 +20,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 2,
 				.maxDamage = 4,
-				.reactionTime = SEC_TO_FRAMES(1),
+				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.6),
 		},
 		{
@@ -466,8 +466,8 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 					player_attacked_register_attack(&context->playerAttackedData, target->x, target->y);
 				}
 				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
-				if (target->state == UNIT_STATE_IDLE && sourceUnit
-					&& sourceUnit->controller != target->controller) {
+				if (target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID
+					&& sourceUnit && sourceUnit->controller != target->controller) {
 					game_unit_command_move_attack(target, sourceUnit, sourceUnit->x, sourceUnit->y);
 				}
 			}
