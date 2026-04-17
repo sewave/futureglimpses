@@ -368,7 +368,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		buildingData->queueNextIndex = 0;
 		buildingData->addedHealth = unit->health;
 		buildingData->currentTicks = 0;
-		buildingData->targetTicks = 0;
+		buildingData->targetTicks = trainingData->time;
 	}
 	else {
 		unit->health = data->health;

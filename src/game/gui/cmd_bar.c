@@ -600,9 +600,9 @@ static void game_cmd_bar_handle_building_select_buttons(GameContext *context) {
 
 static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int value, int maxValue, const char *innerText,
 								   int x, int y, uint8_t isHp) {
-	int textLength = text_length(font, innerText);
+	int length = text_length(font, innerText);
 	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, font, innerText,
-							 x + UNIT_SHEET_BAR_LENGTH / 2 - textLength / 2,
+							 x + UNIT_SHEET_BAR_LENGTH / 2 - length / 2,
 							 y + UNIT_SHEET_BAR_TEXT_Y_OFF, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
 	int barColor = PAL_COLOR_DARK_GREEN;
@@ -610,13 +610,13 @@ static void game_cmd_bar_queue_bar(RenderQueue *renderQueue, FONT *font, int val
 		if (value < maxValue / HEALTH_BAR_HALF) barColor = PAL_COLOR_YELLOW;
 		if (value < maxValue / HEALTH_BAR_QUARTER) barColor = PAL_COLOR_RED;
 	}
-	textLength = (value * UNIT_SHEET_BAR_LENGTH) / maxValue;
+	length = (value * UNIT_SHEET_BAR_LENGTH) / maxValue;
 	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
 								  x, y,
-								  x + textLength, y + UNIT_SHEET_BAR_HEIGHT,
+								  x + length, y + UNIT_SHEET_BAR_HEIGHT,
 								  barColor);
 	render_queue_submit_rect_fill(renderQueue, UNIT_SHEET_Z_ORDER_BAR,
-								  x + textLength, y,
+								  x + length, y,
 								  x + UNIT_SHEET_BAR_LENGTH, y + UNIT_SHEET_BAR_HEIGHT,
 								  PAL_COLOR_GRAY);
 	render_queue_submit_rect(renderQueue, UNIT_SHEET_Z_ORDER_BAR_RECT,
