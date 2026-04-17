@@ -16,6 +16,7 @@
 #define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
 
 #define UNIT_SHEET_COL_ONE_X 3
+#define UNIT_SHEET_COL_TWO_X 38
 #define UNIT_SHEET_ROW_ONE_Y 80
 #define UNIT_SHEET_ROW_TWO_Y 90
 #define UNIT_SHEET_ROW_THREE_Y 104
@@ -56,6 +57,7 @@ static uint8_t trainings[TRAINING_TYPE_NUMBER] = {0};
 static char unitHpText[16];
 static char unitDamageText[16];
 static char unitAtRangeText[16];
+static char unitArmorText[16];
 static char unitsText[16];
 static char resourceBuffers[RESOURCE_TYPES_COUNT][8];
 
@@ -731,6 +733,25 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 									UNIT_SHEET_COL_ONE_X + attackIcon->w + 1,
 									UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
+	// Armor
+	RLE_SPRITE *armorIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ARMOR);
+	int armorBaseX;
+	int armorBaseY;
+	if(unit->minDamage == 0 && unit->maxDamage == 0) {
+		// Buildings, or maybe special units
+		armorBaseX = UNIT_SHEET_COL_ONE_X;
+		armorBaseY = UNIT_SHEET_ROW_THREE_Y;
+	}
+	else {
+		armorBaseX = UNIT_SHEET_COL_TWO_X;
+		armorBaseY = UNIT_SHEET_ROW_FOUR_Y;
+	}
+	render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, armorIcon,
+									armorBaseX, armorBaseY);
+	itoa(unit->armor, unitArmorText, BASE_TEN_NUMBER);
+	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitArmorText,
+								armorBaseX + armorIcon->w + 1,
+								armorBaseY, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 }
 
 static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {

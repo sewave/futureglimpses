@@ -20,6 +20,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 2,
 				.maxDamage = 4,
+				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.6),
 		},
@@ -35,6 +36,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 8,
 				.maxDamage = 12,
+				.armor = 2,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.5),
 		},
@@ -50,6 +52,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 6,
 				.maxDamage = 10,
+				.armor = 1,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.55),
 		},
@@ -65,6 +68,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 10,
 				.maxDamage = 15,
+				.armor = 3,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.4),
 		},
@@ -80,6 +84,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 10,
 				.maxDamage = 15,
+				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.8),
 		},
@@ -95,6 +100,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -110,6 +116,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 2,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -125,6 +132,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 3,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -140,6 +148,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 2,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -155,6 +164,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 2,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -170,6 +180,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
+				.armor = 3,
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
@@ -336,6 +347,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->maxDamage = data->maxDamage;
 	unit->reactionTime = data->reactionTime;
 	unit->moveTime = data->moveTime;
+	unit->armor = data->armor;
 
 	if (unit->type == UNIT_TYPE_WORKER) {
 		WorkerData *workerData = &unit->typed.workerData;
@@ -434,6 +446,11 @@ void game_unit_face_target(GameUnit *unit, GameUnit *target) {
 void game_unit_damage(GameContext *context, uint8_t minDamage, uint8_t maxDamage, GameUnit *target) {
 	if (!target->isActive || target->state == UNIT_STATE_DIE) return;
 	uint8_t damage = random_int(minDamage, maxDamage);
+	if (damage <= target->armor) {
+		damage = 1; // Minimum damage of 1 if the attack overcomes armor
+	} else {
+		damage -= target->armor;
+	}
 	if (target->health <= damage) {
 		target->health = 0;
 		target->state = UNIT_STATE_DIE;
