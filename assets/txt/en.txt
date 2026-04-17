@@ -1,8 +1,4 @@
-%d units
-%d/%d
-%d %%
-%d-%d
-%d-%d
+ units
 Worker
 Soldier
 Archer

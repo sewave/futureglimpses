@@ -41,6 +41,10 @@
 #define RESOURCE_LOCATIONS_TEXT_Y_OFF -1
 #define NO_UNIT_RESOURCE_X_OFF 28
 
+#define RANGE_SEPARATOR "-"
+#define HEALTH_SEPARATOR "/"
+#define UNITS_PERCENT " \%"
+
 static Position RESOURCE_LOCATIONS[UNIT_USED_RESOURCES] = {
 		{220, 190},
 		{258, 190},
@@ -645,9 +649,6 @@ static void game_render_unit_stats_background(GameContext *context, RenderQueue 
 	);
 }
 
-#define RANGE_SEPARATOR "-"
-#define HEALTH_SEPARATOR "/"
-
 static void print_separated_numbers(char *buffer, char* separator, int min, int max) {
 	itoa(min, buffer, BASE_TEN_NUMBER);
 	int length = strlen(buffer);
@@ -734,7 +735,8 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 
 static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {
 	game_render_unit_stats_background(context, renderQueue);
-	snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS), context->selectedUnitCount);
+	itoa(context->selectedUnitCount, unitsText, BASE_TEN_NUMBER);
+	strcat(unitsText, text_get_by_id(GAME_TEXT_ID_SELECTED_UNITS));
 	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
 							 UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
@@ -747,7 +749,8 @@ static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, Re
 			maxHealth += unit->maxHealth;
 		}
 	}
-	snprintf(unitHpText, sizeof(unitHpText), text_get_by_id(GAME_TEXT_ID_UNIT_SHEET_HP_PERCENT), (currentHealth * 100) / maxHealth);
+	itoa((currentHealth * 100) / maxHealth, unitHpText, BASE_TEN_NUMBER);
+	strcat(unitHpText, UNITS_PERCENT);
 	game_cmd_bar_queue_bar(renderQueue, context->gameFont, currentHealth, maxHealth, unitHpText,
 						   UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
 }

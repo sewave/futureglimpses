@@ -1,8 +1,4 @@
-%d unidades
-%d/%d
-%d %%
-%d-%d
-%d-%d
+ unidades
 Obrero
 Soldado
 Arquero
