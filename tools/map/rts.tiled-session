@@ -212,7 +212,7 @@
     "openFiles": [
     ],
     "project": "rts.tiled-project",
-    "property.type": "int",
+    "property.type": "bool",
     "recentFiles": [
         "maps/Test Campaign/1-starting.tmx",
         "maps/base.tmx",

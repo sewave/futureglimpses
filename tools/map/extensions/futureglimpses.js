@@ -25,9 +25,11 @@
  * - Enable tower (U8)
  * - IA Mode (U8)
  * - Peace time (U16)
+ * - Upgraded units (4 * 2 * U8)
+ * - Researcheable upgrades (4 * U8)
  * * OBJECT LAYERS (M times):
  * - Num Objects (U16)
- * - Objects (24 * K times): 
+ * - Objects (28 * K times): 
  * - UNIT_TYPE (U8, from obj.properties.UNIT_TYPE)
  * - UNIT_CONTROLLER (U8, from obj.properties.UNIT_CONTROLLER)
  * - X (U16, tile unit)
@@ -121,6 +123,9 @@ function calculateTotalSize(map) {
 	size += 4 * 4;
     // Other attributes
     size += 8;
+
+    size += 4 * 2 * 1; // Upgraded units (4 * 2 * U8)
+    size += 4 * 1; // Researcheable upgrades (4 * U8)
 
     var mapProperties = map.resolvedProperties();
 
@@ -365,6 +370,44 @@ function exportBinary(map) {
     view.setUint16(offset, peaceTime, littleEndian);
     tiled.log(`Writed peaceTime: ${peaceTime}`);
     offset += 2;
+
+    var enableUpgradeSoldier = mapProperties.ENABLE_UPGRADE_SOLDIER || false;
+    view.setUint8(offset++, enableUpgradeSoldier, littleEndian);
+    tiled.log(`Writed enableUpgradeSoldier: ${enableUpgradeSoldier}`);
+    var enableUpgradeArcher = mapProperties.ENABLE_UPGRADE_ARCHER || false;
+    view.setUint8(offset++, enableUpgradeArcher, littleEndian);
+    tiled.log(`Writed enableUpgradeArcher: ${enableUpgradeArcher}`);
+    var enableUpgradeKnight = mapProperties.ENABLE_UPGRADE_KNIGHT || false;
+    view.setUint8(offset++, enableUpgradeKnight, littleEndian);
+    tiled.log(`Writed enableUpgradeKnight: ${enableUpgradeKnight}`);
+    var enableUpgradeMage = mapProperties.ENABLE_UPGRADE_MAGE || false;
+    view.setUint8(offset++, enableUpgradeMage, littleEndian);
+    tiled.log(`Writed enableUpgradeMage: ${enableUpgradeMage}`);
+
+    var upgradedSoldierComputer = mapProperties.UPGRADED_SOLDIER_COMPUTER || false;
+    view.setUint8(offset++, upgradedSoldierComputer, littleEndian);
+    tiled.log(`Writed upgradedSoldierComputer: ${upgradedSoldierComputer}`);
+    var upgradedArcherComputer = mapProperties.UPGRADED_ARCHER_COMPUTER || false;
+    view.setUint8(offset++, upgradedArcherComputer, littleEndian);
+    tiled.log(`Writed upgradedArcherComputer: ${upgradedArcherComputer}`);
+    var upgradedKnightComputer = mapProperties.UPGRADED_KNIGHT_COMPUTER || false;
+    view.setUint8(offset++, upgradedKnightComputer, littleEndian);
+    tiled.log(`Writed upgradedKnightComputer: ${upgradedKnightComputer}`);
+    var upgradedMageComputer = mapProperties.UPGRADED_MAGE_COMPUTER || false;
+    view.setUint8(offset++, upgradedMageComputer, littleEndian);
+    tiled.log(`Writed upgradedMageComputer: ${upgradedMageComputer}`);
+    var upgradedSoldierPlayer = mapProperties.UPGRADED_SOLDIER_PLAYER || false;
+    view.setUint8(offset++, upgradedSoldierPlayer, littleEndian);
+    tiled.log(`Writed upgradedSoldierPlayer: ${upgradedSoldierPlayer}`);
+    var upgradedArcherPlayer = mapProperties.UPGRADED_ARCHER_PLAYER || false;
+    view.setUint8(offset++, upgradedArcherPlayer, littleEndian);
+    tiled.log(`Writed upgradedArcherPlayer: ${upgradedArcherPlayer}`);
+    var upgradedKnightPlayer = mapProperties.UPGRADED_KNIGHT_PLAYER || false;
+    view.setUint8(offset++, upgradedKnightPlayer, littleEndian);
+    tiled.log(`Writed upgradedKnightPlayer: ${upgradedKnightPlayer}`);
+    var upgradedMagePlayer = mapProperties.UPGRADED_MAGE_PLAYER || false;
+    view.setUint8(offset++, upgradedMagePlayer, littleEndian);
+    tiled.log(`Writed upgradedMagePlayer: ${upgradedMagePlayer}`);
 
     tiled.log(`Writed map attributes`);
 

@@ -110,8 +110,16 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	context->map.enableTower = map->enableTower;
 	context->map.aiMode = (AIModeEnum) map->aiMode;
 	context->map.peaceTime = SEC_TO_FRAMES(map->peaceTime) / AI_STATE_COUNT;
-	// TODO load unit upgrades from map
-
+	for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
+		uint8_t upgradeableUnit = map->upgradeableUnits[i];
+		context->upgrades[UNIT_CONTROLLER_AI][i + UNIT_TYPE_SOLDIER].researchable = upgradeableUnit;
+		context->upgrades[UNIT_CONTROLLER_PLAYER][i + UNIT_TYPE_SOLDIER].researchable = upgradeableUnit;
+	}
+	for(int controller = 0; controller < UNIT_CONTROLLERS_COUNT; controller++) {
+		for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
+			context->upgrades[controller][i + UNIT_TYPE_SOLDIER].enabled = map->upgradedUnits[controller][i];
+		}
+	}
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;
 	return INITIALIZATION_OK;

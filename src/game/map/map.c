@@ -17,6 +17,10 @@
 #define MAP_OPTION_ENABLE_TOWER_INDEX 4
 #define MAP_OPTION_AI_MODE_INDEX 5
 
+#define MAP_UPGRADE_OPTIONS 12
+#define MAP_UPGRADE_OPTIONS_ENABLED_INDEX 0
+#define MAP_UPGRADE_OPTIONS_BLOCK 4
+
 void game_map_free_data(MapData *map) {
 	if (!map) return;
 
@@ -283,6 +287,25 @@ MapData *game_map_load_data(const char *filename) {
 		game_map_free_data(map);
 		fclose(filePtr);
 		return NULL;
+	}
+
+	uint8_t upgradeMapOptions[MAP_UPGRADE_OPTIONS];
+	if (fread(upgradeMapOptions, sizeof(uint8_t), MAP_UPGRADE_OPTIONS, filePtr) != MAP_UPGRADE_OPTIONS) {
+		fprintf(stderr, "Error reading map upgrade options.\n");
+		game_map_free_data(map);
+		fclose(filePtr);
+		return NULL;
+	}
+
+	for(int i = 0; i < MAP_UPGRADE_OPTIONS_BLOCK; i++) {
+		map->upgradeableUnits[i] = upgradeMapOptions[MAP_UPGRADE_OPTIONS_ENABLED_INDEX + i];
+	}
+
+	for(int controller = 0; controller < UNIT_CONTROLLERS_COUNT; controller++) {
+		for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
+			map->upgradedUnits[controller][i] =
+				upgradeMapOptions[MAP_UPGRADE_OPTIONS_BLOCK + controller * MAP_UPGRADEABLE_UNIT_TYPES + i];
+		}
 	}
 
 	fclose(filePtr);

@@ -10,6 +10,10 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="ENABLE_UPGRADE_ARCHER" type="bool" value="true"/>
+  <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="true"/>
+  <property name="ENABLE_UPGRADE_MAGE" type="bool" value="true"/>
+  <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="true"/>
   <property name="MSG_DESCRIPTION" value="Para probar cosas variadas"/>
   <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="Test map"/>
@@ -19,6 +23,14 @@
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="999999"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
+  <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="false"/>
+  <property name="UPGRADED_ARCHER_PLAYER" type="bool" value="false"/>
+  <property name="UPGRADED_KNIGHT_COMPUTER" type="bool" value="false"/>
+  <property name="UPGRADED_KNIGHT_PLAYER" type="bool" value="false"/>
+  <property name="UPGRADED_MAGE_COMPUTER" type="bool" value="false"/>
+  <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
+  <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
+  <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" source="../tileset.tsx"/>
  <tileset firstgid="257" source="../units/units.tsx"/>

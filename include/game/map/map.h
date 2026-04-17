@@ -3,6 +3,8 @@
 #include "common/common.h"
 
 #define CUSTOM_NAME_LENGTH 11
+#define MAP_UPGRADEABLE_UNIT_TYPES 4
+#define MAP_UNIT_CONTROLLERS_COUNT 2
 
 typedef struct {
 	uint8_t type;
@@ -48,6 +50,9 @@ typedef struct {
 	uint8_t enableTower;
 	uint8_t aiMode;
 	uint16_t peaceTime;
+
+	uint8_t upgradeableUnits[MAP_UPGRADEABLE_UNIT_TYPES];
+	uint8_t upgradedUnits[MAP_UNIT_CONTROLLERS_COUNT][MAP_UPGRADEABLE_UNIT_TYPES];
 
 	TileLayer *tileLayers;
 	ObjectLayer *objectLayers;
