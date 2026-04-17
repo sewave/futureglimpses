@@ -362,6 +362,9 @@ void game_selection_handle_input(GameContext *context) {
 							break;
 					}
 				}
+				else {
+					if (selectionMode == SELECTION_SET) game_selection_clear(context);
+				}
 			}
 		} else {
 			// Mass Selection (Bounding Box)
