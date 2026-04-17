@@ -28,8 +28,8 @@ static int game_unit_path_evaluate_direction(GameContext *context, GameUnit *uni
 		}
 	}
 
-	if (moveDir == unit->pathfindingData.lastDir) score -= 30;
-	if (moveDir >= DIAGONALS_INDEX) score += 25;
+	if (moveDir == unit->pathfindingData.lastDir) score -= 10;
+	if (moveDir >= DIAGONALS_INDEX) score += 5;
 	if (unit->pathfindingData.frustration > 10) score += (rand() % (unit->pathfindingData.frustration * 16));
 
 	return score;

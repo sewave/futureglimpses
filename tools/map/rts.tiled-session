@@ -198,7 +198,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/maps/Test Campaign",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/testcmp",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -214,12 +214,12 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/Test Campaign/1-starting.tmx",
-        "maps/base.tmx",
-        "maps/Test Campaign/2-archers.tmx",
         "maps/laber.tmx",
+        "maps/base.tmx",
         "maps/clash.tmx",
         "maps/win.tmx",
+        "maps/Test Campaign/2-archers.tmx",
+        "maps/Test Campaign/1-starting.tmx",
         "maps/test.tmx",
         "clash.tmx",
         "Test Campaign/1-starting.tmx",
