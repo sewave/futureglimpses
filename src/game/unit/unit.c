@@ -485,7 +485,7 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 				if (target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID
 					&& sourceUnit && sourceUnit->controller != target->controller) {
-					game_unit_command_move_attack(target, sourceUnit, sourceUnit->x, sourceUnit->y);
+					game_unit_command_move_attack(target, NULL, sourceUnit->x, sourceUnit->y);
 				}
 			}
 		}
