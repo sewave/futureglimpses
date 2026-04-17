@@ -84,6 +84,7 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 				if(mapObj->minDamage) unit->minDamage = clamp(mapObj->minDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
 				if(mapObj->maxDamage) unit->maxDamage = clamp(mapObj->maxDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
 				unit->mustSurvive = mapObj->mustSurvive;
+				unit->armor = mapObj->armor;
 			}
 		}
 	}

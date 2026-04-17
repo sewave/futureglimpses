@@ -10,9 +10,9 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
-  <property name="MSG_DESCRIPTION" value="Bla bla bla long description"/>
+  <property name="MSG_DESCRIPTION" value="Para probar cosas variadas"/>
   <property name="MSG_LOSE" value="You lose"/>
-  <property name="MSG_TITLE" value="The map title"/>
+  <property name="MSG_TITLE" value="Test map"/>
   <property name="MSG_WIN" value="You win"/>
   <property name="PEACE_TIME" type="int" value="10"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="999999"/>
@@ -97,6 +97,7 @@
   <object id="72" template="../units/P_Worker.tx" x="912" y="832"/>
   <object id="73" template="../units/P_Knight.tx" name="Triturador" gid="260" x="816" y="832" opacity="1" visible="1">
    <properties>
+    <property name="ARMOR" type="int" value="7"/>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="120"/>
     <property name="MAX_HEALTH" type="int" value="9999"/>
@@ -117,6 +118,7 @@
   <object id="132" template="../units/C_Worker.tx" x="80" y="128"/>
   <object id="158" template="../units/P_Archer.tx" name="Rajafieras" x="784" y="864">
    <properties>
+    <property name="ARMOR" type="int" value="5"/>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="60"/>
     <property name="MAX_HEALTH" type="int" value="9999"/>

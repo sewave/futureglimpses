@@ -38,11 +38,12 @@
  * - minDamage (U8)
  * - maxDamage (U8)
  * - mustSurvive (U8)
- * - padding (U8) to align with C structs
+ * - armor (U8)
+ * - padding (3 * U8) to align with C structs
  * -----------------------------------------------------
  */
 let littleEndian = true; // Define Endianness for binary writes
-const OBJECT_DATA_SIZE = 24;
+const OBJECT_DATA_SIZE = 28;
 
 function getUtf8Size(str) {
     var size = 0;
@@ -217,6 +218,14 @@ function writeObjectData(view, offset, obj, map) {
     tiled.log(`Must Survive: [` + mustSurvive + `]`);
     view.setUint8(offset, mustSurvive, littleEndian);
     offset += 1;
+
+    const armor = resolvedProperties.ARMOR || 0;
+    tiled.log(`Armor: [` + armor + `]`);
+    view.setUint8(offset, armor, littleEndian);
+    offset += 1;
+
+    // Must pad to 32 bit size for C struct alignment
+    offset += 3;
 }
 
 function writeStringAndLength(view, offset, name, string) {

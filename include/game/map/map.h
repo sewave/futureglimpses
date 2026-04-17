@@ -15,6 +15,8 @@ typedef struct {
 	uint8_t minDamage;
 	uint8_t maxDamage;
 	uint8_t mustSurvive;
+	uint8_t armor;
+	uint8_t padding[3];
 } MapObject;
 
 typedef struct {

@@ -88,7 +88,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 485.5,
-                "y": 262.5
+                "y": 263
             }
         },
         "maps/Test Campaign/2-archers.tmx": {
@@ -96,7 +96,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 478.33333333333326,
-                "y": 149.66666666666663
+                "y": 149.33333333333331
             }
         },
         "maps/base.tmx": {
@@ -104,7 +104,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 711.5,
-                "y": 689.5
+                "y": 690
             }
         },
         "maps/buildings/big_buildings.tsx": {
@@ -118,7 +118,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 516.6666666666666,
-                "y": 485.99999999999994
+                "y": 485.3333333333333
             }
         },
         "maps/laber.tmx": {
@@ -126,7 +126,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 262.5,
-                "y": 689.5
+                "y": 690
             }
         },
         "maps/test.tmx": {
@@ -136,8 +136,8 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 788,
-                "y": 150.25
+                "x": 788.25,
+                "y": 770
             }
         },
         "maps/tileset.tsx": {
@@ -151,7 +151,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 505,
-                "y": 525
+                "y": 526
             }
         },
         "sin nombre.tmx": {
@@ -198,7 +198,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/maps/Test Campaign",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -212,15 +212,15 @@
     "openFiles": [
     ],
     "project": "rts.tiled-project",
-    "property.type": "AI_MODE",
+    "property.type": "int",
     "recentFiles": [
-        "maps/Test Campaign/2-archers.tmx",
-        "maps/base.tmx",
         "maps/Test Campaign/1-starting.tmx",
-        "maps/test.tmx",
-        "maps/clash.tmx",
+        "maps/base.tmx",
+        "maps/Test Campaign/2-archers.tmx",
         "maps/laber.tmx",
+        "maps/clash.tmx",
         "maps/win.tmx",
+        "maps/test.tmx",
         "clash.tmx",
         "Test Campaign/1-starting.tmx",
         "Test Campaign/tcmp1.tmx",
