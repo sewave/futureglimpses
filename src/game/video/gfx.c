@@ -20,10 +20,10 @@ static SpriteSheet spriteSheetsBlue[UNIT_TYPE_NUMBER];
 static SpriteSheet spriteSheetsRed[UNIT_TYPE_NUMBER];
 static SpriteSheet spriteSheetsObject[OBJ_TYPE_NUMBER];
 static BITMAP *frame;
-static BITMAP *cmdBarButtons;
 static BITMAP *icons[GAME_ICON_COUNT];
 static BITMAP *overtiles[GAME_OVERTILE_COUNT];
 static RLE_SPRITE *unitIcons[GAME_UNIT_ICON_COUNT];
+static RLE_SPRITE *cmdBarButtonIcons[CMD_BAR_BUTTON_ICON_COUNT];
 static BITMAP *tileSet;
 static BITMAP *tileSetColors;
 static BITMAP *menuBack;
@@ -80,6 +80,7 @@ static const SquareSize objectSquares[OBJ_TYPE_NUMBER] = {
 };
 
 static const SquareSize iconSquare = {8, 8};
+static const SquareSize cmdButtonSquare = {32, 22};
 
 static void game_gfx_destroy_sheet(SpriteSheet * spriteSheet) {
 	if (spriteSheet->numFrames > 0 && spriteSheet->frames != NULL) {
@@ -144,13 +145,19 @@ InitializationStatusEnum game_gfx_load_all() {
 	}
 	common_print_ok_steps();
 
+	printf("Loading command bar buttons gfx [");
+	BITMAP *cmdBarButtons = load_bitmap(CMD_BAR_BUTTONS_FILE, NULL);
+	if (!cmdBarButtons) return INITIALIZATION_ERROR;
+	for (int i = 0; i < CMD_BAR_BUTTON_ICON_COUNT; i++) {
+		cmdBarButtonIcons[i] = game_gfx_get_rle_sprite_from_partial_bitmap(cmdBarButtons, cmdButtonSquare, i);
+		common_print_init_step();
+	}
+	common_print_ok_steps();
+	destroy_bitmap(cmdBarButtons);
+
 	printf("Loading ui gfx [");
 	frame = load_bitmap(FRAME_FILE, NULL);
 	if (!frame) return INITIALIZATION_ERROR;
-	common_print_init_step();
-
-	cmdBarButtons = load_bitmap(CMD_BAR_BUTTONS_FILE, NULL);
-	if (!cmdBarButtons) return INITIALIZATION_ERROR;
 	common_print_init_step();
 
 	tileSet = load_bitmap(TILESET_FILE, NULL);
@@ -207,7 +214,6 @@ void game_gfx_destroy_all() {
 		game_gfx_destroy_sheet(&spriteSheetsObject[i]);
 	}
 	if (frame) destroy_bitmap(frame);
-	if (cmdBarButtons) destroy_bitmap(cmdBarButtons);
 	if (tileSet) destroy_bitmap(tileSet);
 	if (tileSetColors) destroy_bitmap(tileSetColors);
 	for (int i = 0; i < GAME_ICON_COUNT; i++) {
@@ -216,7 +222,12 @@ void game_gfx_destroy_all() {
 	for (int i = 0; i < GAME_OVERTILE_COUNT; i++) {
 		if (overtiles[i] != NULL) destroy_bitmap(overtiles[i]);
 	}
-	if (menuBack) destroy_bitmap(menuBack);
+	for (int i = 0; i < CMD_BAR_BUTTON_ICON_COUNT; i++) {
+		if (cmdBarButtonIcons[i] != NULL) {
+			destroy_rle_sprite(cmdBarButtonIcons[i]);
+			cmdBarButtonIcons[i] = NULL;
+		}
+	}
 }
 
 void game_gfx_set_sprite_sheet(GameUnit *unit) {
@@ -237,10 +248,6 @@ BITMAP *game_gfx_get_frame() {
 
 BITMAP *game_gfx_get_icon(GameIconEnum gameIcon) {
 	return icons[gameIcon];
-}
-
-BITMAP *game_gfx_get_cmd_bar_buttons() {
-	return cmdBarButtons;
 }
 
 BITMAP *game_gfx_get_tileset() {
@@ -273,4 +280,8 @@ RLE_SPRITE *game_gfx_get_unit_icon(GameUnitIconEnum unitIcon) {
 
 BITMAP *game_gfx_get_resource_hover() {
 	return resHover;
+}
+
+RLE_SPRITE *game_gfx_get_cmd_bar_button_icon(CommandBarButtonIconEnum btnType) {
+	return cmdBarButtonIcons[btnType];
 }

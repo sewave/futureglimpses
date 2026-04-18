@@ -34,10 +34,10 @@ Construir Cuarteles (^004B^001)
 Construir Herrería (^004M^001)
 Construir Establos (^004S^001)
 Construir Torre (^004T^001)
-Investigar ^004S^001oldado mejorado
-Investigar ^004A^001rquero mejorado
-Investigar Caballero mejorado (^004K^001)
-Investigar ^004M^001ago mejorado
+Mejorar ^004S^001oldados
+Mejorar ^004A^001rqueros
+Mejorar Caballeros (^004K^001)
+Mejorar ^004M^001agos
 Oro insuficiente, recolecta más oro.
 Madera insuficiente, tala más árboles.
 Comida insuficiente, crea más granjas.

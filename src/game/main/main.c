@@ -78,7 +78,7 @@ int main_init() {
 
 	if (game_video_load_universal_pal(context.mainPalette) != INITIALIZATION_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
-		printf("Error loading universal game pal.");
+		printf("Error loading universal game pal.\n");
 		return PROGRAM_ERROR;
 	}
 	set_palette(black_palette);

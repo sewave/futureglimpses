@@ -172,8 +172,7 @@ static const CommandBarButton MOVE_CMD_BUTTON = {
 		.hotkey = "M",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_MOVE,
 		.fixedParam = UNIT_STATE_MOVE,
-		.sheetOffsetX = 0,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_MOVE,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -186,8 +185,7 @@ static const CommandBarButton STOP_CMD_BUTTON = {
 		.hotkey = "S",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_STOP,
 		.fixedParam = UNIT_STATE_IDLE,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_STOP,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -200,8 +198,7 @@ static const CommandBarButton ATTACK_CMD_BUTTON = {
 		.hotkey = "A",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_ATTACK,
 		.fixedParam = UNIT_STATE_ATTACK,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_ATTACK,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -214,8 +211,7 @@ static const CommandBarButton DEFEND_CMD_BUTTON = {
 		.hotkey = "D",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_DEFEND,
 		.fixedParam = UNIT_STATE_DEFEND,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_DEFEND,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -228,8 +224,7 @@ static const CommandBarButton CANCEL_CMD_BUTTON = {
 		.hotkey = "ESC",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
 		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_CANCEL,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -242,8 +237,7 @@ static const CommandBarButton BUILD_CMD_BUTTON = {
 		.hotkey = "B",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_BUILD,
 		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 5,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -256,8 +250,7 @@ static const CommandBarButton REPAIR_CMD_BUTTON = {
 		.hotkey = "R",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_REPAIR,
 		.fixedParam = UNIT_STATE_MOVE,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 6,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_REPAIR,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -270,8 +263,7 @@ static const CommandBarButton HARVEST_CMD_BUTTON = {
 		.hotkey = "H",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_HARVEST,
 		.fixedParam = UNIT_STATE_MOVE,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 7,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_HARVEST,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -284,8 +276,7 @@ static const CommandBarButton CANCEL_SELECT_BUILDING_CMD_BUTTON = {
 		.hotkey = "ESC",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
 		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_CANCEL,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -298,8 +289,7 @@ static const CommandBarButton CANCEL_PLACE_BUILDING_CMD_BUTTON = {
 		.hotkey = "ESC",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL,
 		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_CANCEL,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -312,8 +302,7 @@ static const CommandBarButton CANCEL_BUILDING_CMD_BUTTON = {
 		.hotkey = "ESC",
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_BUILDING,
 		.fixedParam = 0,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = 0,
+		.icon = CMD_BAR_BUTTON_ICON_CANCEL,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -326,8 +315,7 @@ static const CommandBarButton TRAIN_WORKER_CMD_BUTTON = {
 		.hotkey = "W",
 		.hoverTextId = GAME_TEXT_ID_TRAIN_WORKER,
 		.fixedParam = UNIT_TYPE_WORKER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 0,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_TRAIN_WORKER,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -340,8 +328,7 @@ static const CommandBarButton TRAIN_SOLDIER_CMD_BUTTON = {
 		.hotkey = "S",
 		.hoverTextId = GAME_TEXT_ID_TRAIN_SOLDIER,
 		.fixedParam = UNIT_TYPE_SOLDIER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 1,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_TRAIN_SOLDIER,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -354,8 +341,7 @@ static const CommandBarButton TRAIN_ARCHER_CMD_BUTTON = {
 		.hotkey = "A",
 		.hoverTextId = GAME_TEXT_ID_TRAIN_ARCHER,
 		.fixedParam = UNIT_TYPE_ARCHER,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 2,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_TRAIN_ARCHER,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -368,8 +354,7 @@ static const CommandBarButton TRAIN_KNIGHT_CMD_BUTTON = {
 		.hotkey = "K",
 		.hoverTextId = GAME_TEXT_ID_TRAIN_KNIGHT,
 		.fixedParam = UNIT_TYPE_KNIGHT,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 3,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_TRAIN_KNIGHT,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -382,8 +367,7 @@ static const CommandBarButton TRAIN_MAGE_CMD_BUTTON = {
 		.hotkey = "M",
 		.hoverTextId = GAME_TEXT_ID_TRAIN_MAGE,
 		.fixedParam = UNIT_TYPE_MAGE,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_TRAIN_MAGE,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -396,8 +380,7 @@ static const CommandBarButton FARM_CMD_BUTTON = {
 		.hotkey = "F",
 		.hoverTextId = GAME_TEXT_ID_BUILD_FARM,
 		.fixedParam = UNIT_TYPE_FARM,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 5,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_FARM,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -410,8 +393,7 @@ static const CommandBarButton BARRACKS_CMD_BUTTON = {
 		.hotkey = "B",
 		.hoverTextId = GAME_TEXT_ID_BUILD_BARRACKS,
 		.fixedParam = UNIT_TYPE_BARRACKS,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 6,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_BARRACKS,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -424,8 +406,7 @@ static const CommandBarButton BLACKSMITH_CMD_BUTTON = {
 		.hotkey = "M",
 		.hoverTextId = GAME_TEXT_ID_BUILD_BLACKSMITH,
 		.fixedParam = UNIT_TYPE_BLACKSMITH,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 7,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_BLACKSMITH,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
@@ -438,101 +419,88 @@ static const CommandBarButton STABLES_CMD_BUTTON = {
 		.hotkey = "S",
 		.hoverTextId = GAME_TEXT_ID_BUILD_STABLES,
 		.fixedParam = UNIT_TYPE_STABLES,
-		.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 8,
-		.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_STABLES,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton TOWER_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_CREATE,
-	.isActive = TRUE,
-	.action = handle_build_place_button,
-	.hotkeyIndex = KEY_T,
-	.hotkey = "T",
-	.hoverTextId = GAME_TEXT_ID_BUILD_TOWER,
-	.fixedParam = UNIT_TYPE_TOWER,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 9,
-	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT,
-	.x = CMD_BAR_BUTTON_INITIAL_X,
-	.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_build_place_button,
+		.hotkeyIndex = KEY_T,
+		.hotkey = "T",
+		.hoverTextId = GAME_TEXT_ID_BUILD_TOWER,
+		.fixedParam = UNIT_TYPE_TOWER,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_TOWER,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton UPGRADE_SOLDIER_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_CREATE,
-	.isActive = TRUE,
-	.action = handle_train_unit,
-	.hotkeyIndex = KEY_S,
-	.hotkey = "S",
-	.hoverTextId = GAME_TEXT_ID_RESEARCH_SOLDIER,
-	.fixedParam = TRAINING_TYPE_UPGRADE_SOLDIER,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 8,
-	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
-	.x = CMD_BAR_BUTTON_INITIAL_X,
-	.y = CMD_BAR_BUTTON_INITIAL_Y,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_S,
+		.hotkey = "S",
+		.hoverTextId = GAME_TEXT_ID_RESEARCH_SOLDIER,
+		.fixedParam = TRAINING_TYPE_UPGRADE_SOLDIER,
+		.icon = CMD_BAR_BUTTON_ICON_UPGRADE_SOLDIER,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton UPGRADE_ARCHER_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_CREATE,
-	.isActive = TRUE,
-	.action = handle_train_unit,
-	.hotkeyIndex = KEY_A,
-	.hotkey = "A",
-	.hoverTextId = GAME_TEXT_ID_RESEARCH_ARCHER,
-	.fixedParam = TRAINING_TYPE_UPGRADE_ARCHER,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 9,
-	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
-	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-	.y = CMD_BAR_BUTTON_INITIAL_Y,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_A,
+		.hotkey = "A",
+		.hoverTextId = GAME_TEXT_ID_RESEARCH_ARCHER,
+		.fixedParam = TRAINING_TYPE_UPGRADE_ARCHER,
+		.icon = CMD_BAR_BUTTON_ICON_UPGRADE_ARCHER,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton UPGRADE_KNIGHT_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_CREATE,
-	.isActive = TRUE,
-	.action = handle_train_unit,
-	.hotkeyIndex = KEY_K,
-	.hotkey = "K",
-	.hoverTextId = GAME_TEXT_ID_RESEARCH_KNIGHT,
-	.fixedParam = TRAINING_TYPE_UPGRADE_KNIGHT,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 10,
-	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
-	.x = CMD_BAR_BUTTON_INITIAL_X,
-	.y = CMD_BAR_BUTTON_INITIAL_Y,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_K,
+		.hotkey = "K",
+		.hoverTextId = GAME_TEXT_ID_RESEARCH_KNIGHT,
+		.fixedParam = TRAINING_TYPE_UPGRADE_KNIGHT,
+		.icon = CMD_BAR_BUTTON_ICON_UPGRADE_KNIGHT,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton UPGRADE_MAGE_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_CREATE,
-	.isActive = TRUE,
-	.action = handle_train_unit,
-	.hotkeyIndex = KEY_M,
-	.hotkey = "M",
-	.hoverTextId = GAME_TEXT_ID_RESEARCH_MAGE,
-	.fixedParam = TRAINING_TYPE_UPGRADE_MAGE,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 11,
-	.sheetOffsetY = CMD_BAR_BUTTON_HEIGHT * 0,
-	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-	.y = CMD_BAR_BUTTON_INITIAL_Y,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_train_unit,
+		.hotkeyIndex = KEY_G,
+		.hotkey = "G",
+		.hoverTextId = GAME_TEXT_ID_RESEARCH_MAGE,
+		.fixedParam = TRAINING_TYPE_UPGRADE_MAGE,
+		.icon = CMD_BAR_BUTTON_ICON_UPGRADE_MAGE,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton CANCEL_ALL_TRAIN_CMD_BUTTON = {
-	.type = CMD_BAR_BTN_TYPE_ACTION,
-	.isActive = TRUE,
-	.action = handle_cancel_all_unit_training,
-	.hotkeyIndex = KEY_ESC,
-	.hotkey = "ESC",
-	.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_ALL_TRAINING,
-	.fixedParam = 0,
-	.sheetOffsetX = CMD_BAR_BUTTON_WIDTH * 4,
-	.sheetOffsetY = 0,
-	.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-	.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
-	.state = CMD_BAR_BTN_STATE_IDLE
-};
+		.type = CMD_BAR_BTN_TYPE_ACTION,
+		.isActive = TRUE,
+		.action = handle_cancel_all_unit_training,
+		.hotkeyIndex = KEY_ESC,
+		.hotkey = "ESC",
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_CANCEL_ALL_TRAINING,
+		.fixedParam = 0,
+		.icon = CMD_BAR_BUTTON_ICON_CANCEL,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
 	if(building->state == BUILDING_STATE_COMPLETED) {
@@ -860,23 +828,25 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		if (context->selectedUnitCount == 1) {
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 			if (unit) {
-				if (unit->isBuilding) {
+				if (unit->isBuilding || unit->type == UNIT_TYPE_WORKER) {
 					GameUnit **activeUnits = context->activeUnits;
 					for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
-						GameUnit *unit = *activeUnits;
-						if (unit && unit->controller == UNIT_CONTROLLER_PLAYER && 
-							(!unit->isBuilding || unit->state == BUILDING_STATE_COMPLETED)) {
-							unitCount[unit->type]++;
-							if(unit->isBuilding) {
-								if(unit->typed.buildingData.isTraining) {
-									trainings[unit->typed.buildingData.trainingType]++;
+						GameUnit *currentUnit = *activeUnits;
+						if (currentUnit && currentUnit->controller == UNIT_CONTROLLER_PLAYER &&
+							(!currentUnit->isBuilding || currentUnit->state == BUILDING_STATE_COMPLETED)) {
+							unitCount[currentUnit->type]++;
+							if (currentUnit->isBuilding) {
+								if (currentUnit->typed.buildingData.isTraining) {
+									trainings[currentUnit->typed.buildingData.trainingType]++;
 								}
-								for(int j = 0; j < unit->typed.buildingData.queueNextIndex; j++) {
-									trainings[unit->typed.buildingData.queue[j]]++;
+								for (int j = 0; j < currentUnit->typed.buildingData.queueNextIndex; j++) {
+									trainings[currentUnit->typed.buildingData.queue[j]]++;
 								}
 							}
 						}
 					}
+				}
+				if (unit->isBuilding) {
 					game_cmd_bar_clear_build_placing(&context->buildPlacing);
 					game_cmd_bar_handle_building_buttons(context, unit);
 				} else {
@@ -963,7 +933,6 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 	if (context->selectedUnitCount > 1) game_cmd_bar_render_queue_submit_multi_unit(context, renderQueue);
 
 	// Render buttons
-	BITMAP* buttons = game_gfx_get_cmd_bar_buttons();
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
 		CommandBarButton *button = &context->cmdBarButtons[i];
 		if (!button->isActive) continue;
@@ -988,11 +957,9 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 									 xPos + CMD_BAR_BUTTON_WIDTH - 1, yPos + CMD_BAR_BUTTON_HEIGHT - 1,
 									 PAL_COLOR_WHITE);
 		}
-		render_queue_submit_masked_partial(
-				renderQueue, CMD_BUTTON_Z, buttons,
-				button->sheetOffsetX, button->sheetOffsetY,
-				xPos, yPos,
-				CMD_BAR_BUTTON_WIDTH, CMD_BAR_BUTTON_HEIGHT);
+		render_queue_submit_rle_sprite(
+				renderQueue, CMD_BUTTON_Z, game_gfx_get_cmd_bar_button_icon(button->icon),
+				xPos, yPos);
 		render_queue_submit_text(
 				renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
 				xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX);

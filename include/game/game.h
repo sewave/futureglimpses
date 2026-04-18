@@ -226,7 +226,7 @@ typedef struct {
 	char* hotkey;
 	GameTextIdEnum hoverTextId;
 	uint8_t fixedParam;
-	uint16_t sheetOffsetX, sheetOffsetY;
+	CommandBarButtonIconEnum icon;
 	uint16_t x, y;
 	CommandBarButtonStateEnum state;
 } CommandBarButton;

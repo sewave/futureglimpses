@@ -404,12 +404,12 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	}
 
 	// If the controller has the update for the unit, set flag and upgrade stats
-	GameUnitUpgrade *upgrade = &context->upgrades[controller][unit->type];
-	if(upgrade->enabled) {
-		// Apply upgrade effects here. For simplicity, let's say it increases health and damage by 50%
+	if(context->upgrades[controller][unit->type].enabled) {
+		// Apply upgrade effects here. For simplicity, let's say it increases stats by 50%
 		unit->health = unit->maxHealth = (uint16_t)((unit->maxHealth * 3) / 2);
 		unit->minDamage = (uint8_t)((unit->minDamage * 3) / 2);
 		unit->maxDamage = (uint8_t)((unit->maxDamage * 3) / 2);
+		unit->armor = (uint8_t)((unit->armor * 3) / 2);
 		unit->isUpgraded = TRUE;
 	}
 	else {

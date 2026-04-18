@@ -50,12 +50,12 @@ void game_gfx_set_object_sheet(Object *object);
 BITMAP *game_gfx_get_frame();
 BITMAP *game_gfx_get_icon(GameIconEnum gameIcon);
 RLE_SPRITE *game_gfx_get_unit_icon(GameUnitIconEnum unitIcon);
-BITMAP *game_gfx_get_cmd_bar_buttons();
 BITMAP *game_gfx_get_tileset();
 BITMAP *game_gfx_get_tileset_colors();
 SpriteSheet *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controller);
 BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile);
 BITMAP *game_gfx_get_menu_back();
 BITMAP *game_gfx_get_resource_hover();
+RLE_SPRITE *game_gfx_get_cmd_bar_button_icon(CommandBarButtonIconEnum btnType);
 
 #endif /* GAME_GFX_H */
