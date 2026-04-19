@@ -122,6 +122,18 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	}
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;
+
+	// Clear statistics
+	for(int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
+		context->stats[i].buildingsConstructed = 0;
+		context->stats[i].unitsTrained = 0;
+		context->stats[i].buildingsDestroyed = 0;
+		context->stats[i].enemiesKilled = 0;
+		for(int j = 0; j < RESOURCE_TYPES_COUNT; j++) {
+			context->stats[i].resourcesGathered[j] = 0;
+		}
+	}
+
 	return INITIALIZATION_OK;
 }
 
