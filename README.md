@@ -6,8 +6,6 @@ Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486/66
 
 ## Historia
 
-
-
 ## Características
 
 * Agrupación de mapas tipo campaña: podemos agrupar en carpetas varios mapas simulando una campaña.
@@ -81,6 +79,21 @@ Son los siguientes:
 `ENABLE_STABLES`: Activa la construcción de establos en el mapa.
 `ENABLE_TOWER`: Activa la construcción de torres en el mapa.
 
+`ENABLE_UPGRADE_SOLDIER`: Activa la opción de mejorar soldados.
+`ENABLE_UPGRADE_ARCHER`: Activa la opción de mejorar arqueros.
+`ENABLE_UPGRADE_KNIGHT`: Activa la opción de mejorar caballeros.
+`ENABLE_UPGRADE_MAGE`: Activa la opción de mejorar magos.
+
+`UPGRADED_SOLDIER_PLAYER`: Si el jugador ya tiene soldados mejorados.
+`UPGRADED_ARCHER_PLAYER`: Si el jugador ya tiene arqueros mejorados.
+`UPGRADED_KNIGHT_PLAYER`: Si el jugador ya tiene caballeros mejorados.
+`UPGRADED_MAGE_PLAYER`: Si el jugador ya tiene magos mejorados.
+
+`UPGRADED_SOLDIER_COMPUTER`: Si el ordenador ya tiene soldados mejorados.
+`UPGRADED_ARCHER_COMPUTER`: Si el ordenador ya tiene arqueros mejorados.
+`UPGRADED_KNIGHT_COMPUTER`: Si el ordenador ya tiene caballeros mejorados.
+`UPGRADED_MAGE_COMPUTER`: Si el ordenador ya tiene magos mejorados.
+
 `MSG_DESCRIPTION`: El mensaje de descripción del mapa, para el selector de niveles y la información del menú de pausa, la longitud del mismo depende del texto pero no debería llegar a los 256 caracteres.
 `MSG_LOSE`: El mensaje que aparecerá al perder el mapa, de longitud similar al de descripción.
 `MSG_TITLE`: El título del mapa, se verá en el selector y en la información del mapa en partida.
@@ -100,6 +113,7 @@ Podemos personalizar nuestras unidades con diferentes características, para ell
 `MIN_DAMAGE`: Daño mínimo de la unidad.
 `MAX_DAMAGE`: Daño máximo de la unidad.
 `MAX_HEALTH`: Salud máxima de la unidad.
+`ARMOR`: La armadura de la unidad.
 `MUST_SURVIVE`: Indica que esta unidad debe sobrevivir, si muere será una derrota instantánea.
 `Nombre`: Esto no es una variable, podemos modificar el nombre del objeto de Tiled, hasta unos 10 caracteres.
 
@@ -114,8 +128,8 @@ Este trabajo incluye contenido modificado de "[Bitrimus Font](https://ggbot.itch
 
 Este trabajo incluye contenido modificado de "[Fantasy Battle Pack](https://mattwalkden.itch.io/fantasy-battle-pack)" por [Matt Walkden](https://mattwalkden.itch.io).
 
-Este trabajo incluye contenido modificado de "[Superpowers assets sound effects](https://opengameart.org/content/superpowers-assets-sound-effects)" - "medieval-fantasyy/5.wav (goldhit.wav)", "western-fps-2d/explosion-1.ogg (fbexplo.wav)", "medieval-fantasy/7.wav (ironhit.wav)", "prehistoric-platformer/hit-1.wav (work.wav)", "prehistoric-platformer/wood-2.wav (chop.wav)", "medieval-fantasyy/woosh-2.wav (arrowthr.wav)", 
-"space-shooter/alert.wav (attack.wav)", "ninja-adventure/menu-1.ogg (notvalid.wav)", "prehistoric-platformer/hit-2.wav (crumble.wav)", "top-down-shooter/flame-thrower.wav (fblaunch.wav)", "western-fps-2d/arrow.ogg (arrowhit.wav)" y "western-fps-2d/scream-5.ogg (die.wav)" por [Sparklin Labs' Superpowers HTML5 game maker](http://superpowers-html5.com/), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+Este trabajo incluye contenido modificado de "[Superpowers assets sound effects](https://opengameart.org/content/superpowers-assets-sound-effects)" - "medieval-fantasyy/5.wav (goldhit.wav)", "western-fps-2d/explosion-1.ogg (fbexplo.wav)", "medieval-fantasy/7.wav (ironhit.wav)", "prehistoric-platformer/hit-1.wav (work.wav)", "prehistoric-platformer/wood-2.wav (chop.wav)", "medieval-fantasyy/woosh-2.wav (arrowthr.wav)",
+"space-shooter/alert.wav (attack.wav)", "ninja-adventure/menu-1.ogg (notvalid.wav)", "prehistoric-platformer/hit-2.wav (crumble.wav)", "top-down-shooter/flame-thrower.wav (fblaunch.wav)", "western-fps-2d/arrow.ogg (arrowhit.wav)" y "western-fps-2d/scream-5.ogg (die.wav)" por [Sparklin Labs - Superpowers HTML5 game maker](http://superpowers-html5.com/), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
 Este trabajo incluye contenido de "[DarkBasic Music Library](https://opengameart.org/content/darkbasic-music-library)" - "northern lights.mid (map1.mid)" y "~bog~ tune.mid (menus.mid)" por [DarkBasic](https://darkbasic.com/), licenciado bajo [CC-BY-4.0+](https://creativecommons.org/licenses/by/4.0/).
 
