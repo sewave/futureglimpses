@@ -16,7 +16,7 @@
 #define TEXTOUT_EX_BOX_BUFFER 2048
 #define STAR_SPEED SEC_TO_FRAMES(0.1)
 #define NUM_STARS 128
-#define TEXT_PIXEL_FRAMES SEC_TO_FRAMES(0.04)
+#define TEXT_PIXEL_FRAMES SEC_TO_FRAMES(0.06)
 static char buffer[TEXTOUT_EX_BOX_BUFFER];
 
 static uint8_t numLines;
