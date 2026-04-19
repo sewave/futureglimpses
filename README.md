@@ -1,42 +1,42 @@
 # ATISBOS DEL FUTURO
 
 [Pantalla de título]
-Atisbos del futuro o Future glimpses es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada uno.
-Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486/66 con 16MB de RAM, especialmente para el concurso de [MS-DOS Club](https://msdos.club/).
+Atisbos del futuro o Future glimpses es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada entre otros.
+Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486DX2/66 con 16MB de RAM, especialmente para el concurso de [MS-DOS Club](https://msdos.club/).
 
 ## Historia
 
 ## Características
 
-* Agrupación de mapas tipo campaña: podemos agrupar en carpetas varios mapas simulando una campaña.
-* Mulidioma: Español / Inglés.
-* Opciones: podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o si cuando queremos ver las barras de vida de los enemigos.
-* Minimapa: el clásico minimapa, podemos desplazarnos por el haciendo clic.
-* Niebla de guerra: Una vez destapada queda el mapa visible.
-* Grupos de unidades: podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
-* Recursos: tenemos tres recursos, oro, madera y comida. Oro y comida se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas y limita las unidades que podemos tener a la vez.
-* Sistema de mensajes: para ver mensajes relacionados con los eventos que ocurren.
-* Cola de unidades: puedes encolar entrenamientos en los edificios y cancelarlos.
-* Pantalla de resultados: al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
+* **Agrupación de mapas tipo campaña**: podemos agrupar en carpetas varios mapas simulando una campaña.
+* **Multiidioma**: Español / Inglés.
+* **Opciones**: podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o si cuando queremos ver las barras de vida de los enemigos.
+* **Minimapa**: el clásico minimapa, podemos desplazarnos por el haciendo clic.
+* **Niebla de guerra:** Una vez destapada queda el mapa visible.
+* **Grupos de unidades**: podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
+* **Recursos**: tenemos tres recursos, oro, madera y comida. Oro y comida se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas y limita las unidades que podemos tener a la vez.
+* **Sistema de mensajes**: para ver mensajes relacionados con los eventos que ocurren.
+* **Cola de unidades**: puedes encolar entrenamientos en los edificios y cancelarlos.
+* **Pantalla de resultados**: al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
 
 Y otras sorpresas que será más divertido descubrir jugando.
 
 ## Unidades
 
-Obrero: la unidad básica, encargada de la recolección de recursos, la construcción y la reparación.
-Soldado: la unidad básica de combate cuerpo a cuerpo, sencillo pero eficaz.
-Arquero: la unidad básica de combate a distancia, permite atacar desde la lejanía.
-Caballero: una mejora del soldado, mejor en todos los aspectos pero con un coste mayor.
-Mago: la unidad de ataque a larga distancia, no solo ataca desde muy lejos si no que sus bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
+`Obrero`: la unidad básica, encargada de la recolección de recursos, la construcción y la reparación.
+`Soldado`: la unidad básica de combate cuerpo a cuerpo, sencillo pero eficaz.
+`Arquero`: la unidad básica de combate a distancia, permite atacar desde la lejanía.
+`Caballero`: una mejora del soldado, mejor en todos los aspectos pero con un coste mayor.
+`Mago`: la unidad de ataque a larga distancia, no solo ataca desde muy lejos si no que sus bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
 
 ## Edificios
 
-Alcaldía: el edificio principal, crea obreros y no puede ser construido.
-Granja: permite tener más comida para generar más unidades.
-Cuarteles: el edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
-Herrería: permite entrenar arqueros en los cuarteles.
-Establos: permite entrenar caballeros en los cuarteles.
-Torre: permite entrenar magos.
+`Alcaldía`: el edificio principal, crea obreros y no puede ser construido.
+`Granja`: permite tener más comida para poder tener más unidades simultaneamente.
+`Cuarteles`: el edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
+`Herrería`: permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
+`Establos`: permite entrenar caballeros en los cuarteles, requiere tener herrería para edificarse
+`Torre`: permite entrenar magos, requiere tener establos para edificarse.
 
 ## Controles
 
@@ -44,18 +44,18 @@ La mayoría del juego puede controlarse con el ratón, algunos menús tienen ata
 En el juego principal podemos usar el botón izquierdo para seleccionar una unidad o múltiples y el botón derecho para las acciones contextuales, dependiendo de que unidad elija que objetivo.
 Si no queremos usar las acciones contextuales podemos usar los botones de comando de la unidad o sus atajos.
 
-ALT: Mostrar barras de vida mientras se pulsa.
-TAB: Mostrar cantidad restante del recurso sobre el que está el cursor mientras se pulsa.
+`ALT`: Mostrar barras de vida mientras se pulsa.
+`TAB`: Mostrar cantidad restante del recurso sobre el que está el cursor mientras se pulsa.
 
-Si pulsas SHIFT mientras estamos en modo construcción, podremos colocar varios edificios a la vez.
+`SHIFT`: Si estamos en modo construcción, podremos colocar varios edificios a la vez.
 
-CTRL + 1-5: Crea un grupo rápido con la selección actual.
-1-5: Seleccione el grupo rápido creado.
+`CTRL + 1-5`: Crea un grupo rápido con la selección actual.
+`1-5`: Seleccione el grupo rápido creado.
 
-CTRL + Clic izquierdo: Añade una unidad a la selección actual.
-SHIFT + Clic izquierdo: Elimina una unidad a la selección actual.
+`CTRL + Clic izquierdo`: Añade una unidad a la selección actual.
+`SHIFT + Clic izquierdo`: Elimina una unidad a la selección actual.
 
-Si pulsas espacio teniendo alguna unidad seleccionada la cámara se posicionará centrando a la primera unidad de la selección.
+`Espacio`: Si tienes alguna unidad seleccionada la cámara se posicionará centrando a la primera unidad de la selección.
 
 Nota: No se pueden seleccionar múltiples edificios propios ni múltiples unidades/edificios enemigos.
 
@@ -94,10 +94,10 @@ Son los siguientes:
 `UPGRADED_KNIGHT_COMPUTER`: Si el ordenador ya tiene caballeros mejorados.
 `UPGRADED_MAGE_COMPUTER`: Si el ordenador ya tiene magos mejorados.
 
-`MSG_DESCRIPTION`: El mensaje de descripción del mapa, para el selector de niveles y la información del menú de pausa, la longitud del mismo depende del texto pero no debería llegar a los 256 caracteres.
-`MSG_LOSE`: El mensaje que aparecerá al perder el mapa, de longitud similar al de descripción.
-`MSG_TITLE`: El título del mapa, se verá en el selector y en la información del mapa en partida.
-`MSG_WIN`: El mensaje que aparecerá al ganar el mapa, de longitud similar al de descripción.
+`MSG_TITLE`: El título del mapa, se verá en el selector y en la información del mapa en partida, unos 20 caracteres.
+`MSG_DESCRIPTION`: El mensaje de descripción del mapa, para el selector de niveles y la información del menú de pausa, unos caracteres.
+`MSG_LOSE`: El mensaje que aparecerá al perder el mapa, unos 150 caracteres.
+`MSG_WIN`: El mensaje que aparecerá al ganar el mapa, unos 150 caracteres.
 
 `PEACE_TIME`: El tiempo en segundos que tardará la máquina en empezar a crear unidades y mandártelas, solo tiene sentido en modo `AGGRESSIVE`.
 
@@ -116,6 +116,11 @@ Podemos personalizar nuestras unidades con diferentes características, para ell
 `ARMOR`: La armadura de la unidad.
 `MUST_SURVIVE`: Indica que esta unidad debe sobrevivir, si muere será una derrota instantánea.
 `Nombre`: Esto no es una variable, podemos modificar el nombre del objeto de Tiled, hasta unos 10 caracteres.
+
+### Camapañas
+
+Existe la posibilidad de crear "campañas" o conjuntos de mapas, para ello crea una carpeta y pon dentro los mapas que quieras que pertenezcan a ella. Mi recomendación es que empiecen por el número de mapa, ya que los listados se ordenan alfabéticamente.
+Además de los mapas, dentro de la carpeta debe haber un fichero "campaign.txt" codificado en UTF-8 con exáctamente dos líneas. La primera es el título (hasta 20 caracteres) y la segunda la descripción, hasta unos 300.
 
 ## Créditos
 
