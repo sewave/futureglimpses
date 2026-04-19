@@ -268,8 +268,8 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_WHITE);
 
-	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
+	itoa((uint8_t) fps_get(), fpsText, BASE_TEN_NUMBER);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 290, 1, PAL_COLOR_WHITE, -1);
 
 	if (context->isDebugEnabled) {
 		int blue = 0;
@@ -285,7 +285,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 		}
 		snprintf(activeText, sizeof(activeText), "T:%d ^004B:%d ^005R:%d", context->activeUnitCount, blue, red);
 		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText,
-			220, 2, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+			240, 23, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 
 	resource_render_queue_submit_ui(context, renderQueue);

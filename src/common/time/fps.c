@@ -9,7 +9,6 @@ typedef struct {
     long frameTimesMs[FPS_SAMPLES];
     int currentIndex;
     long totalTimeMs;
-    float currentFps;
     long lastTimeMs;
 } FPSCounter;
 
@@ -20,13 +19,9 @@ static long get_current_ms() {
 }
 
 void fps_init() {
-	for (int i = 0; i < FPS_SAMPLES; i++) {
-		fpsCounter.frameTimesMs[i] = 0;
-	}
+	for (int i = 0; i < FPS_SAMPLES; i++) fpsCounter.frameTimesMs[i] = 0;
 	fpsCounter.currentIndex = 0;
 	fpsCounter.totalTimeMs = 0;
-	fpsCounter.currentFps = 0.0f;
-
 	fpsCounter.lastTimeMs = get_current_ms();
 }
 
@@ -41,14 +36,12 @@ void fps_update() {
 	fpsCounter.totalTimeMs += deltaMs;
 
 	fpsCounter.currentIndex = (fpsCounter.currentIndex + 1) % FPS_SAMPLES;
-
-	if (fpsCounter.totalTimeMs > 0) {
-		fpsCounter.currentFps = (float) FPS_SAMPLES / ((float) fpsCounter.totalTimeMs / MS_IN_SECOND);
-	} else {
-		fpsCounter.currentFps = MAX_FPS;
-	}
 }
 
 float fps_get() {
-    return fpsCounter.currentFps;
+    if (fpsCounter.totalTimeMs > 0) {
+		return (float) FPS_SAMPLES / ((float) fpsCounter.totalTimeMs / MS_IN_SECOND);
+	} else {
+		return MAX_FPS;
+	}
 }

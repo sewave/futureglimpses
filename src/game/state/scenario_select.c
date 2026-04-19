@@ -39,7 +39,6 @@ static char *currentFolder;
 
 static uint8_t scenarioSelectOffset;
 static uint8_t scenarioSelected;
-static char fpsText[16];
 
 static uint8_t get_max_scenario(const GameContext *context) {
 	return mapList->count - 1;
@@ -295,8 +294,6 @@ static void init_scenarios_folder(char *folder) {
 void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_render_queue_submit(context, renderQueue, &scenarioSelectGuiScreen);
 	render_queue_submit_mouse(context, renderQueue);
-	snprintf(fpsText, sizeof(fpsText), "FPS: %.1f", fps_get());
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 260, 180, PAL_COLOR_WHITE, -1);
 }
 
 void handle_scenario_select_init(GameContext *context) {

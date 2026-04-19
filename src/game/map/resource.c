@@ -12,13 +12,13 @@
 #define WORKER_RESOURCE_GATHER_MAX 100
 
 static int RESOURCE_TEXT_LOCATIONS[UNIT_CONTROLLERS_COUNT][PRINTED_RESOURCES][2] = {
-		{ {89, 1}, {136, 1}, {186, 1} },
-		{ {89, 12}, {136, 12}, {186, 12} }
+		{ {90, 1}, {170, 1}, {250, 1} },
+		{ {90, 12}, {170, 12}, {250, 12} }
 	};
 static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
-		{79, 2},
-		{126, 2},
-		{176, 2}};
+		{80, 2},
+		{160, 2},
+		{240, 2}};
 
 static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPES_COUNT][16];
 
