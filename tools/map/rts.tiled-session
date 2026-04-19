@@ -118,7 +118,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 516.6666666666666,
-                "y": 485.3333333333333
+                "y": 731.3333333333333
             }
         },
         "maps/laber.tmx": {
@@ -136,8 +136,8 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 788.25,
-                "y": 770
+                "x": 268.75,
+                "y": 92.75
             }
         },
         "maps/tileset.tsx": {
@@ -214,9 +214,9 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/clash.tmx",
         "maps/laber.tmx",
         "maps/base.tmx",
-        "maps/clash.tmx",
         "maps/win.tmx",
         "maps/Test Campaign/2-archers.tmx",
         "maps/Test Campaign/1-starting.tmx",
