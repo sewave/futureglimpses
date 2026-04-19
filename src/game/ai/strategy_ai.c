@@ -213,17 +213,13 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 			if(workerData->job != WORKER_JOB_REPAIR) workerCount++;
 		}
 	}
-	// 70 % gold, 30 % wood
-	int desiredWoodWorkers = (workerCount * 30) / 100;
+	// 65 % gold, 35 % wood
+	int desiredWoodWorkers = (workerCount * 35) / 100;
 	int desiredGoldWorkers = workerCount - desiredWoodWorkers;
 	int excessGoldWorkers = 0;
-	if(desiredGoldWorkers < currentGoldWorkers) {
-		excessGoldWorkers = currentGoldWorkers - desiredGoldWorkers;
-	}
+	if(desiredGoldWorkers < currentGoldWorkers) excessGoldWorkers = currentGoldWorkers - desiredGoldWorkers;
 	int excessWoodWorkers = 0;
-	if(desiredWoodWorkers < currentWoodWorkers) {
-		excessWoodWorkers = currentWoodWorkers - desiredWoodWorkers;
-	}
+	if(desiredWoodWorkers < currentWoodWorkers) excessWoodWorkers = currentWoodWorkers - desiredWoodWorkers;
 	int idleWorkersToGold = desiredGoldWorkers - currentGoldWorkers - excessWoodWorkers;
 	if(idleWorkersToGold < 0) idleWorkersToGold = 0;
 	int idleWorkersToWood = desiredWoodWorkers - currentWoodWorkers - excessGoldWorkers;
@@ -258,7 +254,7 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 
 static void game_strategy_ai_train_units(GameContext *context) {
 	// Start training after peace time
-	if (context->aiData.peaceCounter < context->map.peaceTime) return;
+	if (++context->aiData.peaceCounter < context->map.peaceTime) return;
 	uint8_t allWorkersTrained = game_strategy_ai_count_computer_workers(context) >= context->aiData.desiredWorkers;
 	int workerGoldCost = game_unit_get_training_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
 	// Must have at least worker gold cost and reserve
@@ -292,7 +288,7 @@ static void game_strategy_ai_train_units(GameContext *context) {
 }
 
 static void game_strategy_ai_attack(GameContext *context) {
-	if (++context->aiData.peaceCounter < context->map.peaceTime) return;
+	if (context->aiData.peaceCounter < context->map.peaceTime) return;
 	if (++context->aiData.attackCounter < ATTACK_WAVE_FRAMES) return;
 	context->aiData.attackCounter = 0;
 
