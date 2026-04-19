@@ -16,7 +16,7 @@
 #define CMD_BUTTON_DOWN_LINE_Z UI_Z_ORDER + 507
 
 #define UNIT_SHEET_COL_ONE_X 3
-#define UNIT_SHEET_COL_TWO_X 38
+#define UNIT_SHEET_COL_TWO_X 42
 #define UNIT_SHEET_ROW_ONE_Y 80
 #define UNIT_SHEET_ROW_TWO_Y 90
 #define UNIT_SHEET_ROW_THREE_Y 104
@@ -60,6 +60,7 @@ static char unitDamageText[16];
 static char unitAtRangeText[16];
 static char unitArmorText[16];
 static char unitsText[16];
+static char unitsResQty[16];
 static char resourceBuffers[RESOURCE_TYPES_COUNT][8];
 
 static void game_cmd_bar_clear_build_placing(BuildPlacing *buildPlacing) {
@@ -697,6 +698,18 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 									buildingData->currentTicks, buildingData->targetTicks,
 									text_get_by_id(GAME_TEXT_ID_BUILDING_COMPLETATION),
 									UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
+		}
+	}
+
+	if(unit->type == UNIT_TYPE_WORKER) {
+		WorkerData *workerData = &unit->typed.workerData;
+		if(workerData->carriedResourceType != RESOURCE_TYPE_NONE && workerData->carriedResourceQty > 0) {
+			RLE_SPRITE* resourceIcon = game_gfx_get_unit_icon(GAME_ICON_GOLD + unit->typed.workerData.carriedResourceType);
+			render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, resourceIcon,
+						UNIT_SHEET_COL_TWO_X, UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET);
+			itoa(workerData->carriedResourceQty, unitsResQty, BASE_TEN_NUMBER);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsResQty,
+										UNIT_SHEET_COL_TWO_X + resourceIcon->w + 1, UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 		}
 	}
 

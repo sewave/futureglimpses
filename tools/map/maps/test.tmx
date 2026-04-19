@@ -111,9 +111,9 @@
    <properties>
     <property name="ARMOR" type="int" value="7"/>
     <property name="CUSTOM" type="bool" value="true"/>
-    <property name="MAX_DAMAGE" type="int" value="120"/>
+    <property name="MAX_DAMAGE" type="int" value="99"/>
     <property name="MAX_HEALTH" type="int" value="9999"/>
-    <property name="MIN_DAMAGE" type="int" value="12"/>
+    <property name="MIN_DAMAGE" type="int" value="20"/>
     <property name="MUST_SURVIVE" type="bool" value="false"/>
    </properties>
   </object>

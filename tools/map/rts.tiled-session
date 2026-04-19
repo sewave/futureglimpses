@@ -87,16 +87,16 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 485.5,
-                "y": 263
+                "x": 485,
+                "y": 388.5
             }
         },
         "maps/Test Campaign/2-archers.tmx": {
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 478.33333333333326,
-                "y": 149.33333333333331
+                "x": 478,
+                "y": 248.33333333333334
             }
         },
         "maps/base.tmx": {
@@ -117,27 +117,27 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 516.6666666666666,
-                "y": 731.3333333333333
+                "x": 443.9999999999999,
+                "y": 485.99999999999994
             }
         },
         "maps/laber.tmx": {
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 262.5,
-                "y": 690
+                "x": 262,
+                "y": 690.5
             }
         },
         "maps/test.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 268.75,
-                "y": 92.75
+                "x": 272.66666666666663,
+                "y": 160.33333333333337
             }
         },
         "maps/tileset.tsx": {
@@ -150,8 +150,8 @@
             "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 505,
-                "y": 526
+                "x": 540,
+                "y": 521
             }
         },
         "sin nombre.tmx": {
