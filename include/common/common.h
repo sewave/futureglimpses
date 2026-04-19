@@ -6,19 +6,6 @@
 //#define DEBUGMODE
 #include <allegro/debug.h>
 
-#ifdef DEBUGMODE
-#define TRACE_START(func) clock_t __trace_start_##func = clock()
-#define TRACE_END(func)                                                                                   \
-	do {                                                                                                  \
-		clock_t __trace_end = clock();                                                                    \
-		double __trace_elapsed = ((double) (__trace_end - __trace_start_##func)); \
-		TRACE("[TRACE] %s: %.3f ms\n", #func, __trace_elapsed);                                             \
-	} while (0)
-#else
-#define TRACE_START(func)
-#define TRACE_END(func)
-#endif
-
 typedef enum {
     INITIALIZATION_OK = 0,
     INITIALIZATION_ERROR = -1
