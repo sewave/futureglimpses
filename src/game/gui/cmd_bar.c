@@ -113,8 +113,24 @@ static void handle_building_select_button(void *ctxVoid, uint8_t fixedDat) {
 
 static void handle_build_place_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
-	context->buildPlacing.state = CMD_BAR_BUILD_STATE_PLACE;
-	context->buildPlacing.building = (UnitTypeEnum) fixedDat;
+	UnitTypeEnum buildingType = (UnitTypeEnum) fixedDat;
+
+    TrainingResourcesData* unitResources = game_unit_get_training_resources(buildingType);
+	uint8_t canPlace = TRUE;
+	for (int i = 0; i < UNIT_USED_RESOURCES; i++) {
+		if (!resource_has_enough(context, UNIT_CONTROLLER_PLAYER, i, unitResources->used[i])) {
+				message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_NOT_ENOUGH_GOLD + i),
+								 NOT_ENOUGH_RESOURCE_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+				game_snd_play_sound(GAME_SOUND_NOT_VALID);
+			canPlace = FALSE;
+			break;
+		}
+	}
+
+	if (canPlace) {
+		context->buildPlacing.state = CMD_BAR_BUILD_STATE_PLACE;
+		context->buildPlacing.building = buildingType;
+	}
 }
 
 static void handle_build_select_cancel_button(void *ctxVoid, uint8_t fixedDat) {

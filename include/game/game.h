@@ -357,7 +357,7 @@ void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 #else
 #define LOGIC_RATE_BPS 60
 #endif
-#define SEC_TO_FRAMES(secs) 1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS)
+#define SEC_TO_FRAMES(secs) (1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS))
 #define MAX_CATCHUP_TICKS 5
 // First MB is special so we check for 7 more
 #define PROGRAM_REQUIRED_RAM_MB 7
@@ -378,5 +378,6 @@ void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2
 #define WORKER_TIME SEC_TO_FRAMES(0.7)
+#define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 
 #endif /* GAME_H */

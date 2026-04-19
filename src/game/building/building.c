@@ -1,7 +1,6 @@
 #include "game/building/building.h"
 #include <allegro.h>
 
-#define NOT_ENOUGH_RESOURCE_TIME SEC_TO_FRAMES(5)
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
 #define SPIRAL_DIRECTIONS 4
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
