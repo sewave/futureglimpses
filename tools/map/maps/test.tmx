@@ -14,7 +14,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="true"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="true"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="true"/>
-  <property name="MSG_DESCRIPTION" value="Para probar cosas variadas"/>
+  <property name="MSG_DESCRIPTION" value="Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas "/>
   <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="Test map"/>
   <property name="MSG_WIN" value="You win"/>

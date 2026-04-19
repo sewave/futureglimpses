@@ -10,10 +10,10 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
-  <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquet maximus mattis. Aliquam non elementum nisl, id dictum arcu. Sed rutrum purus a finibus luctus. Nam aliquet et sapien sed ultrices. Sed blandit interdum arcu in interdum. Aenean ac sem."/>
+  <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos."/>
   <property name="MSG_LOSE" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
   <property name="MSG_TITLE" value="Vas a ganar"/>
-  <property name="MSG_WIN" value="Ganas. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
+  <property name="MSG_WIN" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida. Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
   <property name="PEACE_TIME" type="int" value="120"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="123456"/>

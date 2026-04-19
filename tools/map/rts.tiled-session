@@ -133,11 +133,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 272.66666666666663,
-                "y": 160.33333333333337
+                "x": 655.625,
+                "y": 765.875
             }
         },
         "maps/tileset.tsx": {
