@@ -345,6 +345,7 @@ void game_selection_handle_input(GameContext *context) {
 			int tileY = game_spatial_get_board_y_position(context->yPosition, game_mouse_get_selection_start_y());
 
 			if (tileX >= BOARD_X_MIN && tileX <= BOARD_X_MAX && tileY >= BOARD_Y_MIN && tileY <= BOARD_Y_MAX) {
+				context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
 				UnitId id = game_selection_get_in_position_or_previous(context, tileX, tileY);
 				GameUnit *foundUnit = game_unit_get_by_id(context, id);
 				if (foundUnit && context->boardExploration[tileX][tileY] == BOARD_EXPLORED) {
