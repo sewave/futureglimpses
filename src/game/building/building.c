@@ -129,7 +129,7 @@ GameUnit* building_place_building(GameContext *context, UnitTypeEnum buildingTyp
 
 	GameUnit *building = game_unit_spawn(context, buildingType, controller, x, y);
 	if (building) {
-		game_snd_play_sound(GAME_SOUND_BUILDING_BUILD);
+		if(building->controller == UNIT_CONTROLLER_PLAYER) game_snd_play_sound(GAME_SOUND_BUILDING_BUILD);
 		// Deduct resources but not food
 		for (int i = 0; i < UNIT_CREATE_REDUCE_RESOURCES; i++) {
 			resource_deduct_amount(context, controller, i, unitResources->used[i]);
@@ -143,24 +143,28 @@ void building_handle_placing_input(GameContext *context) {
 
     if(context->mouseStatus.isRightPressed) {
         context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
-    }
-    else {
-        if(context->mouseStatus.isLeftPressed && context->buildPlacing.canBuild) {
-			GameUnit* building = building_place_building(context, context->buildPlacing.building, UNIT_CONTROLLER_PLAYER,
-				context->buildPlacing.x, context->buildPlacing.y);
-			if (building) {
-				if(!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
-					context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+	} else {
+		if (context->mouseStatus.isLeftPressed) {
+			if (context->buildPlacing.canBuild) {
+				GameUnit *building = building_place_building(context, context->buildPlacing.building,
+															 UNIT_CONTROLLER_PLAYER,
+															 context->buildPlacing.x, context->buildPlacing.y);
+				if (building) {
+					if (!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
+						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
+					}
+					// Send selected worker to build it
+					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
+					if (worker) {
+						worker->typed.workerData.targetConstruction = building->id;
+						game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					}
 				}
-				// Send selected worker to build it
-				GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
-				if(worker) {
-					worker->typed.workerData.targetConstruction = building->id;
-					game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
-				}
+			} else {
+				game_snd_play_sound(GAME_SOUND_NOT_VALID);
 			}
 		}
-    }
+	}
 }
 
 void building_add_construction(GameContext *context, GameUnit *building) {

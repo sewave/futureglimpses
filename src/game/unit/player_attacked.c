@@ -28,6 +28,7 @@ void player_attacked_register_attack(PlayerAttackedData *playerAttackedData, uin
     playerAttackedData->yPosition = yPosition;
     playerAttackedData->blinkCounter = 0;
     playerAttackedData->blinkShowing = TRUE;
+    game_snd_play_sound(GAME_SOUND_INCOMING_ATTACK);
 }
 
 void player_attacked_render(PlayerAttackedData *playerAttackedData, RenderQueue *renderQueue) {
