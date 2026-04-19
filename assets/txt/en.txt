@@ -98,8 +98,8 @@ Select scenario:
 Description:
 You
 ___
-Enemy
-_____
+Computer
+________
 Stats
 _____
 Units trained

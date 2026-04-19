@@ -98,10 +98,10 @@ Elige escenario:
 Descripción:
 Tú
 __
-Enemigo
-_______
+Ordenador
+__________
 Estadísticas
-____________
+_____________
 Unidades entrenadas
 Enemigos eliminados
 Edificios construidos

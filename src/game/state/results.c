@@ -102,7 +102,7 @@ static GuiElement menu[MENU_ELEMENTS] = {
 	{
 		.x = RESULT_X_MID / 2 + RESULT_X_INC, .y = MENU_STAT_Y, .z = 5,
 		.type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_RESULT_ENEMY,
+        .textId = GAME_TEXT_ID_RESULT_COMPUTER,
 		.textColor = PAL_COLOR_WHITE,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX,
@@ -111,7 +111,7 @@ static GuiElement menu[MENU_ELEMENTS] = {
     {
         .x = RESULT_X_MID / 2 + RESULT_X_INC, .y = MENU_STAT_Y + MENU_STAT_Y_INC, .z = 5,
         .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_RESULT_ENEMY_UNDER,
+        .textId = GAME_TEXT_ID_RESULT_COMPUTER_UNDER,
         .textColor = PAL_COLOR_WHITE,
         .shadowTextColor = PAL_COLOR_BLACK,
         .textBackground = TRANSPARENT_INDEX,
