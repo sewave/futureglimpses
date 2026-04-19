@@ -53,7 +53,6 @@ Blacksmith built.
 Stables built.
 Tower built.
 Queue full.
-In queue: %d
 Completed
 Options Menu
 ^004S^001ound

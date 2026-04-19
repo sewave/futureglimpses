@@ -20,7 +20,8 @@
 #define UNIT_SHEET_ROW_ONE_Y 80
 #define UNIT_SHEET_ROW_TWO_Y 90
 #define UNIT_SHEET_ROW_THREE_Y 104
-#define UNIT_SHEET_ROW_FOUR_Y 116
+#define UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET 1
+#define UNIT_SHEET_ROW_FOUR_Y 117
 #define UNIT_SHEET_HP_BAR_X UNIT_SHEET_COL_ONE_X + 3
 #define UNIT_SHEET_TRAIN_BAR_X UNIT_SHEET_COL_ONE_X + 3
 #define UNIT_SHEET_BACK_X 1
@@ -668,11 +669,12 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 									text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainingType),
 									UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 		}
-		if (buildingData->queueNextIndex > 0) {
-			snprintf(unitsText, sizeof(unitsText), text_get_by_id(GAME_TEXT_ID_IN_QUEUE), buildingData->queueNextIndex);
-			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
-										UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
-		}
+		RLE_SPRITE* queueIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_QUEUE);
+		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, queueIcon,
+			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y);
+		itoa(buildingData->queueNextIndex, unitsText, BASE_TEN_NUMBER);
+		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+									UNIT_SHEET_COL_ONE_X + queueIcon->w + 1, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 		// If building is in construction, show progress
 		if(unit->state == BUILDING_STATE_CONSTRUCT) {
 			game_cmd_bar_queue_bar(renderQueue, context->gameFont,
@@ -695,31 +697,20 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 	if (unit->minDamage > 0 || unit->maxDamage > 0) {
 		RLE_SPRITE* attackIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ATTACK);
 		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, attackIcon,
-				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y);
+				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET);
 		print_separated_numbers(unitDamageText, RANGE_SEPARATOR, unit->minDamage, unit->maxDamage);
 		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
 									UNIT_SHEET_COL_ONE_X + attackIcon->w + 1,
-									UNIT_SHEET_ROW_THREE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+									UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
 	// Armor
 	RLE_SPRITE *armorIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ARMOR);
-	int armorBaseX;
-	int armorBaseY;
-	if(unit->minDamage == 0 && unit->maxDamage == 0) {
-		// Buildings, or maybe special units
-		armorBaseX = UNIT_SHEET_COL_ONE_X;
-		armorBaseY = UNIT_SHEET_ROW_THREE_Y;
-	}
-	else {
-		armorBaseX = UNIT_SHEET_COL_TWO_X;
-		armorBaseY = UNIT_SHEET_ROW_FOUR_Y;
-	}
 	render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, armorIcon,
-									armorBaseX, armorBaseY);
+									UNIT_SHEET_COL_TWO_X, UNIT_SHEET_ROW_FOUR_Y);
 	itoa(unit->armor, unitArmorText, BASE_TEN_NUMBER);
 	render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitArmorText,
-								armorBaseX + armorIcon->w + 1,
-								armorBaseY, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+								UNIT_SHEET_COL_TWO_X + armorIcon->w + 1,
+								UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 }
 
 static void game_cmd_bar_render_queue_submit_multi_unit(GameContext *context, RenderQueue *renderQueue) {
