@@ -164,6 +164,14 @@
                 "y": 690.5
             }
         },
+        "maps/superwar.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 492,
+                "y": 515.75
+            }
+        },
         "maps/test.tmx": {
             "expandedObjectLayers": [
                 2
