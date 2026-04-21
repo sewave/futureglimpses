@@ -83,15 +83,39 @@
                 "y": 729.25
             }
         },
+        "maps/Initial/1-starting.tmx": {
+            "scale": 0.53251953125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.7183201907207,
+                "y": 511.7183201907207
+            }
+        },
+        "maps/Initial/2-archers.tmx": {
+            "scale": 0.53251953125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.7183201907207,
+                "y": 511.7183201907207
+            }
+        },
         "maps/Initial/3-knights.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 11,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 950.5,
-                "y": 783.3181818181819
+                "x": 270.3333333333333,
+                "y": 434.99999999999994
+            }
+        },
+        "maps/Initial/4-mages.tmx": {
+            "scale": 0.53251953125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.7183201907207,
+                "y": 511.7183201907207
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -128,8 +152,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 443.33333333333326,
-                "y": 485.99999999999994
+                "x": 510,
+                "y": 484.66666666666674
             }
         },
         "maps/laber.tmx": {
@@ -225,9 +249,9 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/base.tmx",
         "maps/test.tmx",
         "maps/clash.tmx",
-        "maps/base.tmx",
         "maps/win.tmx",
         "maps/Test Campaign/1-starting.tmx",
         "maps/Test Campaign/2-archers.tmx",
