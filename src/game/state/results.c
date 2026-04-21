@@ -65,7 +65,7 @@ static GuiElement menu[MENU_ELEMENTS] = {
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
-        .hotkey = KEY_R,
+        .hotkey = KEY_T,
         .typed = {
             .button = {
                 .size = { .width = MENU_BUTTON_WIDTH, .height = MENU_BUTTON_HEIGHT },
