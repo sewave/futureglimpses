@@ -79,8 +79,8 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxAttackRange = 8,
 				.sightRange = 10,
 				.exploreRange = 2,
-				.health = 80,
-				.maxHealth = 80,
+				.health = 60,
+				.maxHealth = 60,
 				.tileSize = 1,
 				.minDamage = 10,
 				.maxDamage = 15,
@@ -466,6 +466,7 @@ void game_unit_damage(GameContext *context, uint8_t minDamage, uint8_t maxDamage
 void game_unit_area_damage(GameContext *context, Object *object) {
 	uint16_t centerX = object->targetX / TILE_SIZE;
 	uint16_t centerY = object->targetY / TILE_SIZE;
+	GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 	for (int row = centerY - object->damageRadius; row <= centerY + object->damageRadius; row++) {
 		for (int col = centerX - object->damageRadius; col <= centerX + object->damageRadius; col++) {
 			if (col < BOARD_X_MIN || col > BOARD_X_MAX || row < BOARD_Y_MIN || row > BOARD_Y_MAX) continue;
@@ -482,10 +483,13 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 				if(target->controller == UNIT_CONTROLLER_PLAYER) {
 					player_attacked_register_attack(&context->playerAttackedData, target->x, target->y);
 				}
-				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
-				if (target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID
-					&& sourceUnit && sourceUnit->controller != target->controller) {
-					game_unit_command_move_attack(target, NULL, sourceUnit->x, sourceUnit->y);
+				if(sourceUnit && sourceUnit->controller != target->controller) {
+					if(context->boardExploration[sourceUnit->x][sourceUnit->y] == BOARD_UNEXPLORED) {
+						game_spatial_explore_position(context, sourceUnit->x, sourceUnit->y);
+					}
+					if (target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID) {
+						game_unit_command_move_attack(target, NULL, sourceUnit->x, sourceUnit->y);
+					}
 				}
 			}
 		}

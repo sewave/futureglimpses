@@ -193,6 +193,7 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 		targetUnit = game_unit_get_by_id(context, unit->targetId);
 		if (!targetUnit) {
 			game_unit_command_idle(unit);
+			unit->targetId = NO_TARGET_ID;
 			return;
 		}
 		targetX = targetUnit->x + (targetUnit->tileSize - 1) / 2;

@@ -51,9 +51,13 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 		case EVENT_TYPE_DAMAGE:
 			GameUnit *damageTarget = game_unit_get_by_id(context, object->targetId);
 			if (damageTarget) {
+				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 				game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
+				if(sourceUnit && sourceUnit->controller != damageTarget->controller
+					&& context->boardExploration[sourceUnit->x][sourceUnit->y] == BOARD_UNEXPLORED) {
+					game_spatial_explore_position(context, sourceUnit->x, sourceUnit->y);
+				}
 				if(damageTarget->state == UNIT_STATE_IDLE && damageTarget->targetId == NO_TARGET_ID) {
-					GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 					if (sourceUnit && sourceUnit->controller != damageTarget->controller) {
 						// Go attack around source unit, if we are not already attacking or moving towards someone
 						game_unit_command_move_attack(damageTarget, NULL, sourceUnit->x, sourceUnit->y);
