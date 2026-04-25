@@ -230,72 +230,67 @@ void game_units_init(GameContext *context) {
 	context->selectedUnitCount = 0;
 	nextFreeIndex = 0;
 	// Initialize upgrades to false
-	// TODO researcheable = FALSE when loading from map
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
 		for (int j = 0; j < UNIT_TYPE_NUMBER; j++) {
-			context->upgrades[i][j] = (GameUnitUpgrade){.researchable = TRUE, .enabled = FALSE};
+			context->upgrades[i][j] = (GameUnitUpgrade){.researchable = FALSE, .enabled = FALSE};
 		}
 	}
 }
 
 GameUnit *game_unit_get_by_id(GameContext *context, UnitId id) {
-	int index = GET_INDEX(id);
-	int gen = GET_GEN(id);
-
-	if (index < 0 || index >= MAX_GAME_UNITS) return NULL;
-	if (!context->units[index].isActive) return NULL;
-	if (unitGenerations[index] != gen) return NULL;
-
-	return &context->units[index];
+	uint16_t index = GET_INDEX(id);
+	if (index >= MAX_GAME_UNITS) return NULL;
+	if (unitGenerations[index] != GET_GEN(id)) return NULL;
+	GameUnit * unit = &context->units[index];
+	return unit->isActive ? unit : NULL;
 }
 
 void game_unit_destroy(GameContext *context, UnitId id) {
 	GameUnit *unit = game_unit_get_by_id(context, id);
-	if (unit && unit->isActive) {
-		if(unit->mustSurvive) {
-			if(unit->controller == UNIT_CONTROLLER_PLAYER) context->gameResult = GAME_RESULT_DEFEAT;
-			else context->gameResult = GAME_RESULT_VICTORY;
+	if(!unit) return;
+	if(unit->mustSurvive) {
+		if(unit->controller == UNIT_CONTROLLER_PLAYER) context->gameResult = GAME_RESULT_DEFEAT;
+		else context->gameResult = GAME_RESULT_VICTORY;
+	}
+	unit->isActive = FALSE;
+	for(int i = unit->x; i < unit->x + unit->tileSize; i++) {
+		for(int j = unit->y; j < unit->y + unit->tileSize; j++) {
+			context->walkabilityGrid[i][j] = WALKABILITY_FREE;
 		}
-		unit->isActive = FALSE;
-		for(int i = unit->x; i < unit->x + unit->tileSize; i++) {
-			for(int j = unit->y; j < unit->y + unit->tileSize; j++) {
-				context->walkabilityGrid[i][j] = WALKABILITY_FREE;
-			}
+	}
+	
+	GameUnit **activeList = context->activeUnits;
+	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
+		if (*activeList == unit) {
+			*activeList = context->activeUnits[--context->activeUnitCount];
+			break;
 		}
-		
-		GameUnit **activeList = context->activeUnits;
-		for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
-			if (*activeList == unit) {
-				*activeList = context->activeUnits[--context->activeUnitCount];
+	}
+	if (unit->isSelected) {
+		for (int i = 0; i < context->selectedUnitCount; i++) {
+			if (context->selectedUnits[i] == id) {
+				context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
 				break;
 			}
 		}
-		if (unit->isSelected) {
-			for (int i = 0; i < context->selectedUnitCount; i++) {
-				if (context->selectedUnits[i] == id) {
-					context->selectedUnits[i] = context->selectedUnits[--context->selectedUnitCount];
-					break;
-				}
-			}
-			unit->isSelected = FALSE;
-		}
-		uint8_t opponentController = opponent_controller(unit->controller);
-		if (unit->isBuilding) {
-			context->stats[opponentController].buildingsDestroyed++;
-		} else {
-			context->stats[opponentController].enemiesKilled++;
-		}
-		TrainingResourcesData *trainingData = game_unit_get_training_resources(unit->type);
-		uint8_t foodProvidedReturn;
-		// An uncompleted building has not yet provided any food
-		if(unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
-			foodProvidedReturn = 0;
-		}
-		else {
-			foodProvidedReturn = trainingData->foodProvided;
-		}
-		resource_deduct_food(context, unit->controller, trainingData->used[RESOURCE_TYPE_AVAILABLE_FOOD], foodProvidedReturn);
+		unit->isSelected = FALSE;
 	}
+	uint8_t opponentController = opponent_controller(unit->controller);
+	if (unit->isBuilding) {
+		context->stats[opponentController].buildingsDestroyed++;
+	} else {
+		context->stats[opponentController].enemiesKilled++;
+	}
+	TrainingResourcesData *trainingData = game_unit_get_training_resources(unit->type);
+	uint8_t foodProvidedReturn;
+	// An uncompleted building has not yet provided any food
+	if(unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
+		foodProvidedReturn = 0;
+	}
+	else {
+		foodProvidedReturn = trainingData->foodProvided;
+	}
+	resource_deduct_food(context, unit->controller, trainingData->used[RESOURCE_TYPE_AVAILABLE_FOOD], foodProvidedReturn);
 }
 
 GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnum controller, uint16_t x, uint16_t y) {
