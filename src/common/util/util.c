@@ -49,3 +49,10 @@ void get_parent_directory(const char *path, char *outBuffer, unsigned int buffer
 		outBuffer[0] = '\0';
 	}
 }
+
+void separate_ints_in_string(char *buffer, char* separator, int first, int second) {
+	itoa(first, buffer, BASE_TEN_NUMBER);
+	int length = strlen(buffer);
+	buffer[length++] = *separator;
+	itoa(second, buffer + length, BASE_TEN_NUMBER);
+}

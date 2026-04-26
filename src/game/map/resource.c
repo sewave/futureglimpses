@@ -5,8 +5,8 @@
 #define BASIC_RESOURCES 2
 #define PRINTED_RESOURCES 3
 #define RESOURCES_Z UI_Z_ORDER + 600
-#define FOOD_USE_FORMAT "%u/%u"
-#define FOOD_USE_SURPASSED_FORMAT "^005%u^001/%u"
+#define FOOD_USE_FORMAT_SEPARATOR "/"
+#define FOOD_USE_SURPASSED_FORMAT "^005%lu^001/%lu"
 #define WORKER_RESOURCE_WOOD_GATHER 5
 #define WORKER_RESOURCE_GOLD_GATHER 10
 #define WORKER_RESOURCE_GATHER_MAX 100
@@ -20,7 +20,7 @@ static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{160, 2},
 		{240, 2}};
 
-static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPES_COUNT][16];
+static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPE_AVAILABLE_FOOD][32];
 
 void resource_reset(GameContext *context) {
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
@@ -140,14 +140,14 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 	for (int controller = 0; controller < controllers; controller++) {
 		uint32_t usedFood = context->resources[controller].uiQuantity[RESOURCE_TYPE_USED_FOOD];
 		uint32_t maxFood = context->resources[controller].uiQuantity[RESOURCE_TYPE_MAX_FOOD];
-		char *foodFormat;
 		if (usedFood > maxFood) {
-			foodFormat = FOOD_USE_SURPASSED_FORMAT;
+			sprintf(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD],
+				 FOOD_USE_SURPASSED_FORMAT, usedFood, maxFood);
 		} else {
-			foodFormat = FOOD_USE_FORMAT;
+			separate_ints_in_string(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD],
+				FOOD_USE_FORMAT_SEPARATOR, usedFood, maxFood);
 		}
-		snprintf(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD], sizeof(resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD]),
-				 foodFormat, usedFood, maxFood);
+		
 		render_queue_submit_text_multicolor_shadow(renderQueue, RESOURCES_Z, context->gameFont,
 												   resourceBuffers[controller][RESOURCE_TYPE_AVAILABLE_FOOD],
 												   RESOURCE_TEXT_LOCATIONS[controller][RESOURCE_TYPE_AVAILABLE_FOOD][0],

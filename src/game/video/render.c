@@ -283,7 +283,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 				red++;
 			}
 		}
-		snprintf(activeText, sizeof(activeText), "T:%d ^004B:%d ^005R:%d", context->activeUnitCount, blue, red);
+		sprintf(activeText, "T:%d ^004B:%d ^005R:%d", context->activeUnitCount, blue, red);
 		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText,
 			240, 23, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}

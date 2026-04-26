@@ -637,13 +637,6 @@ static void game_render_unit_stats_background(GameContext *context, RenderQueue 
 	);
 }
 
-static void print_separated_numbers(char *buffer, char* separator, int min, int max) {
-	itoa(min, buffer, BASE_TEN_NUMBER);
-	int length = strlen(buffer);
-	buffer[length++] = *separator;
-	itoa(max, buffer + length, BASE_TEN_NUMBER);
-}
-
 static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, RenderQueue *renderQueue) {
 	GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 	if (!unit) return;
@@ -673,7 +666,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 								namePostionX, UNIT_SHEET_ROW_ONE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 
 	// Unit HP bar
-	print_separated_numbers(unitHpText, HEALTH_SEPARATOR, unit->health, unit->maxHealth);
+	separate_ints_in_string(unitHpText, HEALTH_SEPARATOR, unit->health, unit->maxHealth);
 	game_cmd_bar_queue_bar(renderQueue, context->gameFont, unit->health, unit->maxHealth, unitHpText,
 							UNIT_SHEET_HP_BAR_X, UNIT_SHEET_ROW_TWO_Y, TRUE);
 
@@ -718,7 +711,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 		RLE_SPRITE* rangeIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_RANGE);
 		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, rangeIcon,
 			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y);
-		print_separated_numbers(unitAtRangeText, RANGE_SEPARATOR,unit->minAttackRange, unit->maxAttackRange);
+		separate_ints_in_string(unitAtRangeText, RANGE_SEPARATOR,unit->minAttackRange, unit->maxAttackRange);
 		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitAtRangeText,
 									UNIT_SHEET_COL_ONE_X + rangeIcon->w + 1,
 									UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
@@ -727,7 +720,7 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 		RLE_SPRITE* attackIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ATTACK);
 		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, attackIcon,
 				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET);
-		print_separated_numbers(unitDamageText, RANGE_SEPARATOR, unit->minDamage, unit->maxDamage);
+		separate_ints_in_string(unitDamageText, RANGE_SEPARATOR, unit->minDamage, unit->maxDamage);
 		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitDamageText,
 									UNIT_SHEET_COL_ONE_X + attackIcon->w + 1,
 									UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
