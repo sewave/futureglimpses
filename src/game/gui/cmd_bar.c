@@ -971,6 +971,8 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 
 		if (buttonPress) game_snd_play_sound(GAME_SOUND_CLICK);
 		if (button->state == CMD_BAR_BTN_STATE_RELEASED) button->action(context, button->fixedParam);
+		// Only one button pressed
+		if (button->state == CMD_BAR_BTN_STATE_DOWN) break;
 	}
 	game_cmd_bar_handle_placing(context);
 }
@@ -978,6 +980,16 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQueue) {
 	if (context->selectedUnitCount == 1) game_cmd_bar_render_queue_submit_single_unit(context, renderQueue);
 	if (context->selectedUnitCount > 1) game_cmd_bar_render_queue_submit_multi_unit(context, renderQueue);
+
+	uint8_t buttonPressed = FALSE;
+	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
+		CommandBarButton *button = &context->cmdBarButtons[i];
+		if (!button->isActive) continue;
+		if (button->state == CMD_BAR_BTN_STATE_DOWN) {
+			buttonPressed = TRUE;
+			break;
+		}
+	}
 
 	// Render buttons
 	for (int i = 0; i < CMD_BAR_BUTTONS; i++) {
@@ -1010,7 +1022,8 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 		render_queue_submit_text(
 				renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
 				xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX);
-		if (button->state != CMD_BAR_BTN_STATE_IDLE) {
+		if ((button->state == CMD_BAR_BTN_STATE_HOVER && !buttonPressed) ||
+			button->state == CMD_BAR_BTN_STATE_DOWN) {
 			render_queue_submit_rect(renderQueue,
 									 CMD_BUTTON_HOVER_Z,
 									 xPos - 1, yPos - 1,
@@ -1019,7 +1032,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 			game_cmd_bar_render_queue_submit_btn_info(renderQueue, context->gameFont, button);
 		}
 	}
-	if(context->buildPlacing.state == CMD_BAR_BUILD_STATE_PLACE &&
+	if(!buttonPressed && context->buildPlacing.state == CMD_BAR_BUILD_STATE_PLACE &&
 					context->mouseStatus.y > VIEWPORT_Y_MIN && context->mouseStatus.y < VIEWPORT_Y_MAX &&
 					context->mouseStatus.x > VIEWPORT_X_MIN && context->mouseStatus.x < VIEWPORT_X_MAX) {
 		render_queue_submit_text_multicolor_shadow(
