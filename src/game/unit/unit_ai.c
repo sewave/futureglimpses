@@ -1,6 +1,6 @@
 #include "game/unit/unit_ai.h"
 
-#define MAX_FOUND_UNITS 16
+#define MAX_FOUND_UNITS 8
 static GameUnit *foundUnits[MAX_FOUND_UNITS];
 
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
@@ -28,7 +28,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 						distance = newDistance;
 					}
 				}
-				if (target) game_unit_command_move_attack(unit, NO_TARGET_ID, target->x, target->y);
+				if (target) game_unit_command_move_attack(unit, NULL, target->x, target->y);
 			} else {
 				// We found nothing, so we change direction to make it "look" around
 				unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT;
