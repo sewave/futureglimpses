@@ -491,13 +491,42 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 	}
 }
 
+void game_unit_increment_counters(GameUnit *unit) {
+	switch (unit->state) {
+		case UNIT_STATE_MOVE_ANIM: {
+			unit->moveTimeCounter++;
+			break;
+		}
+		default: {
+			if(unit->isBuilding) {
+				BuildingData* buildingData = &unit->typed.buildingData;
+				if(buildingData->isTraining && buildingData->currentTicks < buildingData->targetTicks) {
+					unit->typed.buildingData.currentTicks++;
+				}
+			}
+			else {
+				unit->reactionTimeCounter++;
+			}
+			break;
+		}
+	}
+}
+
+#define AI_SLOTS 5
+static uint8_t aiSlot = 0;
+
 void game_unit_process_all(GameContext *context) {
 	GameUnit **activeUnits = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		game_animation_unit_advance(context, unit);
-		game_unit_ai_invoke(context, unit);
+		game_unit_increment_counters(unit);
+		if(i % AI_SLOTS == aiSlot || unit->state == UNIT_STATE_MOVE
+			|| unit->state == UNIT_STATE_MOVE_ATTACK || unit->state == UNIT_STATE_MOVE_ANIM) {
+			game_unit_ai_invoke(context, unit);
+		}
 	}
+	aiSlot = (aiSlot + 1) % AI_SLOTS;
 }
 
 TrainingResourcesData *game_unit_get_training_resources(TrainingTypeEnum type) {

@@ -50,7 +50,6 @@ static void building_start_training(GameUnit *building, TrainingTypeEnum trainin
 void building_update(GameContext *context, GameUnit *building) {
 	BuildingData *buildingData = &building->typed.buildingData;
 	if (buildingData->isTraining) {
-		buildingData->currentTicks++;
 		if (buildingData->currentTicks >= buildingData->targetTicks) {
 			if (buildingData->trainingType >= TRAINING_TYPE_UPGRADE_SOLDIER) {
 				// It's an upgrade, enable it and move on to the next in queue
@@ -69,10 +68,10 @@ void building_update(GameContext *context, GameUnit *building) {
 						}
 					}
 					else {
-						buildingData->currentTicks--;
+						buildingData->currentTicks = buildingData->targetTicks - 1;
 					}
 				} else {
-					buildingData->currentTicks--;
+					buildingData->currentTicks = buildingData->targetTicks - 1;
 				}
 			}
 		}

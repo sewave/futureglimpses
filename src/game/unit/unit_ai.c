@@ -4,7 +4,7 @@
 static GameUnit *foundUnits[MAX_FOUND_UNITS];
 
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
-	if (++unit->reactionTimeCounter >= unit->reactionTime) {
+	if (unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
 		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
 														   game_spatial_filter_enemy_units_in_attack_range, unit, foundUnits,
@@ -45,7 +45,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_idle_worker(GameContext *context, GameUnit *worker) {
-	if (++worker->reactionTimeCounter >= worker->reactionTime) {
+	if (worker->reactionTimeCounter >= worker->reactionTime) {
 		worker->reactionTimeCounter = 0;
 		WorkerData *workerData = &worker->typed.workerData;
 		// If we have a targetWorkingBuilding, we must approach it
@@ -142,7 +142,7 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_defend(GameContext *context, GameUnit *unit) {
-	if (++unit->reactionTimeCounter >= unit->reactionTime) {
+	if (unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
 		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
 														   game_spatial_filter_enemy_units, unit, foundUnits,
@@ -169,7 +169,7 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 }
 
 static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
-	if (++unit->moveTimeCounter > unit->moveTimeAnim) {
+	if (unit->moveTimeCounter > unit->moveTimeAnim) {
 		unit->prevX = unit->x;
 		unit->prevY = unit->y;
 		unit->state = unit->nextState;
