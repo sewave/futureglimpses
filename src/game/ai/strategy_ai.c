@@ -234,18 +234,22 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 				if (workerData->job == WORKER_JOB_WOOD && excessWoodWorkers > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
 					excessWoodWorkers--;
+					break;
 				}
 				else if (workerData->job == WORKER_JOB_GOLD && excessGoldWorkers > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
 					excessGoldWorkers--;
+					break;
 				}
 				else if (workerData->job == WORKER_JOB_NONE && idleWorkersToGold > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_GOLD);
 					idleWorkersToGold--;
+					break;
 				}
 				else if (workerData->job == WORKER_JOB_NONE && idleWorkersToWood > 0) {
 					game_strategy_ai_send_worker_to_harvest(context, unit, WORKER_JOB_WOOD);
 					idleWorkersToWood--;
+					break;
 				}
 			}
 		}
