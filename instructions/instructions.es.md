@@ -40,10 +40,10 @@ Atisbos del futuro
 * **Agrupación de mapas tipo campaña**: podemos agrupar en carpetas varios mapas simulando una campaña.
 * **Multiidioma**: Español / Inglés.
 * **Opciones**: podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o cuándo queremos ver las barras de vida de los enemigos.
-* **Minimapa**: el clásico minimapa, podemos desplazarnos por el haciendo clic.
+* **Minimapa**: el clásico minimapa, podemos desplazarnos por él haciendo clic.
 * **Niebla de guerra:** Una vez destapada queda el mapa visible.
 * **Grupos de unidades**: podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
-* **Recursos**: tenemos tres recursos, oro, madera y comida. Oro y comida se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas y limita las unidades que podemos tener a la vez.
+* **Recursos**: tenemos tres recursos, oro, madera y comida. Oro y madera se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas y limita las unidades que podemos tener a la vez.
 * **Sistema de mensajes**: para ver mensajes relacionados con los eventos que ocurren.
 * **Cola de unidades**: puedes encolar entrenamientos en los edificios y cancelarlos.
 * **Pantalla de resultados**: al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
@@ -61,7 +61,7 @@ Y otras sorpresas que será más divertido descubrir jugando.
 
 ## Edificios
 `Alcaldía`: el edificio principal, crea obreros y no puede ser construido.
-`Granja`: permite tener más comida para poder tener más unidades simultaneamente.
+`Granja`: permite tener más comida para poder tener más unidades simultáneamente.
 `Cuarteles`: el edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
 `Herrería`: permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
 `Establos`: permite entrenar caballeros en los cuarteles, requiere tener herrería para edificarse
