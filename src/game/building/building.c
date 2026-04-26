@@ -140,7 +140,7 @@ void building_handle_placing_input(GameContext *context) {
     if(context->buildPlacing.state != CMD_BAR_BUILD_STATE_PLACE) return;
 
     if(context->mouseStatus.isRightPressed) {
-        context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
+        context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
 	} else {
 		if (context->mouseStatus.isLeftPressed) {
 			if (context->buildPlacing.canBuild) {

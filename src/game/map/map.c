@@ -279,6 +279,8 @@ MapData *game_map_load_data(const char *filename) {
 	map->enableFarm = mapOptions[MAP_OPTION_ENABLE_FARM_INDEX];
 	map->enableStables = mapOptions[MAP_OPTION_ENABLE_STABLES_INDEX];
 	map->enableTower = mapOptions[MAP_OPTION_ENABLE_TOWER_INDEX];
+	// TODO get enable city hall from map
+	map->enableCityHall = TRUE;
 	map->aiMode = mapOptions[MAP_OPTION_AI_MODE_INDEX];
 
 	// Peace time

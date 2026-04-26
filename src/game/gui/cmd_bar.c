@@ -112,6 +112,11 @@ static void handle_building_select_button(void *ctxVoid, uint8_t fixedDat) {
 	context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
 }
 
+static void handle_building_select_advanced_button(void *ctxVoid, uint8_t fixedDat) {
+	GameContext *context = (GameContext *) ctxVoid;
+	context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT_ADVANCED;
+}
+
 static void handle_build_place_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
 	UnitTypeEnum buildingType = (UnitTypeEnum) fixedDat;
@@ -141,7 +146,7 @@ static void handle_build_select_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 
 static void handle_build_place_cancel_button(void *ctxVoid, uint8_t fixedDat) {
 	GameContext *context = (GameContext *) ctxVoid;
-	context->buildPlacing.state = CMD_BAR_BUILD_STATE_SELECT;
+	context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
 }
 
 static void handle_build_cancel_button(void *ctxVoid, uint8_t fixedDat) {
@@ -256,34 +261,34 @@ static const CommandBarButton BUILD_CMD_BUTTON = {
 		.hoverTextId = GAME_TEXT_ID_CMD_BAR_BUILD,
 		.fixedParam = 0,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD,
-		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
-		.state = CMD_BAR_BTN_STATE_IDLE};
-
-static const CommandBarButton REPAIR_CMD_BUTTON = {
-		.type = CMD_BAR_BTN_TYPE_ACTION,
-		.isActive = TRUE,
-		.action = handle_action_button,
-		.hotkeyIndex = KEY_R,
-		.hotkey = "R",
-		.hoverTextId = GAME_TEXT_ID_CMD_BAR_REPAIR,
-		.fixedParam = UNIT_STATE_MOVE,
-		.icon = CMD_BAR_BUTTON_ICON_REPAIR,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
-static const CommandBarButton HARVEST_CMD_BUTTON = {
+static const CommandBarButton BUILD_ADVANCED_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_ACTION,
+		.isActive = TRUE,
+		.action = handle_building_select_advanced_button,
+		.hotkeyIndex = KEY_V,
+		.hotkey = "V",
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_BUILD_ADVANCED,
+		.fixedParam = UNIT_STATE_MOVE,
+		.icon = CMD_BAR_BUTTON_ICON_REPAIR,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
+static const CommandBarButton REPAIR_HARVEST_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_ACTION,
 		.isActive = TRUE,
 		.action = handle_action_button,
-		.hotkeyIndex = KEY_H,
-		.hotkey = "H",
-		.hoverTextId = GAME_TEXT_ID_CMD_BAR_HARVEST,
+		.hotkeyIndex = KEY_W,
+		.hotkey = "W",
+		.hoverTextId = GAME_TEXT_ID_CMD_BAR_REPAIR_HARVEST,
 		.fixedParam = UNIT_STATE_MOVE,
-		.icon = CMD_BAR_BUTTON_ICON_HARVEST,
+		.icon = CMD_BAR_BUTTON_ICON_REPAIR_HARVEST,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton CANCEL_SELECT_BUILDING_CMD_BUTTON = {
@@ -390,6 +395,19 @@ static const CommandBarButton TRAIN_MAGE_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton CITY_HALL_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_build_place_button,
+		.hotkeyIndex = KEY_C,
+		.hotkey = "C",
+		.hoverTextId = GAME_TEXT_ID_BUILD_CITY_HALL,
+		.fixedParam = UNIT_TYPE_CITY_HALL,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_CITY_HALL,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static const CommandBarButton FARM_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
@@ -399,7 +417,7 @@ static const CommandBarButton FARM_CMD_BUTTON = {
 		.hoverTextId = GAME_TEXT_ID_BUILD_FARM,
 		.fixedParam = UNIT_TYPE_FARM,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD_FARM,
-		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
 		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
@@ -412,8 +430,8 @@ static const CommandBarButton BARRACKS_CMD_BUTTON = {
 		.hoverTextId = GAME_TEXT_ID_BUILD_BARRACKS,
 		.fixedParam = UNIT_TYPE_BARRACKS,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD_BARRACKS,
-		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y,
+		.x = CMD_BAR_BUTTON_INITIAL_X,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton BLACKSMITH_CMD_BUTTON = {
@@ -426,7 +444,7 @@ static const CommandBarButton BLACKSMITH_CMD_BUTTON = {
 		.fixedParam = UNIT_TYPE_BLACKSMITH,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD_BLACKSMITH,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton STABLES_CMD_BUTTON = {
@@ -439,7 +457,7 @@ static const CommandBarButton STABLES_CMD_BUTTON = {
 		.fixedParam = UNIT_TYPE_STABLES,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD_STABLES,
 		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
+		.y = CMD_BAR_BUTTON_INITIAL_Y,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton TOWER_CMD_BUTTON = {
@@ -452,7 +470,7 @@ static const CommandBarButton TOWER_CMD_BUTTON = {
 		.fixedParam = UNIT_TYPE_TOWER,
 		.icon = CMD_BAR_BUTTON_ICON_BUILD_TOWER,
 		.x = CMD_BAR_BUTTON_INITIAL_X,
-		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT * 2,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static const CommandBarButton UPGRADE_SOLDIER_CMD_BUTTON = {
@@ -576,8 +594,13 @@ static void game_cmd_bar_add_common(CommandBarButton cmdBarButtons[CMD_BAR_BUTTO
 }
 
 static void game_cmd_bar_handle_building_select_buttons(GameContext *context) {
+	if(context->map.enableCityHall) context->cmdBarButtons[buttonIndex++] = CITY_HALL_CMD_BUTTON;
 	if(context->map.enableFarm) context->cmdBarButtons[buttonIndex++] = FARM_CMD_BUTTON;
 	if(context->map.enableBarracks) context->cmdBarButtons[buttonIndex++] = BARRACKS_CMD_BUTTON;
+	context->cmdBarButtons[buttonIndex++] = CANCEL_SELECT_BUILDING_CMD_BUTTON;
+}
+
+static void game_cmd_bar_handle_building_select_advanced_buttons(GameContext *context) {
 	if (context->map.enableBlacksmith && unitCount[UNIT_TYPE_BARRACKS]) context->cmdBarButtons[buttonIndex++] = BLACKSMITH_CMD_BUTTON;
 	if (context->map.enableStables && unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = STABLES_CMD_BUTTON;
 	if (context->map.enableTower && unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TOWER_CMD_BUTTON;
@@ -868,14 +891,26 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 							case CMD_BAR_BUILD_STATE_SELECT:
 								game_cmd_bar_handle_building_select_buttons(context);
 								break;
+							case CMD_BAR_BUILD_STATE_SELECT_ADVANCED: {
+								game_cmd_bar_handle_building_select_advanced_buttons(context);
+								break;
+							}
 							case CMD_BAR_BUILD_STATE_PLACE:
 								context->cmdBarButtons[buttonIndex++] = CANCEL_PLACE_BUILDING_CMD_BUTTON;
 								break;
 							case CMD_BAR_BUILD_STATE_NONE:
 								game_cmd_bar_add_common(context->cmdBarButtons);
-								context->cmdBarButtons[buttonIndex++] = BUILD_CMD_BUTTON;
-								context->cmdBarButtons[buttonIndex++] = REPAIR_CMD_BUTTON;
-								context->cmdBarButtons[buttonIndex++] = HARVEST_CMD_BUTTON;
+								if(context->map.enableCityHall || context->map.enableFarm || context->map.enableBarracks) {
+									context->cmdBarButtons[buttonIndex++] = BUILD_CMD_BUTTON;
+								}
+								if(
+									(context->map.enableBlacksmith && unitCount[UNIT_TYPE_BARRACKS]) ||
+										(context->map.enableStables && unitCount[UNIT_TYPE_BLACKSMITH]) ||
+										(context->map.enableTower && unitCount[UNIT_TYPE_STABLES])
+								) {
+									context->cmdBarButtons[buttonIndex++] = BUILD_ADVANCED_CMD_BUTTON;
+								}
+								context->cmdBarButtons[buttonIndex++] = REPAIR_HARVEST_CMD_BUTTON;
 								break;
 						}
 					} else {
@@ -888,19 +923,18 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 		} else {
 			game_cmd_bar_clear_build_placing(&context->buildPlacing);
 			game_cmd_bar_add_common(context->cmdBarButtons);
-			uint8_t therAreNonWorkers = FALSE;
+			uint8_t thereAreNonWorkers = FALSE;
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
 				if (unit && unit->type != UNIT_TYPE_WORKER) {
-					therAreNonWorkers = TRUE;
+					thereAreNonWorkers = TRUE;
 					break;
 				}
 			}
-			if (therAreNonWorkers > 0) {
+			if (thereAreNonWorkers > 0) {
 				context->cmdBarButtons[buttonIndex++] = DEFEND_CMD_BUTTON;
 			} else {
-				context->cmdBarButtons[buttonIndex++] = REPAIR_CMD_BUTTON;
-				context->cmdBarButtons[buttonIndex++] = HARVEST_CMD_BUTTON;
+				context->cmdBarButtons[buttonIndex++] = REPAIR_HARVEST_CMD_BUTTON;
 			}
 		}
 	}
@@ -984,5 +1018,12 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 									 PAL_COLOR_BLACK);
 			game_cmd_bar_render_queue_submit_btn_info(renderQueue, context->gameFont, button);
 		}
+	}
+	if(context->buildPlacing.state == CMD_BAR_BUILD_STATE_PLACE &&
+					context->mouseStatus.y > VIEWPORT_Y_MIN && context->mouseStatus.y < VIEWPORT_Y_MAX &&
+					context->mouseStatus.x > VIEWPORT_X_MIN && context->mouseStatus.x < VIEWPORT_X_MAX) {
+		render_queue_submit_text_multicolor_shadow(
+			renderQueue, UI_Z_ORDER + 505, context->gameFont, text_get_by_id(GAME_TEXT_ID_PUT_BUILDING),
+			HOVER_MESSAGE_X, HOVER_MESSAGE_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
 	}
 }

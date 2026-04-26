@@ -20,8 +20,8 @@ Mage+
 ^004D^001efend with unit
 Cancel action (^004ESC^001)
 Build (^004B^001)
-^004R^001epair
-^004H^001arvest
+Build Ad^004v^001anced
+Repair / Harvest (^004W^001)
 Cancel queue and recover resources (^004ESC^001)
 Train Worker (^004W^001)
 Train ^004S^001oldier
@@ -38,6 +38,7 @@ Upgrade ^004S^001oldiers
 Upgrade ^004A^001rchers
 Upgrade ^004K^001nights
 Upgrade ^004M^001ages
+Put the building
 Not enough gold, harvest more gold.
 Not enough wood, chop more trees.
 Not enough food, build more farms.

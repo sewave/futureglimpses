@@ -20,24 +20,25 @@ Parar unidad (^004S^001)
 ^004D^001efender con unidad
 Cancelar acción (^004ESC^001)
 Construir (^004B^001)
-^004R^001eparar
-Recolectar (^004H^001)
+Construir A^004v^001anzado
+Reparar / Recolectar (^004W^001)
 Cancelar cola y recuperar recursos (^004ESC^001)
 Entrenar Obrero (^004W^001)
 Entrenar ^004S^001oldado
 Entrenar ^004A^001rquero
 Entrenar Caballero (^004K^001)
 Entrenar ^004M^001ago
-Construir Alcaldía (^004H^001)
+Construir Al^004c^001aldía
 Construir Granja (^004F^001)
 Construir Cuarteles (^004B^001)
 Construir Herrería (^004M^001)
-Construir Establos (^004S^001)
-Construir Torre (^004T^001)
+Construir E^004s^001tablos
+Construir ^004T^001orre
 Mejorar ^004S^001oldados
 Mejorar ^004A^001rqueros
 Mejorar Caballeros (^004K^001)
 Mejorar ^004M^001agos
+Coloca el edificio
 Oro insuficiente, recolecta más oro.
 Madera insuficiente, tala más árboles.
 Comida insuficiente, crea más granjas.

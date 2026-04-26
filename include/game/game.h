@@ -248,6 +248,7 @@ typedef struct {
 
 	uint8_t enableBarracks;
 	uint8_t enableBlacksmith;
+	uint8_t enableCityHall;
 	uint8_t enableFarm;
 	uint8_t enableStables;
 	uint8_t enableTower;
