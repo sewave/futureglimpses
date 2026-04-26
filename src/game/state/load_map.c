@@ -114,6 +114,7 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 
 	context->map.enableBarracks = map->enableBarracks;
 	context->map.enableBlacksmith = map->enableBlacksmith;
+	context->map.enableCityHall = map->enableCityHall;
 	context->map.enableFarm = map->enableFarm;
 	context->map.enableStables = map->enableStables;
 	context->map.enableTower = map->enableTower;
