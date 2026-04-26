@@ -75,7 +75,7 @@ int main_init() {
 		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}
-
+	printf("\n");
 	if (game_video_load_universal_pal(context.mainPalette) != INITIALIZATION_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 		printf("Error loading universal game pal.\n");
