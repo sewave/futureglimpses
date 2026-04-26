@@ -197,6 +197,14 @@
                 "y": 521
             }
         },
+        "maps/workers.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 549.6666666666666,
+                "y": 557
+            }
+        },
         "sin nombre.tmx": {
             "scale": 0.5,
             "selectedLayer": 1,
@@ -257,6 +265,7 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/superwar.tmx",
         "maps/Initial/2-archers.tmx",
         "maps/Initial/4-mages.tmx",
         "maps/Initial/3-knights.tmx",
@@ -267,8 +276,7 @@
         "maps/win.tmx",
         "maps/Test Campaign/1-starting.tmx",
         "maps/Test Campaign/2-archers.tmx",
-        "maps/laber.tmx",
-        "clash.tmx"
+        "maps/laber.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
