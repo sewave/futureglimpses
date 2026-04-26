@@ -20,7 +20,7 @@ static int RESOURCE_ICONS_LOCATIONS[PRINTED_RESOURCES][2] = {
 		{160, 2},
 		{240, 2}};
 
-static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPE_AVAILABLE_FOOD][32];
+static char resourceBuffers[UNIT_CONTROLLERS_COUNT][RESOURCE_TYPE_AVAILABLE_FOOD + 1][32];
 
 void resource_reset(GameContext *context) {
 	for (int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
