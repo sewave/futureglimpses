@@ -1,6 +1,6 @@
 #include "game/unit/unit_ai.h"
 
-#define MAX_FOUND_UNITS 32
+#define MAX_FOUND_UNITS 16
 static GameUnit *foundUnits[MAX_FOUND_UNITS];
 
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
@@ -10,13 +10,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 														   game_spatial_filter_enemy_units_in_attack_range, unit, foundUnits,
 														   1);
 		if (foundUnitsCount > 0) {
-			for (int i = 0; i < foundUnitsCount; i++) {
-				GameUnit *target = foundUnits[i];
-				if (!game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
-					game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
-					return;
-				}
-			}
+			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_IDLE);
 		} else {
 			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
 													  game_spatial_filter_enemy_units, unit, foundUnits,
@@ -34,7 +28,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 						distance = newDistance;
 					}
 				}
-				if (target) game_unit_command_move_attack(unit, target, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				if (target) game_unit_command_move_attack(unit, NO_TARGET_ID, target->x, target->y);
 			} else {
 				// We found nothing, so we change direction to make it "look" around
 				unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT;
@@ -210,21 +204,13 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 		return;
 	}
 
-	// If we ara not attacking a concrete unit, fight against any enemy unit in the way
+	// If we are not attacking a concrete unit, fight against any enemy unit in the way
 	if(!targetUnit) {
 		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
-														game_spatial_filter_enemy_units, unit, foundUnits, 1);
+														game_spatial_filter_enemy_units_in_attack_range, unit, foundUnits, 1);
 		if (foundUnitsCount > 0) {
-			for (int i = 0; i < foundUnitsCount; i++) {
-				GameUnit *target = foundUnits[i];
-				if (!game_spatial_unit_in_range(unit, target, unit->minAttackRange)) {
-					unit->prevTargetX = targetX;
-					unit->prevTargetY = targetY;
-					unit->prevTargetId = unit->targetId;
-					game_unit_command_attack(unit, target, UNIT_STATE_MOVE_ATTACK);
-					return;
-				}
-			}
+			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_MOVE_ATTACK);
+			return;
 		}
 	}
 
