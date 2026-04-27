@@ -257,8 +257,8 @@ static void game_strategy_ai_harvester_workers(GameContext *context) {
 }
 
 static void game_strategy_ai_train_units(GameContext *context) {
-	// Start training after peace time
-	if (++context->aiData.peaceCounter < context->map.peaceTime) return;
+	// Start training after half peace time
+	if (++context->aiData.peaceCounter < context->map.peaceTime / 2) return;
 	uint8_t allWorkersTrained = game_strategy_ai_count_computer_workers(context) >= context->aiData.desiredWorkers;
 	int workerGoldCost = game_unit_get_training_resources(UNIT_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
 	// Must have at least worker gold cost and reserve

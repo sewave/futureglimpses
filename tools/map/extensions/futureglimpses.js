@@ -388,18 +388,6 @@ function exportBinary(map) {
     view.setUint8(offset++, enableUpgradeMage, littleEndian);
     tiled.log(`Writed enableUpgradeMage: ${enableUpgradeMage}`);
 
-    var upgradedSoldierComputer = mapProperties.UPGRADED_SOLDIER_COMPUTER || false;
-    view.setUint8(offset++, upgradedSoldierComputer, littleEndian);
-    tiled.log(`Writed upgradedSoldierComputer: ${upgradedSoldierComputer}`);
-    var upgradedArcherComputer = mapProperties.UPGRADED_ARCHER_COMPUTER || false;
-    view.setUint8(offset++, upgradedArcherComputer, littleEndian);
-    tiled.log(`Writed upgradedArcherComputer: ${upgradedArcherComputer}`);
-    var upgradedKnightComputer = mapProperties.UPGRADED_KNIGHT_COMPUTER || false;
-    view.setUint8(offset++, upgradedKnightComputer, littleEndian);
-    tiled.log(`Writed upgradedKnightComputer: ${upgradedKnightComputer}`);
-    var upgradedMageComputer = mapProperties.UPGRADED_MAGE_COMPUTER || false;
-    view.setUint8(offset++, upgradedMageComputer, littleEndian);
-    tiled.log(`Writed upgradedMageComputer: ${upgradedMageComputer}`);
     var upgradedSoldierPlayer = mapProperties.UPGRADED_SOLDIER_PLAYER || false;
     view.setUint8(offset++, upgradedSoldierPlayer, littleEndian);
     tiled.log(`Writed upgradedSoldierPlayer: ${upgradedSoldierPlayer}`);
@@ -412,6 +400,19 @@ function exportBinary(map) {
     var upgradedMagePlayer = mapProperties.UPGRADED_MAGE_PLAYER || false;
     view.setUint8(offset++, upgradedMagePlayer, littleEndian);
     tiled.log(`Writed upgradedMagePlayer: ${upgradedMagePlayer}`);
+
+    var upgradedSoldierComputer = mapProperties.UPGRADED_SOLDIER_COMPUTER || false;
+    view.setUint8(offset++, upgradedSoldierComputer, littleEndian);
+    tiled.log(`Writed upgradedSoldierComputer: ${upgradedSoldierComputer}`);
+    var upgradedArcherComputer = mapProperties.UPGRADED_ARCHER_COMPUTER || false;
+    view.setUint8(offset++, upgradedArcherComputer, littleEndian);
+    tiled.log(`Writed upgradedArcherComputer: ${upgradedArcherComputer}`);
+    var upgradedKnightComputer = mapProperties.UPGRADED_KNIGHT_COMPUTER || false;
+    view.setUint8(offset++, upgradedKnightComputer, littleEndian);
+    tiled.log(`Writed upgradedKnightComputer: ${upgradedKnightComputer}`);
+    var upgradedMageComputer = mapProperties.UPGRADED_MAGE_COMPUTER || false;
+    view.setUint8(offset++, upgradedMageComputer, littleEndian);
+    tiled.log(`Writed upgradedMageComputer: ${upgradedMageComputer}`);
 
     tiled.log(`Writed map attributes`);
 

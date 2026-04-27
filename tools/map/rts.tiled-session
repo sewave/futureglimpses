@@ -152,7 +152,7 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 510,
+                "x": 391.33333333333326,
                 "y": 238.66666666666666
             }
         },
@@ -206,11 +206,11 @@
             }
         },
         "maps/workers.tmx": {
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 549.6666666666666,
-                "y": 557.3333333333333
+                "x": 434,
+                "y": 462.6666666666667
             }
         },
         "sin nombre.tmx": {
@@ -273,18 +273,18 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/workers.tmx",
         "maps/closewar.tmx",
-        "maps/superwar.tmx",
-        "maps/Initial/2-archers.tmx",
-        "maps/Initial/4-mages.tmx",
-        "maps/Initial/3-knights.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/clash.tmx",
         "maps/base.tmx",
+        "maps/Initial/1-starting.tmx",
+        "maps/Initial/2-archers.tmx",
+        "maps/Initial/3-knights.tmx",
+        "maps/Initial/4-mages.tmx",
+        "maps/laber.tmx",
+        "maps/superwar.tmx",
         "maps/test.tmx",
         "maps/win.tmx",
-        "maps/Test Campaign/1-starting.tmx"
+        "maps/workers.tmx",
+        "maps/clash.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

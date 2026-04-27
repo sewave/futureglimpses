@@ -73,31 +73,6 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 		}
 	}
 
-	// Only one object layer
-	ObjectLayer *objLayer = &map->objectLayers[0];
-	for (int i = 0; i < objLayer->numObjects; i++) {
-		MapObject *mapObj = &objLayer->objects[i];
-		GameUnit *unit = game_unit_spawn(context, (UnitTypeEnum) mapObj->type, (ControllerEnum) mapObj->controller, mapObj->x, mapObj->y);
-		if (unit) {
-			if(unit->isBuilding) {
-				building_complete(context, unit);
-				unit->health = unit->maxHealth;
-			}
-			if(mapObj->isCustom) {
-				unit->isCustom = TRUE;
-				strcpy(unit->name, mapObj->name);
-				if(mapObj->maxHealth) {
-					unit->maxHealth = clamp(mapObj->maxHealth, UNIT_MIN_HEALTH, UNIT_MAX_HEALTH);
-					unit->health = unit->maxHealth;
-				}
-				if(mapObj->minDamage) unit->minDamage = clamp(mapObj->minDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
-				if(mapObj->maxDamage) unit->maxDamage = clamp(mapObj->maxDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
-				unit->mustSurvive = mapObj->mustSurvive;
-				unit->armor = mapObj->armor;
-			}
-		}
-	}
-
 	free(context->map.title);
 	free(context->map.description);
 	free(context->map.win);
@@ -130,6 +105,32 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 			context->upgrades[controller][i + UNIT_TYPE_SOLDIER].enabled = map->upgradedUnits[controller][i];
 		}
 	}
+
+	// Only one object layer
+	ObjectLayer *objLayer = &map->objectLayers[0];
+	for (int i = 0; i < objLayer->numObjects; i++) {
+		MapObject *mapObj = &objLayer->objects[i];
+		GameUnit *unit = game_unit_spawn(context, (UnitTypeEnum) mapObj->type, (ControllerEnum) mapObj->controller, mapObj->x, mapObj->y);
+		if (unit) {
+			if(unit->isBuilding) {
+				building_complete(context, unit);
+				unit->health = unit->maxHealth;
+			}
+			if(mapObj->isCustom) {
+				unit->isCustom = TRUE;
+				strcpy(unit->name, mapObj->name);
+				if(mapObj->maxHealth) {
+					unit->maxHealth = clamp(mapObj->maxHealth, UNIT_MIN_HEALTH, UNIT_MAX_HEALTH);
+					unit->health = unit->maxHealth;
+				}
+				if(mapObj->minDamage) unit->minDamage = clamp(mapObj->minDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
+				if(mapObj->maxDamage) unit->maxDamage = clamp(mapObj->maxDamage, UNIT_MIN_DAMAGE, UNIT_MAX_DAMAGE);
+				unit->mustSurvive = mapObj->mustSurvive;
+				unit->armor = mapObj->armor;
+			}
+		}
+	}
+
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;
 

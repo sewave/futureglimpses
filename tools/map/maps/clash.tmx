@@ -19,7 +19,7 @@
   <property name="MSG_LOSE" value="Has perdido"/>
   <property name="MSG_TITLE" value="Conquista"/>
   <property name="MSG_WIN" value="Has ganado"/>
-  <property name="PEACE_TIME" type="int" value="300"/>
+  <property name="PEACE_TIME" type="int" value="184"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
