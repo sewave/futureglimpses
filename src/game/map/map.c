@@ -9,13 +9,14 @@
 #define MAP_RESOURCE_PLAYER_WOOD_INDEX 1
 #define MAP_RESOURCE_COMPUTER_GOLD_INDEX 2
 #define MAP_RESOURCE_COMPUTER_WOOD_INDEX 3
-#define MAP_OPTIONS 6
+#define MAP_OPTIONS 7
 #define MAP_OPTION_ENABLE_BARRACKS_INDEX 0
 #define MAP_OPTION_ENABLE_BLACKSMITH_INDEX 1
-#define MAP_OPTION_ENABLE_FARM_INDEX 2
-#define MAP_OPTION_ENABLE_STABLES_INDEX 3
-#define MAP_OPTION_ENABLE_TOWER_INDEX 4
-#define MAP_OPTION_AI_MODE_INDEX 5
+#define MAP_OPTION_ENABLE_CITY_HALL_INDEX 2
+#define MAP_OPTION_ENABLE_FARM_INDEX 3
+#define MAP_OPTION_ENABLE_STABLES_INDEX 4
+#define MAP_OPTION_ENABLE_TOWER_INDEX 5
+#define MAP_OPTION_AI_MODE_INDEX 6
 
 #define MAP_UPGRADE_OPTIONS 12
 #define MAP_UPGRADE_OPTIONS_ENABLED_INDEX 0
@@ -276,11 +277,10 @@ MapData *game_map_load_data(const char *filename) {
 	}
 	map->enableBarracks = mapOptions[MAP_OPTION_ENABLE_BARRACKS_INDEX];
 	map->enableBlacksmith = mapOptions[MAP_OPTION_ENABLE_BLACKSMITH_INDEX];
+	map->enableCityHall = mapOptions[MAP_OPTION_ENABLE_CITY_HALL_INDEX];
 	map->enableFarm = mapOptions[MAP_OPTION_ENABLE_FARM_INDEX];
 	map->enableStables = mapOptions[MAP_OPTION_ENABLE_STABLES_INDEX];
 	map->enableTower = mapOptions[MAP_OPTION_ENABLE_TOWER_INDEX];
-	// TODO get enable city hall from map
-	map->enableCityHall = TRUE;
 	map->aiMode = mapOptions[MAP_OPTION_AI_MODE_INDEX];
 
 	// Peace time

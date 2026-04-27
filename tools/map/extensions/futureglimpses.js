@@ -20,6 +20,7 @@
  * - Computer Wood (U32)
  * - Enable barracks (U8)
  * - Enable blacksmith (U8)
+ * - Enable city hall (U8)
  * - Enable farm (U8)
  * - Enable stables (U8)
  * - Enable tower (U8)
@@ -122,7 +123,7 @@ function calculateTotalSize(map) {
 	// 4 resources of 32 bits
 	size += 4 * 4;
     // Other attributes
-    size += 8;
+    size += 9;
 
     size += 4 * 2 * 1; // Upgraded units (4 * 2 * U8)
     size += 4 * 1; // Researcheable upgrades (4 * U8)
@@ -349,24 +350,27 @@ function exportBinary(map) {
     offset += 4;
 
     var enableBarracks = mapProperties.ENABLE_BARRACKS || false;
-    var enableBlacksmith = mapProperties.ENABLE_BLACKSMITH || false;
-    var enableFarm = mapProperties.ENABLE_FARM || false;
-    var enableStables = mapProperties.ENABLE_STABLES || false;
-    var enableTower = mapProperties.ENABLE_TOWER || false;
-    var aiMode = mapProperties.AI_MODE ? mapProperties.AI_MODE.value : 0;
-    var peaceTime = mapProperties.PEACE_TIME || 0;
     view.setUint8(offset++, enableBarracks, littleEndian);
     tiled.log(`Writed enableBarracks: ${enableBarracks}`);
+    var enableBlacksmith = mapProperties.ENABLE_BLACKSMITH || false;
     view.setUint8(offset++, enableBlacksmith, littleEndian);
     tiled.log(`Writed enableBlacksmith: ${enableBlacksmith}`);
+    var enableCityHall = mapProperties.ENABLE_CITY_HALL || false;
+    view.setUint8(offset++, enableCityHall, littleEndian);
+    tiled.log(`Writed enableCityHall: ${enableCityHall}`);
+    var enableFarm = mapProperties.ENABLE_FARM || false;
     view.setUint8(offset++, enableFarm, littleEndian);
     tiled.log(`Writed enableFarm: ${enableFarm}`);
+    var enableStables = mapProperties.ENABLE_STABLES || false;
     view.setUint8(offset++, enableStables, littleEndian);
     tiled.log(`Writed enableStables: ${enableStables}`);
+    var enableTower = mapProperties.ENABLE_TOWER || false;
     view.setUint8(offset++, enableTower, littleEndian);
     tiled.log(`Writed enableTower: ${enableTower}`);
+    var aiMode = mapProperties.AI_MODE ? mapProperties.AI_MODE.value : 0;
     view.setUint8(offset++, aiMode, littleEndian);
     tiled.log(`Writed aiMode: ${aiMode}`);
+    var peaceTime = mapProperties.PEACE_TIME || 0;
     view.setUint16(offset, peaceTime, littleEndian);
     tiled.log(`Writed peaceTime: ${peaceTime}`);
     offset += 2;

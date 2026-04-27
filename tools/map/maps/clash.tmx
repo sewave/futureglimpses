@@ -7,6 +7,7 @@
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="2"/>
   <property name="ENABLE_BARRACKS" type="bool" value="true"/>
   <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
+  <property name="ENABLE_CITY_HALL" type="bool" value="true"/>
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>

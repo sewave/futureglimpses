@@ -187,21 +187,21 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 };
 
 static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
-		{.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
-		{.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
-		{.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
-		{.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
-		{.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
-		{.used = {1000, 0, 0}, .time = SEC_TO_FRAMES(85), .foodProvided = 5},
-		{.used = {500, 250, 0}, .time = SEC_TO_FRAMES(33), .foodProvided = 4},
-		{.used = {700, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
-		{.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
-		{.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
-		{.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
-		{.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
-		{.used = {2000, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
-		{.used = {2500, 500, 0}, .time = SEC_TO_FRAMES(90), .foodProvided = 0},
-		{.used = {3000, 1000, 0}, .time = SEC_TO_FRAMES(110), .foodProvided = 0},
+	[TRAINING_TYPE_WORKER]			= {.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
+	[TRAINING_TYPE_SOLDIER]			= {.used = {600, 0, 1}, .time = SEC_TO_FRAMES(20), .foodProvided = 0},
+	[TRAINING_TYPE_ARCHER]			= {.used = {500, 50, 1}, .time = SEC_TO_FRAMES(25), .foodProvided = 0},
+	[TRAINING_TYPE_KNIGHT]			= {.used = {800, 100, 2}, .time = SEC_TO_FRAMES(30), .foodProvided = 0},
+	[TRAINING_TYPE_MAGE]			= {.used = {900, 300, 2}, .time = SEC_TO_FRAMES(83), .foodProvided = 0},
+	[TRAINING_TYPE_CITY_HALL]		= {.used = {800, 200, 0}, .time = SEC_TO_FRAMES(85), .foodProvided = 5},
+	[TRAINING_TYPE_FARM]			= {.used = {500, 250, 0}, .time = SEC_TO_FRAMES(33), .foodProvided = 4},
+	[TRAINING_TYPE_BARRACKS]		= {.used = {700, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
+	[TRAINING_TYPE_BLACKSMITH]		= {.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
+	[TRAINING_TYPE_STABLES]			= {.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
+	[TRAINING_TYPE_TOWER]			= {.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
+	[TRAINING_TYPE_UPGRADE_SOLDIER]	= {.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
+	[TRAINING_TYPE_UPGRADE_ARCHER]	= {.used = {2000, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
+	[TRAINING_TYPE_UPGRADE_KNIGHT]	= {.used = {2500, 500, 0}, .time = SEC_TO_FRAMES(90), .foodProvided = 0},
+	[TRAINING_TYPE_UPGRADE_MAGE]	= {.used = {3000, 1000, 0}, .time = SEC_TO_FRAMES(110), .foodProvided = 0},
 };
 
 static int game_unit_find_free_index(GameUnit units[]) {

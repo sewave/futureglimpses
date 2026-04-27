@@ -88,7 +88,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 511.7183201907207,
-                "y": 511.7183201907207
+                "y": 512.6572528883185
             }
         },
         "maps/Initial/2-archers.tmx": {
@@ -96,7 +96,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 511.7183201907207,
-                "y": 511.7183201907207
+                "y": 512.6572528883185
             }
         },
         "maps/Initial/3-knights.tmx": {
@@ -107,15 +107,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 270.3333333333333,
-                "y": 434.99999999999994
+                "y": 434.66666666666663
             }
         },
         "maps/Initial/4-mages.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 182.66666666666663,
-                "y": 727.3333333333333
+                "x": 182,
+                "y": 728
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -139,7 +139,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 711.5,
-                "y": 690.5
+                "y": 691
             }
         },
         "maps/buildings/big_buildings.tsx": {
@@ -153,23 +153,31 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 510,
-                "y": 484.66666666666674
+                "y": 238.66666666666666
+            }
+        },
+        "maps/closewar.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 497.66666666666663,
+                "y": 534
             }
         },
         "maps/laber.tmx": {
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 262,
-                "y": 690.5
+                "x": 261.5,
+                "y": 691
             }
         },
         "maps/superwar.tmx": {
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 492,
-                "y": 515.75
+                "x": 492.25,
+                "y": 516
             }
         },
         "maps/test.tmx": {
@@ -180,7 +188,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 797.625,
-                "y": 788.625
+                "y": 788.75
             }
         },
         "maps/tileset.tsx": {
@@ -194,7 +202,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 5,
-                "y": 521
+                "y": 522
             }
         },
         "maps/workers.tmx": {
@@ -202,7 +210,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 549.6666666666666,
-                "y": 557
+                "y": 557.3333333333333
             }
         },
         "sin nombre.tmx": {
@@ -249,7 +257,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/initial",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -265,6 +273,8 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/workers.tmx",
+        "maps/closewar.tmx",
         "maps/superwar.tmx",
         "maps/Initial/2-archers.tmx",
         "maps/Initial/4-mages.tmx",
@@ -274,9 +284,7 @@
         "maps/base.tmx",
         "maps/test.tmx",
         "maps/win.tmx",
-        "maps/Test Campaign/1-starting.tmx",
-        "maps/Test Campaign/2-archers.tmx",
-        "maps/laber.tmx"
+        "maps/Test Campaign/1-starting.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
