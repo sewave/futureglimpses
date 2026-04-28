@@ -145,7 +145,12 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
-				if (!unit || unit->isBuilding) continue;
+				if (!unit) continue;
+				if(unit->isBuilding) {
+					unit->targetX = targetUnit->x;
+					unit->targetY = targetUnit->y;
+					continue;
+				}
 				if (isContextual) {
 					if (targetUnit->controller == UNIT_CONTROLLER_AI) {
 						game_unit_command_move_attack_player(context, unit, targetUnit, targetUnit->x, targetUnit->y);

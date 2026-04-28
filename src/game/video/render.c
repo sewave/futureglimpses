@@ -74,6 +74,17 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		int unitSize = unit->tileSize;
+		if(unit->isBuilding && unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION &&
+			unit->isSelected && unit->targetX <= cameraMaxX && unit->targetX >= cameraMinX - unitSize &&
+				unit->targetY <= cameraMaxY && unit->targetY >= cameraMinY - unitSize) {
+			int targetXPos = (unit->targetX * TILE_SIZE) - context->xPosition + VIEWPORT_X_OFFSET;
+			int targetYPos = (unit->targetY * TILE_SIZE) - context->yPosition + VIEWPORT_Y_OFFSET;
+			render_queue_submit_rect(renderQueue, BACKGROUND_Z_ORDER + 10,
+									targetXPos + SELECT_CUBE_OFF, targetYPos + SELECT_CUBE_OFF,
+									targetXPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF * 2,
+									targetYPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF * 2,
+									PAL_COLOR_VIOLET);
+		}
 		if (unit->x <= cameraMaxX && unit->x >= cameraMinX - unitSize &&
 			unit->y <= cameraMaxY && unit->y >= cameraMinY - unitSize && game_unit_is_visible(context, unit)) {
 			AnimationStatus *animationStatus = &unit->animationStatus;
@@ -130,7 +141,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				} else {
 					rectColor = PAL_COLOR_GREEN;
 				}
-			} 
+			}
 			if (unit->blinkTime && unit->blinkTime % BLINK_MOD < BLINK_FRAMES) {
 				if (unit->controller == UNIT_CONTROLLER_AI) {
 					rectColor = PAL_COLOR_RED;
@@ -300,8 +311,9 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 			context->targetPosition.y >= cameraMinY && context->targetPosition.y < cameraMaxY) {
 			int unitTileXCamera = context->targetPosition.x * TILE_SIZE - context->xPosition + VIEWPORT_X_OFFSET;
 			int unitTileYCamera = context->targetPosition.y * TILE_SIZE - context->yPosition + VIEWPORT_Y_OFFSET;	
-			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera, unitTileXCamera + TILE_SIZE,
-				unitTileYCamera + TILE_SIZE, context->blinkColor);
+			render_queue_submit_rect(renderQueue, OBJECTS_Z_ORDER, unitTileXCamera, unitTileYCamera,
+				unitTileXCamera + TILE_SIZE - SELECT_CUBE_OFF,
+				unitTileYCamera + TILE_SIZE - SELECT_CUBE_OFF, context->blinkColor);
 		}
 	}
 }
