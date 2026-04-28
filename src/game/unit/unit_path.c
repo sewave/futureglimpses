@@ -64,7 +64,7 @@ static int8_t game_unit_path_get_best_direction(GameContext *context, GameUnit *
 		int nextX = unit->x + directionDx[i];
 		int nextY = unit->y + directionDy[i];
 
-		if (nextX < 0 || nextX >= BOARD_WIDTH || nextY < 0 || nextY >= BOARD_HEIGHT || context->walkabilityGrid[nextX][nextY] == WALKABILITY_BLOCKED) continue;
+		if (nextX < 0 || nextX >= BOARD_WIDTH || nextY < 0 || nextY >= BOARD_HEIGHT || context->walkabilityGrid[nextX][nextY] != WALKABILITY_FREE) continue;
 
 		int currentScore = game_unit_path_evaluate_direction(context, unit, nextX, nextY, i);
 		if (currentScore < bestScore) {
