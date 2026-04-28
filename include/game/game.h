@@ -271,6 +271,7 @@ typedef struct {
 typedef struct {
 	uint16_t attackCounter;
 	uint16_t peaceCounter;
+	uint16_t rebuildCooldown;
 	int currentWaveUnits;
 	int initialFood;
 	int desiredWorkers;

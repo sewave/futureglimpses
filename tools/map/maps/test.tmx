@@ -19,9 +19,9 @@
   <property name="MSG_TITLE" value="Test map"/>
   <property name="MSG_WIN" value="You win"/>
   <property name="PEACE_TIME" type="int" value="10"/>
-  <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
+  <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
-  <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
+  <property name="RES_WOOD_COMPUTER" type="int" value="50000"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
   <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_ARCHER_PLAYER" type="bool" value="false"/>

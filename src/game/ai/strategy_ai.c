@@ -6,6 +6,7 @@
 #define SEARCH_RESOURCE_MULTIPLIER 5
 #define MIN_GOLD_TRAINING_BUDGET 1000
 #define MAX_WORKER_IDLE_TIME (SEC_TO_FRAMES(30) / AI_STATE_COUNT)
+#define REBUILD_COOLDOWN (SEC_TO_FRAMES(10) / AI_STATE_COUNT)
 
 static uint8_t trainRanged = FALSE;
 
@@ -131,13 +132,15 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 	}
 	
 	UnitPosition *buildingToRebuild = game_strategy_ai_find_building_to_rebuild(context);
-	if (buildingToRebuild) {
+	if (context->aiData.rebuildCooldown) context->aiData.rebuildCooldown--;
+	if (buildingToRebuild && !context->aiData.rebuildCooldown) {
 		int workerGoldCost = game_unit_get_training_resources(TRAINING_TYPE_WORKER)->used[RESOURCE_TYPE_GOLD];
 		int buildingGoldCost = game_unit_get_training_resources(buildingToRebuild->type)->used[RESOURCE_TYPE_GOLD];
 		int gold = context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD];
 		// Reserve at least worker cost
 		if (gold >= workerGoldCost + buildingGoldCost) {
 			building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
+			context->aiData.rebuildCooldown = REBUILD_COOLDOWN;
 		}
 	}
 
@@ -366,6 +369,7 @@ static void game_strategy_ai_scan_buildings(GameContext *context) {
 void game_strategy_ai_init(GameContext *context) {
 	context->aiData.attackCounter = 0;
 	context->aiData.peaceCounter = 0;
+	context->aiData.rebuildCooldown = 0;
 	context->aiData.currentWaveUnits = FIRST_WAVE_UNITS;
 	context->aiData.state = AI_STATE_CREATE_WORKERS;
 	context->aiData.initialFood = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_MAX_FOOD];
