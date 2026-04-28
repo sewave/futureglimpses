@@ -1,6 +1,7 @@
 #include "game/state/results.h"
 #include "game/game_lib.h"
 #include <allegro.h>
+#include <stdio.h>
 
 #define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8
@@ -28,20 +29,15 @@ typedef struct {
 } ResultNumber;
 
 static ResultNumber resultNumbers[UNIT_CONTROLLERS_COUNT][CONTROLLER_STATS];
-
 static uint8_t goTitle;
+static char resultTitle[64];
 
 static void return_to_title(GameContext *context) {
     goTitle = TRUE;
 }
 
 static char* get_result_text(const GameContext *context) {
-    if(context->gameResult == GAME_RESULT_VICTORY) {
-        return (char *) text_get_by_id(GAME_TEXT_ID_RESULT_VICTORY);
-    } else if(context->gameResult == GAME_RESULT_DEFEAT) {
-        return (char *) text_get_by_id(GAME_TEXT_ID_RESULT_DEFEAT);
-    }
-    return "";
+    return resultTitle;
 }
 
 #define MENU_ELEMENTS 9
@@ -233,6 +229,17 @@ void handle_results_init(GameContext *context) {
     } else if(context->gameResult == GAME_RESULT_DEFEAT) {
         game_snd_play_music(GAME_MUSIC_DEFEAT);
     }
+
+    char* resultText;
+    if(context->gameResult == GAME_RESULT_VICTORY) {
+        resultText = (char *) text_get_by_id(GAME_TEXT_ID_RESULT_VICTORY);
+    } else if(context->gameResult == GAME_RESULT_DEFEAT) {
+        resultText = (char *) text_get_by_id(GAME_TEXT_ID_RESULT_DEFEAT);
+    } else {
+        resultText = "";
+    }
+    sprintf(resultTitle, resultText, context->map.title);
+
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
     goTitle = FALSE;
 }

@@ -93,8 +93,8 @@ Credits
 Credits line number 1
 Credits line number 2
 Credits line number 3
-Victory
-Defeat
+%s - Victory
+%s - Defeat
 Select scenario:
 Description:
 You
