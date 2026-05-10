@@ -13,17 +13,19 @@
 #define GUI_DESCRIPTION_X 168
 #define GUI_DESCRIPTION_MAX_WIDTH 140
 #define GUI_DESCRIPTION_MAX_HEIGHT 160
+#define GUI_DESCRIPTION_MAX_HEIGHT_SMALL (GUI_DESCRIPTION_MAX_HEIGHT / 2)
 #define BUTTON_RETURN_Y 175
 #define BUTTON_PLAY_Y 145
 
-#define LEFT_BACK_X GUI_ROWS_X - 2
-#define LEFT_BACK_Y GUI_BODY_Y - 2
-#define LEFT_BACK_WIDTH GUI_DESCRIPTION_MAX_WIDTH + 8
+#define LEFT_BACK_X (GUI_ROWS_X - 2)
+#define LEFT_BACK_Y (GUI_BODY_Y - 2)
+#define LEFT_BACK_WIDTH (GUI_DESCRIPTION_MAX_WIDTH + 8)
 #define LEFT_BACK_HEIGHT 122
-#define RIGHT_BACK_WIDTH GUI_DESCRIPTION_MAX_WIDTH + 4
-#define RIGHT_BACK_HEIGHT GUI_DESCRIPTION_MAX_HEIGHT + 4
-#define RIGHT_BACK_X GUI_DESCRIPTION_X - 2
-#define RIGHT_BACK_Y GUI_BODY_Y - 2
+#define RIGHT_BACK_WIDTH (GUI_DESCRIPTION_MAX_WIDTH + 4)
+#define RIGHT_BACK_HEIGHT (GUI_DESCRIPTION_MAX_HEIGHT + 4)
+#define RIGHT_BACK_HEIGHT_SMALL (GUI_DESCRIPTION_MAX_HEIGHT_SMALL + 4)
+#define RIGHT_BACK_X (GUI_DESCRIPTION_X - 2)
+#define RIGHT_BACK_Y (GUI_BODY_Y - 2)
 
 typedef enum {
 	SCENARIO_SELECT_BROWSE_STATE,
@@ -110,6 +112,9 @@ static void go_title_action(GameContext *context) {
 }
 
 #define SCENARIO_SELECT_ELEMENTS 12
+#define RIGHT_TEXT_BACK_TEXT_INDEX 5
+#define RIGHT_TEXT_BACK_RECT_INDEX 10
+#define RIGHT_TEXT_BACK_RECT_FILL_INDEX 11
 
 static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 	{
@@ -168,7 +173,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	{
+	[RIGHT_TEXT_BACK_TEXT_INDEX] = {
 		.x = GUI_DESCRIPTION_X, .y = GUI_BODY_Y, .z = 10,
 		.type = GUI_ELEMENT_CUSTOM_TEXT,
 		.textColor = PAL_COLOR_WHITE,
@@ -232,7 +237,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	{
+	[RIGHT_TEXT_BACK_RECT_INDEX] = {
 		.type = GUI_ELEMENT_RECTANGLE,
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 9,
 		.typed = {
@@ -242,7 +247,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	{
+	[RIGHT_TEXT_BACK_RECT_FILL_INDEX] = {
 		.type = GUI_ELEMENT_FILL_RECTANGLE,
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 8,
 		.typed = {
@@ -255,6 +260,20 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 };
 
 GuiScreen scenarioSelectGuiScreen = { .elements = scenarioSelect, .elementsCount = SCENARIO_SELECT_ELEMENTS };
+
+static void resize_scenario_text_area() {
+	if(mapList->count > 0) {
+		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT;
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT;
+			scenarioSelect[RIGHT_TEXT_BACK_TEXT_INDEX].typed.customText.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT;
+		} else {
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
+			scenarioSelect[RIGHT_TEXT_BACK_TEXT_INDEX].typed.customText.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT_SMALL;
+		}
+	}
+}
 
 static void free_all() {
 	destroy_bitmap(background);
@@ -289,6 +308,7 @@ static void init_scenarios_folder(char *folder) {
 	scenarioSelectOffset = 0;
 	scenarioSelected = 0;
 	state = SCENARIO_SELECT_BROWSE_STATE;
+	resize_scenario_text_area();
 }
 
 void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue) {
@@ -309,6 +329,16 @@ void handle_scenario_select_init(GameContext *context) {
 }
 
 GameStateEnum handle_scenario_select_update(GameContext *context) {
+	resize_scenario_text_area();
+	if(mapList->count > 0) {
+		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT;
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT;
+		} else {
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
+			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
+		}
+	}
 	game_gui_handle(context, &scenarioSelectGuiScreen);
 	
 	// Load test map as default for now
