@@ -14,7 +14,7 @@
 #define INTRO_TEXT_FILE_ES "assets/txt/intro_es.txt"
 #define INTRO_TEXT_FILE_EN "assets/txt/intro_en.txt"
 #define TEXTOUT_EX_BOX_BUFFER 2048
-#define STAR_SPEED SEC_TO_FRAMES(0.1)
+#define STAR_SPEED (MAX_STAR_Z * SEC_TO_FRAMES(1)) / SEC_TO_FRAMES(100) // Stars move from max Z to 0 in 1 second
 #define NUM_STARS 128
 #define TEXT_PIXEL_FRAMES SEC_TO_FRAMES(0.06)
 static char buffer[TEXTOUT_EX_BOX_BUFFER];
