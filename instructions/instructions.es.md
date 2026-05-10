@@ -60,7 +60,7 @@ Y otras sorpresas que será más divertido descubrir jugando.
 `Mago`: la unidad de ataque a larga distancia, no solo ataca desde muy lejos si no que sus bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
 
 ## Edificios
-`Alcaldía`: el edificio principal, crea obreros y no puede ser construido.
+`Alcaldía`: el edificio principal, crea obreros.
 `Granja`: permite tener más comida para poder tener más unidades simultáneamente.
 `Cuarteles`: el edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
 `Herrería`: permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
@@ -117,6 +117,7 @@ Son los siguientes:
 
 `ENABLE_BARRACKS`: Activa la construcción de cuarteles en el mapa.
 `ENABLE_BLACKSMITH`: Activa la construcción de herrerías en el mapa.
+`ENABLE_CITY_HALL`: Activa la construcción de alcaldías en el mapa.
 `ENABLE_STABLES`: Activa la construcción de establos en el mapa.
 `ENABLE_TOWER`: Activa la construcción de torres en el mapa.
 
