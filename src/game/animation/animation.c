@@ -96,7 +96,7 @@ static AnimationData WORKER_WORK_ANIMATION_DATA = {
         },
 		.lastFrameIndex = 3,
 		.events = {
-			{.type = EVENT_TYPE_WORK_SOUND, .data = 0, .fireTime = SEC_TO_FRAMES(0.5)},
+			{.type = EVENT_TYPE_WORK_SOUND, .data = 0, .fireTime = SEC_TO_FRAMES(0.4)},
 			{.type = EVENT_TYPE_WORK, .data = 0, .fireTime = WORKER_TIME},
 		},
 		.numEvents = 2,
