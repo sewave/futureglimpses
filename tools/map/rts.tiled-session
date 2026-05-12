@@ -3,10 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "maps/waves.tmx",
     "expandedProjectPaths": [
+        "maps/Test Campaign",
+        "Test Campaign",
+        "units",
+        "maps/Initial",
+        "maps",
+        "buildings",
         ".",
-        "Test Campaign"
+        "maps/Starting"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -152,8 +158,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 391.33333333333326,
-                "y": 238.66666666666666
+                "x": 512,
+                "y": 511.33333333333326
             }
         },
         "maps/closewar.tmx": {
@@ -187,8 +193,8 @@
             "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 797.625,
-                "y": 788.75
+                "x": 512.125,
+                "y": 512.25
             }
         },
         "maps/tileset.tsx": {
@@ -196,6 +202,14 @@
         },
         "maps/units/units.tsx": {
             "scaleInDock": 1
+        },
+        "maps/waves.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 399,
+                "y": 256
+            }
         },
         "maps/win.tmx": {
             "scale": 0.5,
@@ -257,7 +271,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/initial",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -269,10 +283,14 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
+        "maps/waves.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/waves.tmx",
+        "maps/clash.tmx",
+        "maps/test.tmx",
         "maps/closewar.tmx",
         "maps/base.tmx",
         "maps/Initial/1-starting.tmx",
@@ -281,10 +299,7 @@
         "maps/Initial/4-mages.tmx",
         "maps/laber.tmx",
         "maps/superwar.tmx",
-        "maps/test.tmx",
-        "maps/win.tmx",
-        "maps/workers.tmx",
-        "maps/clash.tmx"
+        "maps/win.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
