@@ -111,10 +111,7 @@ static void go_title_action(GameContext *context) {
 	state = SCENARIO_SELECT_TITLE_STATE;
 }
 
-#define SCENARIO_SELECT_ELEMENTS 12
-#define RIGHT_TEXT_BACK_TEXT_INDEX 5
-#define RIGHT_TEXT_BACK_RECT_INDEX 10
-#define RIGHT_TEXT_BACK_RECT_FILL_INDEX 11
+#define SCENARIO_SELECT_ELEMENTS 9
 
 static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 	{
@@ -173,20 +170,6 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	[RIGHT_TEXT_BACK_TEXT_INDEX] = {
-		.x = GUI_DESCRIPTION_X, .y = GUI_BODY_Y, .z = 10,
-		.type = GUI_ELEMENT_CUSTOM_TEXT,
-		.textColor = PAL_COLOR_WHITE,
-		.shadowTextColor = PAL_COLOR_BLACK,
-		.textBackground = TRANSPARENT_INDEX,
-		.typed = {
-			.customText = {
-				.text = get_scenario_selected_description,
-				.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT,
-				.maxWidth = GUI_DESCRIPTION_MAX_WIDTH
-			}
-		}
-	},
 	{
 		.x = LEFT_BACK_X, .y = BUTTON_RETURN_Y, .z = 10,
 		.type = GUI_ELEMENT_BUTTON,
@@ -237,7 +220,27 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	[RIGHT_TEXT_BACK_RECT_INDEX] = {
+};
+
+GuiScreen scenarioSelectGuiScreen = { .elements = scenarioSelect, .elementsCount = SCENARIO_SELECT_ELEMENTS };
+
+#define SCENARIO_SELECT_FOLDER_ELEMENTS 3
+static GuiElement scenarioSelectFolder[SCENARIO_SELECT_FOLDER_ELEMENTS] = {
+	{
+		.x = GUI_DESCRIPTION_X, .y = GUI_BODY_Y, .z = 10,
+		.type = GUI_ELEMENT_CUSTOM_TEXT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.customText = {
+				.text = get_scenario_selected_description,
+				.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT,
+				.maxWidth = GUI_DESCRIPTION_MAX_WIDTH
+			}
+		}
+	},
+	{
 		.type = GUI_ELEMENT_RECTANGLE,
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 9,
 		.typed = {
@@ -247,7 +250,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 			}
 		}
 	},
-	[RIGHT_TEXT_BACK_RECT_FILL_INDEX] = {
+	{
 		.type = GUI_ELEMENT_FILL_RECTANGLE,
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 8,
 		.typed = {
@@ -259,21 +262,47 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 	}
 };
 
-GuiScreen scenarioSelectGuiScreen = { .elements = scenarioSelect, .elementsCount = SCENARIO_SELECT_ELEMENTS };
+GuiScreen scenarioSelectFolderGuiScreen = { .elements = scenarioSelectFolder, .elementsCount = SCENARIO_SELECT_FOLDER_ELEMENTS };
 
-static void resize_scenario_text_area() {
-	if(mapList->count > 0) {
-		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT;
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT;
-			scenarioSelect[RIGHT_TEXT_BACK_TEXT_INDEX].typed.customText.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT;
-		} else {
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
-			scenarioSelect[RIGHT_TEXT_BACK_TEXT_INDEX].typed.customText.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT_SMALL;
+#define SCENARIO_SELECT_MAP_ELEMENTS 3
+static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
+	{
+		.x = GUI_DESCRIPTION_X, .y = GUI_BODY_Y, .z = 10,
+		.type = GUI_ELEMENT_CUSTOM_TEXT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.customText = {
+				.text = get_scenario_selected_description,
+				.maxHeight = GUI_DESCRIPTION_MAX_HEIGHT_SMALL,
+				.maxWidth = GUI_DESCRIPTION_MAX_WIDTH
+			}
+		}
+	},
+	{
+		.type = GUI_ELEMENT_RECTANGLE,
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 9,
+		.typed = {
+			.rectangle = {
+				.size = { .width = RIGHT_BACK_WIDTH, .height = RIGHT_BACK_HEIGHT_SMALL },
+				.color = PAL_COLOR_BLACK
+			}
+		}
+	},
+	{
+		.type = GUI_ELEMENT_FILL_RECTANGLE,
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y, .z = 8,
+		.typed = {
+			.fillRectangle = {
+				.size = { .width = RIGHT_BACK_WIDTH, .height = RIGHT_BACK_HEIGHT_SMALL },
+				.color = PAL_COLOR_DARK_TURQUOISE
+			}
 		}
 	}
-}
+};
+
+GuiScreen scenarioSelectMapGuiScreen = { .elements = scenarioSelectMap, .elementsCount = SCENARIO_SELECT_MAP_ELEMENTS };
 
 static void free_all() {
 	destroy_bitmap(background);
@@ -308,11 +337,17 @@ static void init_scenarios_folder(char *folder) {
 	scenarioSelectOffset = 0;
 	scenarioSelected = 0;
 	state = SCENARIO_SELECT_BROWSE_STATE;
-	resize_scenario_text_area();
 }
 
 void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_render_queue_submit(context, renderQueue, &scenarioSelectGuiScreen);
+	if(mapList->count > 0) {
+		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
+			game_gui_render_queue_submit(context, renderQueue, &scenarioSelectFolderGuiScreen);
+		} else {
+			game_gui_render_queue_submit(context, renderQueue, &scenarioSelectMapGuiScreen);
+		}
+	}
 	render_queue_submit_mouse(context, renderQueue);
 }
 
@@ -329,16 +364,6 @@ void handle_scenario_select_init(GameContext *context) {
 }
 
 GameStateEnum handle_scenario_select_update(GameContext *context) {
-	resize_scenario_text_area();
-	if(mapList->count > 0) {
-		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT;
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT;
-		} else {
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_INDEX].typed.rectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
-			scenarioSelect[RIGHT_TEXT_BACK_RECT_FILL_INDEX].typed.fillRectangle.size.height = RIGHT_BACK_HEIGHT_SMALL;
-		}
-	}
 	game_gui_handle(context, &scenarioSelectGuiScreen);
 	
 	// Load test map as default for now
