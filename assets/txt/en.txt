@@ -114,3 +114,6 @@ Wood spent
 Gold
 Wood
 You are under attack!
+Upgradeable
+Upgraded
+Constructible

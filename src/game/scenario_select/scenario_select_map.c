@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "game/scenario/scenario_select_map.h"
-#include "game/map/map.h"
 #include "common/util.h"
 #include <allegro.h>
 
@@ -11,6 +10,7 @@
 #define FGM_EXTENSION ".fgm"
 #define DIR_FILTER "%s/*"
 #define FGM_FILTER "%s/*.fgm"
+#define PLAYER_CONTROLLER 0
 
 typedef struct {
 	MapList *mapList;
@@ -83,8 +83,26 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 		exit(PROGRAM_ERROR);
 	}
 	mapEntry->type = MAP_ENTRY_FILE;
+	MapData* mapData = game_map_load_data(filename);
+	if(!mapData) {
+		TRACE("Error loading map data for %s\n", filename);
+		exit(PROGRAM_ERROR);
+	}
+	mapEntry->title = strdup(mapData->title);
+	mapEntry->description = strdup(mapData->description);
 
-	game_map_load_metadata(filename, &mapEntry->title, &mapEntry->description);
+	mapEntry->enableBarracks = mapData->enableBarracks;
+	mapEntry->enableBlacksmith = mapData->enableBlacksmith;
+	mapEntry->enableCityHall = mapData->enableCityHall;
+	mapEntry->enableFarm = mapData->enableFarm;
+	mapEntry->enableStables = mapData->enableStables;
+	mapEntry->enableTower = mapData->enableTower;
+	for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
+		mapEntry->upgradeableUnits[i] = mapData->upgradeableUnits[i];
+		mapEntry->upgradedUnits[i] = mapData->upgradedUnits[PLAYER_CONTROLLER][i];
+	}
+
+	game_map_free_data(mapData);
 	mapList->count++;
 	return 0;
 }

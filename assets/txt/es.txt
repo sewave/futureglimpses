@@ -114,3 +114,6 @@ Madera gastada
 Oro
 Madera
 ¡Estás siendo atacado!
+Mejorable
+Mejorado
+Construible

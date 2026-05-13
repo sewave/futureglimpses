@@ -1,6 +1,7 @@
 #ifndef SCENARIO_SELECT_MAP_H
 #define SCENARIO_SELECT_MAP_H
 #include "common/common.h"
+#include "game/map/map.h"
 
 #define MAPS_FOLDER "assets/map"
 
@@ -15,6 +16,14 @@ typedef struct {
 	char *path;
 	char *title;
 	char *description;
+	uint8_t enableBarracks;
+	uint8_t enableBlacksmith;
+	uint8_t enableCityHall;
+	uint8_t enableFarm;
+	uint8_t enableStables;
+	uint8_t enableTower;
+	uint8_t upgradeableUnits[MAP_UPGRADEABLE_UNIT_TYPES];
+	uint8_t upgradedUnits[MAP_UPGRADEABLE_UNIT_TYPES];
 } MapEntry;
 
 typedef struct {

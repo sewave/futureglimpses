@@ -264,7 +264,25 @@ static GuiElement scenarioSelectFolder[SCENARIO_SELECT_FOLDER_ELEMENTS] = {
 
 GuiScreen scenarioSelectFolderGuiScreen = { .elements = scenarioSelectFolder, .elementsCount = SCENARIO_SELECT_FOLDER_ELEMENTS };
 
-#define SCENARIO_SELECT_MAP_ELEMENTS 3
+#define SCENARIO_SELECT_MAP_ELEMENTS 20
+#define MAP_OPTIONS_SEPARATOR 100
+#define MAP_OPTIONS_SMALL_SEPARATOR 50
+#define MAP_OPTIONS_Y_SEPARATION 2
+#define UPGRADABLE_SOLDIER_INDEX 6
+#define UPGRADABLE_ARCHER_INDEX 7
+#define UPGRADABLE_KNIGHT_INDEX 8
+#define UPGRADABLE_MAGE_INDEX 9
+#define UPGRADADED_SOLDIER_INDEX 10
+#define UPGRADADED_ARCHER_INDEX 11
+#define UPGRADADED_KNIGHT_INDEX 12
+#define UPGRADADED_MAGE_INDEX 13
+#define CONSTRUCTABLE_CITY_HALL_INDEX 14
+#define CONSTRUCTABLE_FARM_INDEX 15
+#define CONSTRUCTABLE_BARRACKS_INDEX 16
+#define CONSTRUCTABLE_BLACKSMITH_INDEX 17
+#define CONSTRUCTABLE_STABLES_INDEX 18
+#define CONSTRUCTABLE_TOWER_INDEX 19
+
 static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 	{
 		.x = GUI_DESCRIPTION_X, .y = GUI_BODY_Y, .z = 10,
@@ -299,7 +317,158 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 				.color = PAL_COLOR_DARK_TURQUOISE
 			}
 		}
-	}
+	},
+	{
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 30, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_UPGRADABLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.text = {
+				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
+			}
+		}
+	},
+	{
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 60, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_UPGRADED,
+		.textColor = PAL_COLOR_YELLOW,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.text = {
+				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
+			}
+		}
+	},
+	{
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_BUILDING_CONSTRUCTIBLE,
+		.textColor = PAL_COLOR_YELLOW,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX,
+		.typed = {
+			.text = {
+				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
+			}
+		}
+	},
+	[UPGRADABLE_SOLDIER_INDEX] = {
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 40, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_SOLDIER,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADABLE_ARCHER_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SEPARATOR, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 40, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_ARCHER,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADABLE_KNIGHT_INDEX] = {
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 50, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_KNIGHT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADABLE_MAGE_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SEPARATOR, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 50, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_MAGE,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADADED_SOLDIER_INDEX] = {
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 70, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_SOLDIER,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADADED_ARCHER_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SEPARATOR, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 70, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_ARCHER,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[UPGRADADED_KNIGHT_INDEX] = {
+		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 80, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_KNIGHT,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+        },
+	[UPGRADADED_MAGE_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SEPARATOR, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 80, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_MAGE,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_CITY_HALL_INDEX] = {
+		.x = RIGHT_BACK_X - 3, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 10, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_CITY_HALL,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_FARM_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SMALL_SEPARATOR + 5, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 10, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_FARM,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_BARRACKS_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SMALL_SEPARATOR * 2 + 2, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 10, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_BARRACKS,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_BLACKSMITH_INDEX] = {
+		.x = RIGHT_BACK_X - 3, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 20, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_BLACKSMITH,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_STABLES_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SMALL_SEPARATOR + 5, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 20, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_STABLES,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
+	[CONSTRUCTABLE_TOWER_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SMALL_SEPARATOR * 2 + 2, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 20, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_TOWER,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},
 };
 
 GuiScreen scenarioSelectMapGuiScreen = { .elements = scenarioSelectMap, .elementsCount = SCENARIO_SELECT_MAP_ELEMENTS };
@@ -311,6 +480,24 @@ static void free_all() {
 	mapList = NULL;
 	free(currentFolder);
 	currentFolder = NULL;
+}
+
+static void update_map_options() {
+	MapEntry *mapEntry = &mapList->entries[scenarioSelected];
+	if(mapList->count > 0 && mapEntry->type == MAP_ENTRY_FILE) {
+		for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
+			uint8_t upgradeable = mapEntry->upgradeableUnits[i];
+			uint8_t upgraded = mapEntry->upgradedUnits[i];
+			scenarioSelectMap[UPGRADABLE_SOLDIER_INDEX + i].textColor = upgradeable ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+			scenarioSelectMap[UPGRADADED_SOLDIER_INDEX + i].textColor = upgraded ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		}
+		scenarioSelectMap[CONSTRUCTABLE_CITY_HALL_INDEX].textColor = mapEntry->enableCityHall ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_FARM_INDEX].textColor = mapEntry->enableFarm ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_BARRACKS_INDEX].textColor = mapEntry->enableBarracks ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_BLACKSMITH_INDEX].textColor = mapEntry->enableBlacksmith ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_STABLES_INDEX].textColor = mapEntry->enableStables ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_TOWER_INDEX].textColor = mapEntry->enableTower ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+	}
 }
 
 static void init_scenarios_folder(char *folder) {
@@ -337,15 +524,20 @@ static void init_scenarios_folder(char *folder) {
 	scenarioSelectOffset = 0;
 	scenarioSelected = 0;
 	state = SCENARIO_SELECT_BROWSE_STATE;
+	update_map_options();
 }
 
 void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_render_queue_submit(context, renderQueue, &scenarioSelectGuiScreen);
 	if(mapList->count > 0) {
-		if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FOLDER) {
-			game_gui_render_queue_submit(context, renderQueue, &scenarioSelectFolderGuiScreen);
-		} else {
-			game_gui_render_queue_submit(context, renderQueue, &scenarioSelectMapGuiScreen);
+		switch(mapList->entries[scenarioSelected].type) {
+			case MAP_ENTRY_FOLDER:
+			case MAP_ENTRY_FOLDER_UP:
+				game_gui_render_queue_submit(context, renderQueue, &scenarioSelectFolderGuiScreen);
+				break;
+			case MAP_ENTRY_FILE:
+				game_gui_render_queue_submit(context, renderQueue, &scenarioSelectMapGuiScreen);
+				break;
 		}
 	}
 	render_queue_submit_mouse(context, renderQueue);
@@ -364,6 +556,7 @@ void handle_scenario_select_init(GameContext *context) {
 }
 
 GameStateEnum handle_scenario_select_update(GameContext *context) {
+	update_map_options();
 	game_gui_handle(context, &scenarioSelectGuiScreen);
 	
 	// Load test map as default for now

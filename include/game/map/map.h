@@ -63,8 +63,6 @@ void game_map_free_data(MapData *map);
 
 MapData* game_map_load_data(const char *filename);
 
-void game_map_load_metadata(const char *filepath, char **title, char **description);
-
 void game_map_load_campaign_metadata(const char *dirpath, char **title, char **description);
 
 #endif /* MAP_H */
