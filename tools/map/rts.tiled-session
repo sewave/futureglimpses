@@ -3,16 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/waves.tmx",
+    "activeFile": "maps/test.tmx",
     "expandedProjectPaths": [
-        "maps/Test Campaign",
-        "Test Campaign",
-        "units",
+        ".",
+        "buildings",
         "maps/Initial",
         "maps",
-        "buildings",
-        ".",
-        "maps/Starting"
+        "Test Campaign",
+        "maps/Test Campaign",
+        "maps/Starting",
+        "units"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -90,38 +90,41 @@
             }
         },
         "maps/Initial/1-starting.tmx": {
-            "scale": 0.53251953125,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 511.7183201907207,
-                "y": 512.6572528883185
+                "x": 471,
+                "y": 797.25
             }
         },
         "maps/Initial/2-archers.tmx": {
-            "scale": 0.53251953125,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.7183201907207,
-                "y": 512.6572528883185
+                "x": 337.33333333333337,
+                "y": 148
             }
         },
         "maps/Initial/3-knights.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 4,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 270.3333333333333,
-                "y": 434.66666666666663
+                "x": 245.25,
+                "y": 453.75
             }
         },
         "maps/Initial/4-mages.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 182,
-                "y": 728
+                "x": 605.3333333333333,
+                "y": 419.33333333333326
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -141,11 +144,11 @@
             }
         },
         "maps/base.tmx": {
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 711.5,
-                "y": 691
+                "x": 525.3333333333333,
+                "y": 832.3333333333333
             }
         },
         "maps/buildings/big_buildings.tsx": {
@@ -155,11 +158,11 @@
             "scaleInDock": 1
         },
         "maps/clash.tmx": {
-            "scale": 0.75,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512,
-                "y": 511.33333333333326
+                "x": 709.3333333333333,
+                "y": 380.5
             }
         },
         "maps/closewar.tmx": {
@@ -179,22 +182,22 @@
             }
         },
         "maps/superwar.tmx": {
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 492.25,
-                "y": 516
+                "x": 550.5,
+                "y": 478
             }
         },
         "maps/test.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 4,
+            "scale": 5.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512.125,
-                "y": 512.25
+                "x": 764.3636363636365,
+                "y": 839
             }
         },
         "maps/tileset.tsx": {
@@ -207,8 +210,8 @@
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 399,
-                "y": 256
+                "x": 511,
+                "y": 510
             }
         },
         "maps/win.tmx": {
@@ -224,7 +227,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 434,
-                "y": 462.6666666666667
+                "y": 462.66666666666663
             }
         },
         "sin nombre.tmx": {
@@ -255,7 +258,7 @@
             }
         },
         "tileset.tsx": {
-            "scaleInDock": 1.5,
+            "scaleInDock": 3,
             "scaleInEditor": 2
         },
         "units/units.tsx": {
@@ -271,7 +274,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/initial",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -283,23 +286,23 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/waves.tmx"
+        "maps/test.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/waves.tmx",
-        "maps/clash.tmx",
-        "maps/test.tmx",
-        "maps/closewar.tmx",
-        "maps/base.tmx",
         "maps/Initial/1-starting.tmx",
-        "maps/Initial/2-archers.tmx",
         "maps/Initial/3-knights.tmx",
+        "maps/Initial/2-archers.tmx",
         "maps/Initial/4-mages.tmx",
-        "maps/laber.tmx",
-        "maps/superwar.tmx",
-        "maps/win.tmx"
+        "maps/test.tmx",
+        "maps/waves.tmx",
+        "maps/base.tmx",
+        "maps/closewar.tmx",
+        "maps/win.tmx",
+        "maps/workers.tmx",
+        "maps/clash.tmx",
+        "maps/laber.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
