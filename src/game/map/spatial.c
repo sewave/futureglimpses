@@ -63,6 +63,11 @@ uint8_t game_spatial_filter_enemy_units_in_attack_range(const GameContext* conte
 	&& found->state != UNIT_STATE_DIE && game_spatial_unit_target_in_attack_range(source, found);
 }
 
+uint8_t game_spatial_filter_construction_sites(const GameContext* context, const GameUnit *source, const GameUnit *found) {
+	return found->isActive && found->controller == source->controller && found->isBuilding
+		&& found->state == BUILDING_STATE_CONSTRUCT;
+}
+
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range) {
 	if(range == 0) return FALSE;
 	int sourceTileRadius = source->tileSize / 2;

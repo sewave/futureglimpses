@@ -44,4 +44,5 @@ void game_unit_explore(GameContext *context, GameUnit *unit);
 uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit);
 uint8_t game_unit_exists(GameContext *context, ControllerEnum controller, UnitTypeEnum type);
 void game_unit_explore_extended(GameContext *context, GameUnit *unit, int multipliedRange);
+GameUnit* game_unit_get_nearest_construction_building(GameContext *context, GameUnit *worker);
 #endif /* UNIT_H */

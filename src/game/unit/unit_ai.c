@@ -232,9 +232,15 @@ static void game_unit_ai_work_worker(GameContext *context, GameUnit *worker) {
 				(targetBuilding->state == BUILDING_STATE_CONSTRUCT || targetBuilding->health < targetBuilding->maxHealth)) {
 				game_animation_reset(&worker->animationStatus);
 			} else {
-				// Building no longer exists or is completed, cancel
-				worker->typed.workerData.targetConstruction = NO_TARGET_ID;
-				game_unit_command_idle(worker);
+				GameUnit *constructionSite = game_unit_get_nearest_construction_building(context, worker);
+				if(constructionSite) {
+					worker->typed.workerData.targetConstruction = constructionSite->id;
+					game_unit_command_move(worker, constructionSite, NO_TARGET_POSITION, NO_TARGET_POSITION);
+				}
+				else {
+					worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+					game_unit_command_idle(worker);
+				}
 			}
 		} else {
 			WorkerData *workerData = &worker->typed.workerData;

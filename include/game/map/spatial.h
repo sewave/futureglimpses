@@ -19,6 +19,7 @@ uint16_t game_spatial_query_grid_rectangle(GameContext* context,
 								 GameUnit* foundUnits[], uint16_t maxResults);
 uint8_t game_spatial_filter_enemy_units(const GameContext* context, const GameUnit *source, const GameUnit *found);
 uint8_t game_spatial_filter_enemy_units_in_attack_range(const GameContext* context, const GameUnit *source, const GameUnit *found);
+uint8_t game_spatial_filter_construction_sites(const GameContext* context, const GameUnit *source, const GameUnit *found);
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range);
 uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, uint16_t targetY, uint8_t range);
 uint16_t game_spatial_get_board_x_position(uint16_t cameraPosition, int cursorPosition);

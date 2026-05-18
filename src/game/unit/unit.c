@@ -6,6 +6,8 @@
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
+#define MAX_FOUND_UNITS 8
+static GameUnit *foundUnits[MAX_FOUND_UNITS];
 
 static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 		{
@@ -537,6 +539,24 @@ UnitData* game_unit_get_data(UnitTypeEnum type) {
 	return &unitsData[type];
 }
 
+GameUnit* game_unit_get_nearest_construction_building(GameContext *context, GameUnit *worker) {
+	uint8_t foundUnitsCount = game_spatial_query_grid(context, worker->x, worker->y, worker->sightRange * 2,
+								game_spatial_filter_construction_sites, worker, foundUnits, MAX_FOUND_UNITS);
+	GameUnit *constructionSite = NULL;
+	// Target nearest construction site
+	int distance = 9999999;
+	GameUnit **newTargetList = foundUnits;
+	for (int i = 0; i < foundUnitsCount; i++, newTargetList++) {
+		GameUnit *newTarget = *newTargetList;
+		int newDistance = distance_sq(worker->x, worker->y, newTarget->x, newTarget->y);
+		if (newDistance < distance) {
+			constructionSite = newTarget;
+			distance = newDistance;
+		}
+	}
+	return constructionSite;
+}
+
 void game_unit_work(GameContext *context, GameUnit *worker) {
 	if (worker->type != UNIT_TYPE_WORKER) return;
 	WorkerData *workerData = &worker->typed.workerData;
@@ -547,8 +567,15 @@ void game_unit_work(GameContext *context, GameUnit *worker) {
 				if (workTarget->health < workTarget->maxHealth) {
 					building_repair(context, workTarget);
 				} else {
-					worker->typed.workerData.targetConstruction = NO_TARGET_ID;
-					game_unit_command_idle(worker);
+					GameUnit *constructionSite = game_unit_get_nearest_construction_building(context, worker);
+					if(constructionSite) {
+						worker->typed.workerData.targetConstruction = constructionSite->id;
+						game_unit_command_move(worker, constructionSite, NO_TARGET_POSITION, NO_TARGET_POSITION);
+					}
+					else {
+						worker->typed.workerData.targetConstruction = NO_TARGET_ID;
+						game_unit_command_idle(worker);
+					}
 				}
 			} else {
 				building_add_construction(context, workTarget);
