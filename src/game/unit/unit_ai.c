@@ -74,8 +74,10 @@ static void game_unit_ai_idle_worker(GameContext *context, GameUnit *worker) {
 					return;
 				}
 			}
-			// We found nothing, so we change direction to make it "look" around
-			worker->direction = (worker->direction + 1) % DIRECTIONS_COUNT;
+			if(worker->state == UNIT_STATE_IDLE) {
+				// Idle, so we change direction to make it "look" around
+				worker->direction = (worker->direction + 1) % DIRECTIONS_COUNT;
+			}
 			game_animation_unit_set(worker);
 		}
 	}
