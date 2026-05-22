@@ -1023,7 +1023,7 @@ void game_cmd_bar_render_queue_submit(GameContext *context, RenderQueue *renderQ
 				renderQueue, CMD_BUTTON_Z + 1, context->gameFont, button->hotkey,
 				xPos + 2, yPos + 2, PAL_COLOR_BLACK, TRANSPARENT_INDEX);
 		if ((button->state == CMD_BAR_BTN_STATE_HOVER && !buttonPressed) ||
-			button->state == CMD_BAR_BTN_STATE_DOWN) {
+			button->state == CMD_BAR_BTN_STATE_DOWN || button->state == CMD_BAR_BTN_STATE_RELEASED) {
 			render_queue_submit_rect(renderQueue,
 									 CMD_BUTTON_HOVER_Z,
 									 xPos - 1, yPos - 1,
