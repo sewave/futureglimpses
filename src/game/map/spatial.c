@@ -101,7 +101,10 @@ static Position sorroundings[POSITION_SORROUNDINGS] = {
 uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, uint16_t x, uint16_t y) {
 	for(int i = 0; i < POSITION_SORROUNDINGS; i++) {
 		Position offsets = sorroundings[i];
-		if(context->walkabilityGrid[x + offsets.x][y +  offsets.y] == unitId) return TRUE;
+		int checkX = (int) x + offsets.x;
+		int checkY = (int) y + offsets.y;
+		if (checkX < BOARD_X_MIN || checkX > BOARD_X_MAX || checkY < BOARD_Y_MIN || checkY > BOARD_Y_MAX) continue;
+		if (context->walkabilityGrid[checkX][checkY] == unitId) return TRUE;
 	}
 	return FALSE;
 }
@@ -109,13 +112,13 @@ uint8_t game_spatial_unit_around_position(GameContext* context, UnitId unitId, u
 uint8_t game_spatial_unit_in_explored_viewport(const GameContext *context, const GameUnit *unit) {
 	return context->boardExploration[unit->x][unit->y] == BOARD_EXPLORED &&
 		unit->x >= context->xPosition / TILE_SIZE && unit->x <= (context->xPosition + VIEWPORT_WIDTH) / TILE_SIZE &&
-		unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_WIDTH) / TILE_SIZE;
+		unit->y >= context->yPosition / TILE_SIZE && unit->y <= (context->yPosition + VIEWPORT_HEIGHT) / TILE_SIZE;
 }
 
 uint8_t game_spatial_object_in_explored_viewport(const GameContext *context, const Object *object) {
 	return context->boardExploration[object->x][object->y] == BOARD_EXPLORED &&
 		   object->x >= context->xPosition && object->x <= (context->xPosition + VIEWPORT_WIDTH) &&
-		   object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_WIDTH);
+		   object->y >= context->yPosition && object->y <= (context->yPosition + VIEWPORT_HEIGHT);
 }
 
 uint8_t game_spatial_unit_target_in_attack_range(const GameUnit* unit, const GameUnit* target) {

@@ -37,9 +37,13 @@ void game_unit_command_idle(GameUnit *unit) {
 }
 
 void game_unit_command_attack(GameUnit *unit, GameUnit *target, UnitStateEnum nextState) {
-    unit->targetId = target->id;
-    game_unit_face_target(unit, target);
-    game_unit_set_state_or_next(unit, UNIT_STATE_ATTACK);
+    if (target) {
+        unit->targetId = target->id;
+        game_unit_face_target(unit, target);
+        game_unit_set_state_or_next(unit, UNIT_STATE_ATTACK);
+    } else {
+        unit->targetId = NO_TARGET_ID;
+    }
 }
 
 void game_unit_command_defend(GameUnit *unit) {
