@@ -1,4 +1,4 @@
-# <span style="display:block;text-align:center">ATISBOS DEL FUTURO</span>
+# <span style="display:block;text-align:center">ATISBOS DEL FUTURO v1.0</span>
 
 <span style="display:block;text-align:center">!["Pantalla de título"](resources/pic_002_es.png "Pantalla de título")</span>
 Atisbos del futuro o Future glimpses es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada entre otros.
@@ -10,6 +10,7 @@ Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486DX2
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Historia
+
 Durante siglos, dos reinos han luchado sin descanso.
 Ni el acero, ni el fuego, ni el tiempo han logrado
 romper el equilibrio.
@@ -37,39 +38,43 @@ Atisbos del futuro
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Características
-* **Agrupación de mapas tipo campaña**: podemos agrupar en carpetas varios mapas simulando una campaña.
+
+* **Agrupación de mapas tipo campaña**: Podemos agrupar en carpetas varios mapas simulando una campaña.
 * **Multiidioma**: Español / Inglés.
-* **Opciones**: podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o cuándo queremos ver las barras de vida de los enemigos.
-* **Minimapa**: el clásico minimapa, podemos desplazarnos por él haciendo clic.
+* **Opciones**: Podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o cuándo queremos ver las barras de vida de los enemigos.
+* **Minimapa**: El clásico minimapa, podemos desplazarnos por él haciendo clic.
 * **Niebla de guerra:** Una vez destapada queda el mapa visible.
-* **Grupos de unidades**: podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
-* **Recursos**: tenemos tres recursos, oro, madera y comida. Oro y madera se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas y limita las unidades que podemos tener a la vez.
-* **Sistema de mensajes**: para ver mensajes relacionados con los eventos que ocurren.
-* **Cola de unidades**: puedes encolar entrenamientos en los edificios y cancelarlos.
-* **Pantalla de resultados**: al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
+* **Grupos de unidades**: Podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
+* **Recursos**: Tenemos tres recursos, oro, madera y comida. Oro y madera se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas o alcaldías y limita las unidades que podemos tener a la vez.
+* **Sistema de mensajes**: Ppara ver mensajes relacionados con los eventos que ocurren.
+* **Cola de unidades**: Puedes encolar entrenamientos en los edificios y cancelarlos.
+* **Pantalla de resultados**: Al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
 
 Y otras sorpresas que será más divertido descubrir jugando.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Unidades
-`Obrero`: la unidad básica, encargada de la recolección de recursos, la construcción y la reparación.
-`Soldado`: la unidad básica de combate cuerpo a cuerpo, sencillo pero eficaz.
-`Arquero`: la unidad básica de combate a distancia, permite atacar desde la lejanía.
-`Caballero`: una mejora del soldado, mejor en todos los aspectos pero con un coste mayor.
-`Mago`: la unidad de ataque a larga distancia, no solo ataca desde muy lejos si no que sus bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
+
+`Obrero`: La unidad básica, encargada de la recolección de recursos, La construcción y la reparación.
+`Soldado`: La unidad básica de combate cuerpo a cuerpo, sencillo pero eficaz.
+`Arquero`: La unidad básica de combate a distancia, permite atacar desde la lejanía.
+`Caballero`: Una mejora del soldado, mejor en todos los aspectos pero con un coste mayor.
+`Mago`: La unidad de ataque a larga distancia, no solo ataca desde muy lejos si no que sus bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
 
 ## Edificios
-`Alcaldía`: el edificio principal, crea obreros.
-`Granja`: permite tener más comida para poder tener más unidades simultáneamente.
-`Cuarteles`: el edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
-`Herrería`: permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
-`Establos`: permite entrenar caballeros en los cuarteles, requiere tener herrería para edificarse
-`Torre`: permite entrenar magos, requiere tener establos para edificarse.
+
+`Alcaldía`: El edificio principal, crea obreros y añade comida.
+`Granja`: Permite tener más comida para poder tener más unidades simultáneamente.
+`Cuarteles`: El edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
+`Herrería`: Permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
+`Establos`: Permite entrenar caballeros en los cuarteles, requiere tener herrería para edificarse
+`Torre`: Permite entrenar magos, requiere tener establos para edificarse.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Controles
+
 La mayoría del juego puede controlarse con el ratón, algunos menús tienen atajos de teclado que pueden usarse también.
 En el juego principal podemos usar el botón izquierdo para seleccionar una unidad o múltiples y el botón derecho para las acciones contextuales, dependiendo de que unidad elija que objetivo.
 Si no queremos usar las acciones contextuales podemos usar los botones de comando de la unidad o sus atajos.
@@ -87,15 +92,21 @@ Si no queremos usar las acciones contextuales podemos usar los botones de comand
 
 `Espacio`: Si tienes alguna unidad seleccionada la cámara se posicionará centrando a la primera unidad de la selección.
 
-Nota: No se pueden seleccionar múltiples edificios propios ni múltiples unidades/edificios enemigos.
+**Nota**: No se pueden seleccionar múltiples edificios propios ni múltiples unidades/edificios enemigos.
+
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Mapas
+
 Una de las mejores características del juego es la posibilidad de diseñar tus propios mapas. Para ello hará falta el editor [Tiled](https://www.mapeditor.org/) y unas características concretas. En la carpeta /tools/map encontraréis un projecto de tiled con el que gestionarlo todo. Mi recomendación es copiar mapas y editarlos.
+
 ### Campañas
+
 Existe la posibilidad de crear "campañas" o conjuntos de mapas, para ello crea una carpeta y pon dentro los mapas que quieras que pertenezcan a ella. Mi recomendación es que empiecen por el número de mapa, ya que los listados se ordenan alfabéticamente.
 Además de los mapas, dentro de la carpeta debe haber un fichero "campaign.txt" codificado en UTF-8 con exáctamente dos líneas. La primera es el título (hasta 20 caracteres) y la segunda la descripción, hasta unos 300.
+
 ### Unidades personalizadas
+
 Podemos personalizar nuestras unidades, para ello usaremos sus propios atributos. Podemos verlos en "Atributos personalizados" al seleccionar una unidad, podemos crearlos pero es preferible copiarlos de los ejemplos y luego modificarlos.
 `CUSTOM`: Activa los atributos personalizados de la unidad.
 `MIN_DAMAGE`: Daño mínimo de la unidad.
@@ -104,44 +115,48 @@ Podemos personalizar nuestras unidades, para ello usaremos sus propios atributos
 `ARMOR`: La armadura de la unidad.
 `MUST_SURVIVE`: Indica que esta unidad debe sobrevivir, si muere será una derrota instantánea.
 `Nombre`: No es una variable, es el nombre del objeto de Tiled, hasta unos 10 caracteres.
+
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ### Atributos de los mapas
-Además de poder editar el terreno, tenemos la posibilidad de configurar algunas cosas para hacer los mapas únicos. A nivel de mapa, los encontraréis en "Mapa -> Atributos del mapa... -> Atributos personalizados"
-Son los siguientes:
+
+Además de poder editar el terreno, tenemos la posibilidad de configurar algunas cosas para hacer los mapas únicos. A nivel de mapa, los encontraréis en "Mapa -> Atributos del mapa... -> Atributos personalizados", son los siguientes:
 `AI_MODE`: El modo de funcionamiento de la IA, hay tres opciones.
 
-* `IDLE`, la máquina no hace nada pero se defenderá.
-* `PASSIVE`, la máquina recogerá recursos, creará su ejército y reconstruirá sus edificios, pero solo se defenderá.
-* `AGGRESIVE`, lo mismo que `PASSIVE` pero además enviará oleadas de enemigos a por ti.
+* `IDLE`: No se mueve, pero se defiende.
+* `PASSIVE`: Recoge recursos, crea su ejército, reconstruye edificios y se defiende.
+* `AGGRESIVE`: Como `PASSIVE` y además envía oleadas de enemigos a por ti.
 
-`ENABLE_BARRACKS`: Activa la construcción de cuarteles en el mapa.
-`ENABLE_BLACKSMITH`: Activa la construcción de herrerías en el mapa.
-`ENABLE_CITY_HALL`: Activa la construcción de alcaldías en el mapa.
-`ENABLE_STABLES`: Activa la construcción de establos en el mapa.
-`ENABLE_TOWER`: Activa la construcción de torres en el mapa.
+`ENABLE_BARRACKS`: Cuarteles construibles en el mapa.
+`ENABLE_BLACKSMITH`: Herrerías construibles en el mapa.
+`ENABLE_CITY_HALL`: Alcaldías construibles en el mapa.
+`ENABLE_FARM`: Granjas construibles en el mapa.
+`ENABLE_STABLES`: Establos construibles en el mapa.
+`ENABLE_TOWER`: Torres construibles en el mapa.
 
-`ENABLE_UPGRADE_SOLDIER`: Activa la opción de mejorar soldados.
-`ENABLE_UPGRADE_ARCHER`: Activa la opción de mejorar arqueros.
-`ENABLE_UPGRADE_KNIGHT`: Activa la opción de mejorar caballeros.
-`ENABLE_UPGRADE_MAGE`: Activa la opción de mejorar magos.
+`ENABLE_UPGRADE_SOLDIER`: Mejora de soldados disponible.
+`ENABLE_UPGRADE_ARCHER`: Mejora de arqueros disponible.
+`ENABLE_UPGRADE_KNIGHT`: Mejora de caballeros disponible.
+`ENABLE_UPGRADE_MAGE`: Mejora de magos disponible.
 
-`UPGRADED_SOLDIER_PLAYER`: Si el jugador tiene los soldados mejorados.
-`UPGRADED_ARCHER_PLAYER`: Si el jugador tiene los arqueros mejorados.
-`UPGRADED_KNIGHT_PLAYER`: Si el jugador tiene los caballeros mejorados.
-`UPGRADED_MAGE_PLAYER`: Si el jugador tiene los magos mejorados.
+`UPGRADED_SOLDIER_PLAYER`: Soldados mejorados para el jugador.
+`UPGRADED_ARCHER_PLAYER`: Arqueros mejorados para el jugador.
+`UPGRADED_KNIGHT_PLAYER`: Caballeros mejorados para el jugador.
+`UPGRADED_MAGE_PLAYER`: Magos mejorados para el jugador.
 
-`UPGRADED_SOLDIER_COMPUTER`: Si el ordenador tiene los soldados mejorados.
-`UPGRADED_ARCHER_COMPUTER`: Si el ordenador tiene los arqueros mejorados.
-`UPGRADED_KNIGHT_COMPUTER`: Si el ordenador tiene los caballeros mejorados.
-`UPGRADED_MAGE_COMPUTER`: Si el ordenador tiene los magos mejorados.
+`UPGRADED_SOLDIER_COMPUTER`: Soldados mejorados para la máquina.
+`UPGRADED_ARCHER_COMPUTER`: Arqueros mejorados para la máquina.
+`UPGRADED_KNIGHT_COMPUTER`: Caballeros mejorados para la máquina.
+`UPGRADED_MAGE_COMPUTER`: Magos mejorados para la máquina.
+
+<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 `MSG_TITLE`: El título del mapa, se verá en el selector y en la información del mapa en partida, unos 20 caracteres.
-`MSG_DESCRIPTION`: El mensaje de descripción del mapa, para el selector de niveles y la información del menú de pausa, unos caracteres.
+`MSG_DESCRIPTION`: El mensaje de descripción del mapa, para el selector de niveles y la información del menú de pausa, unos 150 caracteres.
 `MSG_LOSE`: El mensaje que aparecerá al perder el mapa, unos 150 caracteres.
 `MSG_WIN`: El mensaje que aparecerá al ganar el mapa, unos 150 caracteres.
 
-`PEACE_TIME`: El tiempo en segundos que tardará la máquina en empezar a crear unidades y mandártelas, solo tiene sentido en modo `AGGRESSIVE`.
+`PEACE_TIME`: El tiempo en segundos que tardará la máquina en empezar mandarte unidades, a la mitad del tiempo empezará a entrenarlas, solo tiene sentido en modo `AGGRESSIVE`.
 
 `RES_GOLD_COMPUTER`: El oro inicial con el que empieza la máquina.
 `RES_GOLD_PLAYER`: El oro inicial con el que empieza el jugador.
@@ -151,6 +166,7 @@ Son los siguientes:
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Créditos
+
 **Programación y diseño**: Wave
 **Con ayuda de IA**: texturas, edificios, ilustración del título, acciones.
 
