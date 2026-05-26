@@ -93,38 +93,38 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 471,
-                "y": 797.25
+                "x": 414.33333333333326,
+                "y": 355.33333333333337
             }
         },
         "maps/Initial/2-archers.tmx": {
-            "scale": 3,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 337.33333333333337,
-                "y": 148
+                "x": 402.33333333333326,
+                "y": 242
             }
         },
         "maps/Initial/3-knights.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 4,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 245.25,
-                "y": 453.75
+                "x": 488.5,
+                "y": 546
             }
         },
         "maps/Initial/4-mages.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 605.3333333333333,
-                "y": 419.33333333333326
+                "x": 314,
+                "y": 452
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -193,11 +193,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 5.5,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 764.3636363636365,
-                "y": 839
+                "x": 394.33333333333326,
+                "y": 272
             }
         },
         "maps/tileset.tsx": {
