@@ -5,6 +5,11 @@ SRC_DIR = src
 OUT_DIR = out
 ENV ?= mingw
 BUILD_MODE ?= debug
+DEV_ALLEGRO_DIR = C:/dev-allegro
+DJGPP_EXE_PATH = $(DEV_ALLEGRO_DIR)/djgpp/bin/i586-pc-msdosdjgpp-gcc.exe
+GCC_EXE_PATH = $(DEV_ALLEGRO_DIR)/mingw32/bin/gcc.exe
+DEV_ALLEGRO_DOS_DIR = $(DEV_ALLEGRO_DIR)/allegro4-dos
+DEV_ALLEGRO_WIN_DIR = $(DEV_ALLEGRO_DIR)/allegro4-win
 
 # ==============================================================================
 # TOOLCHAIN CONFIGURATION (ADJUST PATHS HERE!)
@@ -12,27 +17,27 @@ BUILD_MODE ?= debug
 
 ifeq ($(ENV), djgpp)
     # DJGPP Environment (DOS)
-    CC = C:/dev-allegro/djgpp/bin/i586-pc-msdosdjgpp-gcc.exe -DDOS -DALLEGRO_HAVE_STDINT_H
+    CC = $(DJGPP_EXE_PATH) -DDOS -DALLEGRO_HAVE_STDINT_H
     TARGET_NAME = dos
     TARGET_EXT = .exe
     CLEAN_RM = del 2> /dev/null
     
     # Custom Paths for DJGPP
-    IFLAGS  = -IC:/dev-allegro/allegro4-dos/include -I./include
-    LDPATHS = -LC:/dev-allegro/allegro4-dos/lib
+    IFLAGS  = -I$(DEV_ALLEGRO_DOS_DIR)/include -I./include
+    LDPATHS = -L$(DEV_ALLEGRO_DOS_DIR)/lib
     
     # Combined Flags
     LDFLAGS = $(LDPATHS) -ljgmod -lalleg
 else
     # MinGW Environment (Windows) - This is the default
-    CC = C:/dev-allegro/mingw32/bin/gcc.exe
+    CC = $(GCC_EXE_PATH)
     TARGET_NAME = win
     TARGET_EXT = .exe
     CLEAN_RM = del 2> /dev/null
 
     # Custom Paths for MinGW
-    IFLAGS  = -IC:/dev-allegro/allegro4-win/include -I./include
-    LDPATHS = -LC:/dev-allegro/allegro4-win/lib
+    IFLAGS  = -I$(DEV_ALLEGRO_WIN_DIR)/include -I./include
+    LDPATHS = -L$(DEV_ALLEGRO_WIN_DIR)/lib
 
     # Combined Flags
     LDFLAGS = $(LDPATHS) -ljgmod -lalleg -lgdi32 -luser32 -lwinmm -lkernel32 -ldsound
