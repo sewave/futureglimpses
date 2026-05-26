@@ -94,12 +94,6 @@ static void *free_map_and_close_file(MapData *map, FILE *file) {
 	return NULL;
 }
 
-static void cleanup_metadata_load_error(char **title, char **description, FILE *file) {
-	*title = strdup("(error)");
-	*description = strdup("(error)");
-	if (file) fclose(file);
-}
-
 MapData *game_map_load_data(const char *filename) {
 	FILE *filePtr = NULL;
 	MapData *map = NULL;
