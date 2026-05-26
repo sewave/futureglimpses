@@ -151,6 +151,14 @@
                 "y": 832.3333333333333
             }
         },
+        "maps/biclash.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 102.5,
+                "y": 122
+            }
+        },
         "maps/buildings/big_buildings.tsx": {
             "scaleInDock": 1
         },
@@ -158,11 +166,11 @@
             "scaleInDock": 1
         },
         "maps/clash.tmx": {
-            "scale": 3,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 709.3333333333333,
-                "y": 380.5
+                "x": 568.5,
+                "y": 833
             }
         },
         "maps/closewar.tmx": {
@@ -274,7 +282,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/initial",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -291,11 +299,11 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/Initial/1-starting.tmx",
-        "maps/Initial/3-knights.tmx",
-        "maps/Initial/2-archers.tmx",
         "maps/Initial/4-mages.tmx",
+        "maps/Initial/3-knights.tmx",
         "maps/test.tmx",
+        "maps/Initial/1-starting.tmx",
+        "maps/Initial/2-archers.tmx",
         "maps/waves.tmx",
         "maps/base.tmx",
         "maps/closewar.tmx",
