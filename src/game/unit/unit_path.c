@@ -23,7 +23,7 @@ static int game_unit_path_evaluate_direction(GameContext *context, GameUnit *uni
 	for (int i = 0; i < PATHFINDING_HISTORY_SIZE; i++, xPos++, yPos++) {
 		if (*xPos == NO_TARGET_POSITION || *yPos == NO_TARGET_POSITION) continue;
 		if (nextX == *xPos && nextY == *yPos) {
-			score += 999;
+			score += 999999;
 			break;
 		}
 	}
