@@ -276,7 +276,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS,
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
-							 PAL_COLOR_WHITE);
+							 PAL_COLOR_VIOLET);
 
 	itoa((uint8_t) fps_get(), fpsText, BASE_TEN_NUMBER);
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 290, 1, PAL_COLOR_WHITE, -1);
