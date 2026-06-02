@@ -51,7 +51,7 @@ BASE_FLAGS = -Wall -std=gnu99 -fgnu89-inline
 
 ifeq ($(BUILD_MODE), debug)
     # Add IFLAGS (custom includes) and Debug flags
-    CFLAGS = -g -O0 $(BASE_FLAGS) $(IFLAGS) 
+    CFLAGS = -g -O0 $(BASE_FLAGS) $(IFLAGS) -DDEBUG
     TARGET = $(TARGET_NAME)_dbg$(TARGET_EXT)
 else
     # Add IFLAGS (custom includes) and Release flags
