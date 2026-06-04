@@ -13,7 +13,7 @@ static int mouse_get_x() {
 #ifdef DOS
 	return mouse_x;
 #else
-	return mouse_x / RESOLUTION_MULTIPLIER;
+	return mouse_x / X_RESOLUTION_MULTIPLIER;
 #endif
 }
 
@@ -21,7 +21,7 @@ static int mouse_get_y() {
 #ifdef DOS
 	return mouse_y;
 #else
-	return mouse_y / RESOLUTION_MULTIPLIER;
+	return mouse_y / Y_RESOLUTION_MULTIPLIER;
 #endif
 }
 

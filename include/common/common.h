@@ -27,7 +27,13 @@ typedef struct {
 	int width, height;
 } Size;
 
-#define RESOLUTION_MULTIPLIER 3
+#ifdef DEBUG
+#define X_RESOLUTION_MULTIPLIER 3
+#define Y_RESOLUTION_MULTIPLIER 3.6
+#else
+#define X_RESOLUTION_MULTIPLIER 2
+#define Y_RESOLUTION_MULTIPLIER 2.4
+ #endif
 
 char common_init_basic(
 		int minCpuFamily,

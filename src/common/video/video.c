@@ -24,7 +24,12 @@ InitializationStatusEnum video_init_system(int width, int height, int depth) {
 #ifdef DOS
 	if (set_gfx_mode(GFX_AUTODETECT, width, height, 0, 0) != ALLEGRO_INIT_OK) {
 #endif
-		if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0) != ALLEGRO_INIT_OK) {
+		#ifdef DEBUG
+		int gfxMode = GFX_AUTODETECT_WINDOWED;
+		#else
+		int gfxMode = GFX_AUTODETECT_FULLSCREEN;
+		#endif
+		if (set_gfx_mode(gfxMode, width, height, 0, 0) != ALLEGRO_INIT_OK) {
 			set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 			return INITIALIZATION_ERROR;
 		}

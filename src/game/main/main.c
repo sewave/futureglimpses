@@ -70,12 +70,14 @@ int main_init() {
 	}
 	readkey();
 
-	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
+	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH) != INITIALIZATION_OK) {
 		common_print_ko();
-		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, GAME_COLOR_DEPTH);
+		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}
 	printf("\n");
+	set_color_depth(GAME_COLOR_DEPTH);
+	set_color_conversion(COLORCONV_NONE);
 	if (game_video_load_universal_pal(context.mainPalette) != INITIALIZATION_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 		printf("Error loading universal game pal.\n");
@@ -95,6 +97,9 @@ int main_init() {
 }
 
 void main_loop() {
+	#ifndef DOS
+		BITMAP* screenDepthBuffer = create_bitmap_ex(SCREEN_COLOR_DEPTH, GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
+	#endif
 	timer_reset_ticks();
 	GameStateEnum oldState = GAME_STATE_EXIT;
 	do {
@@ -124,7 +129,8 @@ void main_loop() {
 			#ifdef DOS
 				blit(context.screenBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 			#else
-				stretch_blit(context.screenBuffer, screen, 0, 0, context.screenBuffer->w, context.screenBuffer->h, 0, 0, screen->w, screen->h);
+				blit(context.screenBuffer, screenDepthBuffer, 0, 0, 0, 0, context.screenBuffer->w, context.screenBuffer->h);
+				stretch_blit(screenDepthBuffer, screen, 0, 0, screenDepthBuffer->w, screenDepthBuffer->h, 0, 0, screen->w, screen->h);
 			#endif
 			release_screen();
 			fps_update();
