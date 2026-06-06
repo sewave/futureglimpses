@@ -89,10 +89,12 @@ Title:
 Description:
 Cancel building (^004ESC^001)
 ^004C^001redits
+© 2026 Wave
 Credits
-Credits line number 1
-Credits line number 2
-Credits line number 3
+Programming and design:
+Wave
+3rd party resources:
+Bitrimus Font - (GGBotNet). Fantasy Battle Pack - Matt Walkden (Modified by @RubenRetro). Superpowers assets sound effects - Sparklin Labs' Superpowers HTML5 game maker. DarkBasic Music Library - DarkBasic. Midi Pack 3 (35 so far) - Tozan. Cool Text Graphics Generator.
 %s - Victory
 %s - Defeat
 Select scenario:

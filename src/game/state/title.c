@@ -78,6 +78,9 @@ static void credits(GameContext* context) {
 	titleMenuState = TITLE_MENU_CREDITS;
 }
 
+#define CREDITS_WAVE_X 240
+#define CREDITS_WAVE_Y 185
+
 #define TITLE_MENU_START_Y 120
 #define TITLE_MENU_SPACING 20
 #define TITLE_MENU_BUTTON_WIDTH 120
@@ -88,9 +91,17 @@ static void credits(GameContext* context) {
 #define TITLE_MENU_WIDTH 170
 #define TITLE_MENU_HEIGHT 115
 
-#define TITLE_MENU_ELEMENTS 6
+#define TITLE_MENU_ELEMENTS 7
 
 static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -163,9 +174,17 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
     },
 };
 
-#define TITLE_MENU_OPTIONS_ELEMENTS 5
+#define TITLE_MENU_OPTIONS_ELEMENTS 6
 
 static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -223,9 +242,17 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
     },
 };
 
-#define TITLE_MENU_CONFIRM_EXIT_ELEMENTS 5
+#define TITLE_MENU_CONFIRM_EXIT_ELEMENTS 6
 
 static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -277,9 +304,17 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 	},
 };
 
-#define TITLE_MENU_SOUND_ELEMENTS 5
+#define TITLE_MENU_SOUND_ELEMENTS 6
 
 static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -341,9 +376,17 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 	},
 };
 
-#define GAMEPLAY_MENU_ELEMENTS 5
+#define GAMEPLAY_MENU_ELEMENTS 6
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -415,12 +458,20 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	},
 };
 
-#define TITLE_MENU_CREDITS_ELEMENTS 5
+#define TITLE_MENU_CREDITS_ELEMENTS 8
 #define CREDITS_Y 10
 #define CREDITS_X 10
 #define CREDITS_Y_OFFSET 12
 
 static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
+    {
+        .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
 	{
 		.x = 0, .y = 0, .z = 0,
 		.type = GUI_ELEMENT_IMAGE,
@@ -451,21 +502,37 @@ static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
         .typed = { .text = { .maxX = GAME_INTERNAL_WIDTH - CREDITS_X, } }
     },
     {
-        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET, .z = 1,
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 4, .z = 1,
         .type = GUI_ELEMENT_TEXT,
         .textId = GAME_TEXT_ID_CREDITS_LINE_1,
-        .textColor = PAL_COLOR_WHITE,
+        .textColor = PAL_COLOR_YELLOW,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
-		.typed = { .text = { .maxWidth = GAME_INTERNAL_WIDTH - CREDITS_X, .maxHeight = CREDITS_Y_OFFSET * 10 } }
     },
     {
-        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 11, .z = 1,
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 5, .z = 1,
         .type = GUI_ELEMENT_TEXT,
         .textId = GAME_TEXT_ID_CREDITS_LINE_2,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+    },
+	{
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 7, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_LINE_3,
+        .textColor = PAL_COLOR_YELLOW,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+    },
+	{
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 8, .z = 1,
+        .type = GUI_ELEMENT_TEXT,
+        .textId = GAME_TEXT_ID_CREDITS_LINE_4,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .text = { .maxWidth = GAME_INTERNAL_WIDTH - CREDITS_X * 2, .maxHeight = CREDITS_Y_OFFSET * 15 } }
     },
 };
 

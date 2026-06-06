@@ -89,10 +89,12 @@ Título:
 Descripción:
 Cancelar edificio (^004ESC^001)
 ^004C^001réditos
+© 2026 Wave
 Créditos
-Créditos de recursos: [Bitrimus Font] (GGBotNet). [Fantasy Battle Pack] (Matt Walkden). [Superpowers assets sound effects] (Sparklin Labs' Superpowers HTML5 game maker). [DarkBasic Music Library] (DarkBasic).
-Línea de créditos núm. 2
-Línea de créditos núm. 3
+Programación y diseño:
+Wave
+Recursos externos:
+Bitrimus Font - (GGBotNet). Fantasy Battle Pack - Matt Walkden (Modificado por @RubenRetro). Superpowers assets sound effects - Sparklin Labs' Superpowers HTML5 game maker. DarkBasic Music Library - DarkBasic. Midi Pack 3 (35 so far) - Tozan. Cool Text Graphics Generator.
 %s - Victoria
 %s - Derrota
 Elige escenario:
