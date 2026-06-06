@@ -19,7 +19,7 @@
   <property name="MSG_LOSE" value="Has perdido"/>
   <property name="MSG_TITLE" value="Conquista"/>
   <property name="MSG_WIN" value="Has ganado"/>
-  <property name="PEACE_TIME" type="int" value="184"/>
+  <property name="PEACE_TIME" type="int" value="300"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
@@ -107,7 +107,7 @@
  </layer>
  <objectgroup id="2" name="Units/Buildings">
   <object id="71" template="../units/P_Worker.tx" x="880" y="768"/>
-  <object id="72" template="../units/P_Worker.tx" x="912" y="832"/>
+  <object id="72" template="../units/P_Worker.tx" x="944" y="816"/>
   <object id="94" template="../buildings/C_City_Hall.tx" x="64" y="192"/>
   <object id="115" template="../units/C_Worker.tx" x="48" y="128"/>
   <object id="120" template="../buildings/C_Barracks.tx" x="256" y="208"/>
@@ -115,7 +115,7 @@
   <object id="122" template="../buildings/C_Farm.tx" x="16" y="64"/>
   <object id="123" template="../buildings/C_Blacksmith.tx" x="176" y="96"/>
   <object id="124" template="../buildings/C_Tower.tx" x="192" y="160"/>
-  <object id="125" template="../buildings/P_City_Hall.tx" x="848" y="896"/>
+  <object id="125" template="../buildings/P_City_Hall.tx" x="880" y="832"/>
   <object id="126" template="../units/P_Worker.tx" x="944" y="864"/>
   <object id="127" template="../units/C_Worker.tx" x="112" y="128"/>
   <object id="132" template="../units/C_Worker.tx" x="80" y="128"/>
@@ -127,8 +127,6 @@
   <object id="246" template="../buildings/C_Farm.tx" x="80" y="64"/>
   <object id="249" template="../buildings/P_Farm.tx" x="976" y="992"/>
   <object id="250" template="../buildings/P_Farm.tx" x="944" y="992"/>
-  <object id="255" template="../units/C_Mage.tx" x="368" y="240"/>
-  <object id="256" template="../units/C_Mage.tx" x="288" y="304"/>
   <object id="257" template="../units/C_Knight.tx" x="352" y="272"/>
   <object id="258" template="../units/C_Knight.tx" x="320" y="288"/>
  </objectgroup>
