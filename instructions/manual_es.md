@@ -67,9 +67,9 @@ Y otras sorpresas que será más divertido descubrir jugando.
 `Alcaldía`: El edificio principal, crea obreros y añade comida.
 `Granja`: Permite tener más comida para poder tener más unidades simultáneamente.
 `Cuarteles`: El edificio básico que permite entrenar soldados, arqueros y caballeros una vez tengan sus edificios.
-`Herrería`: Permite entrenar arqueros en los cuarteles, requiere tener cuarteles para edificarse
-`Establos`: Permite entrenar caballeros en los cuarteles, requiere tener herrería para edificarse
-`Torre`: Permite entrenar magos, requiere tener establos para edificarse.
+`Herrería`: Permite entrenar arqueros en los cuarteles y mejorar arqueros y soldados, requiere tener cuarteles para edificarse.
+`Establos`: Permite entrenar caballeros en los cuarteles y mejorar caballeros, requiere tener herrería para edificarse.
+`Torre`: Permite entrenar y mejorar magos, requiere tener establos para edificarse.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
@@ -173,7 +173,7 @@ Además de poder editar el terreno, tenemos la posibilidad de configurar algunas
 **Créditos de recursos de terceros**:
 Contenido modificado de "[Bitrimus Font](https://ggbot.itch.io/bitrimus-font)" por [GGBotNet](https://www.ggbot.net), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
-Contenido modificado de "[Fantasy Battle Pack](https://mattwalkden.itch.io/fantasy-battle-pack)" por [Matt Walkden](https://mattwalkden.itch.io).
+Contenido modificado (tileset por [@RubenRetro](https://rubenretro.itch.io/)) de "[Fantasy Battle Pack](https://mattwalkden.itch.io/fantasy-battle-pack)" por [Matt Walkden](https://mattwalkden.itch.io).
 
 Contenido modificado de "[Superpowers assets sound effects](https://opengameart.org/content/superpowers-assets-sound-effects)" - "medieval-fantasyy/5.wav (goldhit.wav)", "western-fps-2d/explosion-1.ogg (fbexplo.wav)", "medieval-fantasy/7.wav (ironhit.wav)", "prehistoric-platformer/hit-1.wav (work.wav)", "prehistoric-platformer/wood-2.wav (chop.wav)", "medieval-fantasyy/woosh-2.wav (arrowthr.wav)",
 "space-shooter/alert.wav (attack.wav)", "ninja-adventure/menu-1.ogg (notvalid.wav)", "prehistoric-platformer/hit-2.wav (crumble.wav)", "top-down-shooter/flame-thrower.wav (fblaunch.wav)", "western-fps-2d/arrow.ogg (arrowhit.wav)" y "western-fps-2d/scream-5.ogg (die.wav)" por [Sparklin Labs - Superpowers HTML5 game maker](http://superpowers-html5.com/), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -182,5 +182,5 @@ Contenido de "[DarkBasic Music Library](https://opengameart.org/content/darkbasi
 
 Contenido de "[Midi Pack 3 (35 so far)](https://opengameart.org/content/midi-pack-3-35-so-far)" - "9088malchakwilder8.mid (intro.mid)", "9095noobusfog.mid (defeat.mid)", "9099clavvictorytune.mid (victory.mid)", "9101pianochordmelody.mid (map2.mid)" y "9094telosvillagecentralsmarket.mid (map3.mid)" por [Tozan](https://opengameart.org/users/tozan), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
-Se ha usado [Cool Text Graphics Generator](https://cooltext.com/) para generar el título del juego.
+Usado [Cool Text Graphics Generator](https://cooltext.com/) para el título.
 
