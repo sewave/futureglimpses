@@ -76,11 +76,14 @@ void video_fade_reset() {
 void video_fade_handle() {
 	if (fadeType == FADE_NONE) return;
 	vsync();
+	// IF DOS or DEBUG are defined
+	#if defined(DOS) || defined(DEBUG)
 	if (fadeType == FADE_IN && fadePalette) {
 		fade_in(fadePalette, fadeSpeed);
 	} else {
 		if (fadeType == FADE_OUT) fade_out(fadeSpeed);
 	}
+	#endif
 	fadeType = FADE_NONE;
 }
 
