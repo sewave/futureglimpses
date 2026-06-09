@@ -230,7 +230,6 @@ Position resource_find_first_around_unit(GameContext *context, GameUnit *unit, T
 	// Search in range for closest resource using distance_sq to avoid sqrt
 	int closestDistanceSq = maxDistance * maxDistance + 1;
 	Position closestResourcePos = {.x = NO_TARGET_POSITION, .y = NO_TARGET_POSITION};
-	// TODO search in spiral way to find closer resources first
 	for (int dx = -maxDistance; dx <= maxDistance; dx++) {
 		for (int dy = -maxDistance; dy <= maxDistance; dy++) {
 			int checkX = unit->x + dx;

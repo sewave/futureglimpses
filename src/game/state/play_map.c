@@ -352,7 +352,6 @@ static void game_update(GameContext *context) {
 }
 
 static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
-	// TODO performance - not updating minimap each frame?
 	if(context->aiData.state != AI_STATE_CREATE_WORKERS) return;
 	// Minimap update
 	clear_bitmap(context->renderedMinimapUnits);
