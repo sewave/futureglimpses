@@ -39,6 +39,17 @@
             "detail": "Builds the release executable for DJGPP"
         },
         {
+            "label": "Build DOS Debug",
+            "type": "shell",
+            "command": "${config:makePath} ENV=djgpp debug",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Builds the debug executable for DJGPP"
+        },
+        {
             "label": "Clean Project",
             "type": "shell",
             "command": "${config:makePath} clean",

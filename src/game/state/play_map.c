@@ -218,6 +218,7 @@ static void game_update(GameContext *context) {
 	
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
 	// Resource debug keys
+	#ifdef DEBUG
 	if(keyboard_is_key_pressed(KEY_G)) context->isDebugEnabled ^= TRUE;
 	if(context->isDebugEnabled) {
 		if(keyboard_is_key_pressed(KEY_F11)) {
@@ -253,7 +254,7 @@ static void game_update(GameContext *context) {
 			}
 		}
 	}
-
+	#endif
 	game_selection_handle_slots(context);
 
 	// We are in building mode

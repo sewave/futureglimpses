@@ -10,6 +10,13 @@
         },
         {
             "type": "node-terminal",
+            "name": "Run DOS debug",
+            "request": "launch",
+            "command": "${config:dosboxPath} -conf ${workspaceFolder}/.dos/dosbox-x.conf -fastlaunch -exit ${workspaceFolder}/dos_dbg.exe",
+            "preLaunchTask": "Build DOS Debug"
+        },
+        {
+            "type": "node-terminal",
             "name": "Run Windows release",
             "request": "launch",
             "command": "${workspaceFolder}/win_rel.exe",
