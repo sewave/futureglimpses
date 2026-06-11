@@ -5,14 +5,13 @@
     },
     "activeFile": "maps/test.tmx",
     "expandedProjectPaths": [
-        ".",
-        "buildings",
-        "maps/Initial",
-        "maps",
-        "Test Campaign",
-        "maps/Test Campaign",
         "maps/Starting",
-        "units"
+        ".",
+        "maps/Test Campaign",
+        "Test Campaign",
+        "maps/Initial",
+        "buildings",
+        "maps"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -166,27 +165,30 @@
             "scaleInDock": 1
         },
         "maps/clash.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 568.5,
-                "y": 833
+                "x": 851.3333333333333,
+                "y": 702.3333333333333
             }
         },
         "maps/closewar.tmx": {
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 497.66666666666663,
-                "y": 534
+                "x": 332.33333333333326,
+                "y": 537.3333333333333
             }
         },
         "maps/laber.tmx": {
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 261.5,
-                "y": 691
+                "x": 201,
+                "y": 500
             }
         },
         "maps/superwar.tmx": {
@@ -202,10 +204,10 @@
                 2
             ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 394.33333333333326,
-                "y": 272
+                "x": 752,
+                "y": 727
             }
         },
         "maps/tileset.tsx": {
@@ -299,18 +301,18 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/test.tmx",
+        "maps/clash.tmx",
+        "maps/laber.tmx",
+        "maps/closewar.tmx",
         "maps/Initial/4-mages.tmx",
         "maps/Initial/3-knights.tmx",
-        "maps/test.tmx",
         "maps/Initial/1-starting.tmx",
         "maps/Initial/2-archers.tmx",
         "maps/waves.tmx",
         "maps/base.tmx",
-        "maps/closewar.tmx",
         "maps/win.tmx",
-        "maps/workers.tmx",
-        "maps/clash.tmx",
-        "maps/laber.tmx"
+        "maps/workers.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
