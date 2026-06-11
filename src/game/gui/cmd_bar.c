@@ -702,12 +702,15 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 									text_get_by_id(GAME_TEXT_ID_UNIT_TYPE_WORKER + buildingData->trainingType),
 									UNIT_SHEET_TRAIN_BAR_X, UNIT_SHEET_ROW_THREE_Y, FALSE);
 		}
-		RLE_SPRITE* queueIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_QUEUE);
-		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, queueIcon,
-			UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y);
-		itoa(buildingData->queueNextIndex, unitsText, BASE_TEN_NUMBER);
-		render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
-									UNIT_SHEET_COL_ONE_X + queueIcon->w + 1, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		// Icons are on same area, show queue only if the unit has no range
+		if(unit->maxAttackRange == 0) {
+			RLE_SPRITE* queueIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_QUEUE);
+			render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, queueIcon,
+				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_FOUR_Y);
+			itoa(buildingData->queueNextIndex, unitsText, BASE_TEN_NUMBER);
+			render_queue_submit_text(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, context->gameFont, unitsText,
+										UNIT_SHEET_COL_ONE_X + queueIcon->w + 1, UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
+		}
 		// If building is in construction, show progress
 		if(unit->state == BUILDING_STATE_CONSTRUCT) {
 			game_cmd_bar_queue_bar(renderQueue, context->gameFont,
@@ -739,7 +742,8 @@ static void game_cmd_bar_render_queue_submit_single_unit(GameContext *context, R
 									UNIT_SHEET_COL_ONE_X + rangeIcon->w + 1,
 									UNIT_SHEET_ROW_FOUR_Y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
-	if (unit->minDamage > 0 || unit->maxDamage > 0) {
+	// Show damage if we have damage and are not a building in construction, damage is in the same spot as completed bar
+	if ((unit->minDamage > 0 || unit->maxDamage > 0) && (!unit->isBuilding || unit->state != BUILDING_STATE_CONSTRUCT)) {
 		RLE_SPRITE* attackIcon = game_gfx_get_unit_icon(GAME_UNIT_ICON_ATTACK);
 		render_queue_submit_rle_sprite(renderQueue, UNIT_SHEET_Z_ORDER_SHEET_TEXT, attackIcon,
 				UNIT_SHEET_COL_ONE_X, UNIT_SHEET_ROW_THREE_Y + UNIT_SHEET_ROW_THREE_Y_TEXT_OFFSET);
