@@ -10,6 +10,7 @@ Barracks
 Blacksmith
 Stables
 Tower
+Turret
 Soldier+
 Archer+
 Knight+
@@ -34,6 +35,7 @@ Build ^004B^001arracks
 Build Blacks^004m^001ith
 Build ^004S^001tables
 Build ^004T^001ower
+Build T^004u^001rret
 Upgrade ^004S^001oldiers
 Upgrade ^004A^001rchers
 Upgrade ^004K^001nights
@@ -53,6 +55,7 @@ Barracks built.
 Blacksmith built.
 Stables built.
 Tower built.
+Turret built.
 Queue full.
 Completed
 Options Menu

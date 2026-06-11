@@ -10,6 +10,7 @@ Cuarteles
 Herrería
 Establos
 Torre
+Torreta
 Soldado+
 Arquero+
 Caballero+
@@ -34,6 +35,7 @@ Construir Cuarteles (^004B^001)
 Construir Herrería (^004M^001)
 Construir E^004s^001tablos
 Construir ^004T^001orre
+Construir Torreta (^004U^001)
 Mejorar ^004S^001oldados
 Mejorar ^004A^001rqueros
 Mejorar Caballeros (^004K^001)
@@ -53,6 +55,7 @@ Cuarteles construidos.
 Herrería construida.
 Establos construidos.
 Torre construida.
+Torreta construida.
 Cola llena.
 Completado
 Menú de Opciones

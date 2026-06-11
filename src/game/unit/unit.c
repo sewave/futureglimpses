@@ -186,6 +186,22 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.reactionTime = 0,
 				.moveTime = 0,
 		},
+		{
+				.type = UNIT_TYPE_TURRET,
+				.isBuilding = TRUE,
+				.minAttackRange = 0,
+				.maxAttackRange = 6,
+				.sightRange = 8,
+				.exploreRange = 6,
+				.health = 600,
+				.maxHealth = 600,
+				.tileSize = 2,
+				.minDamage = 10,
+				.maxDamage = 15,
+				.armor = 3,
+				.reactionTime = 0,
+				.moveTime = 0,
+		}
 };
 
 static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
@@ -200,7 +216,8 @@ static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
 	[TRAINING_TYPE_BLACKSMITH]		= {.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 	[TRAINING_TYPE_STABLES]			= {.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 	[TRAINING_TYPE_TOWER]			= {.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
-	[TRAINING_TYPE_UPGRADE_SOLDIER]	= {.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(60), .foodProvided = 0},
+	[TRAINING_TYPE_TURRET]			= {.used = {800, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
+	[TRAINING_TYPE_UPGRADE_SOLDIER]	= {.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_ARCHER]	= {.used = {2000, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_KNIGHT]	= {.used = {2500, 500, 0}, .time = SEC_TO_FRAMES(90), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_MAGE]	= {.used = {3000, 1000, 0}, .time = SEC_TO_FRAMES(110), .foodProvided = 0},

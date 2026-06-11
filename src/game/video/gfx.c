@@ -41,6 +41,7 @@ static const char *spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
 		"assets/gfx/building/blasmib.pcx",
 		"assets/gfx/building/stablesb.pcx",
 		"assets/gfx/building/towerb.pcx",
+		"assets/gfx/building/turretb.pcx",
 };
 
 static const char *spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
@@ -55,6 +56,7 @@ static const char *spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
 		"assets/gfx/building/blasmir.pcx",
 		"assets/gfx/building/stablesr.pcx",
 		"assets/gfx/building/towerr.pcx",
+		"assets/gfx/building/turretr.pcx",
 };
 
 static const char *objectSheetFilenames[OBJ_TYPE_NUMBER] = {
@@ -72,7 +74,7 @@ static const SquareSize unitSquares[UNIT_TYPE_NUMBER] = {
 		// Mobile units
 		{32, 32}, {32, 32}, {32, 32}, {32, 32}, {32, 32},
 		// Buildings
-		{48, 48}, {32, 32}, {48, 48}, {32, 32}, {48, 48}, {32, 32},		
+		{48, 48}, {32, 32}, {48, 48}, {32, 32}, {48, 48}, {32, 32},	 {32, 32},	
 };
 
 static const SquareSize objectSquares[OBJ_TYPE_NUMBER] = {

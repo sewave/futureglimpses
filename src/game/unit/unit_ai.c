@@ -12,6 +12,7 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 		if (foundUnitsCount > 0) {
 			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_IDLE);
 		} else {
+			if(unit->isBuilding) return;
 			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
 													  game_spatial_filter_enemy_units, unit, foundUnits,
 													  MAX_FOUND_UNITS);
@@ -266,10 +267,27 @@ static void game_unit_ai_work_worker(GameContext *context, GameUnit *worker) {
 	}
 }
 
+
 void game_unit_ai_invoke(GameContext *context, GameUnit *unit) {
 	if (unit->isBuilding) {
-		if (unit->state == UNIT_STATE_DIE) game_unit_ai_die(context, unit);
-		if (unit->state == BUILDING_STATE_COMPLETED) building_update(context, unit);
+		if (unit->state == UNIT_STATE_DIE) {
+			game_unit_ai_die(context, unit);
+		}
+		else {
+			// This is an attacking building
+			if(unit->maxDamage > 0) {
+				if(unit->state == UNIT_STATE_IDLE) {
+					game_unit_ai_idle(context, unit);
+				}
+				else if (unit->state == UNIT_STATE_ATTACK) {
+					game_unit_ai_attack(context, unit);
+				}
+			}
+			else {
+				if (unit->state == BUILDING_STATE_COMPLETED) building_update(context, unit);
+			}
+		}
+		
 	} else {
 		switch (unit->state) {
 			case UNIT_STATE_IDLE:

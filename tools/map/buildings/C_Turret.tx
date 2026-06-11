@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="small_buildings.tsx"/>
+ <object name="C_Turret" gid="6" width="32" height="32">
+  <properties>
+   <property name="UNIT_CONTROLLER" type="int" propertytype="UNIT_CONTROLLER" value="1"/>
+   <property name="UNIT_TYPE" type="int" propertytype="UNIT_TYPE" value="11"/>
+  </properties>
+ </object>
+</template>
