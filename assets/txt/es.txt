@@ -92,7 +92,6 @@ Título:
 Descripción:
 Cancelar edificio (^004ESC^001)
 ^004C^001réditos
-© 2026 Wave
 Créditos
 Programación y diseño:
 Wave

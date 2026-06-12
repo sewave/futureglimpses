@@ -22,6 +22,11 @@ typedef enum {
 static TitleMenuStateEnum titleMenuState;
 static BITMAP *titleBackground;
 static BITMAP *titleText;
+static char* titleCredits = "v1.0 © Wave 2026";
+
+static char* get_title_credits(const GameContext *context) {
+	return titleCredits;
+}
 
 static void load_title_text_image(GameContext *context) {
 	char* titleTextPath;
@@ -78,7 +83,7 @@ static void credits(GameContext* context) {
 	titleMenuState = TITLE_MENU_CREDITS;
 }
 
-#define CREDITS_WAVE_X 240
+#define CREDITS_WAVE_X 224
 #define CREDITS_WAVE_Y 185
 
 #define TITLE_MENU_START_Y 120
@@ -96,11 +101,11 @@ static void credits(GameContext* context) {
 static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -179,11 +184,11 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
 static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -247,11 +252,11 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
 static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -309,11 +314,11 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -381,11 +386,11 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -466,11 +471,11 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
     {
         .x = CREDITS_WAVE_X, .y = CREDITS_WAVE_Y, .z = 1,
-        .type = GUI_ELEMENT_TEXT,
-        .textId = GAME_TEXT_ID_CREDITS_WAVE,
+        .type = GUI_ELEMENT_CUSTOM_TEXT,
         .textColor = PAL_COLOR_WHITE,
         .textBackground = TRANSPARENT_INDEX,
 		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = { .customText = { .text = get_title_credits } }
     },
 	{
 		.x = 0, .y = 0, .z = 0,
@@ -518,7 +523,7 @@ static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
 		.shadowTextColor = PAL_COLOR_BLACK,
     },
 	{
-        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 7, .z = 1,
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 6, .z = 1,
         .type = GUI_ELEMENT_TEXT,
         .textId = GAME_TEXT_ID_CREDITS_LINE_3,
         .textColor = PAL_COLOR_YELLOW,
@@ -526,7 +531,7 @@ static GuiElement creditsMenu[TITLE_MENU_CREDITS_ELEMENTS] = {
 		.shadowTextColor = PAL_COLOR_BLACK,
     },
 	{
-        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 8, .z = 1,
+        .x = CREDITS_X, .y = CREDITS_Y + CREDITS_Y_OFFSET * 7, .z = 1,
         .type = GUI_ELEMENT_TEXT,
         .textId = GAME_TEXT_ID_CREDITS_LINE_4,
         .textColor = PAL_COLOR_WHITE,

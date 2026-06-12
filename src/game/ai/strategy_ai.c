@@ -268,8 +268,8 @@ static void game_strategy_ai_train_units(GameContext *context) {
 	// Must have at least worker gold cost and reserve
 	if(context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD] <
 		workerGoldCost + MIN_GOLD_TRAINING_BUDGET) return;
-	uint8_t archersAvailable = context->map.enableBlacksmith && game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_BLACKSMITH);
-	uint8_t knightsAvailable = context->map.enableStables && game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_STABLES);
+	uint8_t archersAvailable = game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_BLACKSMITH);
+	uint8_t knightsAvailable = game_unit_exists(context, UNIT_CONTROLLER_AI, UNIT_TYPE_STABLES);
 
 	GameUnit **activeList = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
