@@ -69,7 +69,7 @@ static GameUnit* game_strategy_ai_find_building_to_repair(GameContext *context) 
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 		GameUnit *unit = *activeList;
 		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding &&
-			unit->health < unit->maxHealth && unit->state == BUILDING_STATE_COMPLETED) {
+			unit->health < unit->maxHealth && unit->state != BUILDING_STATE_CONSTRUCT) {
 			return unit;
 		}
 	}
@@ -80,7 +80,8 @@ static GameUnit* game_strategy_ai_find_building_to_construct(GameContext *contex
 	GameUnit **activeList = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 		GameUnit *unit = *activeList;
-		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
+		if (unit->isActive && unit->controller == UNIT_CONTROLLER_AI && unit->isBuilding
+			&& unit->state == BUILDING_STATE_CONSTRUCT) {
 			return unit;
 		}
 	}

@@ -10,6 +10,7 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="ENABLE_TURRET" type="bool" value="false"/>
   <property name="MSG_DESCRIPTION" value="Ganas inmediatamente porque no hay enemigos."/>
   <property name="MSG_LOSE" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
   <property name="MSG_TITLE" value="Vas a ganar"/>

@@ -22,6 +22,7 @@ typedef struct {
 	uint8_t enableFarm;
 	uint8_t enableStables;
 	uint8_t enableTower;
+	uint8_t enableTurret;
 	uint8_t upgradeableUnits[MAP_UPGRADEABLE_UNIT_TYPES];
 	uint8_t upgradedUnits[MAP_UPGRADEABLE_UNIT_TYPES];
 } MapEntry;

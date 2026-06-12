@@ -24,6 +24,7 @@
  * - Enable farm (U8)
  * - Enable stables (U8)
  * - Enable tower (U8)
+ * - Enable turret (U8)
  * - IA Mode (U8)
  * - Peace time (U16)
  * - Upgraded units (4 * 2 * U8)
@@ -123,7 +124,7 @@ function calculateTotalSize(map) {
 	// 4 resources of 32 bits
 	size += 4 * 4;
     // Other attributes
-    size += 9;
+    size += 10;
 
     size += 4 * 2 * 1; // Upgraded units (4 * 2 * U8)
     size += 4 * 1; // Researcheable upgrades (4 * U8)
@@ -367,6 +368,10 @@ function exportBinary(map) {
     var enableTower = mapProperties.ENABLE_TOWER || false;
     view.setUint8(offset++, enableTower, littleEndian);
     tiled.log(`Writed enableTower: ${enableTower}`);
+    var enableTurret = mapProperties.ENABLE_TURRET || false;
+    view.setUint8(offset++, enableTurret, littleEndian);
+    tiled.log(`Writed enableTurret: ${enableTurret}`);
+    
     var aiMode = mapProperties.AI_MODE ? mapProperties.AI_MODE.value : 0;
     view.setUint8(offset++, aiMode, littleEndian);
     tiled.log(`Writed aiMode: ${aiMode}`);

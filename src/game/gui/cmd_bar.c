@@ -473,6 +473,19 @@ static const CommandBarButton TOWER_CMD_BUTTON = {
 		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
+static const CommandBarButton TURRET_CMD_BUTTON = {
+		.type = CMD_BAR_BTN_TYPE_CREATE,
+		.isActive = TRUE,
+		.action = handle_build_place_button,
+		.hotkeyIndex = KEY_U,
+		.hotkey = "U",
+		.hoverTextId = GAME_TEXT_ID_BUILD_TURRET,
+		.fixedParam = UNIT_TYPE_TURRET,
+		.icon = CMD_BAR_BUTTON_ICON_BUILD_TURRET,
+		.x = CMD_BAR_BUTTON_INITIAL_X + CMD_BAR_BUTTON_SEPARATION_WIDTH,
+		.y = CMD_BAR_BUTTON_INITIAL_Y + CMD_BAR_BUTTON_SEPARATION_HEIGHT,
+		.state = CMD_BAR_BTN_STATE_IDLE};
+
 static const CommandBarButton UPGRADE_SOLDIER_CMD_BUTTON = {
 		.type = CMD_BAR_BTN_TYPE_CREATE,
 		.isActive = TRUE,
@@ -539,7 +552,9 @@ static const CommandBarButton CANCEL_ALL_TRAIN_CMD_BUTTON = {
 		.state = CMD_BAR_BTN_STATE_IDLE};
 
 static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit *building) {
-	if(building->state == BUILDING_STATE_COMPLETED) {
+	if(building->state == BUILDING_STATE_CONSTRUCT) {
+		context->cmdBarButtons[buttonIndex++] = CANCEL_BUILDING_CMD_BUTTON;
+	} else {
 		switch (building->type) {
 			case UNIT_TYPE_CITY_HALL:
 				context->cmdBarButtons[buttonIndex++] = TRAIN_WORKER_CMD_BUTTON;
@@ -582,9 +597,6 @@ static void game_cmd_bar_handle_building_buttons(GameContext *context, GameUnit 
 			context->cmdBarButtons[buttonIndex++] = CANCEL_ALL_TRAIN_CMD_BUTTON;
 		}
 	}
-	else {
-		context->cmdBarButtons[buttonIndex++] = CANCEL_BUILDING_CMD_BUTTON;
-	}
 }
 
 static void game_cmd_bar_add_common(CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS]) {
@@ -604,6 +616,7 @@ static void game_cmd_bar_handle_building_select_advanced_buttons(GameContext *co
 	if (context->map.enableBlacksmith && unitCount[UNIT_TYPE_BARRACKS]) context->cmdBarButtons[buttonIndex++] = BLACKSMITH_CMD_BUTTON;
 	if (context->map.enableStables && unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = STABLES_CMD_BUTTON;
 	if (context->map.enableTower && unitCount[UNIT_TYPE_STABLES]) context->cmdBarButtons[buttonIndex++] = TOWER_CMD_BUTTON;
+	if (context->map.enableTurret && unitCount[UNIT_TYPE_BLACKSMITH]) context->cmdBarButtons[buttonIndex++] = TURRET_CMD_BUTTON;
 	context->cmdBarButtons[buttonIndex++] = CANCEL_SELECT_BUILDING_CMD_BUTTON;
 }
 
@@ -873,7 +886,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 					for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 						GameUnit *currentUnit = *activeUnits;
 						if (currentUnit && currentUnit->controller == UNIT_CONTROLLER_PLAYER &&
-							(!currentUnit->isBuilding || currentUnit->state == BUILDING_STATE_COMPLETED)) {
+							(!currentUnit->isBuilding || currentUnit->state != BUILDING_STATE_CONSTRUCT)) {
 							unitCount[currentUnit->type]++;
 							if (currentUnit->isBuilding) {
 								if (currentUnit->typed.buildingData.isTraining) {

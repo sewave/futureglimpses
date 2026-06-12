@@ -191,10 +191,10 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.isBuilding = TRUE,
 				.minAttackRange = 0,
 				.maxAttackRange = 6,
-				.sightRange = 8,
+				.sightRange = 6,
 				.exploreRange = 6,
-				.health = 600,
-				.maxHealth = 600,
+				.health = 150,
+				.maxHealth = 150,
 				.tileSize = 2,
 				.minDamage = 10,
 				.maxDamage = 15,
@@ -216,7 +216,7 @@ static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
 	[TRAINING_TYPE_BLACKSMITH]		= {.used = {800, 450, 0}, .time = SEC_TO_FRAMES(67), .foodProvided = 0},
 	[TRAINING_TYPE_STABLES]			= {.used = {1000, 300, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 	[TRAINING_TYPE_TOWER]			= {.used = {1000, 200, 0}, .time = SEC_TO_FRAMES(42), .foodProvided = 0},
-	[TRAINING_TYPE_TURRET]			= {.used = {800, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
+	[TRAINING_TYPE_TURRET]			= {.used = {800, 200, 0}, .time = SEC_TO_FRAMES(45), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_SOLDIER]	= {.used = {1750, 0, 0}, .time = SEC_TO_FRAMES(50), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_ARCHER]	= {.used = {2000, 200, 0}, .time = SEC_TO_FRAMES(75), .foodProvided = 0},
 	[TRAINING_TYPE_UPGRADE_KNIGHT]	= {.used = {2500, 500, 0}, .time = SEC_TO_FRAMES(90), .foodProvided = 0},
@@ -303,7 +303,7 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	TrainingResourcesData *trainingData = game_unit_get_training_resources(unit->type);
 	uint8_t foodProvidedReturn;
 	// An uncompleted building has not yet provided any food
-	if(unit->isBuilding && unit->state != BUILDING_STATE_COMPLETED) {
+	if(unit->isBuilding && unit->state == BUILDING_STATE_CONSTRUCT) {
 		foodProvidedReturn = 0;
 	}
 	else {
@@ -580,7 +580,9 @@ void game_unit_work(GameContext *context, GameUnit *worker) {
 	if (workerData->targetConstruction != NO_TARGET_ID) {
 		GameUnit *workTarget = game_unit_get_by_id(context, worker->typed.workerData.targetConstruction);
 		if (workTarget && workTarget->isBuilding) {
-			if (workTarget->state == BUILDING_STATE_COMPLETED) {
+			if (workTarget->state == BUILDING_STATE_CONSTRUCT) {
+				building_add_construction(context, workTarget);
+			} else {
 				if (workTarget->health < workTarget->maxHealth) {
 					building_repair(context, workTarget);
 				} else {
@@ -594,8 +596,6 @@ void game_unit_work(GameContext *context, GameUnit *worker) {
 						game_unit_command_idle(worker);
 					}
 				}
-			} else {
-				building_add_construction(context, workTarget);
 			}
 		} else {
 			worker->typed.workerData.targetConstruction = NO_TARGET_ID;

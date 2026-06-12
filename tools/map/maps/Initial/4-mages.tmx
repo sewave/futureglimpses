@@ -10,6 +10,7 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="ENABLE_TURRET" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_ARCHER" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>

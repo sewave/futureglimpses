@@ -93,6 +93,7 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	context->map.enableFarm = map->enableFarm;
 	context->map.enableStables = map->enableStables;
 	context->map.enableTower = map->enableTower;
+	context->map.enableTurret = map->enableTurret;
 	context->map.aiMode = (AIModeEnum) map->aiMode;
 	context->map.peaceTime = SEC_TO_FRAMES(map->peaceTime) / AI_STATE_COUNT;
 	for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {

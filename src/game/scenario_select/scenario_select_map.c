@@ -97,6 +97,7 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 	mapEntry->enableFarm = mapData->enableFarm;
 	mapEntry->enableStables = mapData->enableStables;
 	mapEntry->enableTower = mapData->enableTower;
+	mapEntry->enableTurret = mapData->enableTurret;
 	for(int i = 0; i < MAP_UPGRADEABLE_UNIT_TYPES; i++) {
 		mapEntry->upgradeableUnits[i] = mapData->upgradeableUnits[i];
 		mapEntry->upgradedUnits[i] = mapData->upgradedUnits[PLAYER_CONTROLLER][i];

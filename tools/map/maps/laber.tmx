@@ -10,6 +10,7 @@
   <property name="ENABLE_FARM" type="bool" value="true"/>
   <property name="ENABLE_STABLES" type="bool" value="true"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
+  <property name="ENABLE_TURRET" type="bool" value="false"/>
   <property name="MSG_DESCRIPTION" value="Prueba de movimiento"/>
   <property name="MSG_LOSE" value="You lose"/>
   <property name="MSG_TITLE" value="Laberinto"/>

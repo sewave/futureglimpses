@@ -252,6 +252,7 @@ typedef struct {
 	uint8_t enableFarm;
 	uint8_t enableStables;
 	uint8_t enableTower;
+	uint8_t enableTurret;
 	AIModeEnum aiMode;
 	uint32_t peaceTime;
 } GameMap;

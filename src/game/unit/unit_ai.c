@@ -155,7 +155,7 @@ static void game_unit_ai_attack(GameContext *context, GameUnit *unit) {
 			game_unit_face_target(unit, target);
 			game_animation_reset(&unit->animationStatus);
 		} else {
-			unit->state = unit->nextState;
+			if(unit->isBuilding) unit->state = BUILDING_STATE_COMPLETED; else unit->state = unit->nextState;
 			unit->nextState = UNIT_STATE_IDLE;
 			unit->targetX = unit->prevTargetX;
 			unit->targetY = unit->prevTargetY;
