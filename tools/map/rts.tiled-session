@@ -195,11 +195,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 518,
-                "y": 662.3333333333333
+                "x": 601,
+                "y": 622.5
             }
         },
         "maps/superwar.tmx": {
@@ -214,11 +214,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 752,
-                "y": 727
+                "x": 196,
+                "y": 371.5
             }
         },
         "maps/tileset.tsx": {

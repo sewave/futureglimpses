@@ -187,15 +187,7 @@
   <object id="286" template="../buildings/P_Barracks.tx" x="720" y="816"/>
   <object id="287" template="../buildings/P_Tower.tx" x="704" y="928"/>
   <object id="288" template="../buildings/P_Stables.tx" x="752" y="992"/>
-  <object id="291" template="../buildings/C_Turret.tx" name="C_Turret" x="640" y="560">
-   <properties>
-    <property name="UNIT_TYPE" type="int" propertytype="UNIT_TYPE" value="11"/>
-   </properties>
-  </object>
-  <object id="292" template="../buildings/C_Turret.tx" name="C_Turret" x="608" y="576">
-   <properties>
-    <property name="UNIT_TYPE" type="int" propertytype="UNIT_TYPE" value="11"/>
-   </properties>
-  </object>
+  <object id="291" template="../buildings/C_Turret.tx" name="C_Turret" x="352" y="240"/>
+  <object id="292" template="../buildings/C_Turret.tx" name="C_Turret" x="272" y="304"/>
  </objectgroup>
 </map>
