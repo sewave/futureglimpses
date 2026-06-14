@@ -1,5 +1,10 @@
 #include "game/building/building.h"
 #include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
+#include "game/map/resource.h"
+#include "game/animation/animation.h"
+#include "game/video/game_video.h"
+#include "game/sound/game_sound.h"
 
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
 #define SPIRAL_DIRECTIONS 4

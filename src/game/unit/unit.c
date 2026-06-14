@@ -1,4 +1,14 @@
 #include "game/unit/unit.h"
+#include "game/unit/unit_path.h"
+#include "game/unit/unit_ai.h"
+#include "game/unit/player_attacked.h"
+#include "game/unit/unit_command.h"
+#include "game/animation/animation.h"
+#include "game/building/building.h"
+#include "game/map/resource.h"
+#include "game/map/spatial.h"
+#include "game/video/gfx.h"
+#include "game/video/game_video.h"
 
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1

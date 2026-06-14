@@ -2,6 +2,9 @@
 #include "game/sound/game_sound.h"
 #include "game/map/spatial.h"
 #include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
+#include "game/object/object.h"
+
 
 void game_event_unit_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
 	switch (eventType) {

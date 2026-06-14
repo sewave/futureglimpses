@@ -1,4 +1,11 @@
 #include "game/unit/unit_ai.h"
+#include "game/unit/unit.h"
+#include "game/unit/unit_path.h"
+#include "game/unit/unit_command.h"
+#include "game/map/spatial.h"
+#include "game/map/resource.h"
+#include "game/building/building.h"
+#include "game/animation/animation.h"
 
 #define MAX_FOUND_UNITS 8
 static GameUnit *foundUnits[MAX_FOUND_UNITS];

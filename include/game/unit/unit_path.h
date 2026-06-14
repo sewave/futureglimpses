@@ -1,6 +1,6 @@
 #ifndef UNIT_PATH_H
 #define UNIT_PATH_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 uint8_t game_unit_path_find(GameContext* context, GameUnit* unit, uint16_t targetX, uint16_t targetY);
 void game_unit_path_init(GameUnit* unit, uint16_t targetX, uint16_t targetY);

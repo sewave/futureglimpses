@@ -1,4 +1,8 @@
+#include "game/animation/animation.h"
+#include "game/unit/unit.h"
 #include "game/unit/unit_command.h"
+#include "game/sound/game_sound.h"
+#include "game/video/game_video.h"
 
 static void game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitState) {
     if(unit->state == UNIT_STATE_DIE) return;

@@ -1,6 +1,6 @@
 #ifndef PLAYER_ATTACKED_H
 #define PLAYER_ATTACKED_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 void player_attacked_update(PlayerAttackedData *playerAttackedData);
 void player_attacked_render(PlayerAttackedData *playerAttackedData, RenderQueue *renderQueue);

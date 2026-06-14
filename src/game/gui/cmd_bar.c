@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include "game/gui/cmd_bar.h"
 #include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
+#include "game/building/building.h"
+#include "game/map/resource.h"
+#include "game/map/selection.h"
+#include "game/map/spatial.h"
+#include "game/mouse/game_mouse.h"
+#include "game/video/game_video.h"
+#include "game/video/gfx.h"
+#include "game/video/render.h"
+#include "game/sound/game_sound.h"
 
 #define CMD_BAR_BUTTON_INITIAL_X 2
 #define CMD_BAR_BUTTON_INITIAL_Y 129

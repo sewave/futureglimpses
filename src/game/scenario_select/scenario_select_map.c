@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <allegro.h>
 #include "game/scenario/scenario_select_map.h"
 #include "common/util.h"
-#include <allegro.h>
 
 #define MAX_MAPS 64
 #define MAX_PATH_LENGTH 256

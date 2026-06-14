@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include <allegro/sound.h>
 #include "game/sound/game_sound.h"
-#include <stdio.h>
 
 const char* gameMusicFilenames [GAME_MUSIC_COUNT] = {
         [GAME_MUSIC_INTRO] = "assets/music/intro.mid",

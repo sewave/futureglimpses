@@ -1,6 +1,6 @@
 #ifndef UNIT_H
 #define UNIT_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 #define UNIT_USED_RESOURCES 3
 #define UNIT_CREATE_REDUCE_RESOURCES 2
@@ -45,4 +45,5 @@ uint8_t game_unit_is_visible(GameContext *context, GameUnit *unit);
 uint8_t game_unit_exists(GameContext *context, ControllerEnum controller, UnitTypeEnum type);
 void game_unit_explore_extended(GameContext *context, GameUnit *unit, int multipliedRange);
 GameUnit* game_unit_get_nearest_construction_building(GameContext *context, GameUnit *worker);
+
 #endif /* UNIT_H */

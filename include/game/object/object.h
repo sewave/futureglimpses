@@ -1,6 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 Object *game_object_get_by_id(GameContext *context, ObjectId handle);
 void game_object_destroy(GameContext *context, ObjectId handle);

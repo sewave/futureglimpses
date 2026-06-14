@@ -1,7 +1,7 @@
+#include <stdio.h>
 #include "game/text/game_text.h"
 #include "game/text/game_text_enum.h"
 #include "common/text.h"
-#include <stdio.h>
 
 #define GAME_TEXT_FILE_ES "assets/txt/es.txt"
 #define GAME_TEXT_FILE_EN "assets/txt/en.txt"

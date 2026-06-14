@@ -1,4 +1,7 @@
 #include "game/object/object.h"
+#include "game/video/gfx.h"
+#include "game/unit/unit.h"
+#include "game/animation/animation.h"
 
 #define FIRST_GENERATION 1
 #define NO_FREE_INDEX -1

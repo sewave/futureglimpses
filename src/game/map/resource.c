@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include "game/map/resource.h"
 #include "game/video/game_video.h"
+#include "game/video/gfx.h"
 #include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
 
 #define UI_RESOURCE_UPDATE_RATE 20 // Quantity to update of ui resource per call
 #define BASIC_RESOURCES 2

@@ -1,4 +1,6 @@
 #include "game/unit/player_attacked.h"
+#include "game/sound/game_sound.h"
+#include "game/video/game_video.h"
 
 #define COOLDOWN_TICKS SEC_TO_FRAMES(10)
 #define ATTACK_SHOWN_TICKS SEC_TO_FRAMES(8)
