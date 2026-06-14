@@ -229,6 +229,7 @@ MapData *game_map_load_data(const char *filename) {
 					case UNIT_TYPE_TOWER:
 					case UNIT_TYPE_BLACKSMITH:
 					case UNIT_TYPE_FARM:
+					case UNIT_TYPE_TURRET:
 						currentLayer->objects[j].y -= 2;
 						break;
 					default:

@@ -3,15 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test.tmx",
+    "activeFile": "maps/minitest.tmx",
     "expandedProjectPaths": [
-        "maps/Starting",
-        ".",
-        "maps/Test Campaign",
-        "Test Campaign",
-        "maps/Initial",
         "buildings",
-        "maps"
+        "maps/Test Campaign",
+        "maps",
+        "maps/Initial",
+        "maps/Starting",
+        "Test Campaign",
+        "."
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -198,7 +198,7 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 601,
+                "x": 789,
                 "y": 622.5
             }
         },
@@ -217,8 +217,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 196,
-                "y": 371.5
+                "x": 512,
+                "y": 512.5
             }
         },
         "maps/tileset.tsx": {
@@ -236,11 +236,11 @@
             }
         },
         "maps/waves.tmx": {
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
-                "y": 509
+                "x": 414.66666666666663,
+                "y": 519.6666666666666
             }
         },
         "maps/win.tmx": {
@@ -315,11 +315,14 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
+        "maps/minitest.tmx",
         "maps/test.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/test.tmx",
+        "maps/minitest.tmx",
         "maps/biclash.tmx",
         "maps/clash.tmx",
         "maps/closewar.tmx",
@@ -329,9 +332,7 @@
         "maps/waves.tmx",
         "maps/win.tmx",
         "maps/workers.tmx",
-        "maps/base.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/Initial/2-archers.tmx"
+        "maps/base.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
