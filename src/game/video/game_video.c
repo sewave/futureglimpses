@@ -1,5 +1,6 @@
 #include <allegro/palette.h>
 #include <allegro/color.h>
+#include "common/video.h"
 #include "game/video/game_video.h"
 
 #define FIRST_COLORS 32

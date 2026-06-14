@@ -1,5 +1,5 @@
 #include "game/building/building.h"
-#include <allegro.h>
+#include "game/unit/unit.h"
 
 #define QUEUE_FULL_MSG_TIME SEC_TO_FRAMES(5)
 #define SPIRAL_DIRECTIONS 4

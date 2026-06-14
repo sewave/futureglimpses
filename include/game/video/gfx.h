@@ -1,6 +1,6 @@
 #ifndef GAME_GFX_H
 #define GAME_GFX_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 typedef enum {
 	GAME_ICON_GOLD,

@@ -1,6 +1,6 @@
-#include "game/gui/cmd_bar.h"
 #include <stdio.h>
-#include <allegro/keyboard.h>
+#include "game/gui/cmd_bar.h"
+#include "game/unit/unit.h"
 
 #define CMD_BAR_BUTTON_INITIAL_X 2
 #define CMD_BAR_BUTTON_INITIAL_Y 129

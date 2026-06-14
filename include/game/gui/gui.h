@@ -1,6 +1,6 @@
 #ifndef GUI_H
 #define GUI_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 #define MENU_BACK_X 80
 #define MENU_BACK_Y 25

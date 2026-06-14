@@ -1,4 +1,7 @@
 #include "game/gui/gui.h"
+#include "game/video/gfx.h"
+#include "game/video/game_video.h"
+#include "game/sound/game_sound.h"
 
 #define GUI_Z_ORDER UI_Z_ORDER + 100
 

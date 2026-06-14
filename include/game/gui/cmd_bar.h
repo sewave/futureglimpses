@@ -1,6 +1,6 @@
 #ifndef CMD_BAR_H
 #define CMD_BAR_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 #define CMD_BAR_BUTTON_WIDTH 32
 #define CMD_BAR_BUTTON_HEIGHT 22

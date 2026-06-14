@@ -1,6 +1,6 @@
 #ifndef GAME_VIDEO_H
 #define GAME_VIDEO_H
-#include "game/game_lib.h"
+#include "common/common.h"
 
 #define GAME_INTERNAL_WIDTH 320
 #define GAME_INTERNAL_HEIGHT 200

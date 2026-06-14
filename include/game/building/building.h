@@ -1,6 +1,6 @@
 #ifndef BUILDING_H
 #define BUILDING_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 void building_add_to_train_queue(GameContext* context, GameUnit* building, TrainingTypeEnum trainingType);
 void building_update(GameContext *context, GameUnit *building);

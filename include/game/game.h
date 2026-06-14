@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
+#include <allegro.h>
 #include "common/common_lib.h"
-#include <allegro/gfx.h>
 #include "text/game_text_enum.h"
 #include "game_enums.h"
 
