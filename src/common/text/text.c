@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <allegro/text.h>
 #include "common/text.h"
 #include "common/video.h"
 

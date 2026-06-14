@@ -1,5 +1,6 @@
+#include <allegro/internal/alconfig.h>
+#include <allegro/timer.h>
 #include "common/timer.h"
-#include <allegro.h>
 
 volatile long logicTicks = 0;
 

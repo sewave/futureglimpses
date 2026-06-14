@@ -1,7 +1,7 @@
-#include "common/util.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "common/util.h"
 
 char has_minimal_free_memory(int megaBytes) {
 	void* ptr = malloc(megaBytes * 1024 * 1024);

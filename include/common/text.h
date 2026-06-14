@@ -1,6 +1,8 @@
 #ifndef TEXT_H
 #define TEXT_H
-#include <allegro.h>
+#include <allegro/gfx.h>
+#include <allegro/palette.h>
+#include <allegro/font.h>
 #include "common/common.h"
 
 InitializationStatusEnum text_init_system(uint16_t numberOfTexts);

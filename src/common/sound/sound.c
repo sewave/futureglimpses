@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "common/sound.h"
 #include <allegro/sound.h>
 #include <jgmod.h>
+#include "common/sound.h"
 
 static JGMOD *currentModMusic = NULL;
 static MIDI *currentMidiMusic = NULL;

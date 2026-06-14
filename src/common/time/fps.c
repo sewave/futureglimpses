@@ -1,5 +1,5 @@
-#include "common/fps.h"
 #include <time.h>
+#include "common/fps.h"
 
 #define FPS_SAMPLES 60
 #define MS_IN_SECOND 1000

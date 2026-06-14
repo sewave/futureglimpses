@@ -1,5 +1,5 @@
-#include "common/keyboard.h"
 #include <allegro/keyboard.h>
+#include "common/keyboard.h"
 
 static char previousKey[KEY_MAX];
 

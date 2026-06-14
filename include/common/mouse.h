@@ -1,8 +1,8 @@
 #ifndef MOUSE_H
 #define MOUSE_H
-#include "common/common.h"
 #include <allegro/gfx.h>
 #include <allegro/mouse.h>
+#include "common/common.h"
 
 typedef struct {
     int x, y;

@@ -1,9 +1,8 @@
-#include <allegro/gfx.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <allegro/file.h>
 #include <allegro/datafile.h>
 #include "common/mouse.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 static BITMAP **mouseCursors = NULL;
 static uint8_t numMouseCursors = 0;
