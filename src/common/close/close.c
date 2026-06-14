@@ -1,5 +1,5 @@
-#include "common/close.h"
 #include <allegro.h>
+#include "common/close.h"
 
 static volatile uint8_t closeButtonPressed = FALSE;
 

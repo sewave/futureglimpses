@@ -1,6 +1,6 @@
-#include "common/text.h"
-#include "common/common_lib.h"
 #include <stdio.h>
+#include "common/text.h"
+#include "common/video.h"
 
 #define CONTROL_SEQUENCE "^"
 #define COLOR_CODE_LENGTH 3
