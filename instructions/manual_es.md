@@ -99,6 +99,7 @@ Si no queremos usar las acciones contextuales podemos usar los botones de comand
 ## Mapas
 
 Una de las mejores características del juego es la posibilidad de diseñar tus propios mapas. Para ello hará falta el editor [Tiled](https://www.mapeditor.org/) y unas características concretas. En la carpeta /tools/map encontraréis un projecto de tiled con el que gestionarlo todo. Mi recomendación es copiar mapas y editarlos.
+Una vez se tengan completados, hay que exportarlos como **Future Glimpses Map (fgm)** usando el plugin incluido que será usable desde la carpeta de mapas.
 
 ### Campañas
 
