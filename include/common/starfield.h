@@ -2,7 +2,7 @@
 #define STARFIELD_H
 #include "common/common.h"
 #include "common/render_queue.h"
-#include <allegro.h>
+#include <allegro/palette.h>
 
 typedef struct {
 	int x, y, z;
