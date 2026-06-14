@@ -1,4 +1,6 @@
 #include "game/animation/animation.h"
+#include "game/sound/game_sound.h"
+#include "game/event/event.h"
 
 #define UNIT_ANI_FRAMES 4
 

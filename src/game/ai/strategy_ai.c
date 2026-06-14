@@ -1,4 +1,5 @@
 #include "game/ai/strategy_ai.h"
+#include "game/unit/unit.h"
 
 #define ATTACK_WAVE_FRAMES (SEC_TO_FRAMES(60) / AI_STATE_COUNT)
 #define FIRST_WAVE_UNITS 4

@@ -1,7 +1,8 @@
-#include "game/config/config.h"
-#include <allegro/config.h>
 #include <stdio.h>
+#include <allegro/config.h>
 #include <allegro/sound.h>
+#include "game/config/config.h"
+#include "game/text/game_text.h"
 
 #define CONFIG_FILE_PATH "config.cfg"
 #define CONFIG_SECTION_AUDIO "audio"
