@@ -1,7 +1,10 @@
-#include "game/state/results.h"
-#include "game/game_lib.h"
-#include <allegro.h>
 #include <stdio.h>
+#include "game/state/results.h"
+#include "game/gui/gui.h"
+#include "game/video/game_video.h"
+#include "game/video/render.h"
+#include "game/mouse/game_mouse.h"
+#include "game/sound/game_sound.h"
 
 #define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "game/state/intro.h"
-#include <allegro.h>
 #include "common/starfield.h"
+#include "game/video/game_video.h"
 
 #define LINE_X 4
 #define LINE_Y_SPACING 20

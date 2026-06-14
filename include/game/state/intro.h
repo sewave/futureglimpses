@@ -1,6 +1,6 @@
 #ifndef INTRO_H
 #define INTRO_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 void game_state_intro_init(GameContext *context);
 GameStateEnum game_state_intro_update(GameContext *context);

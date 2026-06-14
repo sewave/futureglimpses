@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "game/game_lib.h"
-#include <allegro.h>
+#include "game/state/menu_map.h"
+#include "game/gui/gui.h"
+#include "game/config/config.h"
+#include "game/mouse/game_mouse.h"
+#include "game/video/game_video.h"
+#include "game/video/render.h"
+#include "game/video/gfx.h"
 
 #define BUTTON_Y_SEPARATION 20
 #define BUTTON_MAIN_MENU_WIDTH 100

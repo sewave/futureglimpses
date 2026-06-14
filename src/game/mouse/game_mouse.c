@@ -1,6 +1,9 @@
 #include <allegro/gfx.h>
 #include "game/mouse/game_mouse.h"
 #include "game/video/render.h"
+#include "game/map/spatial.h"
+#include "game/map/selection.h"
+#include "game/unit/unit.h"
 
 static MouseCursorStateEnum mouseCursorState = MOUSE_CURSOR_IDLE;
 BITMAP *arrowCursors;

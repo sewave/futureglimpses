@@ -1,6 +1,6 @@
 #ifndef RENDER_H
 #define RENDER_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 #define VIEWPORT_X_OFFSET 72
 #define VIEWPORT_Y_OFFSET 12

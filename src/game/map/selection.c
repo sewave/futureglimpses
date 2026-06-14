@@ -6,6 +6,7 @@
 #include "game/unit/unit.h"
 #include "game/unit/unit_command.h"
 #include "game/video/render.h"
+#include "game/sound/game_sound.h"
 
 typedef struct {
 	UnitId selectedUnits[MAX_GAME_UNITS];

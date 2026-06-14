@@ -1,7 +1,13 @@
-#include "game/video/render.h"
+#include <stdio.h>
 #include <allegro/color.h>
 #include <allegro/keyboard.h>
-#include <stdio.h>
+#include "game/video/render.h"
+#include "game/video/gfx.h"
+#include "game/video/game_video.h"
+#include "game/animation/animation.h"
+#include "game/unit/unit.h"
+#include "game/map/resource.h"
+#include "game/mouse/game_mouse.h"
 
 #define MOVE_PRECISION 16384
 #define HEALTH_BAR_Y_OFFSET 6

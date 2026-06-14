@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "game/game_lib.h"
+#include "game/state/scenario_select.h"
 #include "game/scenario/scenario_select_map.h"
-#include <allegro.h>
+#include "game/gui/gui.h"
+#include "game/video/game_video.h"
+#include "game/video/gfx.h"
+#include "game/video/render.h"
+#include "game/mouse/game_mouse.h"
 
 #define SCENARIO_SELECT_BACKGROUND_PATH "assets/gfx/ui/back/select.pcx"
 #define SCENARIO_SELECT_MAPS 10

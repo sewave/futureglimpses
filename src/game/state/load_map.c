@@ -1,7 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "game/game_lib.h"
-#include <allegro.h>
+#include "game/state/load_map.h"
+#include "game/unit/unit.h"
+#include "game/unit/player_attacked.h"
+#include "game/building/building.h"
+#include "game/object/object.h"
+#include "game/map/map.h"
+#include "game/map/resource.h"
+#include "game/map/selection.h"
+#include "game/mouse/game_mouse.h"
+#include "game/video/game_video.h"
+#include "game/sound/game_sound.h"
 
 #define MESSAGES_X 74
 #define MESSAGES_Y 175

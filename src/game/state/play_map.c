@@ -1,7 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "game/game_lib.h"
-#include <allegro.h>
+#include "game/state/play_map.h"
+#include "game/ai/strategy_ai.h"
+#include "game/gui/gui.h"
+#include "game/gui/cmd_bar.h"
+#include "game/map/spatial.h"
+#include "game/map/selection.h"
+#include "game/map/resource.h"
+#include "game/animation/animation.h"
+#include "game/building/building.h"
+#include "game/object/object.h"
+#include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
+#include "game/unit/player_attacked.h"
+#include "game/video/game_video.h"
+#include "game/video/render.h"
+#include "game/video/gfx.h"
+#include "game/mouse/game_mouse.h"
 
 #define RESULT_MESSAGE_X_OFFSET 5
 #define TOOLTIP_TEXT_X_OFFSET 5

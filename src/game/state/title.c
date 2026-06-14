@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "game/game_lib.h"
-#include <allegro.h>
+#include "game/state/title.h"
+#include "game/gui/gui.h"
+#include "game/config/config.h"
+#include "game/video/game_video.h"
+#include "game/video/render.h"
+#include "game/sound/game_sound.h"
+#include "game/mouse/game_mouse.h"
 
 #define TITLE_BACKGROUND_PATH "assets/gfx/ui/back/title.pcx"
 #define TITLE_TEXT_ES_PATH "assets/gfx/ui/t_txt_es.pcx"
