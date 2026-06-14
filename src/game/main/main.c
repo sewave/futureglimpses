@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include "game/game.h"
+#include "game/video/gfx.h"
+#include "game/video/game_video.h"
 #include "game/mouse/game_mouse.h"
+#include "game/sound/game_sound.h"
+#include "game/config/config.h"
+#include "game/text/game_text.h"
 
 static RenderQueue renderQueue;
 static GameContext context;

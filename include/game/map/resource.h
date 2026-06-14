@@ -1,6 +1,6 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 void resource_reset(GameContext *context);
 void resource_set_amount(GameContext *context, ControllerEnum controller, ResourceTypeEnum type, uint32_t amount);
@@ -16,4 +16,5 @@ void resource_unit_harvest(GameContext *context, GameUnit *worker);
 void resource_search_for_work(GameContext *context, GameUnit *worker);
 Position resource_find_first_around_unit(GameContext *context, GameUnit *unit, TileTypeEnum resourceType, uint8_t maxDistance);
 uint8_t resource_has_enough_for_unit(GameContext *context, ControllerEnum controller, UnitTypeEnum unitType);
+
 #endif /* RESOURCE_H */

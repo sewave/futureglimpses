@@ -1,6 +1,6 @@
 #ifndef GAME_MOUSE_H
 #define GAME_MOUSE_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 typedef enum {
 	MOUSE_CURSOR_IDLE,

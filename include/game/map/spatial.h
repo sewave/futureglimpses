@@ -1,6 +1,6 @@
 #ifndef SPATIAL_H
 #define SPATIAL_H
-#include "game/game_lib.h"
+#include "game/game.h"
 
 /**
  * All filter functions must conform to this 3-argument signature.
@@ -30,4 +30,5 @@ uint8_t game_spatial_object_in_explored_viewport(const GameContext *context, con
 uint8_t game_spatial_unit_target_in_attack_range(const GameUnit* unit, const GameUnit* target);
 uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int targetY);
 void game_spatial_explore_position(GameContext* context, uint16_t x, uint16_t y);
+
 #endif /* SPATIAL_H */

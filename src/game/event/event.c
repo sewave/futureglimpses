@@ -1,4 +1,7 @@
 #include "game/event/event.h"
+#include "game/sound/game_sound.h"
+#include "game/map/spatial.h"
+#include "game/unit/unit.h"
 
 void game_event_unit_process(GameContext *context, EventType eventType, GameUnit *unit, uint16_t data) {
 	switch (eventType) {

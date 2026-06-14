@@ -1,5 +1,9 @@
-#include "game/map/selection.h"
 #include <allegro/keyboard.h>
+#include "game/map/selection.h"
+#include "game/mouse/game_mouse.h"
+#include "game/unit/unit.h"
+#include "game/unit/unit_command.h"
+
 typedef struct {
 	UnitId selectedUnits[MAX_GAME_UNITS];
 	uint16_t selectedUnitCount;
