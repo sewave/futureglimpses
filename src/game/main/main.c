@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <allegro.h>
-#include "game/game_lib.h"
+#include "game/game.h"
+#include "game/mouse/game_mouse.h"
 
 static RenderQueue renderQueue;
 static GameContext context;

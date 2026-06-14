@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include "common/starfield.h"
 #include "common/video.h"
-#include <stdio.h>
 
 #define STAR_RESOLUTION 8
 #define NUM_COLORS 17

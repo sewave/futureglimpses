@@ -1,5 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
+#include <stdint.h>
 #include "common/common.h"
 
 #define CUSTOM_NAME_LENGTH 11

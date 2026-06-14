@@ -1,10 +1,5 @@
 #ifndef COMMON_H
 #define COMMON_H
-#include <stdint.h>
-#include <time.h>
-// Uncomment to compile debug mode with logs
-//#define DEBUGMODE
-#include <allegro/debug.h>
 
 typedef enum {
     INITIALIZATION_OK = 0,

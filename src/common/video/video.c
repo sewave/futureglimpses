@@ -1,7 +1,7 @@
+#include <stdio.h>
 #include <allegro/gfx.h>
 #include <allegro/color.h>
 #include "common/video.h"
-#include <stdio.h>
 
 typedef enum {
 	FADE_NONE,

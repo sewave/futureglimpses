@@ -1,6 +1,5 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include "common/common.h" 
 
 int main_init();
 void main_loop();

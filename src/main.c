@@ -1,4 +1,5 @@
 #include <allegro.h>
+#include "common/common.h"
 #include "game/main/main.h"
 
 int main(int argc, char *argv[]) {
