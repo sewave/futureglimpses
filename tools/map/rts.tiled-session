@@ -3,15 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/waves.tmx",
+    "activeFile": "maps/superwar.tmx",
     "expandedProjectPaths": [
-        ".",
+        "Test Campaign",
         "maps",
-        "maps/Starting",
         "maps/Initial",
         "buildings",
-        "Test Campaign",
-        "maps/Test Campaign"
+        ".",
+        "maps/Test Campaign",
+        "maps/Starting"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -70,11 +70,11 @@
             "scaleInDock": 1
         },
         "buildings/big_buildings.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 5.5
         },
         "buildings/small_buildings.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 1
         },
         "clash.tmx": {
@@ -179,7 +179,7 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 332,
+                "x": 464,
                 "y": 537
             }
         },
@@ -203,11 +203,11 @@
             }
         },
         "maps/superwar.tmx": {
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 551,
-                "y": 478.5
+                "x": 526.6666666666666,
+                "y": 510.99999999999994
             }
         },
         "maps/test.tmx": {
@@ -290,11 +290,11 @@
             }
         },
         "tileset.tsx": {
-            "scaleInDock": 3,
+            "scaleInDock": 1.5,
             "scaleInEditor": 2
         },
         "units/units.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 5.5,
             "scaleInEditor": 8
         },
         "win.tmx": {
@@ -318,25 +318,24 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/minitest.tmx",
-        "maps/test.tmx",
-        "maps/waves.tmx"
+        "maps/superwar.tmx",
+        "buildings/small_buildings.tsx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "buildings/small_buildings.tsx",
+        "maps/superwar.tmx",
         "maps/minitest.tmx",
         "maps/test.tmx",
         "maps/waves.tmx",
+        "maps/closewar.tmx",
         "maps/biclash.tmx",
         "maps/clash.tmx",
-        "maps/closewar.tmx",
         "maps/laber.tmx",
-        "maps/superwar.tmx",
         "maps/updown.tmx",
         "maps/win.tmx",
-        "maps/workers.tmx",
-        "maps/base.tmx"
+        "maps/workers.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
