@@ -172,7 +172,7 @@ GameStateEnum handle_load_map_update(GameContext *context) {
 		return GAME_STATE_SCENARIO_SELECT;
 	}
 
-	context->isDebugEnabled = FALSE;
+	context->areCheatsEnabled = FALSE;
 	context->gameResult = GAME_RESULT_ONGOING;
 	message_init(MESSAGES_X, MESSAGES_Y, MESSAGES_Y_INC, MESSAGES_Z);
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);

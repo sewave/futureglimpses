@@ -232,10 +232,10 @@ static void game_update(GameContext *context) {
 	}
 	
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
-	// Resource debug keys
-	#ifdef DEBUG
-	if(keyboard_is_key_pressed(KEY_G)) context->isDebugEnabled ^= TRUE;
-	if(context->isDebugEnabled) {
+	// Resource cheat keys
+	#ifdef CHEATS_ENABLED
+	if(keyboard_is_key_pressed(KEY_G)) context->areCheatsEnabled ^= TRUE;
+	if(context->areCheatsEnabled) {
 		if(keyboard_is_key_pressed(KEY_F11)) {
 			for(int x = 0; x < BOARD_WIDTH; x++) {
 				for(int y = 0; y < BOARD_HEIGHT; y++) {

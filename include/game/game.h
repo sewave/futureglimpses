@@ -7,6 +7,8 @@
 
 #define VERSION "1.00"
 #define GAME_TITLE "Future Glimpses"
+// Comment to disable cheats in game
+#define CHEATS_ENABLED
 
 #define DEFAULT_MUSIC_VOLUME 100
 #define DEFAULT_SFX_VOLUME 100
@@ -326,7 +328,7 @@ typedef struct {
 	Stats stats[UNIT_CONTROLLERS_COUNT];
 	Config config;
 	CommandBarButton cmdBarButtons[CMD_BAR_BUTTONS];
-	uint8_t isDebugEnabled;
+	uint8_t areCheatsEnabled;
 	BuildPlacing buildPlacing;
 	GameResultEnum gameResult;
 	GameMap map;

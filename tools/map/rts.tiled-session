@@ -5,12 +5,12 @@
     },
     "activeFile": "maps/superwar.tmx",
     "expandedProjectPaths": [
-        "Test Campaign",
-        "maps",
         "maps/Initial",
+        "Test Campaign",
         "buildings",
-        ".",
+        "maps",
         "maps/Test Campaign",
+        ".",
         "maps/Starting"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",

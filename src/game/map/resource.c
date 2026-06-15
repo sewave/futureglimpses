@@ -127,7 +127,7 @@ void resource_render_queue_submit_ui(GameContext *context, RenderQueue* renderQu
 	}
 
 	int controllers = 1;
-	if(context->isDebugEnabled) controllers = UNIT_CONTROLLERS_COUNT;
+	if (context->areCheatsEnabled) controllers = UNIT_CONTROLLERS_COUNT;
 
 	// Render resources
 	for(int controller = 0; controller < controllers; controller++) {

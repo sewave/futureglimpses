@@ -118,7 +118,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											animationStatus->sheet->frames[prop->startFrame + animationStatus->frame],
 											unitXCamera, unitYCamera);
 			// Some debug stuff
-			if (context->isDebugEnabled) {
+			if (context->areCheatsEnabled) {
 				render_queue_submit_text(
 						renderQueue,
 						SPRITES_Z_ORDER + unit->y + 1,
@@ -283,12 +283,10 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 							 context->xPosition / TILE_SIZE + MINIMAP_X_POS + VIEWPORT_WIDTH_TILES - 1,
 							 context->yPosition / TILE_SIZE + MINIMAP_Y_POS + VIEWPORT_HEIGHT_TILES - 1,
 							 PAL_COLOR_VIOLET);
-	#ifdef DEBUG
+	#ifdef CHEATS_ENABLED
 	itoa((uint8_t) fps_get(), fpsText, BASE_TEN_NUMBER);
 	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 290, 1, PAL_COLOR_WHITE, -1);
-	#endif
-
-	if (context->isDebugEnabled) {
+	if (context->areCheatsEnabled) {
 		int blue = 0;
 		int red = 0;
 		// Count active units by controller
@@ -304,6 +302,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 		render_queue_submit_text_multicolor(renderQueue, UI_Z_ORDER + 510, context->gameFont, activeText,
 			240, 23, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
 	}
+	#endif
 
 	resource_render_queue_submit_ui(context, renderQueue);
 
