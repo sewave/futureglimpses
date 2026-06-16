@@ -9,7 +9,7 @@
 #define LINE_Y_START GAME_INTERNAL_HEIGHT
 #define LINE_Y_HALF (GAME_INTERNAL_HEIGHT / 2)
 #define LINE_Z 10
-#define NUM_COLORS 17
+#define NUM_COLORS 6
 #define MAX_COLOR (NUM_COLORS - 1)
 #define INTRO_TEXT_FILE_ES "assets/txt/intro_es.txt"
 #define INTRO_TEXT_FILE_EN "assets/txt/intro_en.txt"
@@ -29,7 +29,7 @@ static int textFramesCounter;
 
 static void init_colors(PALETTE palette) {
     for(int i = 0; i < NUM_COLORS; i++) {
-        int colorTone = (i * 63) / NUM_COLORS;
+        int colorTone = ((i + 1) * 63) / NUM_COLORS;
         colors[i] = video_color_get_best_match(colorTone, colorTone, colorTone, palette);
     }
 }
@@ -38,7 +38,7 @@ static void calculate_line_colors() {
 	for (int i = 0; i < numLines; i++) {
 		int lineY = linesY[i];
 		if (lineY > -LINE_Y_SPACING && lineY < LINE_Y_START) {
-			int color = MAX_COLOR - ((abs(linesY[i] - LINE_Y_HALF) * MAX_COLOR) / LINE_Y_HALF);
+			int color = MAX_COLOR - ((abs(lineY - LINE_Y_HALF) * MAX_COLOR) / LINE_Y_HALF);
 			if (color < 0) color = 0;
 			linesColor[i] = colors[color];
 		}
