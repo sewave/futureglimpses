@@ -264,12 +264,12 @@ static const AnimationPropsData S_BUILD_IDLE = {
 static AnimationData TURRET_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(1.0)},
+				{.duration = SEC_TO_FRAMES(0.5)},
 		},
 		.lastFrameIndex = 0,
 		.events = {
-				{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_THROW_ARROW, .fireTime = SEC_TO_FRAMES(0.5)},
-				{.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.6)}
+				{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_THROW_ARROW, .fireTime = SEC_TO_FRAMES(0.4)},
+				{.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.4)}
 		},
 		.numEvents = 2,
 };
