@@ -3,15 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/superwar.tmx",
+    "activeFile": "maps/biclash.tmx",
     "expandedProjectPaths": [
         "maps/Initial",
         "Test Campaign",
-        "buildings",
-        "maps",
         "maps/Test Campaign",
+        "buildings",
         ".",
-        "maps/Starting"
+        "maps/Starting",
+        "maps"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -171,7 +171,7 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 851.3333333333333,
+                "x": 676.6666666666666,
                 "y": 702.3333333333333
             }
         },
@@ -318,20 +318,21 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/superwar.tmx",
-        "buildings/small_buildings.tsx"
+        "buildings/small_buildings.tsx",
+        "maps/clash.tmx",
+        "maps/biclash.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "buildings/small_buildings.tsx",
+        "maps/clash.tmx",
+        "maps/biclash.tmx",
         "maps/superwar.tmx",
         "maps/minitest.tmx",
         "maps/test.tmx",
         "maps/waves.tmx",
         "maps/closewar.tmx",
-        "maps/biclash.tmx",
-        "maps/clash.tmx",
         "maps/laber.tmx",
         "maps/updown.tmx",
         "maps/win.tmx",
