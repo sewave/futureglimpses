@@ -268,7 +268,7 @@ static GuiElement scenarioSelectFolder[SCENARIO_SELECT_FOLDER_ELEMENTS] = {
 
 GuiScreen scenarioSelectFolderGuiScreen = { .elements = scenarioSelectFolder, .elementsCount = SCENARIO_SELECT_FOLDER_ELEMENTS };
 
-#define SCENARIO_SELECT_MAP_ELEMENTS 20
+#define SCENARIO_SELECT_MAP_ELEMENTS 21
 #define MAP_OPTIONS_SEPARATOR 100
 #define MAP_OPTIONS_SMALL_SEPARATOR 50
 #define MAP_OPTIONS_Y_SEPARATION 2
@@ -286,6 +286,7 @@ GuiScreen scenarioSelectFolderGuiScreen = { .elements = scenarioSelectFolder, .e
 #define CONSTRUCTABLE_BLACKSMITH_INDEX 17
 #define CONSTRUCTABLE_STABLES_INDEX 18
 #define CONSTRUCTABLE_TOWER_INDEX 19
+#define CONSTRUCTABLE_TURRET_INDEX 20
 
 static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 	{
@@ -329,11 +330,6 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 		.textColor = PAL_COLOR_YELLOW,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX,
-		.typed = {
-			.text = {
-				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
-			}
-		}
 	},
 	{
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 60, .z = 10,
@@ -342,11 +338,6 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 		.textColor = PAL_COLOR_YELLOW,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX,
-		.typed = {
-			.text = {
-				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
-			}
-		}
 	},
 	{
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION, .z = 10,
@@ -355,11 +346,6 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 		.textColor = PAL_COLOR_YELLOW,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX,
-		.typed = {
-			.text = {
-				.maxX = RIGHT_BACK_X + RIGHT_BACK_WIDTH,
-			}
-		}
 	},
 	[UPGRADABLE_SOLDIER_INDEX] = {
 		.x = RIGHT_BACK_X, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION + 40, .z = 10,
@@ -473,6 +459,14 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX
 	},
+	[CONSTRUCTABLE_TURRET_INDEX] = {
+		.x = RIGHT_BACK_X + MAP_OPTIONS_SMALL_SEPARATOR * 2 + 2, .y = RIGHT_BACK_Y + RIGHT_BACK_HEIGHT_SMALL + MAP_OPTIONS_Y_SEPARATION, .z = 10,
+		.type = GUI_ELEMENT_TEXT,
+		.textId = GAME_TEXT_ID_UNIT_TYPE_TURRET,
+		.textColor = PAL_COLOR_WHITE,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.textBackground = TRANSPARENT_INDEX
+	},	
 };
 
 GuiScreen scenarioSelectMapGuiScreen = { .elements = scenarioSelectMap, .elementsCount = SCENARIO_SELECT_MAP_ELEMENTS };
@@ -501,6 +495,7 @@ static void update_map_options() {
 		scenarioSelectMap[CONSTRUCTABLE_BLACKSMITH_INDEX].textColor = mapEntry->enableBlacksmith ? PAL_COLOR_GREEN : PAL_COLOR_RED;
 		scenarioSelectMap[CONSTRUCTABLE_STABLES_INDEX].textColor = mapEntry->enableStables ? PAL_COLOR_GREEN : PAL_COLOR_RED;
 		scenarioSelectMap[CONSTRUCTABLE_TOWER_INDEX].textColor = mapEntry->enableTower ? PAL_COLOR_GREEN : PAL_COLOR_RED;
+		scenarioSelectMap[CONSTRUCTABLE_TURRET_INDEX].textColor = mapEntry->enableTurret ? PAL_COLOR_GREEN : PAL_COLOR_RED;
 	}
 }
 
