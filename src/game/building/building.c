@@ -121,6 +121,7 @@ void building_add_to_train_queue(GameContext *context, GameUnit *building, Train
 		if(building->controller == UNIT_CONTROLLER_PLAYER) {
 			message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_QUEUE_FULL),
 								QUEUE_FULL_MSG_TIME, PAL_COLOR_YELLOW, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+			game_snd_play_sound(GAME_SOUND_NOT_VALID);
 		}
 	}
 }
