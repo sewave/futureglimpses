@@ -30,40 +30,41 @@ static BITMAP *menuBack;
 static BITMAP *resHover;
 
 static const char *spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
-		"assets/gfx/unit/workerb.pcx",
-		"assets/gfx/unit/swordfb.pcx",
-		"assets/gfx/unit/archerb.pcx",
-		"assets/gfx/unit/knightb.pcx",
-		"assets/gfx/unit/wizardb.pcx",
-		"assets/gfx/building/challb.pcx",
-		"assets/gfx/building/farmb.pcx",
-		"assets/gfx/building/barrackb.pcx",
-		"assets/gfx/building/blasmib.pcx",
-		"assets/gfx/building/stablesb.pcx",
-		"assets/gfx/building/towerb.pcx",
-		"assets/gfx/building/turretb.pcx",
+		[UNIT_TYPE_WORKER]		= "assets/gfx/unit/workerb.pcx",
+		[UNIT_TYPE_SOLDIER]		= "assets/gfx/unit/swordfb.pcx",
+		[UNIT_TYPE_ARCHER]		= "assets/gfx/unit/archerb.pcx",
+		[UNIT_TYPE_KNIGHT]		= "assets/gfx/unit/knightb.pcx",
+		[UNIT_TYPE_MAGE]		= "assets/gfx/unit/wizardb.pcx",
+		[UNIT_TYPE_CITY_HALL]	= "assets/gfx/building/challb.pcx",
+		[UNIT_TYPE_FARM]		= "assets/gfx/building/farmb.pcx",
+		[UNIT_TYPE_BARRACKS]	= "assets/gfx/building/barrackb.pcx",
+		[UNIT_TYPE_BLACKSMITH]	= "assets/gfx/building/blasmib.pcx",
+		[UNIT_TYPE_STABLES]		= "assets/gfx/building/stablesb.pcx",
+		[UNIT_TYPE_TOWER]		= "assets/gfx/building/towerb.pcx",
+		[UNIT_TYPE_TURRET]		= "assets/gfx/building/turretb.pcx",
 };
 
 static const char *spriteSheetFilenamesRed[UNIT_TYPE_NUMBER] = {
-		"assets/gfx/unit/workerr.pcx",
-		"assets/gfx/unit/swordfr.pcx",
-		"assets/gfx/unit/archerr.pcx",
-		"assets/gfx/unit/knightr.pcx",
-		"assets/gfx/unit/wizardr.pcx",
-		"assets/gfx/building/challr.pcx",
-		"assets/gfx/building/farmr.pcx",
-		"assets/gfx/building/barrackr.pcx",
-		"assets/gfx/building/blasmir.pcx",
-		"assets/gfx/building/stablesr.pcx",
-		"assets/gfx/building/towerr.pcx",
-		"assets/gfx/building/turretr.pcx",
+		[UNIT_TYPE_WORKER]		= "assets/gfx/unit/workerr.pcx",
+		[UNIT_TYPE_SOLDIER]		= "assets/gfx/unit/swordfr.pcx",
+		[UNIT_TYPE_ARCHER]		= "assets/gfx/unit/archerr.pcx",
+		[UNIT_TYPE_KNIGHT]		= "assets/gfx/unit/knightr.pcx",
+		[UNIT_TYPE_MAGE]		= "assets/gfx/unit/wizardr.pcx",
+		[UNIT_TYPE_CITY_HALL]	= "assets/gfx/building/challr.pcx",
+		[UNIT_TYPE_FARM]		= "assets/gfx/building/farmr.pcx",
+		[UNIT_TYPE_BARRACKS]	= "assets/gfx/building/barrackr.pcx",
+		[UNIT_TYPE_BLACKSMITH]	= "assets/gfx/building/blasmir.pcx",
+		[UNIT_TYPE_STABLES]		= "assets/gfx/building/stablesr.pcx",
+		[UNIT_TYPE_TOWER]		= "assets/gfx/building/towerr.pcx",
+		[UNIT_TYPE_TURRET]		= "assets/gfx/building/turretr.pcx",
 };
 
 static const char *objectSheetFilenames[OBJ_TYPE_NUMBER] = {
-		"assets/gfx/object/arrow.pcx",
-		"assets/gfx/object/fireball.pcx",
-		"assets/gfx/object/explode.pcx",
-		"assets/gfx/object/arrowhit.pcx",
+		[OBJ_TYPE_ARROW]		= "assets/gfx/object/arrow.pcx",
+		[OBJ_TYPE_FIREBALL]		= "assets/gfx/object/fireball.pcx",
+		[OBJ_TYPE_EXPLOSION]	= "assets/gfx/object/explode.pcx",
+		[OBJ_TYPE_ARROW_DAMAGE]	= "assets/gfx/object/arrowhit.pcx",
+		[OBJ_TYPE_FLAG]			= "assets/gfx/object/flag.pcx",
 };
 
 typedef struct {
@@ -72,13 +73,27 @@ typedef struct {
 
 static const SquareSize unitSquares[UNIT_TYPE_NUMBER] = {
 		// Mobile units
-		{32, 32}, {32, 32}, {32, 32}, {32, 32}, {32, 32},
+		[UNIT_TYPE_WORKER]		= {32, 32},
+		[UNIT_TYPE_SOLDIER]		= {32, 32},
+		[UNIT_TYPE_ARCHER]		= {32, 32},
+		[UNIT_TYPE_KNIGHT]		= {32, 32},
+		[UNIT_TYPE_MAGE]		= {32, 32},
 		// Buildings
-		{48, 48}, {32, 32}, {48, 48}, {32, 32}, {48, 48}, {32, 32},	 {32, 32},	
+		[UNIT_TYPE_CITY_HALL]	= {48, 48},
+		[UNIT_TYPE_FARM]		= {32, 32},
+		[UNIT_TYPE_BARRACKS]	= {48, 48},
+		[UNIT_TYPE_BLACKSMITH]	= {32, 32},
+		[UNIT_TYPE_STABLES]		= {48, 48},
+		[UNIT_TYPE_TOWER]		= {32, 32},
+		[UNIT_TYPE_TURRET]		= {32, 32},
 };
 
 static const SquareSize objectSquares[OBJ_TYPE_NUMBER] = {
-		{16, 16}, {16, 16}, {48, 48}, {16, 16},
+		[OBJ_TYPE_ARROW] 		= {16, 16},
+		[OBJ_TYPE_FIREBALL] 	= {16, 16},
+		[OBJ_TYPE_EXPLOSION]	= {48, 48},
+		[OBJ_TYPE_ARROW_DAMAGE] = {16, 16},
+		[OBJ_TYPE_FLAG]			= {16, 16},
 };
 
 static const SquareSize iconSquare = {8, 8};
@@ -242,6 +257,10 @@ void game_gfx_set_sprite_sheet(GameUnit *unit) {
 
 void game_gfx_set_object_sheet(Object *object) {
 	object->animationStatus.sheet = &spriteSheetsObject[object->type];
+}
+
+RLE_SPRITE *game_gfx_get_object_sheet_frame(ObjectTypeEnum type, uint8_t frame) {
+	return spriteSheetsObject[type].frames[frame];
 }
 
 BITMAP *game_gfx_get_frame() {

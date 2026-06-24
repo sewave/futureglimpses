@@ -25,6 +25,7 @@ typedef struct {
 	uint8_t maxDamage;
 	uint16_t reactionTime;
 	uint16_t moveTime;
+	uint8_t trainsUnits;
 } UnitData;
 
 GameUnit *game_unit_get_by_id(GameContext *context, UnitId handle);

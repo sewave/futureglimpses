@@ -181,6 +181,7 @@ typedef struct {
 	uint8_t mustSurvive;
 	char name[CUSTOM_UNIT_NAME_LENGTH];
 	PathfindingData pathfindingData;
+	uint8_t trainsUnits;
 } GameUnit;
 
 typedef uint32_t ObjectId;

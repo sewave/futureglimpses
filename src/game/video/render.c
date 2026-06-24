@@ -80,16 +80,21 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		int unitSize = unit->tileSize;
-		if(unit->isBuilding && unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION &&
+		if(unit->trainsUnits && unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION &&
 			unit->isSelected && unit->targetX <= cameraMaxX && unit->targetX >= cameraMinX - unitSize &&
 				unit->targetY <= cameraMaxY && unit->targetY >= cameraMinY - unitSize) {
 			int targetXPos = (unit->targetX * TILE_SIZE) - context->xPosition + VIEWPORT_X_OFFSET;
 			int targetYPos = (unit->targetY * TILE_SIZE) - context->yPosition + VIEWPORT_Y_OFFSET;
-			render_queue_submit_rect(renderQueue, BACKGROUND_Z_ORDER + 10,
-									targetXPos + SELECT_CUBE_OFF, targetYPos + SELECT_CUBE_OFF,
-									targetXPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF * 2,
-									targetYPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF * 2,
-									PAL_COLOR_VIOLET);
+			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + unit->y,
+											game_gfx_get_object_sheet_frame(OBJ_TYPE_FLAG, 0),
+											targetXPos, targetYPos);
+			if(!context->targetBlinkTime || context->targetPosition.x != unit->targetX || context->targetPosition.y != unit->targetY) {
+				render_queue_submit_rect(renderQueue, BACKGROUND_Z_ORDER + 10,
+											targetXPos, targetYPos,
+											targetXPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF ,
+											targetYPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF ,
+											PAL_COLOR_GREEN);
+			}
 		}
 		if (unit->x <= cameraMaxX && unit->x >= cameraMinX - unitSize &&
 			unit->y <= cameraMaxY && unit->y >= cameraMinY - unitSize && game_unit_is_visible(context, unit)) {

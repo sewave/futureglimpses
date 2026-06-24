@@ -35,6 +35,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.6),
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_SOLDIER] = {
 				.type = UNIT_TYPE_SOLDIER,
@@ -51,6 +52,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 2,
 				.reactionTime = SEC_TO_FRAMES(0.5),
 				.moveTime = SEC_TO_FRAMES(0.5),
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_ARCHER] = {
 				.type = UNIT_TYPE_ARCHER,
@@ -67,6 +69,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.7),
 				.moveTime = SEC_TO_FRAMES(0.55),
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_KNIGHT] = {
 				.type = UNIT_TYPE_KNIGHT,
@@ -83,6 +86,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 4,
 				.reactionTime = SEC_TO_FRAMES(0.4),
 				.moveTime = SEC_TO_FRAMES(0.4),
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_MAGE] = {
 				.type = UNIT_TYPE_MAGE,
@@ -99,6 +103,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.8),
 				.moveTime = SEC_TO_FRAMES(0.8),
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_CITY_HALL] = {
 				.type = UNIT_TYPE_CITY_HALL,
@@ -115,6 +120,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = TRUE,
 		},
 		[UNIT_TYPE_FARM] = {
 				.type = UNIT_TYPE_FARM,
@@ -131,6 +137,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_BARRACKS] = {
 				.type = UNIT_TYPE_BARRACKS,
@@ -147,6 +154,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = TRUE,
 		},
 		[UNIT_TYPE_BLACKSMITH] = {
 				.type = UNIT_TYPE_BLACKSMITH,
@@ -163,6 +171,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_STABLES] = {
 				.type = UNIT_TYPE_STABLES,
@@ -179,6 +188,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_TOWER] = {
 				.type = UNIT_TYPE_TOWER,
@@ -195,6 +205,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
+				.trainsUnits = TRUE,
 		},
 		[UNIT_TYPE_TURRET] = {
 				.type = UNIT_TYPE_TURRET,
@@ -211,8 +222,8 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.armor = 5,
 				.reactionTime = 0,
 				.moveTime = 0,
-		}
-};
+				.trainsUnits = FALSE,
+		}};
 
 static TrainingResourcesData trainingResources[TRAINING_TYPE_NUMBER] = {
 	[TRAINING_TYPE_WORKER]			= {.used = {400, 0, 1}, .time = SEC_TO_FRAMES(15), .foodProvided = 0},
@@ -372,6 +383,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->reactionTime = data->reactionTime;
 	unit->moveTime = data->moveTime;
 	unit->armor = data->armor;
+	unit->trainsUnits = data->trainsUnits;
 
 	if (unit->type == UNIT_TYPE_WORKER) {
 		WorkerData *workerData = &unit->typed.workerData;

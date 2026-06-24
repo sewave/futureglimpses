@@ -25,8 +25,15 @@ static void set_blink_position(GameContext *context, int x, int y, int color) {
 
 void game_unit_command_move_player(GameContext *context, GameUnit *unit, GameUnit* target, int x, int y) {
 	game_unit_command_move(unit, target, x, y);
-	set_blink_position(context, x, y, PAL_COLOR_GREEN);
-	game_snd_play_sound(GAME_SOUND_AJUM);
+	if (unit->isBuilding) {
+		if (unit->trainsUnits) {
+			set_blink_position(context, x, y, PAL_COLOR_GREEN);
+			game_snd_play_sound(GAME_SOUND_BUILDING_BUILD);
+		}
+	} else {
+		set_blink_position(context, x, y, PAL_COLOR_GREEN);
+		game_snd_play_sound(GAME_SOUND_AJUM);
+	}
 }
 
 void game_unit_command_move_attack_player(GameContext *context, GameUnit *unit, GameUnit* target, int x, int y) {
