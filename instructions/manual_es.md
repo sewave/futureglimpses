@@ -70,6 +70,7 @@ Y otras sorpresas que será más divertido descubrir jugando.
 `Herrería`: Permite entrenar arqueros en los cuarteles y mejorar arqueros y soldados, requiere tener cuarteles para edificarse.
 `Establos`: Permite entrenar caballeros en los cuarteles y mejorar caballeros, requiere tener herrería para edificarse.
 `Torre`: Permite entrenar y mejorar magos, requiere tener establos para edificarse.
+`Torreta`: Edificio que ataca con flechas a los enemigos, requiere tener herrería para edificarse.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
@@ -91,6 +92,15 @@ Si no queremos usar las acciones contextuales podemos usar los botones de comand
 `SHIFT + Clic izquierdo`: Elimina una unidad a la selección actual.
 
 `Espacio`: Si tienes alguna unidad seleccionada la cámara se posicionará centrando a la primera unidad de la selección.
+
+`Clic derecho`: Acción contextual, dependiendo de lo seleccionado y el destino, hará una acción diferente.
+
+| Unidad                        | Objetivo                  | Resultado                                |
+|-------------------------------|---------------------------|------------------------------------------|
+| Obrero/s | Celda con recurso | Envía a trabajar |
+| Unidad/es | Celda vacía sin recurso | Mueve a la unidad al objetivo |
+| Unidad/es o edificio que ataca | Celda con enemigo | Mueve a la unidad a atacar al objetivo |
+| Edificio que entrena unidades | Cualquier celda | Crea un punto de reunión para entrenados |
 
 **Nota**: No se pueden seleccionar múltiples edificios propios ni múltiples unidades/edificios enemigos.
 
