@@ -23,6 +23,7 @@ const char *gameSoundFilenames[GAME_SOUNDS_COUNT] = {
 		[GAME_SOUND_FIREBALL_LAUNCH] = "assets/sound/fblaunch.wav",
 		[GAME_SOUND_FIREBALL_EXPLOSION] = "assets/sound/fbexplo.wav",
 		[GAME_SOUND_BUILDING_BUILD] = "assets/sound/work.wav",
+		[GAME_SOUND_BUILDING_SELECT] = "assets/sound/work.wav",
 		[GAME_SOUND_BUILDING_CRUMBLE] = "assets/sound/crumble.wav",
 		[GAME_SOUND_NOT_VALID] = "assets/sound/notvalid.wav",
 		[GAME_SOUND_DIE] = "assets/sound/die.wav",

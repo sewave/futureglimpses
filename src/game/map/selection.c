@@ -416,8 +416,13 @@ void game_selection_handle_input(GameContext *context) {
 		}
 		if (context->selectedUnitCount > 0) {
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
-			if (unit && !unit->isBuilding && unit->controller == UNIT_CONTROLLER_PLAYER) {
-				game_snd_play_sound(GAME_SOUND_JA);
+			if (unit&& unit->controller == UNIT_CONTROLLER_PLAYER) {
+				if(unit->isBuilding) {
+					game_snd_play_sound(GAME_SOUND_BUILDING_SELECT);
+				}
+				else {
+					game_snd_play_sound(GAME_SOUND_JA);
+				}
 			}
 		}
 	}
