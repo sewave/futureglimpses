@@ -6,9 +6,8 @@
 
 static void game_unit_set_state_or_next(GameUnit* unit, UnitStateEnum unitState) {
     if(unit->state == UNIT_STATE_DIE) return;
-    // If we are moving or attacking, we have to wait for it to finish
-	if (unit->state == UNIT_STATE_MOVE_ANIM
-        || (unit->state == UNIT_STATE_ATTACK && unitState == UNIT_STATE_MOVE_ATTACK)) {
+    // If we are moving, we have to wait for it to finish
+	if (unit->state == UNIT_STATE_MOVE_ANIM) {
 		unit->nextState = unitState;
 	} else {
 		unit->state = unitState;

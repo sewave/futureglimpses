@@ -182,6 +182,14 @@
                 "y": 537
             }
         },
+        "maps/gotoranged.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 459.75,
+                "y": 575.75
+            }
+        },
         "maps/laber.tmx": {
             "scale": 0.5,
             "selectedLayer": 1,
@@ -328,6 +336,7 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/gotoranged.tmx",
         "maps/test.tmx",
         "maps/superwar.tmx",
         "buildings/small_buildings.tsx",
@@ -338,8 +347,7 @@
         "maps/minitest.tmx",
         "maps/waves.tmx",
         "maps/closewar.tmx",
-        "maps/laber.tmx",
-        "maps/updown.tmx"
+        "maps/laber.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
