@@ -186,28 +186,17 @@ static void game_unit_ai_move_anim(GameContext *context, GameUnit *unit) {
 static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 	uint16_t targetX, targetY;
 	GameUnit *targetUnit = NULL;
-	if (unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION) {
-		targetX = unit->targetX;
-		targetY = unit->targetY;
-	} else {
-		if(unit->targetId == NO_TARGET_ID) {
-			game_unit_command_idle(unit);
-			return;
-		}
+
+	if(unit->targetId != NO_TARGET_ID) {
 		targetUnit = game_unit_get_by_id(context, unit->targetId);
-		if (!targetUnit) {
-			game_unit_command_idle(unit);
-			unit->targetId = NO_TARGET_ID;
-			return;
+		if(targetUnit) {
+			unit->targetX = targetUnit->x + (targetUnit->tileSize - 1) / 2;
+			unit->targetY = targetUnit->y + (targetUnit->tileSize - 1) / 2;
 		}
-		targetX = targetUnit->x + (targetUnit->tileSize - 1) / 2;
-		targetY = targetUnit->y + (targetUnit->tileSize - 1) / 2;
 	}
 
-	if (unit->x == targetX && unit->y == targetY) {
-		game_unit_command_idle(unit);
-		return;
-	}
+	targetX = unit->targetX;
+	targetY = unit->targetY;
 
 	if (targetUnit && game_spatial_unit_target_in_attack_range(unit, targetUnit)) {
 		game_unit_command_attack(unit, targetUnit, UNIT_STATE_IDLE);
@@ -222,6 +211,12 @@ static void game_unit_ai_move_attack(GameContext *context, GameUnit *unit) {
 			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_MOVE_ATTACK);
 			return;
 		}
+	}
+
+	// If we have no target position, or we are already there, we stop moving
+	if(targetX == NO_TARGET_POSITION || targetY == NO_TARGET_POSITION || (unit->x == targetX && unit->y == targetY)) {
+		game_unit_command_idle(unit);
+		return;
 	}
 
 	if (game_unit_path_find(context, unit, targetX, targetY)) {

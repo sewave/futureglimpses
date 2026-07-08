@@ -3,14 +3,13 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/biclash.tmx",
+    "activeFile": "maps/test.tmx",
     "expandedProjectPaths": [
         "maps/Initial",
-        "Test Campaign",
         "maps/Test Campaign",
-        "buildings",
-        ".",
         "maps/Starting",
+        ".",
+        "Test Campaign",
         "maps"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
@@ -92,11 +91,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 414,
-                "y": 355.66666666666663
+                "x": 512,
+                "y": 512.5
             }
         },
         "maps/Initial/2-archers.tmx": {
@@ -146,16 +145,16 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 525.3333333333333,
-                "y": 832.3333333333333
+                "x": 512,
+                "y": 512.3333333333333
             }
         },
         "maps/biclash.tmx": {
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 102.5,
-                "y": 121.75
+                "x": 512,
+                "y": 512.25
             }
         },
         "maps/buildings/big_buildings.tsx": {
@@ -171,8 +170,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 676.6666666666666,
-                "y": 702.3333333333333
+                "x": 512,
+                "y": 512.3333333333333
             }
         },
         "maps/closewar.tmx": {
@@ -198,15 +197,15 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 789,
-                "y": 622.5
+                "x": 512,
+                "y": 512.5
             }
         },
         "maps/superwar.tmx": {
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 526.6666666666666,
+                "x": 527,
                 "y": 510.99999999999994
             }
         },
@@ -214,11 +213,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
+            "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
-                "y": 512.5
+                "x": 517.1666666666666,
+                "y": 613.1666666666666
             }
         },
         "maps/tileset.tsx": {
@@ -320,23 +319,27 @@
     "openFiles": [
         "buildings/small_buildings.tsx",
         "maps/clash.tmx",
-        "maps/biclash.tmx"
+        "maps/biclash.tmx",
+        "maps/Initial/1-starting.tmx",
+        "maps/base.tmx",
+        "maps/minitest.tmx",
+        "maps/test.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/test.tmx",
+        "maps/superwar.tmx",
         "buildings/small_buildings.tsx",
         "maps/clash.tmx",
         "maps/biclash.tmx",
-        "maps/superwar.tmx",
+        "maps/Initial/1-starting.tmx",
+        "maps/base.tmx",
         "maps/minitest.tmx",
-        "maps/test.tmx",
         "maps/waves.tmx",
         "maps/closewar.tmx",
         "maps/laber.tmx",
-        "maps/updown.tmx",
-        "maps/win.tmx",
-        "maps/workers.tmx"
+        "maps/updown.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
