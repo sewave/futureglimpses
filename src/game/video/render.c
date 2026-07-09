@@ -11,7 +11,6 @@
 
 #define MOVE_PRECISION 16384
 #define HEALTH_BAR_Y_OFFSET 6
-#define HEALTH_BAR_HEIGHT 1
 #define HEALTH_BAR_BORDER 1
 #define HEALTH_BAR_LENGTH TILE_SIZE
 
@@ -215,25 +214,31 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 				}
 
 				int healthBarYInit = unitTileYCamera - HEALTH_BAR_Y_OFFSET;
-				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + HEALTH_BAR_HEIGHT;
-				int healthBarLength = ((int) (unit->health * (HEALTH_BAR_LENGTH * unit->tileSize - 3 * HEALTH_BAR_BORDER))) / unit->maxHealth;
+				int healthBarYEnd = unitTileYCamera - HEALTH_BAR_Y_OFFSET + 2 * HEALTH_BAR_BORDER;
+				int healthBarTileSize = HEALTH_BAR_LENGTH * unit->tileSize;
+				int healthBarLength = ((int) (unit->health * (healthBarTileSize - 2 * HEALTH_BAR_BORDER))) / unit->maxHealth;
+				int healthBarXinit = unitTileXCamera + HEALTH_BAR_BORDER;
+				//Submit rectangle for the health bar border
+				render_queue_submit_rect(
+					renderQueue,
+					UI_Z_ORDER + 23,
+					unitTileXCamera,
+					healthBarYInit,
+					unitTileXCamera + healthBarTileSize - HEALTH_BAR_BORDER,
+					healthBarYEnd,
+					PAL_COLOR_BLACK
+				);
 
-				render_queue_submit_rect_fill(
-						renderQueue,
-						UI_Z_ORDER + 21,
-						unitTileXCamera + HEALTH_BAR_BORDER,
-						healthBarYInit,
-						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
-						healthBarYEnd,
-						healthBarColor);
-				render_queue_submit_rect_fill(
-						renderQueue,
-						UI_Z_ORDER + 20,
-						unitTileXCamera + HEALTH_BAR_BORDER + healthBarLength,
-						healthBarYInit,
-						unitTileXCamera + HEALTH_BAR_BORDER + HEALTH_BAR_LENGTH * unit->tileSize - 3 * HEALTH_BAR_BORDER,
-						healthBarYEnd,
-						PAL_COLOR_BLACK);
+				// Submit health bar line
+				render_queue_submit_line(
+					renderQueue,
+					UI_Z_ORDER + 22,
+					healthBarXinit,
+					healthBarYInit + HEALTH_BAR_BORDER,
+					healthBarXinit + healthBarLength,
+					healthBarYInit + HEALTH_BAR_BORDER,
+					healthBarColor
+				);
 			}
 		}
 	}
