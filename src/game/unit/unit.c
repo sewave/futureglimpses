@@ -13,6 +13,7 @@
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1
 #define AREA_DAMAGE_REDUCTION 4
+#define BUILDING_ARMOR 3
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
@@ -67,8 +68,8 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.minDamage = 3,
 				.maxDamage = 9,
 				.armor = 0,
-				.reactionTime = SEC_TO_FRAMES(0.7),
-				.moveTime = SEC_TO_FRAMES(0.55),
+				.reactionTime = SEC_TO_FRAMES(0.5),
+				.moveTime = SEC_TO_FRAMES(0.5),
 				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_KNIGHT] = {
@@ -83,9 +84,9 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 1,
 				.minDamage = 6,
 				.maxDamage = 12,
-				.armor = 4,
-				.reactionTime = SEC_TO_FRAMES(0.4),
-				.moveTime = SEC_TO_FRAMES(0.4),
+				.armor = 3,
+				.reactionTime = SEC_TO_FRAMES(0.5),
+				.moveTime = SEC_TO_FRAMES(0.38),
 				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_MAGE] = {
@@ -102,7 +103,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.maxDamage = 15,
 				.armor = 0,
 				.reactionTime = SEC_TO_FRAMES(0.8),
-				.moveTime = SEC_TO_FRAMES(0.8),
+				.moveTime = SEC_TO_FRAMES(0.6),
 				.trainsUnits = FALSE,
 		},
 		[UNIT_TYPE_CITY_HALL] = {
@@ -117,7 +118,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR + 1,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = TRUE,
@@ -134,7 +135,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = FALSE,
@@ -151,7 +152,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = TRUE,
@@ -168,7 +169,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = FALSE,
@@ -185,7 +186,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 3,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = FALSE,
@@ -202,7 +203,7 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.tileSize = 2,
 				.minDamage = 0,
 				.maxDamage = 0,
-				.armor = 5,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = TRUE,
@@ -217,9 +218,9 @@ static UnitData unitsData[UNIT_TYPE_NUMBER] = {
 				.health = 120,
 				.maxHealth = 120,
 				.tileSize = 2,
-				.minDamage = 8,
-				.maxDamage = 16,
-				.armor = 5,
+				.minDamage = 5,
+				.maxDamage = 15,
+				.armor = BUILDING_ARMOR,
 				.reactionTime = 0,
 				.moveTime = 0,
 				.trainsUnits = FALSE,

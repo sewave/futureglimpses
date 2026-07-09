@@ -114,22 +114,22 @@ static AnimationData SOLDIER_ATTACK_ANIMATION_DATA = {
         },
 		.lastFrameIndex = 3,
 		.events = { {.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_IRON_HIT, .fireTime = SEC_TO_FRAMES(0.35)},
-                    {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.45)}},
+                    {.type = EVENT_TYPE_DAMAGE, .data = 0, .fireTime = SEC_TO_FRAMES(0.35)}},
 		.numEvents = 2,
 };
 
 static AnimationData ARCHER_ATTACK_ANIMATION_DATA = {
 		.type = ANIMATION_TYPE_ONCE,
 		.frames = {
-				{.duration = SEC_TO_FRAMES(0.4)},
+				{.duration = SEC_TO_FRAMES(0.3)},
 				{.duration = SEC_TO_FRAMES(0.05)},
 				{.duration = SEC_TO_FRAMES(0.1)},
 				{.duration = SEC_TO_FRAMES(0.1)},
 		},
 		.lastFrameIndex = 3,
 		.events = {
-				{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_THROW_ARROW, .fireTime = SEC_TO_FRAMES(0.405)},
-				{.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.405)}
+				{.type = EVENT_TYPE_SOUND, .data = GAME_SOUND_THROW_ARROW, .fireTime = SEC_TO_FRAMES(0.305)},
+				{.type = EVENT_TYPE_SPAWN_ARROW, .data = 0, .fireTime = SEC_TO_FRAMES(0.305)}
 		},
 		.numEvents = 2,
 };
