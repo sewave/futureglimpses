@@ -24,8 +24,10 @@
 #define SELECT_CUBE_OFF 1
 #define SELECT_CUBE_SIZE 16
 
+#ifdef CHEATS_ENABLED
 static char fpsText[16];
 static char activeText[64];
+#endif
 static const int8_t cursorEdges[Y_OFFSETS][X_OFFSETS][ARROW_DATA] = {
 		{{0, 0, 0}, {16, 0, 0}, {32, -14, 0}},
 		{{112, 0, 0}, {0, 0, 0}, {48, -14, 0}},
@@ -79,9 +81,9 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 	for (int i = 0; i < context->activeUnitCount; i++, activeUnits++) {
 		GameUnit *unit = *activeUnits;
 		int unitSize = unit->tileSize;
-		if(unit->trainsUnits && unit->targetX != NO_TARGET_POSITION && unit->targetY != NO_TARGET_POSITION &&
-			unit->isSelected && unit->targetX <= cameraMaxX && unit->targetX >= cameraMinX - unitSize &&
-				unit->targetY <= cameraMaxY && unit->targetY >= cameraMinY - unitSize) {
+		if(unit->controller == UNIT_CONTROLLER_PLAYER && unit->trainsUnits && unit->targetX != NO_TARGET_POSITION
+			&& unit->targetY != NO_TARGET_POSITION && unit->isSelected && unit->targetX <= cameraMaxX
+			&& unit->targetX >= cameraMinX - unitSize && unit->targetY <= cameraMaxY && unit->targetY >= cameraMinY - unitSize) {
 			int targetXPos = (unit->targetX * TILE_SIZE) - context->xPosition + VIEWPORT_X_OFFSET;
 			int targetYPos = (unit->targetY * TILE_SIZE) - context->yPosition + VIEWPORT_Y_OFFSET;
 			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + unit->y,
