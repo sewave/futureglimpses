@@ -94,7 +94,7 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
+                "x": 512.5,
                 "y": 512.5
             }
         },
@@ -125,6 +125,14 @@
                 "y": 451.33333333333326
             }
         },
+        "maps/Initial/5-turrets.tmx": {
+            "scale": 0.68837890625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.0726344162292,
+                "y": 512.0726344162292
+            }
+        },
         "maps/Test Campaign/1-starting.tmx": {
             "scale": 1,
             "selectedLayer": 0,
@@ -145,15 +153,15 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512,
-                "y": 512.3333333333333
+                "x": 512.3333333333333,
+                "y": 512.3333333333334
             }
         },
         "maps/biclash.tmx": {
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512,
+                "x": 512.25,
                 "y": 512.25
             }
         },
@@ -170,8 +178,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
-                "y": 512.3333333333333
+                "x": 512.3333333333333,
+                "y": 512.3333333333334
             }
         },
         "maps/closewar.tmx": {
@@ -202,11 +210,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512,
-                "y": 512.5
+                "x": 537,
+                "y": 349
             }
         },
         "maps/superwar.tmx": {
@@ -221,11 +229,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 3,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 517.1666666666666,
-                "y": 613.1666666666666
+                "x": 627.3333333333333,
+                "y": 516.6666666666667
             }
         },
         "maps/tileset.tsx": {
@@ -336,18 +344,18 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/gotoranged.tmx",
-        "maps/test.tmx",
-        "maps/superwar.tmx",
+        "maps/Initial/5-turrets.tmx",
         "buildings/small_buildings.tsx",
         "maps/clash.tmx",
         "maps/biclash.tmx",
         "maps/Initial/1-starting.tmx",
         "maps/base.tmx",
         "maps/minitest.tmx",
+        "maps/test.tmx",
+        "maps/gotoranged.tmx",
+        "maps/superwar.tmx",
         "maps/waves.tmx",
-        "maps/closewar.tmx",
-        "maps/laber.tmx"
+        "maps/closewar.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
