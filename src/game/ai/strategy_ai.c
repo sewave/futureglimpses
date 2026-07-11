@@ -12,8 +12,6 @@
 #define MAX_WORKER_IDLE_TIME (SEC_TO_FRAMES(30) / AI_STATE_COUNT)
 #define REBUILD_COOLDOWN (SEC_TO_FRAMES(10) / AI_STATE_COUNT)
 
-static uint8_t trainRanged = FALSE;
-
 static GameUnit* game_strategy_ai_get_computer_town_hall(GameContext *context) {
 	GameUnit **activeList = context->activeUnits;
 	for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
@@ -288,11 +286,11 @@ static void game_strategy_ai_train_units(GameContext *context) {
 			}
 			if (unit->type == UNIT_TYPE_BARRACKS) {
 				TrainingTypeEnum typeToTrain = TRAINING_TYPE_SOLDIER;
-				if(trainRanged && archersAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_ARCHER)) typeToTrain = TRAINING_TYPE_ARCHER;
-				if(!trainRanged && knightsAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_KNIGHT)) typeToTrain = TRAINING_TYPE_KNIGHT;
+				if(context->aiData.trainRanged && archersAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_ARCHER)) typeToTrain = TRAINING_TYPE_ARCHER;
+				if(!context->aiData.trainRanged && knightsAvailable && resource_has_enough_for_unit(context, UNIT_CONTROLLER_AI, TRAINING_TYPE_KNIGHT)) typeToTrain = TRAINING_TYPE_KNIGHT;
 				if (allWorkersTrained || gold >= workerGoldCost + game_unit_get_training_resources(typeToTrain)->used[RESOURCE_TYPE_GOLD]) {
 					building_add_to_train_queue(context, unit, typeToTrain);
-					trainRanged = !trainRanged;
+					context->aiData.trainRanged = !context->aiData.trainRanged;
 				}
 			}
 		}
@@ -314,7 +312,11 @@ static void game_strategy_ai_attack(GameContext *context) {
 			if (foundUnitsCount == context->aiData.currentWaveUnits) break;
 		}
 	}
-	if (foundUnitsCount != context->aiData.currentWaveUnits) return;
+	if(context->aiData.currentWaveUnits > 0
+		&& foundUnitsCount < context->aiData.currentWaveUnits
+		&& foundUnitsCount <= context->aiData.lastFoundUnits) context->aiData.currentWaveUnits--;
+	context->aiData.lastFoundUnits = foundUnitsCount;
+	if (foundUnitsCount < context->aiData.currentWaveUnits) return;
 	int foundX = foundUnits[0]->x;
 	int foundY = foundUnits[0]->y;
 	// Now we search player CH, or if not found first active unit
@@ -333,8 +335,8 @@ static void game_strategy_ai_attack(GameContext *context) {
 		}
 	}
 	if (!target) {
-		activeList = context->activeUnits;
 		// No town hall found, attack any player unit, closest to the first found unit
+		activeList = context->activeUnits;
 		closestTargetDistance = INT16_MAX;
 		for (int i = 0; i < context->activeUnitCount; i++, activeList++) {
 			GameUnit *unit = *activeList;
@@ -352,6 +354,7 @@ static void game_strategy_ai_attack(GameContext *context) {
 			game_unit_command_move_attack(foundUnits[i], NULL, target->x, target->y);
 		}
 		context->aiData.currentWaveUnits++;
+		context->aiData.lastFoundUnits = 0;
 	}
 }
 
@@ -379,6 +382,8 @@ void game_strategy_ai_init(GameContext *context) {
 	context->aiData.state = AI_STATE_CREATE_WORKERS;
 	context->aiData.initialFood = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_MAX_FOOD];
 	context->aiData.desiredWorkers = context->aiData.initialFood / 4; // 25% must be workers
+	context->aiData.lastFoundUnits = 0;
+	context->aiData.trainRanged = FALSE;
 	game_strategy_ai_scan_buildings(context);
 }
 
