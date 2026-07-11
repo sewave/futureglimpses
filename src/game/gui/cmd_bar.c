@@ -933,7 +933,8 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 								if(
 									(context->map.enableBlacksmith && unitCount[UNIT_TYPE_BARRACKS]) ||
 										(context->map.enableStables && unitCount[UNIT_TYPE_BLACKSMITH]) ||
-										(context->map.enableTower && unitCount[UNIT_TYPE_STABLES])
+										(context->map.enableTower && unitCount[UNIT_TYPE_STABLES]) ||
+										(context->map.enableTurret && unitCount[UNIT_TYPE_BLACKSMITH])
 								) {
 									context->cmdBarButtons[buttonIndex++] = BUILD_ADVANCED_CMD_BUTTON;
 								}
