@@ -273,9 +273,11 @@ typedef struct {
 } UnitPosition;
 
 typedef struct {
+	uint8_t trainRanged;
 	uint16_t attackCounter;
 	uint16_t peaceCounter;
 	uint16_t rebuildCooldown;
+	uint16_t lastFoundUnits;
 	int currentWaveUnits;
 	int initialFood;
 	int desiredWorkers;
