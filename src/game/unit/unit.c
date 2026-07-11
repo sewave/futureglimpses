@@ -524,7 +524,7 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 					if(context->boardExploration[sourceUnit->x][sourceUnit->y] == BOARD_UNEXPLORED) {
 						game_spatial_explore_position(context, sourceUnit->x, sourceUnit->y);
 					}
-					if (target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID) {
+					if (!target->isBuilding && target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID) {
 						game_unit_command_move_attack(target, NULL, sourceUnit->x, sourceUnit->y);
 					}
 				}
