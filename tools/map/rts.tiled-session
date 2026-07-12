@@ -87,6 +87,41 @@
                 "y": 729.25
             }
         },
+        "maps/Adventure/1-hero.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 301.66666666666663,
+                "y": 706.3333333333333
+            }
+        },
+        "maps/Adventure/1-villain.tmx": {
+            "scale": 0.68837890625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.0726344162292,
+                "y": 512.0726344162292
+            }
+        },
+        "maps/Adventure/2-villain.tmx": {
+            "scale": 0.7904296875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 180.28169014084511,
+                "y": 177.75142080553496
+            }
+        },
+        "maps/Adventure/3-mission.tmx": {
+            "scale": 0.7236328125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 511.9999999999999,
+                "y": 511.99999999999994
+            }
+        },
         "maps/Initial/1-starting.tmx": {
             "expandedObjectLayers": [
                 2
@@ -236,6 +271,14 @@
                 "y": 516.6666666666667
             }
         },
+        "maps/testwave.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 384.75,
+                "y": 554.75
+            }
+        },
         "maps/tileset.tsx": {
             "scaleInDock": 1
         },
@@ -321,7 +364,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/advent",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -344,18 +387,18 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/Adventure/2-villain.tmx",
+        "maps/Adventure/3-mission.tmx",
+        "maps/test.tmx",
+        "maps/Adventure/1-villain.tmx",
+        "maps/testwave.tmx",
+        "maps/minitest.tmx",
         "maps/Initial/5-turrets.tmx",
         "buildings/small_buildings.tsx",
         "maps/clash.tmx",
         "maps/biclash.tmx",
         "maps/Initial/1-starting.tmx",
-        "maps/base.tmx",
-        "maps/minitest.tmx",
-        "maps/test.tmx",
-        "maps/gotoranged.tmx",
-        "maps/superwar.tmx",
-        "maps/waves.tmx",
-        "maps/closewar.tmx"
+        "maps/base.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
