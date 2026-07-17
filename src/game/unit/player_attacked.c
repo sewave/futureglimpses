@@ -37,7 +37,7 @@ void player_attacked_render(PlayerAttackedData *playerAttackedData, RenderQueue 
     if(!playerAttackedData->cooldown) return;
     if(playerAttackedData->showMessage) {
         message_add_to_queue_shadow(text_get_by_id(GAME_TEXT_ID_PLAYER_ATTACKED),
-            ATTACK_SHOWN_TICKS, PAL_COLOR_RED, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
+            ATTACK_SHOWN_TICKS, PAL_COLOR_VIOLET, TRANSPARENT_INDEX, PAL_COLOR_BLACK);
         playerAttackedData->showMessage = FALSE;
     }
     if(playerAttackedData->blinkCounter >= BLINK_TICKS) {

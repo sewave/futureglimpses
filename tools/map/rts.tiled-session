@@ -3,13 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test.tmx",
+    "activeFile": "maps/Adventure/2-villain.tmx",
     "expandedProjectPaths": [
-        "maps/Initial",
-        "maps/Test Campaign",
-        "maps/Starting",
-        ".",
+        "units",
         "Test Campaign",
+        "maps/Starting",
+        "maps/Test Campaign",
+        "maps/Adventure",
+        ".",
         "maps"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
@@ -376,19 +377,16 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "buildings/small_buildings.tsx",
-        "maps/clash.tmx",
-        "maps/biclash.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/base.tmx",
-        "maps/minitest.tmx",
-        "maps/test.tmx"
+        "maps/Adventure/1-hero.tmx",
+        "maps/Adventure/3-mission.tmx",
+        "maps/Adventure/2-villain.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/Adventure/2-villain.tmx",
+        "maps/Adventure/1-hero.tmx",
         "maps/Adventure/3-mission.tmx",
+        "maps/Adventure/2-villain.tmx",
         "maps/test.tmx",
         "maps/Adventure/1-villain.tmx",
         "maps/testwave.tmx",
@@ -397,8 +395,7 @@
         "buildings/small_buildings.tsx",
         "maps/clash.tmx",
         "maps/biclash.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/base.tmx"
+        "maps/Initial/1-starting.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

@@ -15,5 +15,7 @@ uint8_t game_config_get_gameplay_life_bars(const GameContext *context);
 void game_config_set_gameplay_life_bars(GameContext *context, uint8_t value);
 uint8_t game_config_get_language(const GameContext *context);
 void game_config_set_language(GameContext *context, uint8_t value);
+uint8_t game_config_get_gameplay_life_bars_style(const GameContext *context);
+void game_config_set_gameplay_life_bars_style(GameContext *context, uint8_t value);
 
 #endif /* CONFIG_H */

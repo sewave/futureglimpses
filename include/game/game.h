@@ -209,11 +209,13 @@ typedef struct {
 } Object;
 
 #define DEFAULT_LIFE_BAR LIFE_BAR_DAMAGED
+#define DEFAULT_LIFE_BAR_STYLE LIFE_BAR_STYLE_BLACK_BAR
 
 typedef struct {
 	uint8_t musicVolume;
 	uint8_t sfxVolume;
 	LifeBarEnum lifeBar;
+	LifeBarStyleEnum lifeBarStyle;
 	GameLanguageEnum language;
 } Config;
 

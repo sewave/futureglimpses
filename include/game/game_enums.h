@@ -168,6 +168,12 @@ typedef enum {
 } LifeBarEnum;
 
 typedef enum {
+	LIFE_BAR_STYLE_BLACK_BAR,
+	LIFE_BAR_STYLE_BLACK_BORDER,
+	LIFE_BAR_STYLE_COUNT,
+} LifeBarStyleEnum;
+
+typedef enum {
     LANGUAGE_SPANISH = 0,
     LANGUAGE_ENGLISH = 1,
 } GameLanguageEnum;

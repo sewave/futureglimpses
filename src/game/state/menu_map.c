@@ -198,7 +198,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 	},
 };
 
-#define GAMEPLAY_MENU_ELEMENTS 5
+#define GAMEPLAY_MENU_ELEMENTS 6
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	{
@@ -236,7 +236,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_RETURN_X, .y = MENU_BACK_Y + 40, .z = 10,
+		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 25, .z = 10,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
 		.textColor = PAL_COLOR_WHITE,
@@ -255,6 +255,27 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 				},
 				.getValue = game_config_get_gameplay_life_bars,
 				.setValue = game_config_set_gameplay_life_bars
+			}
+		}
+	},
+	{
+		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 80, .z = 10,
+		.type = GUI_ELEMENT_OPTION,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_STYLE,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = {
+			.option = {
+				.optionValuesNumber = 2,
+				.optionValues = (GuiOptionValue[]) {
+					{ .value = LIFE_BAR_STYLE_BLACK_BAR, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_STYLE_BLACK_BAR, .hotkey = KEY_B,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
+					{ .value = LIFE_BAR_STYLE_BLACK_BORDER, .textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_STYLE_BLACK_BORDER, .hotkey = KEY_O,
+						.textColor = PAL_COLOR_WHITE, .textBackground = TRANSPARENT_INDEX, .shadowTextColor = PAL_COLOR_BLACK },
+				},
+				.getValue = game_config_get_gameplay_life_bars_style,
+				.setValue = game_config_set_gameplay_life_bars_style
 			}
 		}
 	},

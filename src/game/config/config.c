@@ -11,6 +11,7 @@
 #define CONFIG_KEY_MUSIC_VOLUME "music_volume"
 #define CONFIG_KEY_SFX_VOLUME "sfx_volume"
 #define CONFIG_KEY_LIFE_BAR "life_bar"
+#define CONFIG_KEY_LIFE_BAR_STYLE "life_bar_style"
 #define CONFIG_KEY_LANGUAGE "language"
 
 void game_config_load_settings(Config* config) {
@@ -19,6 +20,7 @@ void game_config_load_settings(Config* config) {
     config->musicVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME);
     config->sfxVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, DEFAULT_SFX_VOLUME);
     config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);
+    config->lifeBarStyle = (LifeBarStyleEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR_STYLE, DEFAULT_LIFE_BAR_STYLE);
     config->language = (GameLanguageEnum) get_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, DEFAULT_LANGUAGE);
 	common_print_ok();
 }
@@ -28,6 +30,7 @@ void game_config_save_settings(Config* config) {
     set_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_MUSIC_VOLUME, config->musicVolume);
     set_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, config->sfxVolume);
     set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, config->lifeBar);
+    set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR_STYLE, config->lifeBarStyle);
     set_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, config->language);
     flush_config_file();
 }
@@ -60,6 +63,14 @@ void game_config_set_audio_sfx_volume(GameContext *context, uint8_t value) {
 
 uint8_t game_config_get_gameplay_life_bars(const GameContext *context) {
 	return context->config.lifeBar;
+}
+
+void game_config_set_gameplay_life_bars_style(GameContext *context, uint8_t value) {
+	context->config.lifeBarStyle = (LifeBarStyleEnum) value;
+}
+
+uint8_t game_config_get_gameplay_life_bars_style(const GameContext *context) {
+	return context->config.lifeBarStyle;
 }
 
 void game_config_set_gameplay_life_bars(GameContext *context, uint8_t value) {

@@ -65,10 +65,13 @@ Options Menu
 Go to ^004T^001itle
 Exit to ^004O^001S
 Gameplay
-Life Bars:
+Show life bars:
 ^004A^001lways
 Only ^004D^001amaged
 ^004N^001ever
+Life bars style:
+^004B^001lack bar
+Black b^004o^001rder
 ^004R^001eturn
 Sound
 Are you sure?
