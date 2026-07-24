@@ -310,6 +310,7 @@ typedef struct {
 	BoardTile board[BOARD_WIDTH][BOARD_HEIGHT];
 	int minimapColors[MINIMAP_COLORS];
 	GameUnit units[MAX_GAME_UNITS];
+	uint16_t unitGenerations[MAX_GAME_UNITS];
 	// Whenever the board is modified, we re-render the modified parts to this bitmap
 	BITMAP *renderedBoard;
 	BITMAP *renderedMinimap;

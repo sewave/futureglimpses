@@ -15,7 +15,6 @@
 #define AREA_DAMAGE_REDUCTION 4
 #define BUILDING_ARMOR 3
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
-static unsigned short unitGenerations[MAX_GAME_UNITS];
 static uint16_t nextFreeIndex;
 #define MAX_FOUND_UNITS 8
 static GameUnit *foundUnits[MAX_FOUND_UNITS];
@@ -265,7 +264,7 @@ void game_units_init(GameContext *context) {
 	for (int i = 0; i < MAX_GAME_UNITS; i++) {
 		context->units[i].isActive = FALSE;
 		context->units[i].id = NULL_HANDLE;
-		unitGenerations[i] = FIRST_UNIT_GENERATION;
+		context->unitGenerations[i] = FIRST_UNIT_GENERATION;
 	}
 	context->activeUnitCount = 0;
 	context->selectedUnitCount = 0;
@@ -281,7 +280,7 @@ void game_units_init(GameContext *context) {
 GameUnit *game_unit_get_by_id(GameContext *context, UnitId id) {
 	uint16_t index = GET_INDEX(id);
 	if (index >= MAX_GAME_UNITS) return NULL;
-	if (unitGenerations[index] != GET_GEN(id)) return NULL;
+	if (context->unitGenerations[index] != GET_GEN(id)) return NULL;
 	GameUnit * unit = &context->units[index];
 	return unit->isActive ? unit : NULL;
 }
@@ -347,8 +346,8 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	int index = game_unit_find_free_index(context->units);
 	if (index == NO_FREE_UNIT_INDEX) return NULL;
 	GameUnit *unit = &context->units[index];
-	unitGenerations[index]++;
-	unit->id = MAKE_ID(index, unitGenerations[index]);
+	context->unitGenerations[index]++;
+	unit->id = MAKE_ID(index, context->unitGenerations[index]);
 	unit->controller = controller;
 	unit->x = x;
 	unit->y = y;

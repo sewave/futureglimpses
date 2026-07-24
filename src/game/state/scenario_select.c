@@ -558,7 +558,6 @@ GameStateEnum handle_scenario_select_update(GameContext *context) {
 	update_map_options();
 	game_gui_handle(context, &scenarioSelectGuiScreen);
 	
-	// Load test map as default for now
 	switch (state) {
 		case SCENARIO_SELECT_GO_STATE: {
 			free(context->mapPath);
