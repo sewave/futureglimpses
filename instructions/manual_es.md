@@ -144,6 +144,7 @@ Además de poder editar el terreno, tenemos la posibilidad de configurar algunas
 `ENABLE_FARM`: Granjas construibles en el mapa.
 `ENABLE_STABLES`: Establos construibles en el mapa.
 `ENABLE_TOWER`: Torres construibles en el mapa.
+`ENABLE_TURRET`: Torretas construibles en el mapa.
 
 `ENABLE_UPGRADE_SOLDIER`: Mejora de soldados disponible.
 `ENABLE_UPGRADE_ARCHER`: Mejora de arqueros disponible.
@@ -194,4 +195,3 @@ Contenido de "[DarkBasic Music Library](https://opengameart.org/content/darkbasi
 Contenido de "[Midi Pack 3 (35 so far)](https://opengameart.org/content/midi-pack-3-35-so-far)" - "9088malchakwilder8.mid (intro.mid)", "9095noobusfog.mid (defeat.mid)", "9099clavvictorytune.mid (victory.mid)", "9101pianochordmelody.mid (map2.mid)" y "9094telosvillagecentralsmarket.mid (map3.mid)" por [Tozan](https://opengameart.org/users/tozan), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
 Usado [Cool Text Graphics Generator](https://cooltext.com/) para el título.
-
