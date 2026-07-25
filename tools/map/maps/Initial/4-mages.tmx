@@ -18,7 +18,7 @@
   <property name="MSG_DESCRIPTION" value="Crea una torre y desde ella magos para frenar las torretas de los magos enemigos."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="4.Magos"/>
-  <property name="MSG_WIN" value="¡Felicidades! Ya dominas a tus magos."/>
+  <property name="MSG_WIN" value="Ya dominas a tus magos."/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>

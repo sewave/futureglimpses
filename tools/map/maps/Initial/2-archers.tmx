@@ -18,7 +18,7 @@
   <property name="MSG_DESCRIPTION" value="Crea una herrería y unos cuantos arqueros y acaba con los arqueros enemigos apostados en los torreones."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="2.Arqueros"/>
-  <property name="MSG_WIN" value="¡Felicidades! Ya dominas a tus arqueros."/>
+  <property name="MSG_WIN" value="Ya dominas a tus arqueros."/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>

@@ -16,9 +16,9 @@
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
   <property name="MSG_DESCRIPTION" value="Recoge recursos, crea granjas y unos cuarteles y limpia el bosque de enemigos."/>
-  <property name="MSG_LOSE" value="Pierdes. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
+  <property name="MSG_LOSE" value="Has perdido en esta empresa tan sencilla..."/>
   <property name="MSG_TITLE" value="1.Empezando"/>
-  <property name="MSG_WIN" value="Ganas. Esto puede ser un texto bastante largo, para dar algo de lore a la partida."/>
+  <property name="MSG_WIN" value="Has cumplido tu misión."/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>

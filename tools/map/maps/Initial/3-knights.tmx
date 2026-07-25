@@ -18,7 +18,7 @@
   <property name="MSG_DESCRIPTION" value="Crea unos establos para crear caballeros en los cuarteles y llega al final del camino rápidamente para asesinar al caballero real."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="3.Caballeros"/>
-  <property name="MSG_WIN" value="¡Felicidades! Ya dominas a tus caballeros."/>
+  <property name="MSG_WIN" value="Ya dominas a tus caballeros."/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>

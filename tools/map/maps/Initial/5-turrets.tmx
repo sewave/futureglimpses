@@ -18,7 +18,7 @@
   <property name="MSG_DESCRIPTION" value="Crea torretas para defenderte de los enemigos que vendrán a por ti. Usa tus caballeros para repeler a los magos."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="5.Torretas"/>
-  <property name="MSG_WIN" value="¡Felicidades! Ya dominas las torretas."/>
+  <property name="MSG_WIN" value="Ya dominas las torretas."/>
   <property name="PEACE_TIME" type="int" value="60"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="3000"/>

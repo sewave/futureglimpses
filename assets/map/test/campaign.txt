@@ -1,0 +1,2 @@
+Mapas de prueba
+Un conjunto de mapas de prueba para el juego.
