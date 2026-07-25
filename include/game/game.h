@@ -145,7 +145,7 @@ typedef struct {
 
 typedef struct {
 	UnitId id;
-	uint8_t isActive, isSelected, isBuilding;
+	uint8_t isActive, isSelected, isBuilding, isBuildingCompleted;
 	UnitTypeEnum type;
 	ControllerEnum controller;
 	UnitStateEnum state;

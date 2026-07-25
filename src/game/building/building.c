@@ -199,6 +199,7 @@ void building_repair(GameContext *context, GameUnit *building) {
 
 void building_complete(GameContext *context, GameUnit *building) {
     building->state = BUILDING_STATE_COMPLETED;
+	building->isBuildingCompleted = TRUE;
     game_animation_unit_set(building);
     // Provide food on completition
 	TrainingResourcesData* trainingData = game_unit_get_training_resources(building->type);

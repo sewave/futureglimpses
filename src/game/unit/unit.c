@@ -323,8 +323,9 @@ void game_unit_destroy(GameContext *context, UnitId id) {
 	}
 	TrainingResourcesData *trainingData = game_unit_get_training_resources(unit->type);
 	uint8_t foodProvidedReturn;
+
 	// An uncompleted building has not yet provided any food
-	if(unit->isBuilding && unit->state == BUILDING_STATE_CONSTRUCT) {
+	if(unit->isBuilding && !unit->isBuildingCompleted) {
 		foodProvidedReturn = 0;
 	}
 	else {
@@ -368,6 +369,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 	unit->blinkTime = 0;
 	unit->isCustom = FALSE;
 	unit->mustSurvive = FALSE;
+	unit->isBuildingCompleted = FALSE;
 
 	UnitData *data = &unitsData[type];
 	unit->type = data->type;
