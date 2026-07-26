@@ -5,7 +5,7 @@
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
-  <property name="ENABLE_BARRACKS" type="bool" value="true"/>
+  <property name="ENABLE_BARRACKS" type="bool" value="false"/>
   <property name="ENABLE_BLACKSMITH" type="bool" value="false"/>
   <property name="ENABLE_FARM" type="bool" value="false"/>
   <property name="ENABLE_STABLES" type="bool" value="false"/>

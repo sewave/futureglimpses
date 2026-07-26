@@ -95,7 +95,7 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 54.5,
+                "x": 54,
                 "y": 221.5
             }
         },
@@ -108,11 +108,14 @@
             }
         },
         "maps/Adventure/2-villain.tmx": {
-            "scale": 0.7904296875,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 180.28169014084511,
-                "y": 177.75142080553496
+                "x": 464.66666666666663,
+                "y": 212.33333333333337
             }
         },
         "maps/Adventure/3-mission.tmx": {
@@ -127,19 +130,19 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 512.5,
-                "y": 512.5
+                "x": 362.1212121212121,
+                "y": 540.9090909090908
             }
         },
         "maps/Initial/2-archers.tmx": {
-            "scale": 1.5,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 402.33333333333337,
-                "y": 241.66666666666663
+                "x": 325,
+                "y": 147
             }
         },
         "maps/Initial/3-knights.tmx": {
@@ -429,7 +432,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/test",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/advent",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -448,18 +451,18 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/test/workers.tmx",
-        "maps/test/closewar.tmx",
-        "maps/minitest.tmx",
-        "maps/Adventure/1-hero.tmx",
         "maps/Adventure/3-mission.tmx",
-        "maps/Adventure/2-villain.tmx",
+        "maps/Adventure/1-hero.tmx",
+        "maps/test/closewar.tmx",
+        "maps/test/superwar.tmx",
+        "maps/test/test.tmx",
+        "maps/test/testwave.tmx",
+        "maps/test/win.tmx",
+        "maps/test/minitest.tmx",
         "maps/Initial/1-starting.tmx",
         "maps/Initial/2-archers.tmx",
-        "maps/Initial/3-knights.tmx",
-        "maps/Initial/4-mages.tmx",
-        "maps/Initial/5-turrets.tmx",
-        "maps/base.tmx"
+        "maps/test/workers.tmx",
+        "maps/minitest.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

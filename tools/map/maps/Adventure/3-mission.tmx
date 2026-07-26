@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="232">
  <editorsettings>
-  <export target="../../../../assets/map/advent/adv1.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../../assets/map/advent/adv3.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
@@ -17,7 +17,7 @@
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
   <property name="MSG_DESCRIPTION" value="Lleva a Karl a través del laberinto y elimina todas las amenazas. Karl debe sobrevivir."/>
   <property name="MSG_LOSE" value="Karl ha muerto. Ahora el imperio será derrotado..."/>
-  <property name="MSG_TITLE" value="1.Héroe"/>
+  <property name="MSG_TITLE" value="3.Misión"/>
   <property name="MSG_WIN" value="¡Ganaste! El imperio continuará su conquista."/>
   <property name="PEACE_TIME" type="int" value="0"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
