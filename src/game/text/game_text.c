@@ -7,7 +7,7 @@
 #define GAME_TEXT_FILE_EN "assets/txt/en.txt"
 
 InitializationStatusEnum game_text_init_system(GameLanguageEnum language) {
-    printf("Loading text system...");
+    printf("Initializing text system..........");
     return text_init_system(GAME_TEXT_ID_NUMBER_OF_TEXTS) == INITIALIZATION_OK &&
            game_text_set_language(language) == INITIALIZATION_OK
            ? INITIALIZATION_OK : INITIALIZATION_ERROR;

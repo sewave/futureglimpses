@@ -4,6 +4,13 @@
 #include <allegro.h>
 #include "common/common.h"
 #include "common/util.h"
+#include "common/console.h"
+
+static void common_set_print_style() {
+	console_set_text_color(CONSOLE_COLOR_LIGHT_GRAY);
+	console_set_background_color(CONSOLE_COLOR_BLACK);
+	console_set_blink_state(CONSOLE_BLINK_OFF);
+}
 
 char common_init_basic(
 		int minCpuFamily,
@@ -11,19 +18,22 @@ char common_init_basic(
 		const char *unsupportedCpuMessage,
 		int requiredRamMb,
 		int (*mouse_init_func)(void)) {
-	printf("\n***Initializing common systems***\n");
+	console_set_text_color(CONSOLE_COLOR_YELLOW);
+	console_set_background_color(CONSOLE_COLOR_RED);
+	console_printf("\r\n     Initializing common systems    \r\n");
+	common_set_print_style();
 
 	/* Init all systems */
-	printf("Initializing Allegro...");
+	printf("Initializing Allegro..............");
 	if (allegro_init() != ALLEGRO_INIT_OK) {
 		common_print_ko();
-		printf("Error initializing Allegro.");
+		console_printf("Error initializing Allegro.");
 		return PROGRAM_ERROR;
 	}
 	common_print_ok();
 
 	// Check cpu is at least a minCpuFamily and has requiredCpuCapabilities
-	printf("Checking CPU capabilities...");
+	printf("Checking CPU capabilities.........");
 	if (cpu_family < minCpuFamily || (requiredCpuCapabilities && !(cpu_capabilities & requiredCpuCapabilities))) {
 		common_print_ko();
 		printf(unsupportedCpuMessage);
@@ -40,7 +50,7 @@ char common_init_basic(
 	}
 	common_print_ok();
 
-	printf("Initializing keyboard...");
+	printf("Initializing keyboard.............");
 	if (install_keyboard() != ALLEGRO_INIT_OK) {
 		common_print_ko();
 		printf("Error initializing keyboard.");
@@ -48,11 +58,11 @@ char common_init_basic(
 	}
 	common_print_ok();
 
-	printf("Initializing mouse [");
+	printf("Initializing mouse.......[");
 	if (mouse_init_func != NULL) {
 		if (mouse_init_func() != INITIALIZATION_OK) {
 			common_print_ko();
-			printf("Error initializing mouse.");
+			console_printf("Error initializing mouse.");
 			return PROGRAM_ERROR;
 		}
 	}
@@ -62,21 +72,27 @@ char common_init_basic(
 	srand(time(NULL));
 	common_print_ok();
 
-	printf("***Common systems initialized***\n\n");
-
 	return PROGRAM_OK;
 }
 
 void common_print_ok() {
-	printf("OK\n");
+	console_set_text_color(CONSOLE_COLOR_GREEN);
+	console_set_background_color(CONSOLE_COLOR_BLACK);
+	console_printf("OK\r\n");
+	common_set_print_style();
 }
 
 void common_print_ok_steps() {
-	printf("] OK\n");
+	printf("].");
+	common_print_ok();
+	common_set_print_style();
 }
 
 void common_print_ko() {
-	printf("KO\n");
+	console_set_text_color(CONSOLE_COLOR_RED);
+	console_set_blink_state(CONSOLE_BLINK_ON);
+	console_printf("KO\r\n");
+	common_set_print_style();
 }
 
 void common_print_init_step() {

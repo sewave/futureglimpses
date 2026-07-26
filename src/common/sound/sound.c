@@ -29,7 +29,7 @@ void _snd_destroy_sound(int soundIndex) {
     Returns INITIALIZATION_OK on success, or INITIALIZATION_ERROR on failure.
 */
 InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, MusicType musicType) {
-	printf("Initializing sound system...");
+	printf("Initializing sound system.........");
 	remove_sound();
 	currentMusicType = musicType;
 	if (currentMusicType == MUSIC_TYPE_MIDI) {

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "common/console.h"
 #include "game/game.h"
 #include "game/video/gfx.h"
 #include "game/video/game_video.h"
@@ -20,7 +21,14 @@ static void get_minimap_colors(GameContext *context) {
 }
 
 int main_init() {
-    printf("Starting %s v%s...\n", GAME_TITLE, VERSION);
+	console_set_text_color(CONSOLE_COLOR_LIGHT_GRAY);
+	console_set_background_color(CONSOLE_COLOR_BLACK);
+	console_clear_screen();
+	console_set_text_color(CONSOLE_COLOR_YELLOW);
+	console_set_background_color(CONSOLE_COLOR_BLUE);
+	console_print_box(0, 0, 80, 3);
+	console_move_cursor(24, 1);
+	printf("%s v%s, 2026 Wave\n", GAME_TITLE, VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
 				UNSUPPORTED_CPU_MESSAGE, PROGRAM_REQUIRED_RAM_MB,
@@ -29,6 +37,10 @@ int main_init() {
 	}
 	set_window_title(GAME_TITLE);
 
+	console_set_text_color(CONSOLE_COLOR_YELLOW);
+	console_set_background_color(CONSOLE_COLOR_RED);
+	console_printf("      Initializing game systems     \r\n");
+	console_reset_styles();
 	game_config_load_settings(&context.config);
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
@@ -36,12 +48,33 @@ int main_init() {
 		printf("Error initializing sound. Continuing without sound.\n");
 	}
 
-	printf("Installing interruptions...");
+	printf("Initializing interruptions........");
 	close_install_handler();
 	timer_init(LOGIC_RATE_BPS);
 	common_print_ok();
 
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+
+	printf("Initializing game font............");
+	context.gameFont = load_font("assets/font/bitrimus.pcx", NULL, NULL);
+	if (context.gameFont == NULL) {
+		common_print_ko();
+		printf("Error loading game font.");
+		return PROGRAM_ERROR;
+	}
+	common_print_ok();
+
+	if (game_text_init_system(context.config.language) != INITIALIZATION_OK) {
+		common_print_ko();
+		printf("Error initializing text system.");
+		return PROGRAM_ERROR;
+	}
+	common_print_ok();
+
+	console_set_text_color(CONSOLE_COLOR_YELLOW);
+	console_set_background_color(CONSOLE_COLOR_RED);
+	console_printf("       Loading game resources       \r\n");
+	console_reset_styles();
 
 	game_snd_load_sounds();
 	set_volume(context.config.sfxVolume, context.config.musicVolume);
@@ -53,23 +86,12 @@ int main_init() {
 		return PROGRAM_ERROR;
 	}
 
-	if (game_text_init_system(context.config.language) != INITIALIZATION_OK) {
-		common_print_ko();
-		printf("Error initializing text system.");
-		return PROGRAM_ERROR;
-	}
-	common_print_ok();
-
-	printf("Loading game font...");
-	context.gameFont = load_font("assets/font/bitrimus.pcx", NULL, NULL);
-	if (context.gameFont == NULL) {
-		common_print_ko();
-		printf("Error loading game font.");
-		return PROGRAM_ERROR;
-	}
-	common_print_ok();
-
-	printf("\n***Press any key/Pulsa cualquier tecla***\n\n");
+	console_set_text_color(CONSOLE_COLOR_YELLOW);
+	console_set_background_color(CONSOLE_COLOR_BLUE);
+	console_set_blink_state(CONSOLE_BLINK_ON);
+	console_move_cursor(19, 24);
+	console_printf("***Press any key/Pulsa cualquier tecla***");
+	console_reset_styles();
 	while (keypressed()) {
 		readkey();
 	}
