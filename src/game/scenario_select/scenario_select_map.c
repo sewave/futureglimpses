@@ -167,7 +167,7 @@ int scenario_select_load_maps(const char *path, MapList **mapList) {
 	// Dirs and then files
 	for_each_file_ex(pattern, FA_DIREC, FA_NONE, dir_iterator_callback, &ctx);
 	snprintf(pattern, sizeof(pattern), FGM_FILTER, path);
-	for_each_file_ex(pattern, FA_ARCH, FA_DIREC, file_iterator_callback, &ctx);
+	for_each_file_ex(pattern, FA_NONE, FA_DIREC | FA_HIDDEN, file_iterator_callback, &ctx);
 
 	sort_map_entries(newMapList);
 
