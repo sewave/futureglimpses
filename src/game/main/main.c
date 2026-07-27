@@ -27,7 +27,7 @@ int main_init() {
 	console_set_background_color(CONSOLE_COLOR_BLUE);
 	console_print_box(0, 0, 80, 3);
 	console_move_cursor(24, 1);
-	printf("%s v%s, 2026 Wave\n", GAME_TITLE, VERSION);
+	console_printf("%s v%s, 2026 Wave\r\n", GAME_TITLE, VERSION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
 				UNSUPPORTED_CPU_MESSAGE, PROGRAM_REQUIRED_RAM_MB,
@@ -44,7 +44,7 @@ int main_init() {
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
 		common_print_ko();
-		printf("Error initializing sound. Continuing without sound.\n");
+		printf("Error initializing sound. Continuing without sound.\r\n");
 	}
 
 	printf("Initializing interruptions........");
