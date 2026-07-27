@@ -6,6 +6,10 @@
 #include "common/util.h"
 #include "common/console.h"
 
+#define LOAD_STATES 8
+static int loadState = 0;
+static char loadStateChars[] = { '|', '/', '-', '\\', '|', '/', '-', '\\'  };
+
 static void common_set_print_style() {
 	console_set_text_color(CONSOLE_COLOR_LIGHT_GRAY);
 	console_set_background_color(CONSOLE_COLOR_BLACK);
@@ -58,7 +62,7 @@ char common_init_basic(
 	}
 	common_print_ok();
 
-	printf("Initializing mouse.......[");
+	printf("Initializing mouse................");
 	if (mouse_init_func != NULL) {
 		if (mouse_init_func() != INITIALIZATION_OK) {
 			common_print_ko();
@@ -66,7 +70,7 @@ char common_init_basic(
 			return PROGRAM_ERROR;
 		}
 	}
-	common_print_ok_steps();
+	common_print_ok();
 
 	printf("Seeding random number generator...");
 	srand(time(NULL));
@@ -82,12 +86,6 @@ void common_print_ok() {
 	common_set_print_style();
 }
 
-void common_print_ok_steps() {
-	printf("].");
-	common_print_ok();
-	common_set_print_style();
-}
-
 void common_print_ko() {
 	console_set_text_color(CONSOLE_COLOR_RED);
 	console_set_blink_state(CONSOLE_BLINK_ON);
@@ -95,7 +93,10 @@ void common_print_ko() {
 	common_set_print_style();
 }
 
-void common_print_init_step() {
-	printf("*");
+void common_print_load_step(int x, int y) {
+	console_move_cursor(x, y);
+	loadState = (loadState + 1) % LOAD_STATES;
+	printf("%c", loadStateChars[loadState]);
 	fflush(stdout);
+	console_move_cursor(x, y);
 }

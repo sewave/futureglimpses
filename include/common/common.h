@@ -38,7 +38,6 @@ char common_init_basic(
 		int (*mouse_init_func)(void));
 void common_print_ok();
 void common_print_ko();
-void common_print_init_step();
-void common_print_ok_steps();
+void common_print_load_step(int x, int y);
 
 #endif /* COMMON_H */

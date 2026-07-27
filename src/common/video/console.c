@@ -121,8 +121,7 @@ void console_reset_styles(void) {
 #elif defined(PLATFORM_WIN)
 	win_update_attributes();
 #endif
-	// Reset cursor to its default safe state (visible line) ohne magic numbers
-	console_set_cursor_type(CONSOLE_CURSOR_NORMAL);
+	console_set_cursor_type(CONSOLE_CURSOR_HIDDEN);
 }
 
 void console_printf(const char *textFormat, ...) {
@@ -209,3 +208,22 @@ void console_print_box(int x, int y, int width, int height) {
     }
     console_printf("%c", br);
 }
+
+ConsoleCoords console_get_cursor_position(void) {
+    ConsoleCoords coords = { 0, 0 };
+
+#ifdef PLATFORM_DOS
+    coords.x = wherex() - 1;
+    coords.y = wherey() - 1;
+#elif defined(PLATFORM_WIN)
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    
+    if (hConsole && GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+        coords.x = csbi.dwCursorPosition.X;
+        coords.y = csbi.dwCursorPosition.Y;
+    }
+#endif
+    return coords;
+}
+

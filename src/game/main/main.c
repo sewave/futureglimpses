@@ -21,8 +21,7 @@ static void get_minimap_colors(GameContext *context) {
 }
 
 int main_init() {
-	console_set_text_color(CONSOLE_COLOR_LIGHT_GRAY);
-	console_set_background_color(CONSOLE_COLOR_BLACK);
+	console_reset_styles();
 	console_clear_screen();
 	console_set_text_color(CONSOLE_COLOR_YELLOW);
 	console_set_background_color(CONSOLE_COLOR_BLUE);
@@ -81,7 +80,7 @@ int main_init() {
 
 	if (game_gfx_load_all() != INITIALIZATION_OK) {
 		game_gfx_destroy_all();
-		common_print_ok_steps();
+		common_print_ok();
 		printf("Error loading gfx.\n");
 		return PROGRAM_ERROR;
 	}

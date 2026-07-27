@@ -3,6 +3,7 @@
 #include <allegro/file.h>
 #include <allegro/datafile.h>
 #include "common/mouse.h"
+#include "common/console.h"
 
 static BITMAP **mouseCursors = NULL;
 static uint8_t numMouseCursors = 0;
@@ -31,15 +32,18 @@ static void mouse_load_cursor(uint8_t index, BITMAP *cursor) {
 }
 
 InitializationStatusEnum mouse_init_cursors(uint8_t numCursors, const char **mouseCursorFilenames) {
+	ConsoleCoords cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	if (install_mouse() < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	show_mouse(NULL);
 	numMouseCursors = numCursors;
 	mouseCursors = (BITMAP **) calloc(numMouseCursors, sizeof(BITMAP *));
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	for (int i = 0; i < numMouseCursors; i++) {
 		BITMAP *cursorBitmap = load_bitmap(mouseCursorFilenames[i], NULL);
 		if (cursorBitmap == NULL) return INITIALIZATION_ERROR;
 		mouse_load_cursor(i, cursorBitmap);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
 	return INITIALIZATION_OK;
 }

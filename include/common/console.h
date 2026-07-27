@@ -34,6 +34,11 @@ typedef enum {
     CONSOLE_BLINK_ON
 } ConsoleBlinkType;
 
+typedef struct {
+    int x;
+    int y;
+} ConsoleCoords;
+
 // --- PUBLIC FUNCTION DECLARATIONS ---
 
 // Color and style management
@@ -46,6 +51,7 @@ void console_reset_styles();
 void console_clear_screen();
 void console_move_cursor(int x, int y);
 void console_set_cursor_type(ConsoleCursorType cursorType);
+ConsoleCoords console_get_cursor_position();
 
 // Formatted printing
 void console_printf(const char* textFormat, ...);

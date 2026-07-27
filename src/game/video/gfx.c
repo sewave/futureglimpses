@@ -3,6 +3,7 @@
 #include <allegro/file.h>
 #include <allegro/datafile.h>
 #include <stdio.h>
+#include <common/console.h>
 
 #define CMD_BAR_BUTTONS_FILE "assets/gfx/ui/cmdbtns.pcx"
 #define FRAME_FILE "assets/gfx/ui/back/frame.pcx"
@@ -136,61 +137,71 @@ static uint8_t game_gfx_load_sprite_sheet(SpriteSheet * spriteSheet, const char 
 }
 
 InitializationStatusEnum game_gfx_load_all() {
-	printf("Loading units gfx [");
+	printf("Loading units gfx.................");
+	ConsoleCoords cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	for (int i = 0; i < UNIT_TYPE_NUMBER; i++) {
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsBlue[i], spriteSheetFilenamesBlue[i], unitSquares[i])) return INITIALIZATION_ERROR;
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsRed[i], spriteSheetFilenamesRed[i], unitSquares[i])) return INITIALIZATION_ERROR;
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
-	common_print_ok_steps();
+	common_print_ok();
 
-	printf("Loading unit icons [");
+	printf("Loading unit icons................");
+	cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	BITMAP* unitIconsSheet = load_bitmap(UNIT_ICONS_FILE, NULL);
 	if (!unitIconsSheet) return INITIALIZATION_ERROR;
 	for (int i = 0; i < GAME_UNIT_ICON_COUNT; i++) {
 		unitIcons[i] = game_gfx_get_rle_sprite_from_partial_bitmap(unitIconsSheet, iconSquare, i);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
-	common_print_ok_steps();
+	common_print_ok();
 	destroy_bitmap(unitIconsSheet);
 
-	printf("Loading objects gfx [");
+	printf("Loading objects gfx...............");
+	cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
 		if (!game_gfx_load_sprite_sheet(&spriteSheetsObject[i], objectSheetFilenames[i], objectSquares[i])) return INITIALIZATION_ERROR;
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
-	common_print_ok_steps();
+	common_print_ok();
 
-	printf("Loading command bar buttons gfx [");
+	printf("Loading command bar gfx...........");
+	cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	BITMAP *cmdBarButtons = load_bitmap(CMD_BAR_BUTTONS_FILE, NULL);
 	if (!cmdBarButtons) return INITIALIZATION_ERROR;
 	for (int i = 0; i < CMD_BAR_BUTTON_ICON_COUNT; i++) {
 		cmdBarButtonIcons[i] = game_gfx_get_rle_sprite_from_partial_bitmap(cmdBarButtons, cmdButtonSquare, i);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
-	common_print_ok_steps();
+	common_print_ok();
 	destroy_bitmap(cmdBarButtons);
 
-	printf("Loading ui gfx [");
+	printf("Loading ui gfx....................");
+	cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	frame = load_bitmap(FRAME_FILE, NULL);
 	if (!frame) return INITIALIZATION_ERROR;
-	common_print_init_step();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 
 	tileSet = load_bitmap(TILESET_FILE, NULL);
 	if (!tileSet) return INITIALIZATION_ERROR;
-	common_print_init_step();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 
 	tileSetColors = load_bitmap(TILESET_COLORS_FILE, NULL);
 	if (!tileSetColors) return INITIALIZATION_ERROR;
-	common_print_init_step();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 
 	BITMAP *allIcons = load_bitmap(ICONS_FILE, NULL);
 	if (!allIcons) return INITIALIZATION_ERROR;
     for(int i = 0; i < GAME_ICON_COUNT; i++) {
         icons[i] = create_bitmap(ICON_WIDTH, ICON_HEIGHT);
         blit(allIcons, icons[i], i * ICON_WIDTH, 0, 0, 0, ICON_WIDTH, ICON_HEIGHT);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
 	destroy_bitmap(allIcons);
 
@@ -199,19 +210,17 @@ InitializationStatusEnum game_gfx_load_all() {
     for(int i = 0; i < GAME_OVERTILE_COUNT; i++) {
         overtiles[i] = create_bitmap(TILE_SIZE, TILE_SIZE);
         blit(allOvertiles, overtiles[i], i * TILE_SIZE, 0, 0, 0, TILE_SIZE, TILE_SIZE);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
 	destroy_bitmap(allOvertiles);
 
 	menuBack = load_bitmap(MENU_BACK_FILE, NULL);
 	if (!menuBack) return INITIALIZATION_ERROR;
-	common_print_init_step();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 
 	resHover = load_bitmap(RESOURCE_HOVER_FILE, NULL);
 	if (!resHover) return INITIALIZATION_ERROR;
-	common_print_init_step();
-
-	common_print_ok_steps();
+	common_print_ok();
 
 	return INITIALIZATION_OK;
 }

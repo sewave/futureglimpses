@@ -2,6 +2,7 @@
 #include <allegro/sound.h>
 #include <jgmod.h>
 #include "common/sound.h"
+#include "common/console.h"
 
 static JGMOD *currentModMusic = NULL;
 static MIDI *currentMidiMusic = NULL;
@@ -83,12 +84,15 @@ void snd_stop_music(void) {
 
 void snd_init_sounds(int numSounds, const char **soundFilenames) {
 	if(!soundInitialized) return;
+	ConsoleCoords cursorPos = console_get_cursor_position();
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	totalSounds = numSounds;
 	sounds = (SAMPLE **) calloc(totalSounds, sizeof(SAMPLE *));
+	common_print_load_step(cursorPos.x, cursorPos.y);
 	for (int i = 0; i < totalSounds; i++) {
 		_snd_destroy_sound(i);
 		sounds[i] = load_sample(soundFilenames[i]);
-		common_print_init_step();
+		common_print_load_step(cursorPos.x, cursorPos.y);
 	}
 }
 
