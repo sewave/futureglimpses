@@ -116,7 +116,7 @@ int main_init() {
 	clear_bitmap(context.screenBuffer);
 	context.gameState = GAME_STATE_SPLASH;
 	render_queue_init(&renderQueue);
-	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.3f));
+	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.66f));
 	get_minimap_colors(&context);
 
 	return PROGRAM_OK;
