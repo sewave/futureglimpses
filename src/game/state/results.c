@@ -242,7 +242,7 @@ void handle_results_init(GameContext *context) {
         resultText = "";
     }
     sprintf(resultTitle, resultText, context->map.title);
-
+    timer_set_speed(TIMER_SPEED_NORMAL);
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
     goTitle = FALSE;
 }

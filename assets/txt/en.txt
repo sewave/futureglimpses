@@ -72,6 +72,7 @@ Only ^004D^001amaged
 Life bars style:
 ^004B^001lack bar
 Black b^004o^001rder
+Game speed:
 ^004R^001eturn
 Sound
 Are you sure?

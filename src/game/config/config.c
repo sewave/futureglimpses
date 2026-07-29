@@ -12,6 +12,7 @@
 #define CONFIG_KEY_SFX_VOLUME "sfx_volume"
 #define CONFIG_KEY_LIFE_BAR "life_bar"
 #define CONFIG_KEY_LIFE_BAR_STYLE "life_bar_style"
+#define CONFIG_KEY_GAME_SPEED "game_speed"
 #define CONFIG_KEY_LANGUAGE "language"
 
 void game_config_load_settings(Config* config) {
@@ -21,7 +22,8 @@ void game_config_load_settings(Config* config) {
     config->sfxVolume = (uint8_t) get_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, DEFAULT_SFX_VOLUME);
     config->lifeBar = (LifeBarEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, DEFAULT_LIFE_BAR);
     config->lifeBarStyle = (LifeBarStyleEnum) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR_STYLE, DEFAULT_LIFE_BAR_STYLE);
-    config->language = (GameLanguageEnum) get_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, DEFAULT_LANGUAGE);
+	config->gameSpeed = (TimerSpeedType) get_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_GAME_SPEED, TIMER_SPEED_NORMAL);
+	config->language = (GameLanguageEnum) get_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, DEFAULT_LANGUAGE);
 	common_print_ok();
 }
 
@@ -31,7 +33,8 @@ void game_config_save_settings(Config* config) {
     set_config_int(CONFIG_SECTION_AUDIO, CONFIG_KEY_SFX_VOLUME, config->sfxVolume);
     set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR, config->lifeBar);
     set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_LIFE_BAR_STYLE, config->lifeBarStyle);
-    set_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, config->language);
+	set_config_int(CONFIG_SECTION_GAMEPLAY, CONFIG_KEY_GAME_SPEED, config->gameSpeed);
+	set_config_int(CONFIG_SECTION_UI, CONFIG_KEY_LANGUAGE, config->language);
     flush_config_file();
 }
 
@@ -84,4 +87,20 @@ uint8_t game_config_get_language(const GameContext *context) {
 void game_config_set_language(GameContext *context, uint8_t value) {
 	context->config.language = (GameLanguageEnum) value;
     game_text_set_language(context->config.language);
+}
+
+uint8_t game_config_get_game_speed(const GameContext *context) {
+	return context->config.gameSpeed;
+}
+
+void game_config_set_game_speed(GameContext *context, uint8_t value) {
+	context->config.gameSpeed = value;
+}
+
+uint8_t game_config_get_min_game_speed(const GameContext *context) {
+    return TIMER_SPEED_SLOWEST;
+}
+
+uint8_t game_config_get_max_game_speed(const GameContext *context) {
+    return TIMER_SPEED_ULTRA;
 }

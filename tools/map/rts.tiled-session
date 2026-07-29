@@ -114,8 +114,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 464.66666666666663,
-                "y": 212.33333333333337
+                "x": 506.66666666666663,
+                "y": 231.66666666666663
             }
         },
         "maps/Adventure/3-mission.tmx": {
@@ -416,7 +416,7 @@
             }
         },
         "tileset.tsx": {
-            "scaleInDock": 1.5,
+            "scaleInDock": 2,
             "scaleInEditor": 2
         },
         "units/units.tsx": {
@@ -451,8 +451,9 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/Adventure/3-mission.tmx",
+        "maps/Adventure/2-villain.tmx",
         "maps/Adventure/1-hero.tmx",
+        "maps/Adventure/3-mission.tmx",
         "maps/test/closewar.tmx",
         "maps/test/superwar.tmx",
         "maps/test/test.tmx",
@@ -461,8 +462,7 @@
         "maps/test/minitest.tmx",
         "maps/Initial/1-starting.tmx",
         "maps/Initial/2-archers.tmx",
-        "maps/test/workers.tmx",
-        "maps/minitest.tmx"
+        "maps/test/workers.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

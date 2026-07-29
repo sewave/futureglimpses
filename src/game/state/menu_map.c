@@ -198,7 +198,7 @@ static GuiElement mainMenu[MAIN_MENU_ELEMENTS] = {
 	},
 };
 
-#define GAMEPLAY_MENU_ELEMENTS 6
+#define GAMEPLAY_MENU_ELEMENTS 7
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 	{
@@ -236,7 +236,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 25, .z = 10,
+		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 15, .z = 10,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
 		.textColor = PAL_COLOR_WHITE,
@@ -259,7 +259,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 80, .z = 10,
+		.x = BUTTON_RETURN_X - 10, .y = MENU_BACK_Y + 65, .z = 10,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_STYLE,
 		.textColor = PAL_COLOR_WHITE,
@@ -276,6 +276,23 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 				},
 				.getValue = game_config_get_gameplay_life_bars_style,
 				.setValue = game_config_set_gameplay_life_bars_style
+			}
+		}
+	},
+	{
+		.x = MENU_BACK_X + 10, .y = MENU_BACK_Y + 102, .z = 11,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_GAME_SPEED,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = {
+			.bar = {
+				.getMaxValue = game_config_get_max_game_speed,
+				.getMinValue = game_config_get_min_game_speed,
+				.getValue = game_config_get_game_speed,
+				.setValue = game_config_set_game_speed,
+				.valueInc = 1,
 			}
 		}
 	},
@@ -570,6 +587,7 @@ void handle_menu_map_init(GameContext *context) {
 
 	prevMouseCursorState = game_mouse_get_cursor_state();
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
+	timer_set_speed(TIMER_SPEED_NORMAL);
 	menuState = PAUSE_MENU_STATE_SELECT;
 }
 

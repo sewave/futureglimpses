@@ -232,6 +232,7 @@ static void game_update(GameContext *context) {
 	}
 	
 	if (keyboard_is_key_pressed(KEY_SPACE)) game_selection_center_camera_on_selection(context);
+
 	// Resource cheat keys
 	#ifdef CHEATS_ENABLED
 	if(keyboard_is_key_pressed(KEY_G)) context->areCheatsEnabled ^= TRUE;
@@ -419,6 +420,7 @@ void handle_play_map_init(GameContext *context) {
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 	renderBackground = FALSE;
 	nextState = GAME_STATE_PLAY_MAP;
+	timer_set_speed(context->config.gameSpeed);
 	game_strategy_ai_init(context);
 }
 

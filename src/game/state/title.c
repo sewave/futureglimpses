@@ -386,7 +386,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 	},
 };
 
-#define GAMEPLAY_MENU_ELEMENTS 7
+#define GAMEPLAY_MENU_ELEMENTS 8
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
     {
@@ -484,6 +484,23 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 				},
 				.getValue = game_config_get_language,
 				.setValue = set_reload_language
+			}
+		}
+	},
+	{
+		.x = MENU_BACK_X + 10, .y = TITLE_MENU_Y + 25, .z = 11,
+		.type = GUI_ELEMENT_BAR,
+		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_GAME_SPEED,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.typed = {
+			.bar = {
+				.getMaxValue = game_config_get_max_game_speed,
+				.getMinValue = game_config_get_min_game_speed,
+				.getValue = game_config_get_game_speed,
+				.setValue = game_config_set_game_speed,
+				.valueInc = 1,
 			}
 		}
 	},
@@ -595,6 +612,7 @@ void handle_title_init(GameContext *context) {
 	load_title_text_image(context);
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	game_snd_play_music(GAME_MUSIC_MENUS);
+	timer_set_speed(TIMER_SPEED_NORMAL);
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 

@@ -217,6 +217,7 @@ typedef struct {
 	LifeBarEnum lifeBar;
 	LifeBarStyleEnum lifeBarStyle;
 	GameLanguageEnum language;
+	TimerSpeedType gameSpeed;
 } Config;
 
 #define CMD_BAR_BUTTONS 6
