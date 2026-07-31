@@ -7,6 +7,7 @@
 #include "game/video/gfx.h"
 #include "game/video/render.h"
 #include "game/mouse/game_mouse.h"
+#include "game/sound/game_sound.h"
 
 #define SCENARIO_SELECT_BACKGROUND_PATH "assets/gfx/ui/back/select.pcx"
 #define SCENARIO_SELECT_MAPS 10
@@ -71,12 +72,17 @@ static uint8_t get_max_scenario_selected(const GameContext *context) {
 }
 
 static void set_scenario_selected(GameContext *context, uint8_t value) {
-	if(value < mapList->count) scenarioSelected = value;
+	if(value < mapList->count && mapList->entries[value].unlocked) scenarioSelected = value;
 }
 
 static char * get_scenario_text(const GameContext *context, uint8_t index) {
 	if(index >= mapList->count) return NULL;
-	return mapList->entries[index].title;
+	if(mapList->entries[index].unlocked) {
+		return mapList->entries[index].title;
+	}
+	else {
+		return (char *) text_get_by_id(GAME_TEXT_ID_UNKNOWN);
+	}
 }
 
 static BITMAP * get_scenario_icon(const GameContext *context, uint8_t index) {
@@ -91,7 +97,11 @@ static BITMAP * get_scenario_icon(const GameContext *context, uint8_t index) {
 
 static char * get_scenario_selected_description(const GameContext *context) {
 	if(scenarioSelected >= mapList->count) return NULL;
-	return mapList->entries[scenarioSelected].description;
+	if(mapList->entries[scenarioSelected].unlocked) {
+		return mapList->entries[scenarioSelected].description;
+	} else {
+		return (char *) text_get_by_id(GAME_TEXT_ID_UNKNOWN);
+	}
 }
 
 static void folders_action(GameContext *context) {
@@ -108,7 +118,12 @@ static void folders_action(GameContext *context) {
 }
 
 static void select_scenario_action(GameContext *context) {
-	if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FILE) state = SCENARIO_SELECT_GO_STATE;
+	if(mapList->entries[scenarioSelected].type == MAP_ENTRY_FILE) {
+		state = SCENARIO_SELECT_GO_STATE;
+	}
+	else {
+		game_snd_play_sound(GAME_SOUND_NOT_VALID);
+	}
 }
 
 static void go_title_action(GameContext *context) {

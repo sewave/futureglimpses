@@ -4,6 +4,7 @@
 #include "common/common_lib.h"
 #include "text/game_text_enum.h"
 #include "game_enums.h"
+#include "game/map/map_code.h"
 
 #define VERSION "1.00"
 #define GAME_TITLE "Future Glimpses"
@@ -251,6 +252,7 @@ typedef struct {
 	char * description;
 	char *win;
 	char *lose;
+	MapCode winCode;
 
 	uint8_t enableBarracks;
 	uint8_t enableBlacksmith;

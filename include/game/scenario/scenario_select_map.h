@@ -2,6 +2,7 @@
 #define SCENARIO_SELECT_MAP_H
 #include "common/common.h"
 #include "game/map/map.h"
+#include "game/map/map_code.h"
 
 #define MAPS_FOLDER "assets/map"
 
@@ -16,6 +17,8 @@ typedef struct {
 	char *path;
 	char *title;
 	char *description;
+	MapCode mapCode;
+	uint8_t unlocked;
 	uint8_t enableBarracks;
 	uint8_t enableBlacksmith;
 	uint8_t enableCityHall;

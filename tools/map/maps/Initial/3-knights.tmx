@@ -15,6 +15,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
+  <property name="MAP_CODE" value="P3C2DCEJ"/>
   <property name="MSG_DESCRIPTION" value="Crea unos establos para crear caballeros en los cuarteles y llega al final del camino rápidamente para asesinar al caballero real."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="3.Caballeros"/>
@@ -32,6 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
+  <property name="WIN_CODE" value="4ZXG4SK3"/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

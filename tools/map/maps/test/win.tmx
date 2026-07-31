@@ -20,6 +20,7 @@
   <property name="RES_GOLD_PLAYER" type="int" value="123456"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="100000"/>
   <property name="RES_WOOD_PLAYER" type="int" value="234567"/>
+  <property name="WIN_CODE" value="12345678"/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

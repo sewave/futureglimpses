@@ -16,6 +16,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="true"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="true"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="true"/>
+  <property name="MAP_CODE" value="12345678"/>
   <property name="MSG_DESCRIPTION" value="Conquista los campamentos enemigos."/>
   <property name="MSG_LOSE" value="Has perdido la conquista."/>
   <property name="MSG_TITLE" value="Conquista doble"/>

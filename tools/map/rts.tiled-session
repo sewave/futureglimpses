@@ -123,7 +123,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 512.6909581646423,
-                "y": 511.99999999999994
+                "y": 550.693657219973
             }
         },
         "maps/Initial/1-starting.tmx": {
@@ -133,7 +133,7 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 362.1212121212121,
+                "x": -433.33333333333326,
                 "y": 540.9090909090908
             }
         },
@@ -141,8 +141,8 @@
             "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 325,
-                "y": 147
+                "x": 324,
+                "y": 581
             }
         },
         "maps/Initial/3-knights.tmx": {
@@ -152,24 +152,24 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 377.5,
-                "y": 546.5
+                "x": 378,
+                "y": 764.5
             }
         },
         "maps/Initial/4-mages.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 312.66666666666663,
-                "y": 451.33333333333326
+                "x": 312,
+                "y": 740.6666666666667
             }
         },
         "maps/Initial/5-turrets.tmx": {
             "scale": 0.68837890625,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.0726344162292,
-                "y": 512.0726344162292
+                "x": 511.34629025393673,
+                "y": 827.3060008511845
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -189,19 +189,19 @@
             }
         },
         "maps/base.tmx": {
-            "scale": 1.5,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.3333333333333,
-                "y": 512.3333333333334
+                "x": 603.030303030303,
+                "y": 1153.030303030303
             }
         },
         "maps/biclash.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 591.3333333333333,
-                "y": 484.66666666666674
+                "x": 590.6666666666667,
+                "y": 775.3333333333333
             }
         },
         "maps/buildings/big_buildings.tsx": {
@@ -225,7 +225,7 @@
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 425,
+                "x": 424,
                 "y": 543
             }
         },
@@ -287,7 +287,7 @@
             "scale": 0.5083984375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.3933922397234,
+                "x": 513.3768728390319,
                 "y": 569.4352669996158
             }
         },
@@ -295,7 +295,7 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
+                "x": 511.30904183535756,
                 "y": 511.99999999999994
             }
         },
@@ -303,7 +303,7 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
+                "x": 511.30904183535756,
                 "y": 511.99999999999994
             }
         },
@@ -311,7 +311,7 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
+                "x": 511.30904183535756,
                 "y": 511.99999999999994
             }
         },
@@ -319,7 +319,7 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
+                "x": 511.30904183535756,
                 "y": 511.99999999999994
             }
         },
@@ -327,15 +327,15 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
-                "y": 511.99999999999994
+                "x": 511.30904183535756,
+                "y": 811.8758434547907
             }
         },
         "maps/test/workers.tmx": {
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.9999999999999,
+                "x": 511.30904183535756,
                 "y": 511.99999999999994
             }
         },
@@ -358,7 +358,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 512.2668056279311,
-                "y": 511.19958311620627
+                "y": 509.0651380927567
             }
         },
         "maps/waves.tmx": {
@@ -369,7 +369,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 552,
-                "y": 449.5
+                "y": 450.5
             }
         },
         "maps/win.tmx": {
@@ -432,7 +432,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/advent",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/test",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -449,20 +449,20 @@
         "maps/Adventure/2-villain.tmx"
     ],
     "project": "rts.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
+        "maps/biclash.tmx",
+        "maps/Initial/1-starting.tmx",
+        "maps/Initial/2-archers.tmx",
+        "maps/Initial/3-knights.tmx",
+        "maps/Initial/4-mages.tmx",
+        "maps/Initial/5-turrets.tmx",
+        "maps/base.tmx",
+        "maps/test/win.tmx",
         "maps/Adventure/2-villain.tmx",
         "maps/Adventure/1-hero.tmx",
         "maps/Adventure/3-mission.tmx",
-        "maps/test/closewar.tmx",
-        "maps/test/superwar.tmx",
-        "maps/test/test.tmx",
-        "maps/test/testwave.tmx",
-        "maps/test/win.tmx",
-        "maps/test/minitest.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/Initial/2-archers.tmx",
-        "maps/test/workers.tmx"
+        "maps/test/closewar.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",

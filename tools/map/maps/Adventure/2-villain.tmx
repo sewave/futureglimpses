@@ -15,6 +15,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
+  <property name="MAP_CODE" value="LY4LFC4F"/>
   <property name="MSG_DESCRIPTION" value="Elimina al villano Lance en el centro de la mazmorra. Karl debe sobrevivir."/>
   <property name="MSG_LOSE" value="Has sido derrotado..."/>
   <property name="MSG_TITLE" value="2.Villano"/>
@@ -32,6 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="true"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="true"/>
+  <property name="WIN_CODE" value="MEEKM6UR"/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

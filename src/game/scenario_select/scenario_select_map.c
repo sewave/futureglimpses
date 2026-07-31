@@ -90,6 +90,7 @@ static int file_iterator_callback(const char *filename, int attrib, void *param)
 	}
 	mapEntry->title = strdup(mapData->title);
 	mapEntry->description = strdup(mapData->description);
+	mapEntry->mapCode = mapData->mapCode;
 
 	mapEntry->enableBarracks = mapData->enableBarracks;
 	mapEntry->enableBlacksmith = mapData->enableBlacksmith;
@@ -168,6 +169,16 @@ int scenario_select_load_maps(const char *path, MapList **mapList) {
 	for_each_file_ex(pattern, FA_DIREC, FA_NONE, dir_iterator_callback, &ctx);
 	snprintf(pattern, sizeof(pattern), FGM_FILTER, path);
 	for_each_file_ex(pattern, FA_NONE, FA_DIREC | FA_HIDDEN, file_iterator_callback, &ctx);
+
+	MapCodes* codes = map_code_read_all(path);
+	for(int i = 0; i < newMapList->count; i++) {
+		MapEntry* entry = &newMapList->entries[i];
+		entry->unlocked = TRUE; // Default to unlocked for folders and files without map codes
+		if(entry->type == MAP_ENTRY_FILE) {
+			entry->unlocked = map_code_is_unlocked(&entry->mapCode, codes);
+		}
+	}
+	map_code_free(codes);
 
 	sort_map_entries(newMapList);
 

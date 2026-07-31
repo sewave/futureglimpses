@@ -5,6 +5,7 @@
 #include "game/video/render.h"
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
+#include "game/map/map_code.h"
 
 #define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8
@@ -243,6 +244,14 @@ void handle_results_init(GameContext *context) {
     }
     sprintf(resultTitle, resultText, context->map.title);
     timer_set_speed(TIMER_SPEED_NORMAL);
+
+    if(context->gameResult == GAME_RESULT_VICTORY) {
+        char fileFolder[512];
+        get_parent_directory(context->mapPath, fileFolder, strlen(context->mapPath));
+        MapCodes mapCodes = (MapCodes) { .codes= & context->map.winCode, 1 };
+        map_code_merge_all(fileFolder, &mapCodes);
+    }
+
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
     goTitle = FALSE;
 }

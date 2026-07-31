@@ -90,6 +90,7 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 	context->map.description = strdup(map->description);
 	context->map.win = strdup(map->win);
 	context->map.lose = strdup(map->lose);
+	context->map.winCode = map->winCode;
 
 	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_GOLD, map->playerGold);
 	resource_set_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, map->playerWood);

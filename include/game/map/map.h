@@ -2,6 +2,7 @@
 #define MAP_H
 #include <stdint.h>
 #include "common/common.h"
+#include "game/map/map_code.h"
 
 #define CUSTOM_NAME_LENGTH 11
 #define MAP_UPGRADEABLE_UNIT_TYPES 4
@@ -43,6 +44,8 @@ typedef struct {
     char * description;
 	char * win;
 	char * lose;
+	MapCode mapCode;
+	MapCode winCode;
 
 	uint8_t enableBarracks;
 	uint8_t enableBlacksmith;

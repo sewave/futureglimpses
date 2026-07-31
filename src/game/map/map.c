@@ -23,6 +23,22 @@
 #define MAP_UPGRADE_OPTIONS_ENABLED_INDEX 0
 #define MAP_UPGRADE_OPTIONS_BLOCK 4
 
+static MapCode* read_map_code_from_file(FILE *file) {
+	MapCode *code = (MapCode *) malloc(sizeof(MapCode));
+	if (!code) {
+		fprintf(stderr, "Error allocating memory for MapCode.\n");
+		return NULL;
+	}
+
+	if (fread(code->data, sizeof(char), MAP_CODE_LENGTH, file) != MAP_CODE_LENGTH) {
+		fprintf(stderr, "Error reading map code from file.\n");
+		memset(code->data, 0, MAP_CODE_LENGTH); // Set to empty code on error
+	}
+	// Ensure null termination
+	code->data[MAP_CODE_LENGTH] = '\0';
+	return code;
+}
+
 void game_map_free_data(MapData *map) {
 	if (!map) return;
 
@@ -250,6 +266,15 @@ MapData *game_map_load_data(const char *filename) {
 	map->lose = read_string_from_file(filePtr);
 	if (!map->lose) return free_map_and_close_file(map, filePtr);
 
+	MapCode *mapCode = read_map_code_from_file(filePtr);
+	if (!mapCode) return free_map_and_close_file(map, filePtr);
+	map->mapCode = *mapCode;
+	free(mapCode);
+	mapCode = read_map_code_from_file(filePtr);
+	if (!mapCode) return free_map_and_close_file(map, filePtr);
+	map->winCode = *mapCode;
+	free(mapCode);
+	
 	// Load start resources, must be in sequence, gold wood gold wood
 	uint32_t resources[MAP_RESOURCES];
 	if (fread(resources, sizeof(uint32_t), MAP_RESOURCES, filePtr) != MAP_RESOURCES) {

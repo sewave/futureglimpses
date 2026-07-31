@@ -14,6 +14,8 @@
  * - Title string (N times)
  * - Description length (U16)
  * - Description string (N times)
+ * - Map code (8 * U8)
+ * - Win code (8 * U8)
  * - Player Gold (U32)
  * - Player Wood (U32)
  * - Computer Gold (U32)
@@ -147,6 +149,9 @@ function calculateTotalSize(map) {
     tiled.log(`Lose length: ${msgLoseLength}`);
     size += 2 + msgLoseLength;
 
+    size += 8; // Map code (8 * U8)
+    size += 8; // Win code (8 * U8)
+
 	return size;
 }
 
@@ -237,10 +242,10 @@ function writeObjectData(view, offset, obj, map) {
 
 function writeStringAndLength(view, offset, name, string) {
     var length = getUtf8Size(string);
-    // Write Title Length (U16)
+    // Write Length (U16)
     view.setUint16(offset, length, littleEndian);
     offset += 2;
-    // Write Title String (UTF-8 bytes)
+    // Write String (UTF-8 bytes)
     writeUtf8String(view, offset, string);
     offset += length;
     tiled.log(`Writed ${name} with length ${length}`);
@@ -321,7 +326,7 @@ function exportBinary(map) {
 	tiled.log(`Writed objects`);
 
     // ===================================
-    // 4. MAP ATTRIBUTES (MSG_TITLE and MSG_DESCRIPTION)
+    // 4. MAP ATTRIBUTES
     // ===================================
     tiled.log(`Writing map attributes`);
     var mapProperties = map.resolvedProperties();
@@ -331,6 +336,22 @@ function exportBinary(map) {
     offset += writeStringAndLength(view, offset, "description", mapProperties.MSG_DESCRIPTION || "");
     offset += writeStringAndLength(view, offset, "win", mapProperties.MSG_WIN || "");
     offset += writeStringAndLength(view, offset, "lose", mapProperties.MSG_LOSE || "");
+
+    // Map code
+    var mapCode = mapProperties.MAP_CODE || "        ";
+    for (let i = 0; i < 8; i++) {
+        let charCode = mapCode.charCodeAt(i) || ' ';
+        view.setUint8(offset++, charCode, littleEndian);
+    }
+    tiled.log(`Writed map code: "${mapCode}"`);
+
+    // Win code
+    var winCode = mapProperties.WIN_CODE || "        ";
+    for (let i = 0; i < 8; i++) {
+        let charCode = winCode.charCodeAt(i) || ' ';
+        view.setUint8(offset++, charCode, littleEndian);
+    }
+    tiled.log(`Writed win code: "${winCode}"`);
 
     // Write resources
     var resGoldPlayer = mapProperties.RES_GOLD_PLAYER || 0;
