@@ -6,6 +6,7 @@
 
 typedef struct {
     int x, y;
+    int clickX, clickY;
     uint8_t isLeftDown;
     uint8_t isRightDown;
     uint8_t wasLeftDown;

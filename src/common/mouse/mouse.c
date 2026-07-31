@@ -5,6 +5,8 @@
 #include "common/mouse.h"
 #include "common/console.h"
 
+#define DOUBLE_CLICK_OFFSET_PIXELS 4
+
 static BITMAP **mouseCursors = NULL;
 static uint8_t numMouseCursors = 0;
 static uint8_t currentMouseCursor = 0;
@@ -70,6 +72,8 @@ void mouse_destroy_cursors(void) {
 void mouse_initialize_status(MouseStatus *status, uint32_t doubleClickMaxTime) {
 	status->x = mouse_get_x();
 	status->y = mouse_get_y();
+	status->clickX = 0;
+	status->clickY = 0;
 	status->isLeftDown = FALSE;
 	status->isRightDown = FALSE;
 	status->wasLeftDown = FALSE;
@@ -88,6 +92,7 @@ void mouse_update_status(MouseStatus *status) {
 	poll_mouse();
 	int x = mouse_get_x();
 	int y = mouse_get_y();
+
 	status->x = x;
 	status->y = y;
 
@@ -95,6 +100,13 @@ void mouse_update_status(MouseStatus *status) {
 	int rightButton = (mouse_b & 2) >> 1;
 
 	status->isLeftPressed = (!status->isLeftDown) && leftButton;
+	if(status->isLeftPressed) {
+		if(abs(status->clickX - status->x) + abs(status->clickY - status->y) > DOUBLE_CLICK_OFFSET_PIXELS) {
+			status->leftClickTime = 0;
+		}
+		status->clickX = status->x;
+		status->clickY = status->y;
+	}
 	status->isRightPressed = (!status->isRightDown) && rightButton;
 	status->isLeftReleased = status->isLeftDown && (!leftButton);
 	status->isRightReleased = status->isRightDown && (!rightButton);
