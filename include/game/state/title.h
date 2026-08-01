@@ -5,5 +5,6 @@
 void handle_title_init(GameContext *context);
 GameStateEnum handle_title_update(GameContext *context);
 void handle_title_render(GameContext *context, RenderQueue *renderQueue);
+void handle_title_exit(GameContext *context);
 
 #endif /* TITLE_MAP_H */

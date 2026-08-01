@@ -352,10 +352,12 @@ typedef struct {
 
 typedef GameStateEnum (*StateUpdateFunction)(GameContext *);
 typedef void (*StateInitFunction)(GameContext *);
+typedef void (*StateExitFunction)(GameContext *);
 typedef void (*StateRenderFunction)(GameContext *, RenderQueue *);
 
 typedef struct {
 	StateInitFunction init;
+	StateExitFunction exit;
 	StateUpdateFunction update;
 	StateRenderFunction render;
 } GameState;
@@ -363,6 +365,7 @@ typedef struct {
 void game_free_context(GameContext *context);
 GameStateEnum game_execute_state_update(GameContext *context);
 void game_execute_state_init(GameContext *context);
+void game_execute_state_exit(GameContext *context);
 void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
 #ifdef DOS

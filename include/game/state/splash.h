@@ -5,5 +5,6 @@
 void game_state_splash_init(GameContext *context);
 GameStateEnum game_state_splash_update(GameContext *context);
 void game_state_splash_render(GameContext *context, RenderQueue *renderQueue);
+void game_state_splash_exit(GameContext *context);
 
 #endif /* SPLASH_H */

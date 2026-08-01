@@ -569,11 +569,6 @@ static GuiScreen guiScreens[PAUSE_MENU_STATE_COUNT] = {
 	[PAUSE_MENU_STATE_EXIT_TITLE] = { .elements = NULL, .elementsCount = 0 },
 };
 
-static void clean_up_menu() {
-	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-	destroy_bitmap(background);
-}
-
 void handle_menu_map_render(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_render_queue_submit(context, renderQueue, &guiScreens[menuState]);
 	render_queue_submit_mouse(context, renderQueue);
@@ -596,20 +591,19 @@ GameStateEnum handle_menu_map_update(GameContext *context) {
 	GameStateEnum nextState;
 	switch(menuState) {
 		case PAUSE_MENU_STATE_EXIT_TITLE: {
-			clean_up_menu();
+			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 			video_fade_out_init(DEFAULT_FADE_SPEED);
 			nextState = GAME_STATE_TITLE;
 			break;
 		}
 		case PAUSE_MENU_STATE_EXIT_OS: {
-			clean_up_menu();
+			game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 			video_fade_out_init(DEFAULT_FADE_SPEED);
 			nextState = GAME_STATE_EXIT;
 			break;
 		}
 		case PAUSE_MENU_STATE_EXIT: {
 			game_mouse_set_cursor_state(prevMouseCursorState);
-			destroy_bitmap(background);
 			video_fade_in_skip_next();
 			nextState = GAME_STATE_PLAY_MAP;
 			break;
@@ -620,4 +614,11 @@ GameStateEnum handle_menu_map_update(GameContext *context) {
 		}
 	}
 	return nextState;
+}
+
+void handle_menu_map_exit(GameContext *context) {
+	if(background) {
+		destroy_bitmap(background);
+		background = NULL;
+	}
 }

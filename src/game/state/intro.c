@@ -138,12 +138,15 @@ GameStateEnum game_state_intro_update(GameContext *context) {
 	}
 	starfield_update_stars();
 	if (linesY[numLines - 1] <= -LINE_Y_SPACING || keyboard_is_key_pressed(KEY_ESC)) {
-		free_lines();
-		starfield_free_stars();
-		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_TITLE;
 	}
 	return GAME_STATE_INTRO;
+}
+
+void game_state_intro_exit(GameContext *context) {
+	free_lines();
+	starfield_free_stars();
+	video_fade_out_init(DEFAULT_FADE_SPEED);
 }
 
 void game_state_intro_render(GameContext *context, RenderQueue *renderQueue) {

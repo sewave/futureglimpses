@@ -6,5 +6,6 @@
 void handle_scenario_select_init(GameContext *context);
 GameStateEnum handle_scenario_select_update(GameContext *context);
 void handle_scenario_select_render(GameContext *context, RenderQueue *renderQueue);
+void handle_scenario_select_exit(GameContext *context);
 
 #endif /* SCENARIO_SELECT_H */

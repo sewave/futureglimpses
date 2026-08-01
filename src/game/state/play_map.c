@@ -444,3 +444,7 @@ GameStateEnum handle_play_map_update(GameContext *context) {
 
 	return nextState;
 }
+
+void handle_play_map_exit(GameContext *context) {
+	// Nothing to do here, we free the context in the load map state
+}

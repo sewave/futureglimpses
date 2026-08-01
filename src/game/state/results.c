@@ -258,10 +258,7 @@ void handle_results_init(GameContext *context) {
 
 GameStateEnum handle_results_update(GameContext *context) {
     game_gui_handle(context, &guiScreen);
-    if(goTitle) {
-        video_fade_out_init(DEFAULT_FADE_SPEED);
-        return GAME_STATE_TITLE;
-    }
+    if(goTitle) return GAME_STATE_TITLE;
     return GAME_STATE_RESULTS;
 }
 
@@ -283,4 +280,9 @@ void handle_results_render(GameContext *context, RenderQueue *renderQueue) {
         render_queue_submit_text(renderQueue, RESULT_Z , context->gameFont,
             statText, x, y, PAL_COLOR_WHITE, TRANSPARENT_INDEX);
     }
+}
+
+void handle_results_exit(GameContext *context) {
+    destroy_bitmap(resultsBackground);
+    video_fade_out_init(DEFAULT_FADE_SPEED);
 }

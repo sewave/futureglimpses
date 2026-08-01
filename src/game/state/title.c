@@ -620,15 +620,21 @@ GameStateEnum handle_title_update(GameContext *context) {
 	GuiScreen *guiScreen = &guiScreens[titleMenuState];
 	game_gui_handle(context, guiScreen);
 	if (titleMenuState == TITLE_MENU_START_GAME) {
-		destroy_bitmap(titleBackground);
-		destroy_bitmap(titleText);
-		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_SCENARIO_SELECT;
 	} else if (titleMenuState == TITLE_MENU_EXIT) {
-		destroy_bitmap(titleBackground);
-		destroy_bitmap(titleText);
-		video_fade_out_init(DEFAULT_FADE_SPEED);
 		return GAME_STATE_EXIT;
 	}
 	return GAME_STATE_TITLE;
+}
+
+void handle_title_exit(GameContext *context) {
+	if(titleBackground) {
+		destroy_bitmap(titleBackground);
+		titleBackground = NULL;
+	}
+	if(titleText) {
+		destroy_bitmap(titleText);
+		titleText = NULL;
+	}
+	video_fade_out_init(DEFAULT_FADE_SPEED);
 }

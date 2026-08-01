@@ -486,15 +486,6 @@ static GuiElement scenarioSelectMap[SCENARIO_SELECT_MAP_ELEMENTS] = {
 
 GuiScreen scenarioSelectMapGuiScreen = { .elements = scenarioSelectMap, .elementsCount = SCENARIO_SELECT_MAP_ELEMENTS };
 
-static void free_all() {
-	destroy_bitmap(background);
-	background = NULL;
-	scenario_select_free_maps(mapList);
-	mapList = NULL;
-	free(currentFolder);
-	currentFolder = NULL;
-}
-
 static void update_map_options() {
 	MapEntry *mapEntry = &mapList->entries[scenarioSelected];
 	if(mapList->count > 0 && mapEntry->type == MAP_ENTRY_FILE) {
@@ -577,8 +568,6 @@ GameStateEnum handle_scenario_select_update(GameContext *context) {
 		case SCENARIO_SELECT_GO_STATE: {
 			free(context->mapPath);
 			context->mapPath = strdup(mapList->entries[scenarioSelected].path);
-			free_all();
-			video_fade_out_init(DEFAULT_FADE_SPEED);
 			return GAME_STATE_LOAD_MAP;
 			break;
 		}
@@ -588,8 +577,6 @@ GameStateEnum handle_scenario_select_update(GameContext *context) {
 			break;
 		}
 		case SCENARIO_SELECT_TITLE_STATE: {
-			free_all();
-			video_fade_out_init(DEFAULT_FADE_SPEED);
 			return GAME_STATE_TITLE;
 		}
 		default:
@@ -597,4 +584,18 @@ GameStateEnum handle_scenario_select_update(GameContext *context) {
 	}
 
 	return GAME_STATE_SCENARIO_SELECT;
+}
+
+void handle_scenario_select_exit(GameContext *context) {
+	if(background) {
+		destroy_bitmap(background);
+		background = NULL;
+	}
+	scenario_select_free_maps(mapList);
+	mapList = NULL;
+	if(currentFolder) {
+		free(currentFolder);
+		currentFolder = NULL;
+	}
+	video_fade_out_init(DEFAULT_FADE_SPEED);
 }

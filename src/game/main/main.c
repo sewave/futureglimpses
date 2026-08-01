@@ -141,10 +141,14 @@ void main_loop() {
 			while (context.ticksToCatchup > 0) {
 				context.ticksToCatchup--;
 				render_queue_clear(&renderQueue);
-				context.gameState = game_execute_state_update(&context);
+				GameStateEnum newState = game_execute_state_update(&context);
 				keyboard_update();
 				mouse_update_status(&context.mouseStatus);
-				if(oldState != context.gameState) break;
+				if(oldState != newState) {
+					game_execute_state_exit(&context);
+					context.gameState = newState;
+					break;
+				}
 			}
 			if (oldState == context.gameState) game_execute_state_render(&context, &renderQueue);
 		}
