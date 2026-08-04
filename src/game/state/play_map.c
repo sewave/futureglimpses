@@ -95,7 +95,7 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
-		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 902,
+		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET + 5, .z = UI_Z_ORDER + 902,
 		.type = GUI_ELEMENT_CUSTOM_TEXT,
 		.textColor = PAL_COLOR_WHITE,
 		.shadowTextColor = PAL_COLOR_BLACK,
@@ -143,7 +143,7 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		.typed = { .text = { .maxX = MENU_BACK_X + MENU_BACK_WIDTH } }
 	},
 	{
-		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET, .z = UI_Z_ORDER + 902,
+		.x = MENU_BACK_X + RESULT_MESSAGE_X_OFFSET, .y = MENU_BACK_Y + 3 * MENU_TITLE_Y_OFFSET + 5, .z = UI_Z_ORDER + 902,
 		.type = GUI_ELEMENT_CUSTOM_TEXT,
 		.textColor = PAL_COLOR_WHITE,
 		.shadowTextColor = PAL_COLOR_BLACK,
