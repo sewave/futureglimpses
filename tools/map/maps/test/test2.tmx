@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="314">
  <editorsettings>
-  <export target="../../../../assets/map/test.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../../assets/map/test/test2.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
   <property name="AI_MODE" type="int" propertytype="AI_MODE" value="2"/>
@@ -18,7 +18,7 @@
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="true"/>
   <property name="MSG_DESCRIPTION" value="Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas Para probar cosas variadas "/>
   <property name="MSG_LOSE" value="You lose"/>
-  <property name="MSG_TITLE" value="Test map"/>
+  <property name="MSG_TITLE" value="Test map 2"/>
   <property name="MSG_WIN" value="You win"/>
   <property name="PEACE_TIME" type="int" value="10"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="100000"/>
@@ -107,9 +107,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Units/Buildings">
-  <object id="71" template="../../units/P_Worker.tx" x="880" y="768"/>
-  <object id="72" template="../../units/P_Worker.tx" x="912" y="832"/>
-  <object id="73" template="../../units/P_Knight.tx" name="Triturador" gid="260" x="816" y="832" opacity="1" visible="1">
+  <object id="73" template="../../units/P_Knight.tx" name="Triturador" gid="260" x="208" y="144" opacity="1" visible="1">
    <properties>
     <property name="ARMOR" type="int" value="7"/>
     <property name="CUSTOM" type="bool" value="true"/>
@@ -119,96 +117,14 @@
     <property name="MUST_SURVIVE" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="94" template="../../buildings/C_City_Hall.tx" x="64" y="192"/>
-  <object id="115" template="../../units/C_Worker.tx" x="48" y="128"/>
-  <object id="120" template="../../buildings/C_Barracks.tx" x="272" y="192"/>
   <object id="121" template="../../buildings/C_Stables.tx" x="272" y="80" opacity="0.93"/>
   <object id="122" template="../../buildings/C_Farm.tx" x="16" y="64"/>
   <object id="123" template="../../buildings/C_Blacksmith.tx" x="240" y="64"/>
-  <object id="124" template="../../buildings/C_Tower.tx" x="208" y="144"/>
-  <object id="125" template="../../buildings/P_City_Hall.tx" name="Garrulia" x="848" y="896">
-   <properties>
-    <property name="ARMOR" type="int" value="6"/>
-    <property name="CUSTOM" type="bool" value="true"/>
-    <property name="MAX_DAMAGE" type="int" value="0"/>
-    <property name="MAX_HEALTH" type="int" value="1500"/>
-    <property name="MIN_DAMAGE" type="int" value="0"/>
-    <property name="MUST_SURVIVE" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="126" template="../../units/P_Worker.tx" x="944" y="864"/>
-  <object id="127" template="../../units/C_Worker.tx" x="112" y="128"/>
-  <object id="132" template="../../units/C_Worker.tx" x="80" y="128"/>
-  <object id="158" template="../../units/P_Archer.tx" name="Rajafieras" x="480" y="624">
-   <properties>
-    <property name="ARMOR" type="int" value="5"/>
-    <property name="CUSTOM" type="bool" value="true"/>
-    <property name="MAX_DAMAGE" type="int" value="60"/>
-    <property name="MAX_HEALTH" type="int" value="9999"/>
-    <property name="MIN_DAMAGE" type="int" value="50"/>
-    <property name="MUST_SURVIVE" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="235" template="../../buildings/C_Farm.tx" x="208" y="64"/>
-  <object id="236" template="../../buildings/C_Farm.tx" x="176" y="96"/>
   <object id="239" template="../../buildings/C_Farm.tx" x="176" y="64"/>
-  <object id="241" template="../../buildings/C_Farm.tx" x="208" y="96"/>
   <object id="243" template="../../buildings/C_Farm.tx" x="48" y="64"/>
   <object id="244" template="../../buildings/C_Farm.tx" x="112" y="64"/>
   <object id="245" template="../../buildings/C_Farm.tx" x="144" y="64"/>
   <object id="246" template="../../buildings/C_Farm.tx" x="80" y="64"/>
-  <object id="248" template="../../buildings/C_Barracks.tx" x="192" y="240"/>
-  <object id="249" template="../../buildings/P_Farm.tx" x="976" y="992"/>
-  <object id="250" template="../../buildings/P_Farm.tx" x="944" y="992"/>
-  <object id="257" template="../../units/C_Archer.tx" x="272" y="224"/>
-  <object id="262" template="../../units/C_Archer.tx" x="272" y="256"/>
-  <object id="263" template="../../units/C_Archer.tx" x="256" y="240"/>
-  <object id="264" template="../../units/C_Archer.tx" x="256" y="224"/>
-  <object id="265" template="../../units/C_Archer.tx" x="272" y="208"/>
-  <object id="266" template="../../units/C_Archer.tx" x="272" y="208"/>
-  <object id="268" template="../../units/C_Worker.tx" x="32" y="160"/>
-  <object id="269" template="../../units/C_Worker.tx" x="144" y="160"/>
-  <object id="270" template="../../units/C_Worker.tx" x="144" y="192"/>
-  <object id="271" template="../../units/C_Worker.tx" x="128" y="208"/>
-  <object id="272" template="../../units/C_Worker.tx" x="80" y="208"/>
-  <object id="273" template="../../units/C_Worker.tx" x="32" y="224"/>
-  <object id="274" template="../../units/C_Worker.tx" x="48" y="192"/>
-  <object id="275" template="../../units/C_Worker.tx" x="96" y="224"/>
-  <object id="276" template="../../buildings/P_City_Hall.tx" x="768" y="192"/>
-  <object id="277" template="../../units/P_Worker.tx" x="912" y="768"/>
-  <object id="278" template="../../units/P_Worker.tx" x="928" y="864"/>
-  <object id="279" template="../../units/P_Worker.tx" x="928" y="896"/>
-  <object id="280" template="../../units/P_Worker.tx" x="912" y="928"/>
-  <object id="281" template="../../buildings/P_Farm.tx" x="912" y="992"/>
-  <object id="282" template="../../buildings/P_Farm.tx" x="880" y="992"/>
-  <object id="283" template="../../units/P_Worker.tx" x="784" y="112"/>
-  <object id="284" template="../../units/P_Worker.tx" x="832" y="112"/>
-  <object id="285" template="../../buildings/P_Blacksmith.tx" x="704" y="896"/>
-  <object id="286" template="../../buildings/P_Barracks.tx" x="720" y="816"/>
-  <object id="287" template="../../buildings/P_Tower.tx" x="704" y="928"/>
-  <object id="288" template="../../buildings/P_Stables.tx" x="752" y="992"/>
-  <object id="291" template="../../buildings/C_Turret.tx" name="C_Turret" x="352" y="240"/>
-  <object id="292" template="../../buildings/C_Turret.tx" name="C_Turret" x="272" y="304"/>
-  <object id="293" template="../../buildings/C_Farm.tx" x="432" y="576"/>
-  <object id="294" template="../../buildings/C_Farm.tx" x="480" y="576"/>
-  <object id="295" template="../../buildings/C_Farm.tx" x="528" y="640"/>
-  <object id="296" template="../../buildings/C_Farm.tx" x="512" y="688"/>
-  <object id="297" template="../../buildings/C_Farm.tx" x="464" y="704"/>
-  <object id="298" template="../../buildings/C_Farm.tx" x="416" y="672"/>
-  <object id="299" template="../../buildings/C_Farm.tx" x="416" y="624"/>
-  <object id="300" template="../../buildings/C_Farm.tx" x="528" y="592"/>
-  <object id="301" template="../../buildings/C_Barracks.tx" x="208" y="768"/>
-  <object id="302" template="../../units/P_Soldier.tx" x="176" y="768"/>
-  <object id="303" template="../../units/P_Soldier.tx" x="192" y="704"/>
-  <object id="304" template="../../units/P_Soldier.tx" x="240" y="672"/>
-  <object id="305" template="../../units/P_Soldier.tx" x="272" y="704"/>
-  <object id="306" template="../../units/P_Soldier.tx" x="272" y="752"/>
-  <object id="307" template="../../units/P_Soldier.tx" x="256" y="800"/>
-  <object id="308" template="../../units/P_Soldier.tx" x="224" y="800"/>
-  <object id="309" template="../../units/P_Soldier.tx" x="176" y="800"/>
-  <object id="310" template="../../units/P_Soldier.tx" x="176" y="720"/>
-  <object id="311" template="../../buildings/C_Blacksmith.tx" x="320" y="704"/>
-  <object id="312" template="../../buildings/C_Farm.tx" x="320" y="800"/>
-  <object id="313" template="../../buildings/C_Stables.tx" x="336" y="624"/>
  </objectgroup>
 </map>

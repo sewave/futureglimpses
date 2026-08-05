@@ -3,15 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/Adventure/2-villain.tmx",
+    "activeFile": "maps/test/win.tmx",
     "expandedProjectPaths": [
-        "units",
         "Test Campaign",
-        "maps/Starting",
-        "maps/Test Campaign",
+        "maps",
+        "maps/Initial",
+        "maps/test",
         "maps/Adventure",
+        "maps/Starting",
         ".",
-        "maps"
+        "maps/Test Campaign"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -165,11 +166,35 @@
             }
         },
         "maps/Initial/5-turrets.tmx": {
-            "scale": 0.68837890625,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.34629025393673,
-                "y": 827.3060008511845
+                "x": 382.66666666666663,
+                "y": 757.9999999999999
+            }
+        },
+        "maps/Main/1-soldiers.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 66.66666666666669,
+                "y": 323.33333333333326
+            }
+        },
+        "maps/Main/2-archers.tmx": {
+            "scale": 0.47592773437499997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.6828767825997,
+                "y": 511.6322971170616
+            }
+        },
+        "maps/Main/2-blacksmith.tmx": {
+            "scale": 0.47592773437499997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.6828767825997,
+                "y": 511.6322971170616
             }
         },
         "maps/Test Campaign/1-starting.tmx": {
@@ -303,16 +328,16 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.30904183535756,
+                "x": 512.6909581646423,
                 "y": 511.99999999999994
             }
         },
         "maps/test/test.tmx": {
-            "scale": 0.7236328125,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 511.30904183535756,
-                "y": 511.99999999999994
+                "x": 183,
+                "y": 136.75
             }
         },
         "maps/test/testwave.tmx": {
@@ -335,7 +360,7 @@
             "scale": 0.7236328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 511.30904183535756,
+                "x": 512.6909581646423,
                 "y": 511.99999999999994
             }
         },
@@ -444,24 +469,24 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/Adventure/1-hero.tmx",
-        "maps/Adventure/3-mission.tmx",
-        "maps/Adventure/2-villain.tmx"
+        "maps/test/workers.tmx",
+        "maps/test/superwar.tmx",
+        "maps/test/win.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "maps/biclash.tmx",
-        "maps/Initial/1-starting.tmx",
-        "maps/Initial/2-archers.tmx",
-        "maps/Initial/3-knights.tmx",
-        "maps/Initial/4-mages.tmx",
-        "maps/Initial/5-turrets.tmx",
-        "maps/base.tmx",
+        "maps/Main/1-soldiers.tmx",
+        "maps/Main/2-blacksmith.tmx",
+        "maps/test/test.tmx",
+        "maps/Main/2-archers.tmx",
+        "maps/test/workers.tmx",
+        "maps/test/superwar.tmx",
         "maps/test/win.tmx",
-        "maps/Adventure/2-villain.tmx",
         "maps/Adventure/1-hero.tmx",
+        "maps/Adventure/2-villain.tmx",
         "maps/Adventure/3-mission.tmx",
+        "maps/Initial/5-turrets.tmx",
         "maps/test/closewar.tmx"
     ],
     "textEdit.monospace": true,
