@@ -86,7 +86,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 			&& unit->targetX >= cameraMinX - unitSize && unit->targetY <= cameraMaxY && unit->targetY >= cameraMinY - unitSize) {
 			int targetXPos = (unit->targetX * TILE_SIZE) - context->xPosition + VIEWPORT_X_OFFSET;
 			int targetYPos = (unit->targetY * TILE_SIZE) - context->yPosition + VIEWPORT_Y_OFFSET;
-			render_queue_submit_rle_sprite(renderQueue, SPRITES_Z_ORDER + unit->y,
+			render_queue_submit_rle_sprite(renderQueue, UI_Z_ORDER,
 											game_gfx_get_object_sheet_frame(OBJ_TYPE_FLAG, 0),
 											targetXPos, targetYPos);
 			if(!context->targetBlinkTime || context->targetPosition.x != unit->targetX || context->targetPosition.y != unit->targetY) {
