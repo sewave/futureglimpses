@@ -10,14 +10,38 @@
 #define MAX_FOUND_UNITS 8
 static GameUnit *foundUnits[MAX_FOUND_UNITS];
 
+static GameUnit * game_unit_get_nearest_found_unit(GameContext *context, GameUnit *source, uint16_t foundUnitsCount) {
+	GameUnit *nearestUnit = NULL;
+	int nearestDistance = 9999999;
+	int nearestIsHostile = FALSE;
+
+	for (int i = 0; i < foundUnitsCount; i++) {
+		GameUnit *foundUnit = foundUnits[i];
+		int distance = distance_sq(source->x, source->y, foundUnit->x, foundUnit->y);
+		int isHostile = foundUnit->maxDamage > 0;
+		if ((distance < nearestDistance && nearestIsHostile == isHostile)
+			|| (isHostile && !nearestIsHostile)) {
+			nearestDistance = distance;
+			nearestUnit = foundUnit;
+			nearestIsHostile = isHostile;
+		}
+	}
+
+	if(foundUnitsCount > 0 && nearestUnit == NULL) nearestUnit = foundUnits[0];
+
+	return nearestUnit;
+}
+
 static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 	if (unit->reactionTimeCounter >= unit->reactionTime) {
 		unit->reactionTimeCounter = 0;
+		if(unit->isBuilding && unit->trainsUnits) return;
 		uint16_t foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->maxAttackRange,
 														   game_spatial_filter_enemy_units_in_attack_range, unit, foundUnits,
-														   1);
+														   MAX_FOUND_UNITS);
 		if (foundUnitsCount > 0) {
-			game_unit_command_attack(unit, foundUnits[0], UNIT_STATE_IDLE);
+			GameUnit *target = game_unit_get_nearest_found_unit(context, unit, foundUnitsCount);
+			if(target) game_unit_command_attack(unit, target, UNIT_STATE_IDLE);
 		} else {
 			if(unit->isBuilding) return;
 			foundUnitsCount = game_spatial_query_grid(context, unit->x, unit->y, unit->sightRange,
@@ -25,18 +49,8 @@ static void game_unit_ai_idle(GameContext *context, GameUnit *unit) {
 													  MAX_FOUND_UNITS);
 			if (foundUnitsCount > 0) {
 				// Target nearest unit
-				GameUnit *target = NULL;
-				int distance = 9999999;
-				GameUnit **newTargetList = foundUnits;
-				for (int i = 0; i < foundUnitsCount; i++, newTargetList++) {
-					GameUnit *newTarget = *newTargetList;
-					int newDistance = distance_sq(unit->x, unit->y, newTarget->x, newTarget->y);
-					if (newDistance < distance) {
-						target = newTarget;
-						distance = newDistance;
-					}
-				}
-				if (target) game_unit_command_move_attack(unit, NULL, target->x, target->y);
+				GameUnit *target = game_unit_get_nearest_found_unit(context, unit, foundUnitsCount);
+				if(target) game_unit_command_move_attack(unit, NULL, target->x, target->y);
 			} else {
 				// We found nothing, so we change direction to make it "look" around
 				unit->direction = (unit->direction + 1) % DIRECTIONS_COUNT;
