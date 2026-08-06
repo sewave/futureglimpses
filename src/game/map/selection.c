@@ -157,6 +157,9 @@ static void handle_viewport_mouse_action(GameContext *context, int mouseX, int m
 				if(unit->isBuilding) {
 					unit->targetX = targetUnit->x;
 					unit->targetY = targetUnit->y;
+					if(unit->trainsUnits) {
+						game_unit_command_move_player(context, unit, targetUnit, targetUnit->x, targetUnit->y);
+					}
 					continue;
 				}
 				if (isContextual) {
