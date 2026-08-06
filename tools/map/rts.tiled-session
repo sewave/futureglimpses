@@ -3,16 +3,17 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/test/win.tmx",
+    "activeFile": "maps/test/test2.tmx",
     "expandedProjectPaths": [
-        "Test Campaign",
         "maps",
-        "maps/Initial",
+        "Test Campaign",
         "maps/test",
-        "maps/Adventure",
-        "maps/Starting",
+        "maps/Test Campaign",
         ".",
-        "maps/Test Campaign"
+        "units",
+        "buildings",
+        "maps/Main",
+        "maps/Starting"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -340,6 +341,14 @@
                 "y": 136.75
             }
         },
+        "maps/test/test2.tmx": {
+            "scale": 0.7904296875,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 512.3795404002966,
+                "y": 511.746973066469
+            }
+        },
         "maps/test/testwave.tmx": {
             "scale": 0.7236328125,
             "selectedLayer": 0,
@@ -469,13 +478,12 @@
     "map.width": 64,
     "mapScene.enableWorlds": true,
     "openFiles": [
-        "maps/test/workers.tmx",
-        "maps/test/superwar.tmx",
-        "maps/test/win.tmx"
+        "maps/test/test2.tmx"
     ],
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "maps/test/test2.tmx",
         "maps/Main/1-soldiers.tmx",
         "maps/Main/2-blacksmith.tmx",
         "maps/test/test.tmx",
@@ -486,8 +494,7 @@
         "maps/Adventure/1-hero.tmx",
         "maps/Adventure/2-villain.tmx",
         "maps/Adventure/3-mission.tmx",
-        "maps/Initial/5-turrets.tmx",
-        "maps/test/closewar.tmx"
+        "maps/Initial/5-turrets.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
