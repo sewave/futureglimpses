@@ -120,10 +120,10 @@
   <object id="184" template="../../buildings/P_Farm.tx" x="224" y="448"/>
   <object id="186" template="../../units/C_Knight.tx" name="Folipondio" x="944" y="800">
    <properties>
-    <property name="ARMOR" type="int" value="5"/>
+    <property name="ARMOR" type="int" value="3"/>
     <property name="CUSTOM" type="bool" value="true"/>
     <property name="MAX_DAMAGE" type="int" value="20"/>
-    <property name="MAX_HEALTH" type="int" value="800"/>
+    <property name="MAX_HEALTH" type="int" value="300"/>
     <property name="MIN_DAMAGE" type="int" value="10"/>
     <property name="MUST_SURVIVE" type="bool" value="true"/>
    </properties>

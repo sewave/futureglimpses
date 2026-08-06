@@ -198,6 +198,14 @@
                 "y": 511.6322971170616
             }
         },
+        "maps/Main/3-knights.tmx": {
+            "scale": 3,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 829.3333333333333,
+                "y": 695.8333333333333
+            }
+        },
         "maps/Test Campaign/1-starting.tmx": {
             "scale": 1,
             "selectedLayer": 0,
@@ -355,6 +363,14 @@
             "viewCenter": {
                 "x": 511.30904183535756,
                 "y": 511.99999999999994
+            }
+        },
+        "maps/test/tightwar.tmx": {
+            "scale": 3,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 113.33333333333333,
+                "y": 88.83333333333331
             }
         },
         "maps/test/win.tmx": {
