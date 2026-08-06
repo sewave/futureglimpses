@@ -43,12 +43,10 @@ uint16_t game_spatial_query_grid_rectangle(GameContext* context,
 
 				if (alreadyAdded[entityIndex]) continue;
 
-				if (col == foundUnit->x && row == foundUnit->y) {
-					if (filterFunc == NULL || filterFunc(context, sourceUnit, foundUnit)) {
-						if (resultCount < maxResults) {
-							foundUnits[resultCount++] = foundUnit;
-							alreadyAdded[entityIndex] = TRUE;
-						}
+				if (filterFunc == NULL || filterFunc(context, sourceUnit, foundUnit)) {
+					if (resultCount < maxResults) {
+						foundUnits[resultCount++] = foundUnit;
+						alreadyAdded[entityIndex] = TRUE;
 					}
 				}
 			}
@@ -74,12 +72,32 @@ uint8_t game_spatial_filter_construction_sites(const GameContext* context, const
 
 uint8_t game_spatial_unit_in_range(const GameUnit * source, const GameUnit* target, uint8_t range) {
 	if(range == 0) return FALSE;
-	int sourceTileRadius = source->tileSize / 2;
-	int targetTileRadius = target->tileSize / 2;
-	int xDist = (source->x + sourceTileRadius) - (target->x + targetTileRadius);
-	int yDist = (source->y + sourceTileRadius) - (target->y + targetTileRadius);
-	int expandedRange = range + sourceTileRadius + targetTileRadius;
-	return expandedRange * expandedRange >= (xDist * xDist + yDist * yDist);
+	// If the range is 1, we do a bounding box check, otherwise we do a distance check
+	if(range == 1) {
+		int sourceMinX = clamp(source->x - 1, BOARD_X_MIN, BOARD_X_MAX);
+		int sourceMaxX = clamp(source->x + source->tileSize, BOARD_X_MIN, BOARD_X_MAX);
+		int sourceMinY = clamp(source->y - 1, BOARD_Y_MIN, BOARD_Y_MAX);
+		int sourceMaxY = clamp(source->y + source->tileSize, BOARD_Y_MIN, BOARD_Y_MAX);
+		int targetMinX = clamp(target->x, BOARD_X_MIN, BOARD_X_MAX);
+		int targetMaxX = clamp(target->x + target->tileSize - 1, BOARD_X_MIN, BOARD_X_MAX);
+		int targetMinY = clamp(target->y, BOARD_Y_MIN, BOARD_Y_MAX);
+		int targetMaxY = clamp(target->y + target->tileSize - 1, BOARD_Y_MIN, BOARD_Y_MAX);
+		// Return true if the bounding boxes overlap
+		return !(sourceMaxX < targetMinX || sourceMinX > targetMaxX
+			|| sourceMaxY < targetMinY || sourceMinY > targetMaxY);
+	}
+	else {
+		int sourceTileHalfSize = (source->tileSize - 1) / 2;
+		int targetTileHalfSize = (target->tileSize - 1) / 2;
+		int sourceCenterX = source->x + sourceTileHalfSize;
+		int sourceCenterY = source->y + sourceTileHalfSize;
+		int targetCenterX = target->x + targetTileHalfSize;
+		int targetCenterY = target->y + targetTileHalfSize;
+		int dx = abs(sourceCenterX - targetCenterX);
+		int dy = abs(sourceCenterY - targetCenterY);
+		int expandedRange = range + sourceTileHalfSize + targetTileHalfSize;
+		return expandedRange * expandedRange >= dx * dx + dy * dy;
+	}
 }
 
 uint8_t game_spatial_target_in_range(const GameUnit * source, uint16_t targetX, uint16_t targetY, uint8_t range) {
