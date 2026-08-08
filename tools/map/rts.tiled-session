@@ -98,11 +98,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
-            "selectedLayer": 1,
+            "scale": 0.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 54,
-                "y": 221.5
+                "x": 522,
+                "y": 373
             }
         },
         "maps/Adventure/1-villain.tmx": {
@@ -117,11 +117,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 506.66666666666663,
-                "y": 231.66666666666663
+                "x": 546.6666666666666,
+                "y": 492.6666666666667
             }
         },
         "maps/Adventure/3-mission.tmx": {
@@ -136,30 +136,30 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.33,
-            "selectedLayer": 1,
+            "scale": 0.75,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": -433.33333333333326,
-                "y": 540.9090909090908
+                "x": 454.66666666666663,
+                "y": 460.66666666666674
             }
         },
         "maps/Initial/2-archers.tmx": {
             "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 324,
-                "y": 581
+                "x": 32,
+                "y": 405
             }
         },
         "maps/Initial/3-knights.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 378,
-                "y": 764.5
+                "x": 441.3333333333333,
+                "y": 753.9999999999999
             }
         },
         "maps/Initial/4-mages.tmx": {
@@ -171,22 +171,22 @@
             }
         },
         "maps/Initial/5-turrets.tmx": {
-            "scale": 0.75,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 382.66666666666663,
-                "y": 757.9999999999999
+                "x": 432,
+                "y": 685.5
             }
         },
         "maps/Main/1-soldiers.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
-            "selectedLayer": 1,
+            "scale": 0.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 509.3333333333333,
-                "y": 372.66666666666674
+                "x": 294,
+                "y": 607
             }
         },
         "maps/Main/2-archers.tmx": {
@@ -201,11 +201,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 482,
-                "y": 655
+                "x": 385.3333333333333,
+                "y": 491.33333333333326
             }
         },
         "maps/Main/3-knights.tmx": {
@@ -220,19 +220,22 @@
             }
         },
         "maps/Main/3a-north.tmx": {
-            "scale": 0.7904296875,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.75,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 180.9142574746726,
-                "y": 511.746973066469
+                "x": 401.3333333333333,
+                "y": 508.6666666666667
             }
         },
         "maps/Main/3b-south.tmx": {
-            "scale": 0.47592773437499997,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.6828767825997,
-                "y": 511.6322971170616
+                "x": 523,
+                "y": 538.5
             }
         },
         "maps/Main/4-mages.tmx": {
