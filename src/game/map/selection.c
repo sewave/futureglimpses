@@ -30,7 +30,7 @@ typedef enum {
 } SelectionModeEnum;
 
 static uint16_t lastSelectionSlotSelectedTime = 0;
-static const uint16_t selectionSlotCooldown = SEC_TO_FRAMES(0.3);
+static const uint16_t selectionSlotCooldown = SEC_TO_FRAMES(0.6);
 
 static void start_slot_selection_time() {
 	lastSelectionSlotSelectedTime = 1;
