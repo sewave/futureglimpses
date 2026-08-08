@@ -237,7 +237,7 @@ static void game_update(GameContext *context) {
 	#ifdef CHEATS_ENABLED
 	if(keyboard_is_key_pressed(KEY_G)) context->areCheatsEnabled ^= TRUE;
 	if(context->areCheatsEnabled) {
-		if(keyboard_is_key_pressed(KEY_F12)) {
+		if(keyboard_is_key_pressed(KEY_F9)) {
 			// Kill all computer units, so win the game
 			for(int i = 0; i < context->activeUnitCount; i++) {
 				GameUnit *unit = context->activeUnits[i];
@@ -249,7 +249,7 @@ static void game_update(GameContext *context) {
 			}
 		}
 
-		if(keyboard_is_key_pressed(KEY_F10)) {
+		if(keyboard_is_key_pressed(KEY_F7)) {
 			for(int x = 0; x < BOARD_WIDTH; x++) {
 				for(int y = 0; y < BOARD_HEIGHT; y++) {
 					if(context->boardExploration[x][y] == BOARD_UNEXPLORED) {
@@ -270,7 +270,7 @@ static void game_update(GameContext *context) {
 		if (keyboard_is_key_pressed(KEY_9)) {
 			resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 		}
-		if (keyboard_is_key_pressed(KEY_F11)) nextState = GAME_STATE_LOAD_MAP;
+		if (keyboard_is_key_pressed(KEY_F8)) nextState = GAME_STATE_LOAD_MAP;
 		if (keyboard_is_key_pressed(KEY_DEL)) {
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
