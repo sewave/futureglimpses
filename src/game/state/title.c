@@ -613,6 +613,7 @@ void handle_title_init(GameContext *context) {
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
 	game_snd_play_music(GAME_MUSIC_MENUS);
 	timer_set_speed(TIMER_SPEED_NORMAL);
+	context->mapFolderPath = NULL;
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 

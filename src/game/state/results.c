@@ -6,6 +6,7 @@
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
 #include "game/map/map_code.h"
+#include "game/scenario/scenario_select_map.h"
 
 #define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
 #define CONTROLLER_STATS 8
@@ -34,17 +35,26 @@ typedef struct {
 
 static ResultNumber resultNumbers[UNIT_CONTROLLERS_COUNT][CONTROLLER_STATS];
 static uint8_t goTitle;
+static uint8_t goCampaign;
+static uint8_t canGoCampaign;
 static char resultTitle[64];
 
 static void return_to_title(GameContext *context) {
     goTitle = TRUE;
 }
 
+static void return_to_campaign(GameContext *context) {
+    goCampaign = TRUE;
+}
+
 static char* get_result_text(const GameContext *context) {
     return resultTitle;
 }
 
-#define MENU_ELEMENTS 9
+#define MENU_ELEMENTS 8
+#define RETURN_TITLE_ELEMENTS 1
+#define RETURN_TITLE_OR_CAMPAIGN_ELEMENTS 2
+
 #define MENU_BUTTON_WIDTH 120
 #define MENU_BUTTON_HEIGHT 18
 #define MENU_BUTTON_X 100
@@ -58,21 +68,6 @@ static GuiElement menu[MENU_ELEMENTS] = {
 		.type = GUI_ELEMENT_IMAGE,
 		.typed = { .image = { .bitmap = &resultsBackground } }
 	},
-    {
-        .x = MENU_BUTTON_X, .y = MENU_BUTTON_Y, .z = 1,
-        .type = GUI_ELEMENT_BUTTON,
-        .textId = GAME_TEXT_ID_MENU_RETURN_TITLE,
-        .textColor = PAL_COLOR_WHITE,
-        .textBackground = TRANSPARENT_INDEX,
-		.shadowTextColor = PAL_COLOR_BLACK,
-        .hotkey = KEY_T,
-        .typed = {
-            .button = {
-                .size = { .width = MENU_BUTTON_WIDTH, .height = MENU_BUTTON_HEIGHT },
-                .action = return_to_title
-            }
-        }
-    },
 	{
 		.x = 0, .y = 10, .z = 5,
 		.type = GUI_ELEMENT_CUSTOM_TEXT,
@@ -137,7 +132,61 @@ static GuiElement menu[MENU_ELEMENTS] = {
 	},
 };
 
+
+static GuiElement returnTitle[RETURN_TITLE_ELEMENTS] = {
+    {
+        .x = MENU_BUTTON_X, .y = MENU_BUTTON_Y, .z = 1,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN_TITLE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+        .hotkey = KEY_T,
+        .typed = {
+            .button = {
+                .size = { .width = MENU_BUTTON_WIDTH, .height = MENU_BUTTON_HEIGHT },
+                .action = return_to_title
+            }
+        }
+    }
+};
+
+static GuiElement returnTitleOrCampaign[RETURN_TITLE_OR_CAMPAIGN_ELEMENTS] = {
+    {
+        .x = 20, .y = MENU_BUTTON_Y, .z = 2,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN_TITLE,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+        .hotkey = KEY_T,
+        .typed = {
+            .button = {
+                .size = { .width = MENU_BUTTON_WIDTH, .height = MENU_BUTTON_HEIGHT },
+                .action = return_to_title
+            }
+        }
+    },
+    {
+        .x = 180, .y = MENU_BUTTON_Y, .z = 3,
+        .type = GUI_ELEMENT_BUTTON,
+        .textId = GAME_TEXT_ID_MENU_RETURN_CAMPAIGN,
+        .textColor = PAL_COLOR_WHITE,
+        .textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+        .hotkey = KEY_C,
+        .typed = {
+            .button = {
+                .size = { .width = MENU_BUTTON_WIDTH, .height = MENU_BUTTON_HEIGHT },
+                .action = return_to_campaign
+            }
+        }
+    },
+};
+
 static GuiScreen guiScreen = {.elements = menu, .elementsCount = MENU_ELEMENTS};
+static GuiScreen returnTitleScreen = {.elements = returnTitle, .elementsCount = RETURN_TITLE_ELEMENTS};
+static GuiScreen returnTitleOrCampaignScreen = {.elements = returnTitleOrCampaign, .elementsCount = RETURN_TITLE_OR_CAMPAIGN_ELEMENTS};
 
 void handle_results_init(GameContext *context) {
     resultsBackground = load_bitmap(RESULTS_BACKGROUND_PATH, NULL);
@@ -245,25 +294,43 @@ void handle_results_init(GameContext *context) {
     sprintf(resultTitle, resultText, context->map.title);
     timer_set_speed(TIMER_SPEED_NORMAL);
 
+    canGoCampaign = FALSE;
     if(context->gameResult == GAME_RESULT_VICTORY) {
         char fileFolder[512];
         get_parent_directory(context->mapPath, fileFolder, strlen(context->mapPath));
-        MapCodes mapCodes = (MapCodes) { .codes= & context->map.winCode, 1 };
-        map_code_merge_all(fileFolder, &mapCodes);
+        MapCodes newMapCode = (MapCodes) { .codes= & context->map.winCode, 1 };
+        if(!map_code_is_master(&context->map.winCode)
+            && strcmp(fileFolder, MAPS_FOLDER) != 0) canGoCampaign = TRUE;
+        map_code_merge_all(fileFolder, &newMapCode);
+        context->mapFolderPath = strdup(fileFolder);
     }
 
-	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
     goTitle = FALSE;
+    goCampaign = FALSE;
+	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 
 GameStateEnum handle_results_update(GameContext *context) {
-    game_gui_handle(context, &guiScreen);
+    if(canGoCampaign) {
+        game_gui_handle(context, &returnTitleOrCampaignScreen);
+    }
+    else {
+        game_gui_handle(context, &returnTitleScreen);
+    }
+    if(goCampaign) return GAME_STATE_SCENARIO_SELECT;
     if(goTitle) return GAME_STATE_TITLE;
     return GAME_STATE_RESULTS;
 }
 
 void handle_results_render(GameContext *context, RenderQueue *renderQueue) {
     game_gui_render_queue_submit(context, renderQueue, &guiScreen);
+
+    if(canGoCampaign) {
+        game_gui_render_queue_submit(context, renderQueue, &returnTitleOrCampaignScreen);
+    }
+    else {
+        game_gui_render_queue_submit(context, renderQueue, &returnTitleScreen);
+    }
     render_queue_submit_mouse(context, renderQueue);
     for(int i = 0; i < UNIT_CONTROLLERS_COUNT; i++) {
         for(int j = 0; j < CONTROLLER_STATS; j++) {

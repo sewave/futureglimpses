@@ -63,6 +63,7 @@ Menú de Opciones
 Ju^004g^001abilidad
 Volve^004r^001 al Juego
 Ir al ^004T^001ítulo
+Ir a la ^004C^001ampaña
 Salir al S^004O^001
 Jugabilidad
 Ver barras de vida:

@@ -556,7 +556,13 @@ void handle_scenario_select_init(GameContext *context) {
 	}
 	
 	game_mouse_set_cursor_state(MOUSE_CURSOR_IDLE);
-	init_scenarios_folder(MAPS_FOLDER);
+	if(context->mapFolderPath) {
+		init_scenarios_folder(context->mapFolderPath);
+		free(context->mapFolderPath);
+		context->mapFolderPath = NULL;
+	} else {
+		init_scenarios_folder(MAPS_FOLDER);
+	}
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 }
 

@@ -342,6 +342,7 @@ typedef struct {
 	GameResultEnum gameResult;
 	GameMap map;
 	char* mapPath;
+	char* mapFolderPath;
 	Position targetPosition;
 	uint8_t targetBlinkTime;
 	int blinkColor;

@@ -63,6 +63,7 @@ Options Menu
 ^004G^001ameplay
 ^004R^001eturn to Game
 Go to ^004T^001itle
+Go to ^004C^001ampaign
 Exit to ^004O^001S
 Gameplay
 Show life bars:
