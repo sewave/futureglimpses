@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="227">
  <editorsettings>
-  <export target="../../../../assets/map/initial/init4.fgm" format="Future Glimpses map (*.fgm)"/>
+  <export target="../../../../assets/map/main/main3b.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
  <properties>
-  <property name="AI_MODE" type="int" propertytype="AI_MODE" value="0"/>
+  <property name="AI_MODE" type="int" propertytype="AI_MODE" value="2"/>
   <property name="ENABLE_BARRACKS" type="bool" value="true"/>
   <property name="ENABLE_BLACKSMITH" type="bool" value="true"/>
   <property name="ENABLE_FARM" type="bool" value="true"/>
-  <property name="ENABLE_STABLES" type="bool" value="true"/>
+  <property name="ENABLE_STABLES" type="bool" value="false"/>
   <property name="ENABLE_TOWER" type="bool" value="true"/>
   <property name="ENABLE_TURRET" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_ARCHER" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
-  <property name="MAP_CODE" value="4ZXG4SK3"/>
-  <property name="MSG_DESCRIPTION" value="Crea una torre y desde ella magos para frenar las torretas de los magos enemigos."/>
+  <property name="MAP_CODE" value="7BJKSFUH"/>
+  <property name="MSG_DESCRIPTION" value="Por el sur tienes una torre de magos, úsalos para destruir el poblado enemigo."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
-  <property name="MSG_TITLE" value="4.Magos"/>
-  <property name="MSG_WIN" value="Ya dominas a tus magos."/>
+  <property name="MSG_TITLE" value="3b.Camino del sur"/>
+  <property name="MSG_WIN" value="Has conquistado esta tierra. Ahora te reunes con tus tropas para un asalto a una capital enemiga."/>
   <property name="PEACE_TIME" type="int" value="0"/>
-  <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
+  <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
-  <property name="RES_WOOD_COMPUTER" type="int" value="0"/>
+  <property name="RES_WOOD_COMPUTER" type="int" value="498"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
   <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_ARCHER_PLAYER" type="bool" value="false"/>
@@ -33,7 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
-  <property name="WIN_CODE" value="32FQKRXA"/>
+  <property name="WIN_CODE" value="7T5AYTVU"/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

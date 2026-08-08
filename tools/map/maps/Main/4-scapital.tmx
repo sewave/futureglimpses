@@ -15,7 +15,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
-  <property name="MAP_CODE" value="32FQKRXA"/>
+  <property name="MAP_CODE" value="7T5AYTVU"/>
   <property name="MSG_DESCRIPTION" value="Crea torretas para defenderte de los enemigos que vendrán a por ti. Usa tus caballeros para repeler a los magos."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="5.Torretas"/>
@@ -33,7 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
-  <property name="WIN_CODE" value=""/>
+  <property name="WIN_CODE" value="UNZEF5AC"/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

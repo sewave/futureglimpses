@@ -118,7 +118,6 @@
   <object id="175" template="../../buildings/C_Farm.tx" x="768" y="960"/>
   <object id="176" template="../../buildings/C_Farm.tx" x="800" y="960"/>
   <object id="177" template="../../buildings/C_Farm.tx" x="800" y="928"/>
-  <object id="178" template="../../buildings/C_Farm.tx" x="768" y="928"/>
   <object id="179" template="../../units/C_Soldier.tx" x="608" y="880"/>
   <object id="181" template="../../units/C_Soldier.tx" x="608" y="912"/>
   <object id="182" template="../../units/C_Soldier.tx" x="688" y="784"/>
