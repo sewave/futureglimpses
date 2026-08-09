@@ -117,19 +117,22 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 546.6666666666666,
-                "y": 492.6666666666667
+                "x": -20,
+                "y": 207.66666666666663
             }
         },
         "maps/Adventure/3-mission.tmx": {
-            "scale": 0.7236328125,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 512.6909581646423,
-                "y": 550.693657219973
+                "x": 800.6666666666666,
+                "y": 297.66666666666663
             }
         },
         "maps/Initial/1-starting.tmx": {
@@ -166,7 +169,7 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 312,
+                "x": 311.99999999999994,
                 "y": 740.6666666666667
             }
         },
@@ -204,7 +207,7 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 385.3333333333333,
+                "x": 385.33333333333337,
                 "y": 491.33333333333326
             }
         },
@@ -223,19 +226,30 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 401.3333333333333,
-                "y": 508.6666666666667
-            }
-        },
-        "maps/Main/3b-south.tmx": {
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 523,
-                "y": 538.5
+                "x": 616,
+                "y": 441.5
+            }
+        },
+        "maps/Main/3b-south.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 466,
+                "y": 435
+            }
+        },
+        "maps/Main/4-bcity.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 341,
+                "y": 275.8333333333333
             }
         },
         "maps/Main/4-mages.tmx": {
@@ -250,11 +264,22 @@
             }
         },
         "maps/Main/4-scapital.tmx": {
-            "scale": 0.47592773437499997,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 223,
+                "y": 653.5
+            }
+        },
+        "maps/Main/5-bcapital.tmx": {
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.6828767825997,
-                "y": 511.6322971170616
+                "x": 538.6666666666666,
+                "y": 697.9999999999999
             }
         },
         "maps/Main/5-turrets.tmx": {
@@ -285,7 +310,7 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 603.0303030303031,
+                "x": 603.030303030303,
                 "y": 1153.030303030303
             }
         },
@@ -544,7 +569,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/main",
+    "last.exportedFilePath": "C:/dev/workspace/allegro/futureglimpses/assets/map/advent",
     "last.externalTilesetPath": "C:/dev/workspace/allegro/futureglimpses/tools/map",
     "last.imagePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
     "last.objectTemplatePath": "C:/dev/workspace/allegro/futureglimpses/tools/map/buildings",
@@ -564,18 +589,18 @@
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "maps/Main/3b-south.tmx",
-        "maps/clash.tmx",
-        "maps/biclash.tmx",
-        "maps/updown.tmx",
-        "maps/waves.tmx",
-        "maps/Main/4-scapital.tmx",
+        "maps/Adventure/1-hero.tmx",
         "maps/Main/2-blacksmith.tmx",
         "maps/Main/1-soldiers.tmx",
-        "maps/Main/5-turrets.tmx",
-        "maps/Main/3a-north.tmx",
-        "maps/Main/3-knights.tmx",
-        "maps/base.tmx"
+        "maps/Initial/5-turrets.tmx",
+        "maps/Main/4-bcity.tmx",
+        "maps/clash.tmx",
+        "maps/base.tmx",
+        "maps/Initial/4-mages.tmx",
+        "maps/Main/4-scapital.tmx",
+        "maps/Main/5-bcapital.tmx",
+        "maps/Main/3b-south.tmx",
+        "maps/Main/3a-north.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
