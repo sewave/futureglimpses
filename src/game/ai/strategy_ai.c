@@ -142,8 +142,15 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 		int gold = context->resources[UNIT_CONTROLLER_AI].uiQuantity[RESOURCE_TYPE_GOLD];
 		// Reserve at least worker cost
 		if (gold >= workerGoldCost + buildingGoldCost) {
-			building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
-			context->aiData.rebuildCooldown = REBUILD_COOLDOWN;
+			// If the place is farther than the unit sight, move unit first
+			if(builder->sightRange < abs(builder->x - buildingToRebuild->x) || builder->sightRange < abs(builder->y - buildingToRebuild->y)) {
+				game_unit_command_move(builder, NULL, buildingToRebuild->x, buildingToRebuild->y);
+			}
+			else {
+				// If we are close enough, we can place the building
+				building_place_building(context, buildingToRebuild->type, UNIT_CONTROLLER_AI, buildingToRebuild->x, buildingToRebuild->y);
+				context->aiData.rebuildCooldown = REBUILD_COOLDOWN;
+			}
 		}
 	}
 
@@ -153,8 +160,8 @@ static void game_strategy_ai_builder_workers(GameContext *context) {
 	if (buildingToWork) {
 		// Send the first workers to work
 		int assignedWorkers = game_strategy_ai_count_computer_workers_repairing(context);
-		// Max 20% of workers repairing
-		int maxWorkers = context->aiData.desiredWorkers / 5;
+		// Max 10% of workers repairing
+		int maxWorkers = context->aiData.desiredWorkers / 10;
 		if(maxWorkers < 1) maxWorkers = 1;
 		GameUnit **activeList = context->activeUnits;
 		for (int i = 0; i < context->activeUnitCount && assignedWorkers < maxWorkers; i++, activeList++) {
@@ -381,7 +388,7 @@ void game_strategy_ai_init(GameContext *context) {
 	context->aiData.currentWaveUnits = FIRST_WAVE_UNITS;
 	context->aiData.state = AI_STATE_CREATE_WORKERS;
 	context->aiData.initialFood = context->resources[UNIT_CONTROLLER_AI].quantity[RESOURCE_TYPE_MAX_FOOD];
-	context->aiData.desiredWorkers = context->aiData.initialFood / 4; // 25% must be workers
+	context->aiData.desiredWorkers = context->aiData.initialFood / 3; // 33% must be workers
 	context->aiData.lastFoundUnits = 0;
 	context->aiData.trainRanged = FALSE;
 	game_strategy_ai_scan_buildings(context);
