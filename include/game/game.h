@@ -47,6 +47,7 @@
 #define MAX_AI_HANDLED_BUILDINGS 256
 
 #define PATHFINDING_HISTORY_SIZE 16
+#define MAX_LAZY_WORKERS 10
 
 typedef struct {
 	uint32_t quantity[RESOURCE_TYPES_COUNT];
@@ -131,6 +132,7 @@ typedef struct {
 	uint8_t carriedResourceQty;
 	ResourceTypeEnum carriedResourceType;
 	WorkerJobEnum job;
+	uint32_t idleCounter;
 } WorkerData;
 
 typedef struct {
@@ -349,6 +351,8 @@ typedef struct {
 	AIData aiData;
 	PlayerAttackedData playerAttackedData;
 	GameUnitUpgrade upgrades[UNIT_CONTROLLERS_COUNT][UNIT_TYPE_NUMBER];
+	GameUnit *lazyWorkers[MAX_LAZY_WORKERS];
+	uint8_t lazyWorkersCount;
 } GameContext;
 
 typedef GameStateEnum (*StateUpdateFunction)(GameContext *);

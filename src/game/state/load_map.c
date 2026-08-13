@@ -144,6 +144,7 @@ static InitializationStatusEnum load_map(GameContext *context, const char * file
 
 	game_map_free_data(map);
 	context->targetBlinkTime = 0;
+	context->lazyWorkersCount = 0;
 
 	return INITIALIZATION_OK;
 }

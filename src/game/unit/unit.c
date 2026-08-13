@@ -394,6 +394,7 @@ GameUnit *game_unit_spawn(GameContext *context, UnitTypeEnum type, ControllerEnu
 		workerData->carriedResourceQty = 0;
 		workerData->workplace = (Position) {.x = NO_TARGET_POSITION, .y = NO_TARGET_POSITION};
 		workerData->job = WORKER_JOB_NONE;
+		workerData->idleCounter = 0;
 	}
 
 	if(unit->isBuilding) {

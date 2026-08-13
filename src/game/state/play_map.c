@@ -17,6 +17,7 @@
 #include "game/video/render.h"
 #include "game/video/gfx.h"
 #include "game/mouse/game_mouse.h"
+#include "game/map/lazy_workers.h"
 
 #define RESULT_MESSAGE_X_OFFSET 5
 #define TOOLTIP_TEXT_X_OFFSET 5
@@ -290,7 +291,10 @@ static void game_update(GameContext *context) {
 		building_handle_placing_input(context);
 	}
 	else {
-		game_selection_handle_input(context);
+		// Lazy workers is on top of selection, so we handle it first
+		if(!lazy_workers_handle_input(context)) {
+			game_selection_handle_input(context);
+		}
 	}
 	
 	int mouseX = context->mouseStatus.x;
@@ -361,6 +365,7 @@ static void game_update(GameContext *context) {
 	game_strategy_ai_execute(context);
 	resource_update_ui_quantities(context);
 	message_update();
+	lazy_workers_update(context);
 
 	// Win condition
 	// If active units are of only one controller, we go to load map again
@@ -410,6 +415,7 @@ void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 	game_gui_render_queue_submit(context, renderQueue, &guiScreenPlay);
 	render_tooltip(context, renderQueue);
 	player_attacked_render(&context->playerAttackedData, renderQueue);
+	lazy_workers_render(context, renderQueue);
 	switch(context->gameResult) {
 		case GAME_RESULT_ONGOING: {
 			// No result screen, just regular gameplay UI

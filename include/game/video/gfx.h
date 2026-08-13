@@ -57,6 +57,7 @@ SpriteSheet *game_gfx_get_unit_sheet(UnitTypeEnum type, ControllerEnum controlle
 BITMAP *game_gfx_get_overtile(GameOvertileEnum overtile);
 BITMAP *game_gfx_get_menu_back();
 BITMAP *game_gfx_get_resource_hover();
+BITMAP *game_gfx_get_lazy_workers_button();
 RLE_SPRITE *game_gfx_get_cmd_bar_button_icon(CommandBarButtonIconEnum btnType);
 RLE_SPRITE *game_gfx_get_object_sheet_frame(ObjectTypeEnum type, uint8_t frame);
 

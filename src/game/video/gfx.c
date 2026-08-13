@@ -13,6 +13,7 @@
 #define OVERTILES_FILE "assets/gfx/ui/otiles.pcx"
 #define MENU_BACK_FILE "assets/gfx/ui/back/menuback.pcx"
 #define UNIT_ICONS_FILE "assets/gfx/ui/unicons.pcx"
+#define LAZY_WORKERS_BUTTON_FILE "assets/gfx/ui/lazyw.pcx"
 #define RESOURCE_HOVER_FILE "assets/gfx/ui/reshover.pcx"
 #define ICON_WIDTH 8
 #define ICON_HEIGHT 8
@@ -29,6 +30,7 @@ static BITMAP *tileSet;
 static BITMAP *tileSetColors;
 static BITMAP *menuBack;
 static BITMAP *resHover;
+static BITMAP *lazyWorkersButton;
 
 static const char *spriteSheetFilenamesBlue[UNIT_TYPE_NUMBER] = {
 		[UNIT_TYPE_WORKER]		= "assets/gfx/unit/workerb.pcx",
@@ -220,6 +222,10 @@ InitializationStatusEnum game_gfx_load_all() {
 
 	resHover = load_bitmap(RESOURCE_HOVER_FILE, NULL);
 	if (!resHover) return INITIALIZATION_ERROR;
+	common_print_load_step(cursorPos.x, cursorPos.y);
+
+	lazyWorkersButton = load_bitmap(LAZY_WORKERS_BUTTON_FILE, NULL);
+	if (!lazyWorkersButton) return INITIALIZATION_ERROR;
 	common_print_ok();
 
 	return INITIALIZATION_OK;
@@ -314,4 +320,8 @@ BITMAP *game_gfx_get_resource_hover() {
 
 RLE_SPRITE *game_gfx_get_cmd_bar_button_icon(CommandBarButtonIconEnum btnType) {
 	return cmdBarButtonIcons[btnType];
+}
+
+BITMAP *game_gfx_get_lazy_workers_button() {
+	return lazyWorkersButton;
 }
