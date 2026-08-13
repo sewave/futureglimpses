@@ -140,6 +140,7 @@ static void game_unit_ai_move(GameContext *context, GameUnit *unit) {
 			if (destination && destination->type == UNIT_TYPE_CITY_HALL && game_spatial_unit_around_position(context, destination->id, unit->x, unit->y)) {
 				resource_add_amount(context, unit->controller, workerData->carriedResourceType, workerData->carriedResourceQty);
 				workerData->carriedResourceQty = 0;
+				workerData->idleCounter = 0;
 				if(workerData->workplace.x != NO_TARGET_POSITION && workerData->workplace.y != NO_TARGET_POSITION && !mustWork) {
 					game_unit_command_move(unit, NULL, workerData->workplace.x, workerData->workplace.y);
 					return;

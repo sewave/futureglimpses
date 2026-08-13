@@ -3,16 +3,34 @@
 #include "game/video/gfx.h"
 #include "game/unit/unit.h"
 #include "game/map/selection.h"
+#include "game/sound/game_sound.h"
 
-#define LAZY_WORKER_TIME SEC_TO_FRAMES(5)
+#define LAZY_WORKER_TIME SEC_TO_FRAMES(45)
 #define IDLE_COUNTER_INCREMENT 3
 #define NON_WORKING_COUNTER_INCREMENT 1
 #define LAZY_WORKERS_BUTTON_X 72
 #define LAZY_WORKERS_BUTTON_Y 12
 #define LAZY_WORKERS_BUTTON_WIDTH 40
 #define LAZY_WORKERS_BUTTON_HEIGHT 21
+#define LAZY_WORKERS_BUTTON_Z_ORDER UI_Z_ORDER + 902
+#define LAZY_WORKERS_BUTTON_BORDER_Z_ORDER UI_Z_ORDER + 903
+#define LAZY_WORKERS_BUTTON_TEXT_Z_ORDER UI_Z_ORDER + 904
+#define LAZY_WORKERS_TEXT_X_OFFSET 26
+#define LAZY_WORKERS_TEXT_Y_OFFSET 6
+
 static const char* MAX_WORKERS_MESSAGE = "9+";
 static char lazyWorkerQuantityString[8];
+
+static uint8_t is_mouse_in_lazy_workers_button(GameContext *context) {
+    return context->mouseStatus.x >= LAZY_WORKERS_BUTTON_X &&
+           context->mouseStatus.x <= LAZY_WORKERS_BUTTON_X + LAZY_WORKERS_BUTTON_WIDTH &&
+           context->mouseStatus.y >= LAZY_WORKERS_BUTTON_Y &&
+           context->mouseStatus.y <= LAZY_WORKERS_BUTTON_Y + LAZY_WORKERS_BUTTON_HEIGHT;
+}
+
+static uint8_t is_mouse_pressed_in_lazy_workers_button(GameContext *context) {
+    return context->mouseStatus.isLeftPressed && is_mouse_in_lazy_workers_button(context);
+}
 
 void lazy_workers_update(GameContext *context) {
     context->lazyWorkersCount = 0;
@@ -43,17 +61,10 @@ void lazy_workers_update(GameContext *context) {
     }
 }
 
-static uint8_t is_mouse_pressed_in_lazy_workers_button(GameContext *context) {
-    return context->mouseStatus.isLeftPressed &&
-           context->mouseStatus.x >= LAZY_WORKERS_BUTTON_X &&
-           context->mouseStatus.x <= LAZY_WORKERS_BUTTON_X + LAZY_WORKERS_BUTTON_WIDTH &&
-           context->mouseStatus.y >= LAZY_WORKERS_BUTTON_Y &&
-           context->mouseStatus.y <= LAZY_WORKERS_BUTTON_Y + LAZY_WORKERS_BUTTON_HEIGHT;
-}
-
 uint8_t lazy_workers_handle_input(GameContext *context) {
     if(context->lazyWorkersCount == 0) return FALSE;
     if(keyboard_is_key_pressed(KEY_F1) || is_mouse_pressed_in_lazy_workers_button(context)) {
+        game_snd_play_sound(GAME_SOUND_CLICK);
         GameUnit *selected = NULL;
         if(context->selectedUnitCount == 1) {
             selected = game_unit_get_by_id(context, context->selectedUnits[0]);
@@ -98,9 +109,18 @@ void lazy_workers_render(GameContext *context, RenderQueue *renderQueue) {
     }
     BITMAP *lazyWorkersButton = game_gfx_get_lazy_workers_button();
     if (lazyWorkersButton) {
-        render_queue_submit_solid(renderQueue, UI_Z_ORDER + 900, lazyWorkersButton, LAZY_WORKERS_BUTTON_X, LAZY_WORKERS_BUTTON_Y);
+        render_queue_submit_solid(renderQueue, LAZY_WORKERS_BUTTON_Z_ORDER,
+            lazyWorkersButton, LAZY_WORKERS_BUTTON_X, LAZY_WORKERS_BUTTON_Y);
+    }
+    // If the mouse is hovering, draw a yellow rectagle around
+    if (is_mouse_in_lazy_workers_button(context) && !context->mouseStatus.isLeftDown) {
+        render_queue_submit_rect(renderQueue, LAZY_WORKERS_BUTTON_BORDER_Z_ORDER, LAZY_WORKERS_BUTTON_X, LAZY_WORKERS_BUTTON_Y,
+                           LAZY_WORKERS_BUTTON_X + LAZY_WORKERS_BUTTON_WIDTH - 1,
+                           LAZY_WORKERS_BUTTON_Y + LAZY_WORKERS_BUTTON_HEIGHT - 1, PAL_COLOR_YELLOW);
     }
     // Here you would add code to render lazyWorkerQuantityString to the screen using your rendering system, for example:
-    render_queue_submit_text(renderQueue, UI_Z_ORDER + 901, context->gameFont, lazyWorkerQuantityString,
-										LAZY_WORKERS_BUTTON_X + 27, LAZY_WORKERS_BUTTON_Y + 5, PAL_COLOR_BLACK, TRANSPARENT_INDEX);
+    render_queue_submit_text(renderQueue, LAZY_WORKERS_BUTTON_TEXT_Z_ORDER, context->gameFont, lazyWorkerQuantityString,
+										LAZY_WORKERS_BUTTON_X + LAZY_WORKERS_TEXT_X_OFFSET,
+                                        LAZY_WORKERS_BUTTON_Y + LAZY_WORKERS_TEXT_Y_OFFSET,
+                                        PAL_COLOR_BLACK, TRANSPARENT_INDEX);
 }
