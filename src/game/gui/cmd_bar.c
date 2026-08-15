@@ -888,7 +888,7 @@ void game_cmd_bar_handle_buttons(GameContext *context) {
 	if (cursorState == MOUSE_CURSOR_ATTACK || cursorState == MOUSE_CURSOR_TARGET) {
 		context->cmdBarButtons[buttonIndex++] = CANCEL_CMD_BUTTON;
 	} else {
-		if (context->selectedUnitCount == 1) {
+		if (context->selectedUnitCount == 1 || game_selection_all_player_workers_selected(context)) {
 			GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[0]);
 			if (unit) {
 				if (unit->isBuilding || unit->type == UNIT_TYPE_WORKER) {

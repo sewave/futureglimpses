@@ -444,3 +444,14 @@ uint8_t game_selection_one_own_building_selected(GameContext* context) {
 	if (unit && unit->isActive && unit->controller == UNIT_CONTROLLER_PLAYER && unit->isBuilding) return TRUE;
 	return FALSE;	
 }
+
+uint8_t game_selection_all_player_workers_selected(GameContext* context) {
+	if (context->selectedUnitCount == 0) return FALSE;
+	for (int i = 0; i < context->selectedUnitCount; i++) {
+		GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);
+		if (!unit || !unit->isActive || unit->controller != UNIT_CONTROLLER_PLAYER || unit->type != UNIT_TYPE_WORKER) {
+			return FALSE;
+		}
+	}
+	return TRUE;
+}

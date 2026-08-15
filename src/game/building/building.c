@@ -156,12 +156,14 @@ void building_handle_placing_input(GameContext *context) {
 				if (building) {
 					if (!keyboard_is_key_down(KEY_LSHIFT) && !keyboard_is_key_down(KEY_RSHIFT)) {
 						context->buildPlacing.state = CMD_BAR_BUILD_STATE_NONE;
-					}
-					// Send selected worker to build it
-					GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[0]);
-					if (worker) {
-						worker->typed.workerData.targetConstruction = building->id;
-						game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
+						// Send selected workers to build it
+						for (int i = 0; i < context->selectedUnitCount; i++) {
+							GameUnit *worker = game_unit_get_by_id(context, context->selectedUnits[i]);
+							if (worker && worker->type == UNIT_TYPE_WORKER) {
+								worker->typed.workerData.targetConstruction = building->id;
+								game_unit_command_move(worker, building, NO_TARGET_POSITION, NO_TARGET_POSITION);
+							}
+						}
 					}
 				}
 			} else {

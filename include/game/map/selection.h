@@ -11,5 +11,6 @@ void game_selection_handle_slots(GameContext* context);
 void game_selection_handle_input(GameContext* context);
 uint8_t game_selection_one_enemy_selected(GameContext* context);
 uint8_t game_selection_one_own_building_selected(GameContext* context);
+uint8_t game_selection_all_player_workers_selected(GameContext* context);
 
 #endif /* SELECTION_H */
