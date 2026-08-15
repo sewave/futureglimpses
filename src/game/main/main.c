@@ -99,8 +99,7 @@ int main_init() {
 	readkey();
 
 	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH) != INITIALIZATION_OK) {
-		common_print_ko();
-		printf("Error initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH);
+		printf("\r\nError initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}
 	printf("\n");

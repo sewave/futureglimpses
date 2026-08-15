@@ -20,7 +20,6 @@ static int video_get_color_distance(RGB *source, RGB *target) {
 }
 
 InitializationStatusEnum video_init_system(int width, int height, int depth) {
-	console_printf("\r\nInitializing video...");
 	set_color_depth(depth);
 #ifdef DOS
 	if (set_gfx_mode(GFX_AUTODETECT, width, height, 0, 0) != ALLEGRO_INIT_OK) {
