@@ -86,6 +86,7 @@ Menú (^004F10^001)
 ^004V^001ictoria
 ¡Has sido derrotado!
 ^004D^001errota
+^004R^001eintenta
 Jug^004a^001r
 O^004p^001ciones
 Idioma:

@@ -42,6 +42,11 @@ static void go_results(GameContext* context) {
 	nextState = GAME_STATE_RESULTS;
 }
 
+static void go_retry(GameContext* context) {
+	video_fade_out_init(DEFAULT_FADE_SPEED);
+	nextState = GAME_STATE_LOAD_MAP;
+}
+
 static char* get_win_text(const GameContext* context) {
 	return context->map.win;
 }
@@ -72,9 +77,15 @@ static GuiElement playMenu[PLAY_MENU_ELEMENTS] = {
 
 static BITMAP* menuBack;
 
-#define BUTTON_CONFIRM_RESULT_WIDTH 80
+#define BUTTON_CONFIRM_RESULT_WIDTH 64
 #define BUTTON_CONFIRM_RESULT_X (MENU_BACK_X + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 2)
 #define BUTTON_CONFIRM_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
+
+#define BUTTON_DEFEAT_RESULT_X (MENU_BACK_X - 4 + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 2 - (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 3)
+#define BUTTON_DEFEAT_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
+
+#define BUTTON_RETRY_RESULT_X (MENU_BACK_X + 4 + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 2 + (MENU_BACK_WIDTH - BUTTON_CONFIRM_RESULT_WIDTH) / 3)
+#define BUTTON_RETRY_RESULT_Y (MENU_BACK_Y + MENU_BACK_HEIGHT - BUTTON_HEIGHT - 20)
 
 #define WIN_MENU_ELEMENTS 4
 #define MINIMAP_CENTER_OFFSET_X 8
@@ -126,7 +137,7 @@ static GuiElement winMenu[WIN_MENU_ELEMENTS] = {
 	},
 };
 
-#define LOSE_MENU_ELEMENTS 4
+#define LOSE_MENU_ELEMENTS 5
 
 static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 	{
@@ -158,7 +169,7 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = BUTTON_CONFIRM_RESULT_X, .y = BUTTON_CONFIRM_RESULT_Y, .z = UI_Z_ORDER + 902,
+		.x = BUTTON_DEFEAT_RESULT_X, .y = BUTTON_DEFEAT_RESULT_Y, .z = UI_Z_ORDER + 902,
 		.type = GUI_ELEMENT_BUTTON,
 		.textId = GAME_TEXT_ID_RESULT_DEFEAT_ACCEPT,
 		.textColor = PAL_COLOR_WHITE,
@@ -169,6 +180,21 @@ static GuiElement loseMenu[LOSE_MENU_ELEMENTS] = {
 			.button = {
 				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
 				.action = go_results
+			}
+		}
+	},
+	{
+		.x = BUTTON_RETRY_RESULT_X, .y = BUTTON_RETRY_RESULT_Y, .z = UI_Z_ORDER + 902,
+		.type = GUI_ELEMENT_BUTTON,
+		.textId = GAME_TEXT_ID_RESULT_RETRY_ACCEPT,
+		.textColor = PAL_COLOR_WHITE,
+		.textBackground = TRANSPARENT_INDEX,
+		.shadowTextColor = PAL_COLOR_BLACK,
+		.hotkey = KEY_R,
+		.typed = {
+			.button = {
+				.size = { .width = BUTTON_CONFIRM_RESULT_WIDTH, .height = BUTTON_HEIGHT },
+				.action = go_retry
 			}
 		}
 	},
@@ -271,7 +297,7 @@ static void game_update(GameContext *context) {
 		if (keyboard_is_key_pressed(KEY_9)) {
 			resource_deduct_amount(context, UNIT_CONTROLLER_PLAYER, RESOURCE_TYPE_WOOD, 1000);
 		}
-		if (keyboard_is_key_pressed(KEY_F8)) nextState = GAME_STATE_LOAD_MAP;
+		if (keyboard_is_key_pressed(KEY_F8)) go_retry(context);
 		if (keyboard_is_key_pressed(KEY_DEL)) {
 			for (int i = 0; i < context->selectedUnitCount; i++) {
 				GameUnit *unit = game_unit_get_by_id(context, context->selectedUnits[i]);

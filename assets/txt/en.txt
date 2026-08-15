@@ -86,6 +86,7 @@ Congratulations, you won!
 ^004V^001ictory
 You were defeatted!
 ^004D^001efeat
+^004R^001etry
 Pl^004a^001y
 O^004p^001tions
 Language:
