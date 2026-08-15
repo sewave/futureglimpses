@@ -295,14 +295,16 @@ void handle_results_init(GameContext *context) {
     timer_set_speed(TIMER_SPEED_NORMAL);
 
     canGoCampaign = FALSE;
+    char fileFolder[512];
+    get_parent_directory(context->mapPath, fileFolder, strlen(context->mapPath));
+    if(strcmp(fileFolder, MAPS_FOLDER) != 0
+        && (!map_code_is_master(&context->map.winCode) || context->gameResult == GAME_RESULT_DEFEAT)) {
+            canGoCampaign = TRUE;
+            context->mapFolderPath = strdup(fileFolder);
+        } 
     if(context->gameResult == GAME_RESULT_VICTORY) {
-        char fileFolder[512];
-        get_parent_directory(context->mapPath, fileFolder, strlen(context->mapPath));
         MapCodes newMapCode = (MapCodes) { .codes= & context->map.winCode, 1 };
-        if(!map_code_is_master(&context->map.winCode)
-            && strcmp(fileFolder, MAPS_FOLDER) != 0) canGoCampaign = TRUE;
         map_code_merge_all(fileFolder, &newMapCode);
-        context->mapFolderPath = strdup(fileFolder);
     }
 
     goTitle = FALSE;
