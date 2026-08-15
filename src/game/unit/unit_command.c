@@ -26,7 +26,7 @@ void game_unit_command_move_player(GameContext *context, GameUnit *unit, GameUni
 	game_unit_command_move(unit, target, x, y);
 	if (unit->isBuilding) {
 		if (unit->trainsUnits) {
-			set_blink_position(context, x, y, PAL_COLOR_GREEN);
+			set_blink_position(context, x, y, PAL_COLOR_VIOLET);
 			game_snd_play_sound(GAME_SOUND_BUILDING_BUILD);
 		}
 	} else {

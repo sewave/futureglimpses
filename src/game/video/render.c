@@ -94,7 +94,7 @@ void render_queue_add_active_units(GameContext *context, RenderQueue *renderQueu
 											targetXPos, targetYPos,
 											targetXPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF ,
 											targetYPos + SELECT_CUBE_SIZE - SELECT_CUBE_OFF ,
-											PAL_COLOR_GREEN);
+											PAL_COLOR_VIOLET);
 			}
 		}
 		if (unit->x <= cameraMaxX && unit->x >= cameraMinX - unitSize &&
