@@ -104,11 +104,15 @@ static char * get_scenario_selected_description(const GameContext *context) {
 	}
 }
 
-static void folders_action(GameContext *context) {
+static void rows_action(GameContext *context) {
 	switch (mapList->entries[scenarioSelected].type) {
 		case MAP_ENTRY_FOLDER_UP:
 		case MAP_ENTRY_FOLDER: {
 			state = SCENARIO_SELECT_RELOAD_STATE;
+			break;
+		}
+		case MAP_ENTRY_FILE: {
+			state = SCENARIO_SELECT_GO_STATE;
 			break;
 		}
 		default: {
@@ -181,7 +185,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 				.getText = get_scenario_text,
 				.getMaxRow = get_max_scenario,
 				.getIcon = get_scenario_icon,
-				.rowAction = folders_action,
+				.rowAction = rows_action,
 				.ySeparation = 12,
 				.width = GUI_ROWS_WIDTH,
 				.numRows = SCENARIO_SELECT_MAPS,

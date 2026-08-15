@@ -306,7 +306,11 @@ void game_gui_handle(GameContext *context, GuiScreen* guiScreen) {
 		}
 		if (context->mouseStatus.isLeftDoubleClick && game_gui_mouse_in_element(context, element)) {
 			if(element->type == GUI_ELEMENT_CUSTOM_TEXT_ROWS) {
-					if(element->typed.customTextRows.rowAction) element->typed.customTextRows.rowAction(context);
+				uint8_t selectedRow = (context->mouseStatus.y - element->y) / element->typed.customTextRows.ySeparation;
+				uint8_t selectedValue = element->typed.customTextRows.getOffsetValue(context) + selectedRow;
+				if(element->typed.customTextRows.rowAction && selectedValue == element->typed.customTextRows.getSelectedValue(context)) {
+					element->typed.customTextRows.rowAction(context);
+				}
 			}
 		}
 	}
