@@ -38,8 +38,9 @@ int main_init() {
 
 	console_set_text_color(CONSOLE_COLOR_YELLOW);
 	console_set_background_color(CONSOLE_COLOR_RED);
-	console_printf("      Initializing game systems     \r\n");
+	console_printf("      Initializing game systems     ");
 	console_reset_styles();
+	printf("\r\n");
 	game_config_load_settings(&context.config);
 
 	if (snd_init_system(GAME_VOICES, MOD_VOICES, MUSIC_TYPE_MIDI) != INITIALIZATION_OK) {
@@ -72,8 +73,9 @@ int main_init() {
 
 	console_set_text_color(CONSOLE_COLOR_YELLOW);
 	console_set_background_color(CONSOLE_COLOR_RED);
-	console_printf("       Loading game resources       \r\n");
+	console_printf("       Loading game resources       ");
 	console_reset_styles();
+	printf("\r\n");
 
 	game_snd_load_sounds();
 	set_volume(context.config.sfxVolume, context.config.musicVolume);
