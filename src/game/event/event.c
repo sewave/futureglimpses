@@ -66,8 +66,9 @@ void game_event_object_process(GameContext *context, EventType eventType, Object
 				GameUnit *sourceUnit = game_unit_get_by_id(context, object->ownerId);
 				game_unit_damage(context, object->minDamage, object->maxDamage, damageTarget);
 				if(sourceUnit && sourceUnit->controller != damageTarget->controller
-					&& context->boardExploration[sourceUnit->x][sourceUnit->y] == BOARD_UNEXPLORED) {
-					game_spatial_explore_position(context, sourceUnit->x, sourceUnit->y);
+					&& context->boardExploration[sourceUnit->x][sourceUnit->y] != BOARD_EXPLORED) {
+					int halfTileSize = sourceUnit->tileSize / 2;
+					game_spatial_explore_radius(context, sourceUnit->x + halfTileSize, sourceUnit->y + halfTileSize, 1 + halfTileSize);
 				}
 				if(!damageTarget->isBuilding && damageTarget->state == UNIT_STATE_IDLE && damageTarget->targetId == NO_TARGET_ID) {
 					if (sourceUnit && sourceUnit->controller != damageTarget->controller) {

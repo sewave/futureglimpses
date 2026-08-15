@@ -253,7 +253,7 @@ static void game_update(GameContext *context) {
 		if(keyboard_is_key_pressed(KEY_F7)) {
 			for(int x = 0; x < BOARD_WIDTH; x++) {
 				for(int y = 0; y < BOARD_HEIGHT; y++) {
-					if(context->boardExploration[x][y] == BOARD_UNEXPLORED) {
+					if(context->boardExploration[x][y] != BOARD_EXPLORED) {
 						game_spatial_explore_position(context, x, y);
 					}
 				}

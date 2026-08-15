@@ -55,7 +55,7 @@ ifeq ($(BUILD_MODE), debug)
     TARGET = $(TARGET_NAME)_dbg$(TARGET_EXT)
 else
     # Add IFLAGS (custom includes) and Release flags
-    CFLAGS = -O3 -DNDEBUG $(BASE_FLAGS) $(IFLAGS)
+    CFLAGS = -O2 -DNDEBUG $(BASE_FLAGS) $(IFLAGS)
     TARGET = $(TARGET_NAME)_rel$(TARGET_EXT)
 endif
 

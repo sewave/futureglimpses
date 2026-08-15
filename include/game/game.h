@@ -18,6 +18,7 @@
 #define BOARD_WIDTH 64
 #define BOARD_HEIGHT 64
 #define TILE_SIZE 16
+#define TILE_SIZE_16_MASK 0xFFF0
 #define BOARD_SIZE (BOARD_WIDTH * BOARD_HEIGHT)
 #define WORLD_WIDTH BOARD_WIDTH *TILE_SIZE
 #define WORLD_HEIGHT BOARD_HEIGHT *TILE_SIZE
@@ -69,6 +70,9 @@ typedef struct {
 #define BUILDING_STATE_CONSTRUCT UNIT_STATE_DEFEND
 #define MAX_FRAMES 4
 #define MAX_EVENTS 4
+#define BOARD_UNEXPLORED 0
+#define BOARD_EXPLORED 1
+#define BOARD_PARTIALLY_EXPLORED 2
 
 typedef struct {
 	uint16_t startFrame;
@@ -310,7 +314,7 @@ typedef struct {
 	BITMAP *screenBuffer;
 	PALETTE mainPalette;
 	GameStateEnum gameState;
-	BoardExplorationEnum boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
+	int boardExploration[BOARD_WIDTH][BOARD_HEIGHT];
 	UnitId walkabilityGrid[BOARD_WIDTH][BOARD_HEIGHT];
 	BoardTile board[BOARD_WIDTH][BOARD_HEIGHT];
 	int minimapColors[MINIMAP_COLORS];

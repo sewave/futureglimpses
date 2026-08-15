@@ -4,6 +4,29 @@
 #include "game/video/render.h"
 #include "game/video/gfx.h"
 
+static int game_spatial_get_exploration_sorroundings(GameContext *context, int x, int y) {
+	int xMin = x - 1;
+	int xMax = x + 1;
+	int yMin = y - 1;
+	int yMax = y + 1;
+
+	int surroundings = BOARD_PARTIALLY_EXPLORED;
+	if (xMin < BOARD_X_MIN || (xMin >= BOARD_X_MIN && xMin <= BOARD_X_MAX && context->boardExploration[xMin][y] == BOARD_UNEXPLORED)) {
+		surroundings |= PARTIAL_EXPLORE_LEFT_MASK;
+	}
+	if (xMax > BOARD_X_MAX || (xMax >= BOARD_X_MIN && xMax <= BOARD_X_MAX && context->boardExploration[xMax][y] == BOARD_UNEXPLORED)) {
+		surroundings |= PARTIAL_EXPLORE_RIGHT_MASK;
+	}
+	if (yMin < BOARD_Y_MIN || (yMin >= BOARD_Y_MIN && yMin <= BOARD_Y_MAX && context->boardExploration[x][yMin] == BOARD_UNEXPLORED)) {
+		surroundings |= PARTIAL_EXPLORE_UP_MASK;
+	}
+	if (yMax > BOARD_Y_MAX || (yMax >= BOARD_Y_MIN && yMax <= BOARD_Y_MAX && context->boardExploration[x][yMax] == BOARD_UNEXPLORED)) {
+		surroundings |= PARTIAL_EXPLORE_DOWN_MASK;
+	}
+
+	return surroundings;
+}
+
 uint16_t game_spatial_query_grid(GameContext* context, uint16_t centerTileX, uint16_t centerTileY, uint8_t tileRadius,
 								 GenericQueryFilterFunc filterFunc, const GameUnit *sourceUnit,
 								 GameUnit* foundUnits[], uint16_t maxResults) {
@@ -154,10 +177,78 @@ uint8_t game_spatial_target_in_attack_range(GameUnit* unit, int targetX, int tar
 }
 
 void game_spatial_explore_position(GameContext* context, uint16_t x, uint16_t y) {
-	BoardTile *tile = &context->board[x][y];
+	BoardTile *boardTile = &context->board[x][y];
+	uint16_t tile = boardTile->tile;
 	blit(game_gfx_get_tileset(), context->renderedBoard,
-			(tile->tile % TILE_SIZE) * TILE_SIZE, (tile->tile / TILE_SIZE) * TILE_SIZE,
+			(tile % TILE_SIZE) * TILE_SIZE, tile & TILE_SIZE_16_MASK,
 			x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	putpixel(context->renderedMinimap, x, y, context->minimapColors[tile->tile]);
+	putpixel(context->renderedMinimap, x, y, context->minimapColors[tile]);
 	context->boardExploration[x][y] = BOARD_EXPLORED;
+}
+
+void game_spatial_explore_partial_position(GameContext* context, uint16_t x, uint16_t y, int partialExploration) {
+	BoardTile *boardTile = &context->board[x][y];
+	uint16_t tile = boardTile->tile;
+	blit(game_gfx_get_tileset(), context->renderedBoard,
+			(tile % TILE_SIZE) * TILE_SIZE, tile & TILE_SIZE_16_MASK,
+			x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	context->boardExploration[x][y] = partialExploration;
+	int tileX = x * TILE_SIZE;
+	int tileY = y * TILE_SIZE;
+	if(partialExploration & PARTIAL_EXPLORE_UP_MASK) {
+		masked_blit(game_gfx_get_overtile(GAME_OVERTILE_UP), context->renderedBoard,
+			0, 0, tileX, tileY, TILE_SIZE, TILE_SIZE);
+	}
+	if (partialExploration & PARTIAL_EXPLORE_DOWN_MASK) {
+		masked_blit(game_gfx_get_overtile(GAME_OVERTILE_DOWN), context->renderedBoard,
+			0, 0, tileX, tileY, TILE_SIZE, TILE_SIZE);
+	}
+	if (partialExploration & PARTIAL_EXPLORE_LEFT_MASK) {
+		masked_blit(game_gfx_get_overtile(GAME_OVERTILE_LEFT), context->renderedBoard,
+			0, 0, tileX, tileY, TILE_SIZE, TILE_SIZE);
+	}
+	if (partialExploration & PARTIAL_EXPLORE_RIGHT_MASK) {
+		masked_blit(game_gfx_get_overtile(GAME_OVERTILE_RIGHT), context->renderedBoard,
+			0, 0, tileX, tileY, TILE_SIZE, TILE_SIZE);
+	}
+	
+}
+
+void game_spatial_explore_radius(GameContext *context, int xCenter, int yCenter, int range) {
+	int xMin = clamp(xCenter - range, BOARD_X_MIN, BOARD_X_MAX);
+	int xMax = clamp(xCenter + range, BOARD_X_MIN, BOARD_X_MAX);
+	int yMin = clamp(yCenter - range, BOARD_Y_MIN, BOARD_Y_MAX);
+	int yMax = clamp(yCenter + range, BOARD_Y_MIN, BOARD_Y_MAX);
+	for (int x = xMin; x <= xMax; x++) {
+		int *boardExplorationRow = &context->boardExploration[x][yMin];
+		for (int y = yMin; y <= yMax; y++, boardExplorationRow++) {
+			if (*boardExplorationRow != BOARD_EXPLORED) {
+				int dx = abs(x - xCenter);
+				int dy = abs(y - yCenter);
+				if (dx != range || dy != range) {
+					if (dx == range || dy == range) {
+						if (*boardExplorationRow == BOARD_UNEXPLORED) *boardExplorationRow = NO_DIRECTION_PARTIAL_EXPLORE;
+					} else {
+						game_spatial_explore_position(context, x, y);
+					}
+				}
+			}
+		}
+	}
+	xMin = clamp(xMin - 1, BOARD_X_MIN, BOARD_X_MAX);
+	xMax = clamp(xMax + 1, BOARD_X_MIN, BOARD_X_MAX);
+	yMin = clamp(yMin - 1, BOARD_Y_MIN, BOARD_Y_MAX);
+	yMax = clamp(yMax + 1, BOARD_Y_MIN, BOARD_Y_MAX);
+	for (int x = xMin; x <= xMax; x++) {
+		int *boardExplorationRow = &context->boardExploration[x][yMin];
+		for (int y = yMin; y <= yMax; y++, boardExplorationRow++) {
+			int boardExplorationValue = *boardExplorationRow;
+			if (boardExplorationValue >= BOARD_PARTIALLY_EXPLORED) {
+				int newSurroundings = game_spatial_get_exploration_sorroundings(context, x, y);
+				if (newSurroundings != boardExplorationValue) {
+					game_spatial_explore_partial_position(context, x, y, newSurroundings);
+				}
+			}
+		}
+	}
 }

@@ -523,8 +523,8 @@ void game_unit_area_damage(GameContext *context, Object *object) {
 					player_attacked_register_attack(&context->playerAttackedData, target->x, target->y);
 				}
 				if(sourceUnit && sourceUnit->controller != target->controller) {
-					if(context->boardExploration[sourceUnit->x][sourceUnit->y] == BOARD_UNEXPLORED) {
-						game_spatial_explore_position(context, sourceUnit->x, sourceUnit->y);
+					if (context->boardExploration[sourceUnit->x][sourceUnit->y] != BOARD_EXPLORED) {
+						game_spatial_explore_radius(context, sourceUnit->x, sourceUnit->y, 1);
 					}
 					if (!target->isBuilding && target->state == UNIT_STATE_IDLE && target->targetId == NO_TARGET_ID) {
 						game_unit_command_move_attack(target, NULL, sourceUnit->x, sourceUnit->y);
@@ -665,18 +665,7 @@ void game_unit_explore_extended(GameContext *context, GameUnit *unit, int multip
 	int xCenter = unit->x + halfTiles;
 	int yCenter = unit->y + halfTiles;
 	int range = unit->exploreRange * multipliedRange;
-	int xMin = clamp(xCenter - range, BOARD_X_MIN, BOARD_X_MAX);
-	int xMax = clamp(xCenter + range, BOARD_X_MIN, BOARD_X_MAX);
-	int yMin = clamp(yCenter - range, BOARD_Y_MIN, BOARD_Y_MAX);
-	int yMax = clamp(yCenter + range, BOARD_Y_MIN, BOARD_Y_MAX);
-	for (int x = xMin; x <= xMax; x++) {
-		for (int y = yMin; y <= yMax; y++) {
-			if (context->boardExploration[x][y] == BOARD_UNEXPLORED &&
-				(abs(x - xCenter) < range || abs(y - yCenter) < range)) {
-					game_spatial_explore_position(context, x, y);
-			}
-		}
-	}
+	game_spatial_explore_radius(context, xCenter, yCenter, range);
 }
 
 void game_unit_explore(GameContext *context, GameUnit *unit) {

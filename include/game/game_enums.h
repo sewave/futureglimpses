@@ -25,11 +25,6 @@ typedef enum {
 } ResourceTypeEnum;
 
 typedef enum {
-	BOARD_UNEXPLORED,
-	BOARD_EXPLORED
-} BoardExplorationEnum;
-
-typedef enum {
 	WALKABILITY_FREE,
 	WALKABILITY_BLOCKED,
 } WalkabilityEnum;
