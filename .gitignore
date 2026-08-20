@@ -1,7 +1,8 @@
 .cache/
 build/
 .vscode/userdata
-*.exe
+win*.exe
+dos*.exe
 out
 CWSDPMI.SWP
 ALLEGRO.LOG
