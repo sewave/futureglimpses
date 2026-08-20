@@ -20,6 +20,7 @@ static const char* MAX_WORKERS_MESSAGE = "9+";
 static char lazyWorkerQuantityString[8];
 
 static uint8_t is_mouse_in_lazy_workers_button(GameContext *context) {
+    if(context->gameResult != GAME_RESULT_ONGOING) return FALSE;
     BITMAP *lazyWorkersButton = game_gfx_get_lazy_workers_button();
     return context->mouseStatus.x >= LAZY_WORKERS_BUTTON_X &&
            context->mouseStatus.x <= LAZY_WORKERS_BUTTON_X + lazyWorkersButton->w &&
