@@ -13,7 +13,7 @@
 #define FIRST_UNIT_GENERATION 1
 #define NO_FREE_UNIT_INDEX -1
 #define AREA_DAMAGE_REDUCTION 4
-#define BUILDING_ARMOR 3
+#define BUILDING_ARMOR 2
 #define SPAWN_SHOW_TIME SEC_TO_FRAMES(3)
 static uint16_t nextFreeIndex;
 #define MAX_FOUND_UNITS 8
