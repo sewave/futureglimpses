@@ -50,6 +50,7 @@ Atisbos del futuro
 * **Cola de unidades**: Puedes encolar entrenamientos en los edificios y cancelarlos.
 * **Obreros vagos**: Cuando un obrero lleve un tiempo sin trabajar podrás ir rápidamente a él con un botón en pantalla. Podrás pasar entre diferentes obreros haciendo clic en caso de haber más de uno.
 * **Pantalla de resultados**: Al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
+* **Velocidad de juego**: Desde las opciones podrás seleccionar entre cinco velocidades de juego.
 
 Y otras sorpresas que será más divertido descubrir jugando.
 
