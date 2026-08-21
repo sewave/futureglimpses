@@ -3,6 +3,7 @@
 #include "game/unit/unit.h"
 #include "game/video/render.h"
 #include "game/video/gfx.h"
+#include "game/video/game_video.h"
 
 static int game_spatial_get_exploration_sorroundings(GameContext *context, int x, int y) {
 	int xMin = x - 1;
@@ -211,7 +212,7 @@ void game_spatial_explore_partial_position(GameContext* context, uint16_t x, uin
 		masked_blit(game_gfx_get_overtile(GAME_OVERTILE_RIGHT), context->renderedBoard,
 			0, 0, tileX, tileY, TILE_SIZE, TILE_SIZE);
 	}
-	
+	putpixel(context->renderedMinimap, x, y, PAL_COLOR_DARK_GRAY);
 }
 
 void game_spatial_explore_radius(GameContext *context, int xCenter, int yCenter, int range) {
@@ -245,8 +246,12 @@ void game_spatial_explore_radius(GameContext *context, int xCenter, int yCenter,
 			int boardExplorationValue = *boardExplorationRow;
 			if (boardExplorationValue >= BOARD_PARTIALLY_EXPLORED) {
 				int newSurroundings = game_spatial_get_exploration_sorroundings(context, x, y);
-				if (newSurroundings != boardExplorationValue) {
-					game_spatial_explore_partial_position(context, x, y, newSurroundings);
+				if(newSurroundings == BOARD_PARTIALLY_EXPLORED) {
+					game_spatial_explore_position(context, x, y);
+				} else {
+					if (newSurroundings != boardExplorationValue) {
+						game_spatial_explore_partial_position(context, x, y, newSurroundings);
+					}
 				}
 			}
 		}
