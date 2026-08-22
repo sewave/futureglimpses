@@ -41,7 +41,7 @@ Atisbos del futuro
 
 * **Agrupación de mapas tipo campaña**: Podemos agrupar en carpetas varios mapas simulando una campaña.
 * **Multiidioma**: Español / Inglés.
-* **Opciones**: Podemos ajustar el volumen, el idioma (español / inglés, solo desde el menú principal) o cuándo queremos ver las barras de vida de los enemigos.
+* **Opciones**: Podemos ajustar el volumen, el idioma (español / inglés (solo interficie, no mapas), solo desde el menú principal), las barras de vida o la velocidad del juego.
 * **Minimapa**: El clásico minimapa, podemos desplazarnos por él haciendo clic.
 * **Niebla de guerra:** Una vez destapada queda el mapa visible.
 * **Grupos de unidades**: Podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
@@ -50,7 +50,6 @@ Atisbos del futuro
 * **Cola de unidades**: Puedes encolar entrenamientos en los edificios y cancelarlos.
 * **Obreros vagos**: Cuando un obrero lleve un tiempo sin trabajar podrás ir rápidamente a él con un botón en pantalla. Podrás pasar entre diferentes obreros haciendo clic en caso de haber más de uno.
 * **Pantalla de resultados**: Al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
-* **Velocidad de juego**: Desde las opciones podrás seleccionar entre cinco velocidades de juego.
 
 Y otras sorpresas que será más divertido descubrir jugando.
 
