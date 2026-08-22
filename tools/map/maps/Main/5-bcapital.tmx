@@ -20,19 +20,19 @@
   <property name="MSG_DESCRIPTION" value="Estás frente a la capital enemiga. ¡Usa todos los medios a tu alcance para conquistarla! El héroe Randalf debe sobrevivir."/>
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="5.La capital"/>
-  <property name="MSG_WIN" value="¡Al fin has recuperado la grandeza de tu imperio!"/>
+  <property name="MSG_WIN" value="¡Al fin has recuperado la grandeza de tu imperio! Aquí acaba Atisbos del Futuro. ¡Pero tú puedes ampliarlo!"/>
   <property name="PEACE_TIME" type="int" value="300"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="2000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
-  <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_ARCHER_PLAYER" type="bool" value="false"/>
-  <property name="UPGRADED_KNIGHT_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_KNIGHT_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_KNIGHT_PLAYER" type="bool" value="false"/>
-  <property name="UPGRADED_MAGE_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_MAGE_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
-  <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
   <property name="WIN_CODE" value=""/>
  </properties>
@@ -129,7 +129,7 @@
   <object id="281" template="../../buildings/C_Tower.tx" x="704" y="64"/>
   <object id="283" template="../../buildings/C_Farm.tx" x="272" y="64"/>
   <object id="284" template="../../buildings/C_Farm.tx" x="304" y="64"/>
-  <object id="285" template="../../buildings/C_Farm.tx" x="336" y="64" width="32"/>
+  <object id="285" template="../../buildings/C_Farm.tx" x="336" y="64"/>
   <object id="286" template="../../buildings/C_Farm.tx" x="336" y="64"/>
   <object id="287" template="../../buildings/C_Farm.tx" x="272" y="96"/>
   <object id="288" template="../../buildings/C_Farm.tx" x="304" y="96"/>

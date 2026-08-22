@@ -246,11 +246,11 @@
             }
         },
         "maps/Main/4-bcity.tmx": {
-            "scale": 3,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 341,
-                "y": 275.8333333333333
+                "x": 528,
+                "y": 636.6666666666667
             }
         },
         "maps/Main/4-mages.tmx": {
@@ -590,9 +590,9 @@
     "project": "rts.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "maps/Main/4-bcity.tmx",
         "maps/Adventure/3-mission.tmx",
         "maps/Main/5-bcapital.tmx",
-        "maps/Main/4-bcity.tmx",
         "maps/Adventure/2-villain.tmx",
         "maps/Adventure/1-hero.tmx",
         "maps/Main/2-blacksmith.tmx",
