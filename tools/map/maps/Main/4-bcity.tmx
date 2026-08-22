@@ -25,13 +25,13 @@
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
   <property name="RES_WOOD_PLAYER" type="int" value="500"/>
-  <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_ARCHER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_ARCHER_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_KNIGHT_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_KNIGHT_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_MAGE_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
-  <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="true"/>
+  <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
   <property name="WIN_CODE" value="UNZEF5AC"/>
  </properties>
