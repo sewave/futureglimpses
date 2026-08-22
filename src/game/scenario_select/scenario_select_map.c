@@ -50,8 +50,7 @@ static int dir_iterator_callback(const char *filename, int attrib, void *param) 
 	if(isUpFolder) {
 		get_parent_directory(ctx->basePath, mapEntry->path, strlen(mapEntry->path));
 		mapEntry->type = MAP_ENTRY_FOLDER_UP;
-		mapEntry->title = strdup("..");
-		mapEntry->description = strdup("");
+		game_map_load_campaign_metadata(ctx->basePath, &mapEntry->title, &mapEntry->description);
 	}
 	else {
 		mapEntry->type = MAP_ENTRY_FOLDER;
