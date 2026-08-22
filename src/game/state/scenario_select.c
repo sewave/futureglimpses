@@ -131,7 +131,14 @@ static void select_scenario_action(GameContext *context) {
 }
 
 static void go_title_action(GameContext *context) {
-	state = SCENARIO_SELECT_TITLE_STATE;
+	// If we are un the root map path, go to title, else go to up folder
+	if(strcmp(currentFolder, MAPS_FOLDER) == 0) {
+		state = SCENARIO_SELECT_TITLE_STATE;
+	}
+	else {
+		scenarioSelected = 0;
+		state = SCENARIO_SELECT_RELOAD_STATE;
+	}
 }
 
 #define SCENARIO_SELECT_ELEMENTS 9
@@ -516,6 +523,9 @@ static void init_scenarios_folder(char *folder) {
 		TRACE("Error allocating current folder.\n");
 		exit(PROGRAM_ERROR);
 	}
+	scenarioSelectOffset = 0;
+	scenarioSelected = 0;
+	uint8_t allUnlocked = TRUE;
 	if (scenario_select_load_maps(currentFolder, &mapList) != 0) {
 		TRACE("Error loading maps from %s\n", currentFolder);
 	} else if (mapList && mapList->count > 0) {
@@ -525,13 +535,20 @@ static void init_scenarios_folder(char *folder) {
 			const char *title = mapList->entries[i].title ? mapList->entries[i].title : "(no title)";
 			const char *desc = mapList->entries[i].description ? mapList->entries[i].description : "(no description)";
 			TRACE("  [%d] %s (%s) - Title: '%s' - Desc: '%s'\n", i, mapList->entries[i].path, type, title, desc);
+			allUnlocked &= mapList->entries[i].unlocked;
+			if(mapList->entries[i].unlocked) {
+				scenarioSelectOffset = i / SCENARIO_SELECT_MAPS;
+				scenarioSelected = i;
+			}
 		}
 	} else {
 		TRACE("No .fgm files found in %s\n", MAPS_FOLDER);
 	}
+	if(allUnlocked && mapList->count > 0) {
+		scenarioSelectOffset = 0;
+		scenarioSelected = 0;
+	}
 
-	scenarioSelectOffset = 0;
-	scenarioSelected = 0;
 	state = SCENARIO_SELECT_BROWSE_STATE;
 	update_map_options();
 }
