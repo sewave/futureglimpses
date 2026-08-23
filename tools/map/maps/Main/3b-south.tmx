@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="244">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="248">
  <editorsettings>
   <export target="../../../../assets/map/main/main3b.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -125,5 +125,9 @@
   <object id="241" template="../../units/P_Worker.tx" x="128" y="416"/>
   <object id="242" template="../../units/P_Worker.tx" x="160" y="416"/>
   <object id="243" template="../../units/P_Worker.tx" x="144" y="464"/>
+  <object id="244" template="../../buildings/C_Turret.tx" x="672" y="656"/>
+  <object id="245" template="../../buildings/C_Turret.tx" x="608" y="320"/>
+  <object id="246" template="../../buildings/C_Turret.tx" x="880" y="528"/>
+  <object id="247" template="../../buildings/C_Turret.tx" x="816" y="640"/>
  </objectgroup>
 </map>

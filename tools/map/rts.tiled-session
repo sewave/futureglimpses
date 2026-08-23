@@ -186,11 +186,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 294,
-                "y": 607
+                "x": 690,
+                "y": 807.6666666666666
             }
         },
         "maps/Main/2-archers.tmx": {
@@ -205,11 +205,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.75,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 385.33333333333337,
-                "y": 491.33333333333326
+                "x": 319,
+                "y": 616.5
             }
         },
         "maps/Main/3-knights.tmx": {
@@ -227,22 +227,22 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 616,
-                "y": 441.5
+                "x": 488,
+                "y": 109
             }
         },
         "maps/Main/3b-south.tmx": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 466,
-                "y": 435
+                "x": 757.3333333333333,
+                "y": 396.99999999999994
             }
         },
         "maps/Main/4-bcity.tmx": {
@@ -250,7 +250,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 528,
-                "y": 636.6666666666667
+                "y": 472.66666666666674
             }
         },
         "maps/Main/4-mages.tmx": {
@@ -282,8 +282,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 482.66666666666663,
-                "y": 596.6666666666667
+                "x": 518.6666666666666,
+                "y": 408.66666666666674
             }
         },
         "maps/Main/5-turrets.tmx": {
@@ -591,17 +591,17 @@
     "property.type": "string",
     "recentFiles": [
         "maps/Main/4-bcity.tmx",
-        "maps/Adventure/3-mission.tmx",
-        "maps/Main/5-bcapital.tmx",
-        "maps/Adventure/2-villain.tmx",
-        "maps/Adventure/1-hero.tmx",
+        "maps/Main/3b-south.tmx",
+        "maps/Main/3a-north.tmx",
         "maps/Main/2-blacksmith.tmx",
         "maps/Main/1-soldiers.tmx",
+        "maps/Main/5-bcapital.tmx",
+        "maps/Adventure/3-mission.tmx",
+        "maps/Adventure/2-villain.tmx",
+        "maps/Adventure/1-hero.tmx",
         "maps/Initial/5-turrets.tmx",
         "maps/clash.tmx",
-        "maps/base.tmx",
-        "maps/Initial/4-mages.tmx",
-        "maps/Main/4-scapital.tmx"
+        "maps/base.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
