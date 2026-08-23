@@ -6,7 +6,7 @@
 #include "game_enums.h"
 #include "game/map/map_code.h"
 
-#define VERSION "1.00"
+#define VERSION "1.0"
 #define GAME_TITLE "Future Glimpses"
 // Comment to disable cheats in game
 #define CHEATS_ENABLED

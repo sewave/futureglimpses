@@ -1,4 +1,4 @@
-<span style="display:block;text-align:center">FUTURE GLIMPSES v1.0</span>
+# <span style="display:block;text-align:center">FUTURE GLIMPSES v1.0</span>
 
 <span style="display:block;text-align:center">!["Title screen"](resources/en/pic_001.png "Title screen")</span>
 Future glimpses is a small real-time strategy (or RTS) game that pays homage to Warcraft / Age of Empires, blending elements from both among others.
