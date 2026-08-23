@@ -6,3 +6,4 @@ dos*.exe
 out
 CWSDPMI.SWP
 ALLEGRO.LOG
+release/
