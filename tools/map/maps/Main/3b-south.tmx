@@ -20,7 +20,7 @@
   <property name="MSG_LOSE" value="No has logrado recuperar tu imperio..."/>
   <property name="MSG_TITLE" value="3b.Camino del sur"/>
   <property name="MSG_WIN" value="Has conquistado esta tierra. Ahora te reunes con tus tropas para un asalto a una capital enemiga."/>
-  <property name="PEACE_TIME" type="int" value="0"/>
+  <property name="PEACE_TIME" type="int" value="500"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="1000"/>
   <property name="RES_GOLD_PLAYER" type="int" value="1000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="500"/>
