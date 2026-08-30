@@ -285,6 +285,7 @@ typedef struct {
 
 typedef struct {
 	uint8_t trainRanged;
+	uint8_t firstAttack;
 	uint16_t attackCounter;
 	uint16_t peaceCounter;
 	uint16_t rebuildCooldown;

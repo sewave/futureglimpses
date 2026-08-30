@@ -306,7 +306,8 @@ static void game_strategy_ai_train_units(GameContext *context) {
 
 static void game_strategy_ai_attack(GameContext *context) {
 	if (context->aiData.peaceCounter < context->map.peaceTime) return;
-	if (++context->aiData.attackCounter < ATTACK_WAVE_FRAMES) return;
+	if (++context->aiData.attackCounter < ATTACK_WAVE_FRAMES && (context->map.peaceTime > 0 || !context->aiData.firstAttack)) return;
+	context->aiData.firstAttack = FALSE;
 	context->aiData.attackCounter = 0;
 
 	GameUnit *foundUnits[MAX_WAVE_UNITS];
@@ -360,7 +361,7 @@ static void game_strategy_ai_attack(GameContext *context) {
 		for (int i = 0; i < foundUnitsCount; i++) {
 			game_unit_command_move_attack(foundUnits[i], NULL, target->x, target->y);
 		}
-		context->aiData.currentWaveUnits++;
+		if(context->aiData.currentWaveUnits < MAX_WAVE_UNITS) context->aiData.currentWaveUnits++;
 		context->aiData.lastFoundUnits = 0;
 	}
 }
@@ -391,6 +392,7 @@ void game_strategy_ai_init(GameContext *context) {
 	context->aiData.desiredWorkers = context->aiData.initialFood / 3; // 33% must be workers
 	context->aiData.lastFoundUnits = 0;
 	context->aiData.trainRanged = FALSE;
+	context->aiData.firstAttack = TRUE;
 	game_strategy_ai_scan_buildings(context);
 }
 
