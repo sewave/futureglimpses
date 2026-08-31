@@ -324,7 +324,11 @@ static void game_strategy_ai_attack(GameContext *context) {
 		&& foundUnitsCount < context->aiData.currentWaveUnits
 		&& foundUnitsCount <= context->aiData.lastFoundUnits) context->aiData.currentWaveUnits--;
 	context->aiData.lastFoundUnits = foundUnitsCount;
-	if (foundUnitsCount < context->aiData.currentWaveUnits) return;
+	// If we don't find enought, next search will be in half time
+	if (foundUnitsCount < context->aiData.currentWaveUnits) {
+		context->aiData.attackCounter = ATTACK_WAVE_FRAMES / 2;
+		return;	
+	} 
 	int foundX = foundUnits[0]->x;
 	int foundY = foundUnits[0]->y;
 	// Now we search player CH, or if not found first active unit
