@@ -15,7 +15,7 @@
   <property name="ENABLE_UPGRADE_KNIGHT" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_MAGE" type="bool" value="false"/>
   <property name="ENABLE_UPGRADE_SOLDIER" type="bool" value="false"/>
-  <property name="MAP_CODE" value="MGAMES01"/>
+  <property name="MAP_CODE" value=""/>
   <property name="MSG_DESCRIPTION" value="La gran carrera, ¿podrás llegar al campamento enemigo antes de que tu enemigo haga lo mismo?"/>
   <property name="MSG_LOSE" value="Perdiste la carrera..."/>
   <property name="MSG_TITLE" value="2.¡Carrera!"/>
@@ -33,7 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
-  <property name="WIN_CODE" value="MGAMES02"/>
+  <property name="WIN_CODE" value=""/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>

@@ -20,7 +20,7 @@
   <property name="MSG_LOSE" value="Las oleadas te han sobrepasado."/>
   <property name="MSG_TITLE" value="Oleadas"/>
   <property name="MSG_WIN" value="¡Has triunfado sobre las oleadas!"/>
-  <property name="PEACE_TIME" type="int" value="0"/>
+  <property name="PEACE_TIME" type="int" value="30"/>
   <property name="RES_GOLD_COMPUTER" type="int" value="0"/>
   <property name="RES_GOLD_PLAYER" type="int" value="5000"/>
   <property name="RES_WOOD_COMPUTER" type="int" value="0"/>

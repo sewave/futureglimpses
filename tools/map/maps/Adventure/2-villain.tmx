@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="274">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="279">
  <editorsettings>
   <export target="../../../../assets/map/advent/adv2.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -176,5 +176,10 @@
   <object id="271" template="../../units/P_Archer.tx" x="80" y="640"/>
   <object id="272" template="../../units/P_Soldier.tx" x="80" y="656"/>
   <object id="273" template="../../units/P_Soldier.tx" x="80" y="672"/>
+  <object id="274" template="../../units/C_Soldier.tx" x="528" y="576"/>
+  <object id="275" template="../../units/C_Soldier.tx" x="544" y="528"/>
+  <object id="276" template="../../units/C_Archer.tx" x="512" y="528"/>
+  <object id="277" template="../../units/C_Archer.tx" x="512" y="128"/>
+  <object id="278" template="../../units/C_Archer.tx" x="496" y="176"/>
  </objectgroup>
 </map>

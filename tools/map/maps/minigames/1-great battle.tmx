@@ -33,7 +33,7 @@
   <property name="UPGRADED_MAGE_PLAYER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_COMPUTER" type="bool" value="false"/>
   <property name="UPGRADED_SOLDIER_PLAYER" type="bool" value="false"/>
-  <property name="WIN_CODE" value="MGAMES01"/>
+  <property name="WIN_CODE" value=""/>
  </properties>
  <tileset firstgid="1" source="../../tileset.tsx"/>
  <tileset firstgid="257" source="../../units/units.tsx"/>
