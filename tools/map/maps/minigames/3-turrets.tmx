@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="654">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="657">
  <editorsettings>
   <export target="../../../../assets/map/mgames/mgames3.fgm" format="Future Glimpses map (*.fgm)"/>
  </editorsettings>
@@ -132,104 +132,103 @@
   <object id="537" template="../../units/C_Knight.tx" x="48" y="48"/>
   <object id="538" template="../../units/C_Knight.tx" x="80" y="48"/>
   <object id="539" template="../../units/C_Knight.tx" x="112" y="48"/>
-  <object id="540" template="../../units/C_Knight.tx" x="128" y="48"/>
-  <object id="541" template="../../units/C_Knight.tx" x="864" y="48"/>
+  <object id="540" template="../../units/C_Knight.tx" x="144" y="48"/>
+  <object id="541" template="../../units/C_Knight.tx" x="848" y="48"/>
   <object id="542" template="../../units/C_Knight.tx" x="880" y="48"/>
   <object id="543" template="../../units/C_Knight.tx" x="928" y="48"/>
   <object id="544" template="../../units/C_Knight.tx" x="960" y="48"/>
-  <object id="547" template="../../units/C_Knight.tx" x="48" y="64"/>
-  <object id="548" template="../../units/C_Knight.tx" x="80" y="64"/>
-  <object id="549" template="../../units/C_Knight.tx" x="112" y="64"/>
+  <object id="547" template="../../units/C_Knight.tx" x="32" y="64"/>
+  <object id="548" template="../../units/C_Knight.tx" x="64" y="64"/>
+  <object id="549" template="../../units/C_Knight.tx" x="96" y="64"/>
   <object id="550" template="../../units/C_Knight.tx" x="128" y="64"/>
   <object id="551" template="../../units/C_Knight.tx" x="864" y="80"/>
-  <object id="552" template="../../units/C_Knight.tx" x="880" y="80"/>
-  <object id="553" template="../../units/C_Knight.tx" x="928" y="80"/>
-  <object id="554" template="../../units/C_Knight.tx" x="960" y="80"/>
-  <object id="557" template="../../units/C_Knight.tx" x="48" y="112"/>
-  <object id="558" template="../../units/C_Knight.tx" x="80" y="112"/>
-  <object id="559" template="../../units/C_Knight.tx" x="112" y="112"/>
+  <object id="552" template="../../units/C_Knight.tx" x="896" y="80"/>
+  <object id="553" template="../../units/C_Knight.tx" x="944" y="80"/>
+  <object id="554" template="../../units/C_Knight.tx" x="976" y="80"/>
+  <object id="557" template="../../units/C_Knight.tx" x="32" y="112"/>
+  <object id="558" template="../../units/C_Knight.tx" x="64" y="112"/>
+  <object id="559" template="../../units/C_Knight.tx" x="96" y="112"/>
   <object id="560" template="../../units/C_Knight.tx" x="128" y="112"/>
-  <object id="561" template="../../units/C_Knight.tx" x="864" y="96"/>
+  <object id="561" template="../../units/C_Knight.tx" x="848" y="96"/>
   <object id="562" template="../../units/C_Knight.tx" x="880" y="96"/>
   <object id="563" template="../../units/C_Knight.tx" x="928" y="96"/>
   <object id="564" template="../../units/C_Knight.tx" x="960" y="96"/>
-  <object id="567" template="../../units/C_Knight.tx" x="48" y="80"/>
-  <object id="568" template="../../units/C_Knight.tx" x="80" y="80"/>
-  <object id="569" template="../../units/C_Knight.tx" x="112" y="80"/>
+  <object id="567" template="../../units/C_Knight.tx" x="32" y="80"/>
+  <object id="568" template="../../units/C_Knight.tx" x="64" y="80"/>
+  <object id="569" template="../../units/C_Knight.tx" x="96" y="80"/>
   <object id="570" template="../../units/C_Knight.tx" x="128" y="80"/>
   <object id="571" template="../../units/C_Knight.tx" x="864" y="64"/>
-  <object id="572" template="../../units/C_Knight.tx" x="880" y="64"/>
-  <object id="573" template="../../units/C_Knight.tx" x="928" y="64"/>
-  <object id="574" template="../../units/C_Knight.tx" x="960" y="64"/>
+  <object id="572" template="../../units/C_Knight.tx" x="896" y="64"/>
+  <object id="573" template="../../units/C_Knight.tx" x="944" y="64"/>
+  <object id="574" template="../../units/C_Knight.tx" x="976" y="64"/>
   <object id="577" template="../../units/C_Knight.tx" x="48" y="96"/>
   <object id="578" template="../../units/C_Knight.tx" x="80" y="96"/>
   <object id="579" template="../../units/C_Knight.tx" x="112" y="96"/>
-  <object id="580" template="../../units/C_Knight.tx" x="128" y="96"/>
-  <object id="582" template="../../units/C_Knight.tx" x="48" y="128"/>
-  <object id="583" template="../../units/C_Knight.tx" x="80" y="128"/>
-  <object id="584" template="../../units/C_Knight.tx" x="112" y="128"/>
+  <object id="580" template="../../units/C_Knight.tx" x="144" y="96"/>
+  <object id="582" template="../../units/C_Knight.tx" x="32" y="128"/>
+  <object id="583" template="../../units/C_Knight.tx" x="64" y="128"/>
+  <object id="584" template="../../units/C_Knight.tx" x="96" y="128"/>
   <object id="585" template="../../units/C_Knight.tx" x="128" y="128"/>
-  <object id="586" template="../../units/C_Knight.tx" x="864" y="112"/>
+  <object id="586" template="../../units/C_Knight.tx" x="848" y="112"/>
   <object id="587" template="../../units/C_Knight.tx" x="880" y="112"/>
   <object id="588" template="../../units/C_Knight.tx" x="928" y="112"/>
   <object id="589" template="../../units/C_Knight.tx" x="960" y="112"/>
   <object id="592" template="../../units/C_Knight.tx" x="48" y="144"/>
   <object id="593" template="../../units/C_Knight.tx" x="80" y="144"/>
   <object id="594" template="../../units/C_Knight.tx" x="112" y="144"/>
-  <object id="595" template="../../units/C_Knight.tx" x="128" y="144"/>
-  <object id="596" template="../../units/C_Knight.tx" x="864" y="128"/>
-  <object id="597" template="../../units/C_Knight.tx" x="880" y="128"/>
+  <object id="595" template="../../units/C_Knight.tx" x="144" y="144"/>
+  <object id="596" template="../../units/C_Knight.tx" x="832" y="128"/>
+  <object id="597" template="../../units/C_Knight.tx" x="864" y="128"/>
   <object id="598" template="../../units/C_Knight.tx" x="912" y="128"/>
   <object id="599" template="../../units/C_Knight.tx" x="944" y="128"/>
   <object id="602" template="../../units/C_Knight.tx" x="48" y="160"/>
   <object id="603" template="../../units/C_Knight.tx" x="80" y="160"/>
   <object id="604" template="../../units/C_Knight.tx" x="112" y="160"/>
-  <object id="605" template="../../units/C_Knight.tx" x="128" y="160"/>
-  <object id="606" template="../../units/C_Knight.tx" x="864" y="144"/>
-  <object id="607" template="../../units/C_Knight.tx" x="880" y="144"/>
+  <object id="605" template="../../units/C_Knight.tx" x="144" y="160"/>
+  <object id="606" template="../../units/C_Knight.tx" x="832" y="144"/>
+  <object id="607" template="../../units/C_Knight.tx" x="864" y="144"/>
   <object id="608" template="../../units/C_Knight.tx" x="912" y="144"/>
   <object id="609" template="../../units/C_Knight.tx" x="944" y="144"/>
   <object id="611" template="../../units/C_Knight.tx" x="176" y="96"/>
   <object id="612" template="../../units/C_Knight.tx" x="176" y="144"/>
   <object id="613" template="../../units/C_Knight.tx" x="208" y="64"/>
-  <object id="614" template="../../units/C_Knight.tx" x="224" y="64"/>
-  <object id="615" template="../../units/C_Knight.tx" x="240" y="64"/>
-  <object id="616" template="../../units/C_Knight.tx" x="768" y="80"/>
-  <object id="617" template="../../units/C_Knight.tx" x="784" y="80"/>
-  <object id="618" template="../../units/C_Knight.tx" x="800" y="80"/>
-  <object id="619" template="../../units/C_Knight.tx" x="816" y="80"/>
-  <object id="620" template="../../units/C_Knight.tx" x="832" y="80"/>
-  <object id="621" template="../../units/C_Knight.tx" x="144" y="112"/>
-  <object id="622" template="../../units/C_Knight.tx" x="176" y="112"/>
+  <object id="614" template="../../units/C_Knight.tx" x="240" y="80"/>
+  <object id="615" template="../../units/C_Knight.tx" x="256" y="80"/>
+  <object id="616" template="../../units/C_Knight.tx" x="752" y="96"/>
+  <object id="617" template="../../units/C_Knight.tx" x="768" y="80"/>
+  <object id="618" template="../../units/C_Knight.tx" x="784" y="64"/>
+  <object id="619" template="../../units/C_Knight.tx" x="800" y="80"/>
+  <object id="620" template="../../units/C_Knight.tx" x="816" y="64"/>
+  <object id="621" template="../../units/C_Knight.tx" x="176" y="64"/>
+  <object id="622" template="../../units/C_Knight.tx" x="160" y="112"/>
   <object id="623" template="../../units/C_Knight.tx" x="176" y="160"/>
   <object id="624" template="../../units/C_Knight.tx" x="208" y="80"/>
-  <object id="625" template="../../units/C_Knight.tx" x="224" y="80"/>
-  <object id="626" template="../../units/C_Knight.tx" x="752" y="112"/>
-  <object id="627" template="../../units/C_Knight.tx" x="768" y="112"/>
-  <object id="628" template="../../units/C_Knight.tx" x="784" y="112"/>
-  <object id="629" template="../../units/C_Knight.tx" x="800" y="112"/>
-  <object id="630" template="../../units/C_Knight.tx" x="816" y="112"/>
-  <object id="631" template="../../units/C_Knight.tx" x="176" y="128"/>
-  <object id="632" template="../../units/C_Knight.tx" x="176" y="176"/>
+  <object id="625" template="../../units/C_Knight.tx" x="240" y="96"/>
+  <object id="626" template="../../units/C_Knight.tx" x="736" y="112"/>
+  <object id="627" template="../../units/C_Knight.tx" x="752" y="128"/>
+  <object id="628" template="../../units/C_Knight.tx" x="768" y="112"/>
+  <object id="629" template="../../units/C_Knight.tx" x="784" y="96"/>
+  <object id="630" template="../../units/C_Knight.tx" x="800" y="112"/>
+  <object id="631" template="../../units/C_Knight.tx" x="160" y="128"/>
   <object id="633" template="../../units/C_Knight.tx" x="208" y="96"/>
-  <object id="634" template="../../units/C_Knight.tx" x="224" y="96"/>
-  <object id="635" template="../../units/C_Knight.tx" x="240" y="96"/>
-  <object id="636" template="../../units/C_Knight.tx" x="720" y="144"/>
-  <object id="637" template="../../units/C_Knight.tx" x="736" y="144"/>
-  <object id="638" template="../../units/C_Knight.tx" x="752" y="144"/>
-  <object id="639" template="../../units/C_Knight.tx" x="768" y="144"/>
-  <object id="640" template="../../units/C_Knight.tx" x="784" y="144"/>
-  <object id="641" template="../../units/C_Knight.tx" x="176" y="192"/>
+  <object id="634" template="../../units/C_Knight.tx" x="240" y="112"/>
+  <object id="635" template="../../units/C_Knight.tx" x="288" y="112"/>
+  <object id="638" template="../../units/C_Knight.tx" x="736" y="144"/>
+  <object id="639" template="../../units/C_Knight.tx" x="752" y="160"/>
+  <object id="640" template="../../units/C_Knight.tx" x="768" y="144"/>
   <object id="642" template="../../units/C_Knight.tx" x="208" y="112"/>
-  <object id="643" template="../../units/C_Knight.tx" x="224" y="112"/>
-  <object id="644" template="../../units/C_Knight.tx" x="240" y="112"/>
-  <object id="645" template="../../units/C_Knight.tx" x="256" y="112"/>
+  <object id="643" template="../../units/C_Knight.tx" x="240" y="128"/>
+  <object id="644" template="../../units/C_Knight.tx" x="288" y="128"/>
+  <object id="645" template="../../units/C_Knight.tx" x="304" y="128"/>
   <object id="646" template="../../units/P_Worker.tx" x="96" y="1008"/>
   <object id="647" template="../../buildings/P_Farm.tx" x="256" y="800"/>
   <object id="648" template="../../buildings/P_Farm.tx" x="752" y="880"/>
   <object id="649" template="../../units/C_Knight.tx" x="208" y="160"/>
-  <object id="651" template="../../units/C_Knight.tx" x="256" y="128"/>
-  <object id="652" template="../../units/C_Knight.tx" x="816" y="144"/>
-  <object id="653" template="../../units/C_Knight.tx" x="752" y="192"/>
+  <object id="651" template="../../units/C_Knight.tx" x="304" y="144"/>
+  <object id="652" template="../../units/C_Knight.tx" x="800" y="144"/>
+  <object id="653" template="../../units/C_Knight.tx" x="736" y="192"/>
+  <object id="654" template="../../units/C_Knight.tx" x="208" y="192"/>
+  <object id="655" template="../../units/C_Knight.tx" x="256" y="176"/>
+  <object id="656" template="../../units/C_Knight.tx" x="240" y="208"/>
  </objectgroup>
 </map>

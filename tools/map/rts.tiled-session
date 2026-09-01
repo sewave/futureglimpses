@@ -400,6 +400,14 @@
                 "y": 539.3333333333333
             }
         },
+        "maps/minigames/3-turrets.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 283.25,
+                "y": 206.25
+            }
+        },
         "maps/minitest.tmx": {
             "expandedObjectLayers": [
                 2
@@ -614,6 +622,7 @@
     "project": "rts.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/minigames/3-turrets.tmx",
         "maps/Main/5-bcapital.tmx",
         "maps/minigames/1-great battle.tmx",
         "maps/Main/1-soldiers.tmx",
@@ -624,8 +633,7 @@
         "maps/waves.tmx",
         "maps/test/superwar.tmx",
         "maps/test/closewar.tmx",
-        "maps/minigames/1-hero.tmx",
-        "maps/Adventure/3-mission.tmx"
+        "maps/minigames/1-hero.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
