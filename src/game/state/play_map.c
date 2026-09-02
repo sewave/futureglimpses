@@ -23,6 +23,7 @@
 #define TOOLTIP_TEXT_X_OFFSET 5
 #define TOOLTIP_TEXT_Y_OFFSET 5
 #define TOOLTIP_Z (UI_Z_ORDER + 1000)
+#define MINIMAP_RENDER_FRAMES 4
 
 static int moveViewportCounter = 0;
 static GameStateEnum nextState;
@@ -31,6 +32,7 @@ static char tooltipQtyBuffer[16];
 static const char *tooltipText;
 static uint8_t showResourceTooltip;
 static int tooltipX, tooltipY;
+static uint8_t renderMinimapCountdown;
 
 static void go_menu(GameContext* context) {
 	nextState = GAME_STATE_MENU_MAP;
@@ -411,7 +413,11 @@ static void game_update(GameContext *context) {
 }
 
 static void minimap_render(GameContext *context, RenderQueue *renderQueue) {
-	if(context->aiData.state != AI_STATE_CREATE_WORKERS) return;
+	if(renderMinimapCountdown > 0) {
+		renderMinimapCountdown--;
+		return;
+	}
+	renderMinimapCountdown = MINIMAP_RENDER_FRAMES;
 	// Minimap update
 	clear_bitmap(context->renderedMinimapUnits);
 	GameUnit **activeUnits = context->activeUnits;
@@ -463,6 +469,7 @@ void handle_play_map_render(GameContext *context, RenderQueue *renderQueue) {
 void handle_play_map_init(GameContext *context) {
 	video_fade_in_init(DEFAULT_FADE_SPEED, context->mainPalette);
 	renderBackground = FALSE;
+	renderMinimapCountdown = 0;
 	nextState = GAME_STATE_PLAY_MAP;
 	timer_set_speed(context->config.gameSpeed);
 	game_strategy_ai_init(context);
