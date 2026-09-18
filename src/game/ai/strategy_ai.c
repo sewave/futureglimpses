@@ -7,6 +7,7 @@
 #define ATTACK_WAVE_FRAMES (SEC_TO_FRAMES(60) / AI_STATE_COUNT)
 #define FIRST_WAVE_UNITS 4
 #define MAX_WAVE_UNITS 16
+#define MIN_WAVE_UNITS 1
 #define SEARCH_RESOURCE_MULTIPLIER 5
 #define MIN_GOLD_TRAINING_BUDGET 1000
 #define MAX_WORKER_IDLE_TIME (SEC_TO_FRAMES(30) / AI_STATE_COUNT)
@@ -320,15 +321,15 @@ static void game_strategy_ai_attack(GameContext *context) {
 			if (foundUnitsCount == context->aiData.currentWaveUnits) break;
 		}
 	}
-	if(context->aiData.currentWaveUnits > 0
+	if(context->aiData.currentWaveUnits > MIN_WAVE_UNITS
 		&& foundUnitsCount < context->aiData.currentWaveUnits
 		&& foundUnitsCount <= context->aiData.lastFoundUnits) context->aiData.currentWaveUnits--;
 	context->aiData.lastFoundUnits = foundUnitsCount;
 	// If we don't find enought, next search will be in half time
-	if (foundUnitsCount < context->aiData.currentWaveUnits) {
+	if (foundUnitsCount < MIN_WAVE_UNITS || foundUnitsCount < context->aiData.currentWaveUnits) {
 		context->aiData.attackCounter = ATTACK_WAVE_FRAMES / 2;
-		return;	
-	} 
+		return;
+	}
 	int foundX = foundUnits[0]->x;
 	int foundY = foundUnits[0]->y;
 	// Now we search player CH, or if not found first active unit
