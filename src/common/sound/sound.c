@@ -4,6 +4,9 @@
 #include "common/sound.h"
 #include "common/console.h"
 
+#define MIN_MIXER_BITS 16
+#define MIN_MIXER_QUALITY 0
+
 static JGMOD *currentModMusic = NULL;
 static MIDI *currentMidiMusic = NULL;
 static MusicType currentMusicType = MUSIC_TYPE_MIDI;
@@ -31,7 +34,8 @@ void _snd_destroy_sound(int soundIndex) {
 */
 InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, MusicType musicType) {
 	printf("Initializing sound system.........");
-	remove_sound();
+	soundInitialized = FALSE;
+	set_volume_per_voice(0);
 	currentMusicType = musicType;
 	if (currentMusicType == MUSIC_TYPE_MIDI) {
 		reserve_voices(totalVoices, musicVoices);
@@ -41,6 +45,12 @@ InitializationStatusEnum snd_init_system(int totalVoices, int musicVoices, Music
 	if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
 	if (currentMusicType == MUSIC_TYPE_MOD) {
 		if (install_mod(musicVoices) < ALLEGRO_INIT_OK) return INITIALIZATION_ERROR;
+	}
+	if (get_mixer_bits() < MIN_MIXER_BITS) {
+		set_mixer_quality(MIN_MIXER_QUALITY);
+		console_set_text_color(CONSOLE_COLOR_GREEN);
+		console_set_background_color(CONSOLE_COLOR_BLACK);
+		console_printf("%d BITS ", get_mixer_bits());
 	}
 	common_print_ok();
 	soundInitialized = TRUE;
