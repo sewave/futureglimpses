@@ -385,8 +385,7 @@ void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 #endif
 #define SEC_TO_FRAMES(secs) (1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS))
 #define MAX_CATCHUP_TICKS 5
-// First MB is special so we check for 7 more
-#define PROGRAM_REQUIRED_RAM_MB 7
+#define PROGRAM_REQUIRED_RAM_MB 8
 #define MINIMAL_CPU_FAMILY CPU_FAMILY_I486
 #define REQUIRED_CPU_CAPABILITIES CPU_FPU
 #define UNSUPPORTED_CPU_MESSAGE "Error: CPU not supported. A 486 or better with FPU is required."

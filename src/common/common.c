@@ -27,6 +27,18 @@ char common_init_basic(
 	console_printf("\r\n     Initializing common systems    \r\n");
 	common_set_print_style();
 
+	// Check for requiredRamMb MB of extra memory
+	printf("Checking required memory (%d MB)...", requiredRamMb);
+	int totalMemoryMb = get_total_physical_memory_mb();
+	if (totalMemoryMb < requiredRamMb) {
+		common_print_ko();
+		printf("Error: Not enough memory. At least %d MB of RAM is required, found %d MB.\n",
+			requiredRamMb,
+			totalMemoryMb);
+		return PROGRAM_ERROR;
+	}
+	common_print_ok();
+
 	/* Init all systems */
 	printf("Initializing Allegro..............");
 	if (allegro_init() != ALLEGRO_INIT_OK) {
@@ -41,15 +53,6 @@ char common_init_basic(
 	if (cpu_family < minCpuFamily || (requiredCpuCapabilities && !(cpu_capabilities & requiredCpuCapabilities))) {
 		common_print_ko();
 		printf(unsupportedCpuMessage);
-		return PROGRAM_ERROR;
-	}
-	common_print_ok();
-
-	// Check for requiredRamMb MB of extra memory
-	printf("Checking required memory (%d MB)...", requiredRamMb);
-	if (!has_minimal_free_memory(requiredRamMb)) {
-		common_print_ko();
-		printf("Error: Not enough memory. At least %d MB of RAM is required.", requiredRamMb);
 		return PROGRAM_ERROR;
 	}
 	common_print_ok();
