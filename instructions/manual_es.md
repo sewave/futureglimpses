@@ -1,4 +1,4 @@
-# <span style="display:block;text-align:center">ATISBOS DEL FUTURO v1.0</span>
+# <span style="display:block;text-align:center">ATISBOS DEL FUTURO</span>
 
 <span style="display:block;text-align:center">!["Pantalla de título"](resources/es/pic_001.png "Pantalla de título")</span>
 Atisbos del futuro o Future glimpses es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada entre otros.
