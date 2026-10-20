@@ -27,7 +27,7 @@ typedef enum {
 static TitleMenuStateEnum titleMenuState;
 static BITMAP *titleBackground;
 static BITMAP *titleText;
-static char* titleCredits = "v1.0 © Wave 2026";
+static char* titleCredits = "v1.1 © Wave 2026";
 
 static char* get_title_credits(const GameContext *context) {
 	return titleCredits;
