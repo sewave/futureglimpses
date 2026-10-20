@@ -124,7 +124,7 @@ int main_init() {
 }
 
 void main_loop() {
-	#ifndef DOS
+	#ifndef __MSDOS__
 		BITMAP* screenDepthBuffer = create_bitmap_ex(SCREEN_COLOR_DEPTH, GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	#endif
 	timer_reset_ticks();
@@ -157,7 +157,7 @@ void main_loop() {
 			render_queue_execute(&renderQueue, context.screenBuffer);
 			vsync();
 			acquire_screen();
-			#ifdef DOS
+			#ifdef __MSDOS__
 				blit(context.screenBuffer, screen, 0, 0, 0, 0, screen->w, screen->h);
 			#else
 				blit(context.screenBuffer, screenDepthBuffer, 0, 0, 0, 0, context.screenBuffer->w, context.screenBuffer->h);

@@ -17,7 +17,7 @@ DEV_ALLEGRO_WIN_DIR = $(DEV_ALLEGRO_DIR)/allegro4-win
 
 ifeq ($(ENV), djgpp)
     # DJGPP Environment (DOS)
-    CC = $(DJGPP_EXE_PATH) -DDOS -DALLEGRO_HAVE_STDINT_H
+    CC = $(DJGPP_EXE_PATH) -DALLEGRO_HAVE_STDINT_H
     TARGET_NAME = dos
     TARGET_EXT = .exe
     CLEAN_RM = del 2> /dev/null

@@ -4,7 +4,7 @@
 
 #define GAME_INTERNAL_WIDTH 320
 #define GAME_INTERNAL_HEIGHT 200
-#ifdef DOS
+#ifdef __MSDOS__
 #define GAME_EXTERNAL_WIDTH GAME_INTERNAL_WIDTH
 #define GAME_EXTERNAL_HEIGHT GAME_INTERNAL_HEIGHT
 #else
@@ -14,7 +14,7 @@
 
 #define GAME_COLOR_DEPTH 8
 
-#ifdef DOS
+#ifdef __MSDOS__
 #define SCREEN_COLOR_DEPTH 8
 #else
 #ifdef DEBUG

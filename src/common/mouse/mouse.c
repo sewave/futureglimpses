@@ -12,7 +12,7 @@ static uint8_t numMouseCursors = 0;
 static uint8_t currentMouseCursor = 0;
 
 static int mouse_get_x() {
-#ifdef DOS
+#ifdef __MSDOS__
 	return mouse_x;
 #else
 	return mouse_x / X_RESOLUTION_MULTIPLIER;
@@ -20,7 +20,7 @@ static int mouse_get_x() {
 }
 
 static int mouse_get_y() {
-#ifdef DOS
+#ifdef __MSDOS__
 	return mouse_y;
 #else
 	return mouse_y / Y_RESOLUTION_MULTIPLIER;

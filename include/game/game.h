@@ -378,7 +378,7 @@ void game_execute_state_init(GameContext *context);
 void game_execute_state_exit(GameContext *context);
 void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
-#ifdef DOS
+#ifdef __MSDOS__
 #define LOGIC_RATE_BPS 70
 #else
 #define LOGIC_RATE_BPS 60

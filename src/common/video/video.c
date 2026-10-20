@@ -21,7 +21,7 @@ static int video_get_color_distance(RGB *source, RGB *target) {
 
 InitializationStatusEnum video_init_system(int width, int height, int depth) {
 	set_color_depth(depth);
-#ifdef DOS
+#ifdef __MSDOS__
 	if (set_gfx_mode(GFX_AUTODETECT, width, height, 0, 0) != ALLEGRO_INIT_OK) {
 #endif
 		#ifdef DEBUG
@@ -33,10 +33,10 @@ InitializationStatusEnum video_init_system(int width, int height, int depth) {
 			set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 			return INITIALIZATION_ERROR;
 		}
-#ifdef DOS
+#ifdef __MSDOS__
 	}
 #endif
-#ifndef DOS
+#ifndef __MSDOS__
 	set_display_switch_mode(SWITCH_BACKGROUND);
 #endif
 	return INITIALIZATION_OK;
@@ -76,8 +76,8 @@ void video_fade_reset() {
 void video_fade_handle() {
 	if (fadeType == FADE_NONE) return;
 	vsync();
-	// IF DOS or DEBUG are defined
-	#if defined(DOS) || defined(DEBUG)
+	// IF __MSDOS__ or DEBUG are defined
+	#if defined(__MSDOS__) || defined(DEBUG)
 	if (fadeType == FADE_IN && fadePalette) {
 		fade_in(fadePalette, fadeSpeed);
 	} else {
