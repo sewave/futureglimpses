@@ -11,6 +11,16 @@
 static RenderQueue renderQueue;
 static GameContext context;
 
+#ifdef HIGH_RESOLUTION
+	#define CONSOLE_TITLE_X 22
+	#define CONSOLE_TITLE_Y 1
+	#define TITLE_RESOLUTION " HD"
+#else
+	#define CONSOLE_TITLE_X 24
+	#define CONSOLE_TITLE_Y 1
+	#define TITLE_RESOLUTION ""
+#endif
+
 static void get_minimap_colors(GameContext *context) {
 	BITMAP *tilesetColors = game_gfx_get_tileset_colors();
 	for (int x = 0; x < TILESET_TILES_COLOR_WIDTH; x++) {
@@ -26,8 +36,8 @@ int main_init() {
 	console_set_text_color(CONSOLE_COLOR_YELLOW);
 	console_set_background_color(CONSOLE_COLOR_BLUE);
 	console_print_box(0, 0, 80, 3);
-	console_move_cursor(24, 1);
-	console_printf("%s v%s, 2026 Wave\r\n", GAME_TITLE, VERSION);
+	console_move_cursor(CONSOLE_TITLE_X, CONSOLE_TITLE_Y);
+	console_printf("%s v%s%s, 2026 Wave\r\n", GAME_TITLE, VERSION, TITLE_RESOLUTION);
 	// MIN_CPU, CPU_REQ, RAM_REQ, USE_MOUSE
 	if (common_init_basic(MINIMAL_CPU_FAMILY, REQUIRED_CPU_CAPABILITIES,
 				UNSUPPORTED_CPU_MESSAGE, PROGRAM_REQUIRED_RAM_MB,

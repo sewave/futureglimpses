@@ -6,7 +6,7 @@
 #include "game_enums.h"
 #include "game/map/map_code.h"
 
-#define VERSION "1.1"
+#define VERSION "1.2"
 #define GAME_TITLE "Future Glimpses"
 
 #define DEFAULT_MUSIC_VOLUME 100
