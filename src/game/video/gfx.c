@@ -21,7 +21,7 @@
 static SpriteSheet spriteSheetsBlue[UNIT_TYPE_NUMBER];
 static SpriteSheet spriteSheetsRed[UNIT_TYPE_NUMBER];
 static SpriteSheet spriteSheetsObject[OBJ_TYPE_NUMBER];
-static BITMAP *frame;
+static RLE_SPRITE *frame;
 static BITMAP *icons[GAME_ICON_COUNT];
 static BITMAP *overtiles[GAME_OVERTILE_COUNT];
 static RLE_SPRITE *unitIcons[GAME_UNIT_ICON_COUNT];
@@ -186,7 +186,9 @@ InitializationStatusEnum game_gfx_load_all() {
 	printf("Loading ui gfx....................");
 	cursorPos = console_get_cursor_position();
 	common_print_load_step(cursorPos.x, cursorPos.y);
-	frame = load_bitmap(FRAME_FILE, NULL);
+	BITMAP *frameBitmap = load_bitmap(FRAME_FILE, NULL);
+	if (!frameBitmap) return INITIALIZATION_ERROR;
+	frame = get_rle_sprite(frameBitmap);
 	if (!frame) return INITIALIZATION_ERROR;
 	common_print_load_step(cursorPos.x, cursorPos.y);
 
@@ -245,7 +247,7 @@ void game_gfx_destroy_all() {
 	for (int i = 0; i < OBJ_TYPE_NUMBER; i++) {
 		game_gfx_destroy_sheet(&spriteSheetsObject[i]);
 	}
-	if (frame) destroy_bitmap(frame);
+	if (frame) destroy_rle_sprite(frame);
 	if (tileSet) destroy_bitmap(tileSet);
 	if (tileSetColors) destroy_bitmap(tileSetColors);
 	for (int i = 0; i < GAME_ICON_COUNT; i++) {
@@ -278,7 +280,7 @@ RLE_SPRITE *game_gfx_get_object_sheet_frame(ObjectTypeEnum type, uint8_t frame) 
 	return spriteSheetsObject[type].frames[frame];
 }
 
-BITMAP *game_gfx_get_frame() {
+RLE_SPRITE *game_gfx_get_frame() {
 	return frame;
 }
 

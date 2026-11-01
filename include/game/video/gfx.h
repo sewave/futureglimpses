@@ -52,7 +52,7 @@ InitializationStatusEnum game_gfx_load_all();
 void game_gfx_destroy_all();
 void game_gfx_set_sprite_sheet(GameUnit *unit);
 void game_gfx_set_object_sheet(Object *object);
-BITMAP *game_gfx_get_frame();
+RLE_SPRITE *game_gfx_get_frame();
 BITMAP *game_gfx_get_icon(GameIconEnum gameIcon);
 RLE_SPRITE *game_gfx_get_unit_icon(GameUnitIconEnum unitIcon);
 BITMAP *game_gfx_get_tileset();
