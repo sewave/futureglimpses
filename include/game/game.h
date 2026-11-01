@@ -8,8 +8,6 @@
 
 #define VERSION "1.1"
 #define GAME_TITLE "Future Glimpses"
-// Comment to disable cheats in game
-#define CHEATS_ENABLED
 
 #define DEFAULT_MUSIC_VOLUME 100
 #define DEFAULT_SFX_VOLUME 100

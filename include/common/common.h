@@ -22,12 +22,34 @@ typedef struct {
 	int width, height;
 } Size;
 
-#ifdef DEBUG
-#define X_RESOLUTION_MULTIPLIER 3
-#define Y_RESOLUTION_MULTIPLIER 3.6
+// Comment to disable cheats in game
+#define CHEATS_ENABLED
+
+// Uncomment for high resolution mode
+//#define HIGH_RESOLUTION
+
+#ifdef HIGH_RESOLUTION
+	#define HR_PATH "hr/"
 #else
-#define X_RESOLUTION_MULTIPLIER 2
-#define Y_RESOLUTION_MULTIPLIER 2.4
+	#define HR_PATH ""
+#endif
+
+#ifdef DEBUG
+	#ifdef HIGH_RESOLUTION
+		#define X_RESOLUTION_MULTIPLIER 2
+		#define Y_RESOLUTION_MULTIPLIER 2
+	#else
+		#define X_RESOLUTION_MULTIPLIER 3
+		#define Y_RESOLUTION_MULTIPLIER 3.6
+	#endif
+#else
+	#ifdef HIGH_RESOLUTION
+		#define X_RESOLUTION_MULTIPLIER 1
+		#define Y_RESOLUTION_MULTIPLIER 1
+	#else
+		#define X_RESOLUTION_MULTIPLIER 2
+		#define Y_RESOLUTION_MULTIPLIER 2.4
+	#endif
  #endif
 
 char common_init_basic(
