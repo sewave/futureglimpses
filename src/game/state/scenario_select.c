@@ -9,28 +9,33 @@
 #include "game/mouse/game_mouse.h"
 #include "game/sound/game_sound.h"
 
-#define SCENARIO_SELECT_BACKGROUND_PATH "assets/gfx/ui/back/select.pcx"
+#define SCENARIO_SELECT_BACKGROUND_PATH "assets/gfx/ui/back/" HR_PATH "select.pcx"
+#ifdef HIGH_RESOLUTION
+#define SCENARIO_SELECT_MAPS 20
+#else
 #define SCENARIO_SELECT_MAPS 10
+#endif
 #define GUI_BODY_Y 20
 #define GUI_BAR_X 152
 #define GUI_ROWS_X 5
 #define GUI_ROWS_WIDTH 140
-#define GUI_DESCRIPTION_X 168
+#define GUI_DESCRIPTION_X (GAME_INTERNAL_WIDTH - 152)
 #define GUI_DESCRIPTION_MAX_WIDTH 140
 #define GUI_DESCRIPTION_MAX_HEIGHT 145
 #define GUI_DESCRIPTION_MAX_HEIGHT_SMALL (GUI_DESCRIPTION_MAX_HEIGHT / 2)
-#define BUTTON_RETURN_Y 175
-#define BUTTON_PLAY_Y 145
+#define BUTTON_RETURN_Y (GAME_INTERNAL_HEIGHT - 25)
+#define BUTTON_PLAY_Y (GAME_INTERNAL_HEIGHT - 55)
 
 #define LEFT_BACK_X (GUI_ROWS_X - 2)
 #define LEFT_BACK_Y (GUI_BODY_Y - 2)
 #define LEFT_BACK_WIDTH (GUI_DESCRIPTION_MAX_WIDTH + 8)
-#define LEFT_BACK_HEIGHT 122
+#define LEFT_BACK_HEIGHT (SCENARIO_SELECT_MAPS * 12 + 2)
 #define RIGHT_BACK_WIDTH (GUI_DESCRIPTION_MAX_WIDTH + 4)
 #define RIGHT_BACK_HEIGHT (GUI_DESCRIPTION_MAX_HEIGHT + 4)
 #define RIGHT_BACK_HEIGHT_SMALL (GUI_DESCRIPTION_MAX_HEIGHT_SMALL + 4)
 #define RIGHT_BACK_X (GUI_DESCRIPTION_X - 2)
 #define RIGHT_BACK_Y (GUI_BODY_Y - 2)
+#define BAR_Y (GUI_BODY_Y + (GAME_INTERNAL_HEIGHT / 480) * 52)
 
 typedef enum {
 	SCENARIO_SELECT_BROWSE_STATE,
@@ -166,7 +171,7 @@ static GuiElement scenarioSelect[SCENARIO_SELECT_ELEMENTS] = {
 		.textBackground = TRANSPARENT_INDEX
 	},
 	{
-		.x = GUI_BAR_X, .y = GUI_BODY_Y, .z = 10,
+		.x = GUI_BAR_X, .y = BAR_Y, .z = 10,
 		.type = GUI_ELEMENT_VERTICAL_BAR,
 		.typed = {
 			.bar = {

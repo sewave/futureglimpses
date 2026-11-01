@@ -8,7 +8,7 @@
 #include "game/map/map_code.h"
 #include "game/scenario/scenario_select_map.h"
 
-#define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/results.pcx"
+#define RESULTS_BACKGROUND_PATH "assets/gfx/ui/back/" HR_PATH "results.pcx"
 #define CONTROLLER_STATS 8
 #define CONTROLLER_STAT_MAX_LENGTH 16
 #define UNITS_TRAINED_INDEX 0
@@ -21,8 +21,8 @@
 #define WOOD_SPENT_INDEX 7
 #define RESULT_X_MID 55
 #define RESULT_X_INC (GAME_INTERNAL_WIDTH - 2 * RESULT_X_MID)
-#define RESULT_Y_MIN 50
-#define RESULT_Y_INC 15
+#define RESULT_Y_MIN ((GAME_INTERNAL_HEIGHT / 200) * 50)
+#define RESULT_Y_INC (GAME_INTERNAL_HEIGHT / 13)
 #define RESULT_Z 10
 
 static BITMAP *resultsBackground;
@@ -57,9 +57,9 @@ static char* get_result_text(const GameContext *context) {
 
 #define MENU_BUTTON_WIDTH 120
 #define MENU_BUTTON_HEIGHT 18
-#define MENU_BUTTON_X 100
-#define MENU_BUTTON_Y 175
-#define MENU_STAT_Y 25
+#define MENU_BUTTON_X (GAME_INTERNAL_WIDTH / 2 - MENU_BUTTON_WIDTH / 2)
+#define MENU_BUTTON_Y (GAME_INTERNAL_HEIGHT - 25)
+#define MENU_STAT_Y ((GAME_INTERNAL_HEIGHT / 200) * 25)
 #define MENU_STAT_Y_INC 8
 
 static GuiElement menu[MENU_ELEMENTS] = {
@@ -74,7 +74,7 @@ static GuiElement menu[MENU_ELEMENTS] = {
 		.textColor = PAL_COLOR_YELLOW,
 		.shadowTextColor = PAL_COLOR_BLACK,
 		.textBackground = TRANSPARENT_INDEX,
-		.typed = { .customText = { .text = get_result_text, .maxX = 320 } }
+		.typed = { .customText = { .text = get_result_text, .maxX = GAME_INTERNAL_WIDTH } }
 	},
 	{
 		.x = RESULT_X_MID / 2, .y = MENU_STAT_Y, .z = 5,
@@ -153,7 +153,7 @@ static GuiElement returnTitle[RETURN_TITLE_ELEMENTS] = {
 
 static GuiElement returnTitleOrCampaign[RETURN_TITLE_OR_CAMPAIGN_ELEMENTS] = {
     {
-        .x = 20, .y = MENU_BUTTON_Y, .z = 2,
+        .x = MENU_BUTTON_X - 80, .y = MENU_BUTTON_Y, .z = 2,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN_TITLE,
         .textColor = PAL_COLOR_WHITE,
@@ -168,7 +168,7 @@ static GuiElement returnTitleOrCampaign[RETURN_TITLE_OR_CAMPAIGN_ELEMENTS] = {
         }
     },
     {
-        .x = 180, .y = MENU_BUTTON_Y, .z = 3,
+        .x = MENU_BUTTON_X + 80, .y = MENU_BUTTON_Y, .z = 3,
         .type = GUI_ELEMENT_BUTTON,
         .textId = GAME_TEXT_ID_MENU_RETURN_CAMPAIGN,
         .textColor = PAL_COLOR_WHITE,

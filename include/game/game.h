@@ -396,7 +396,7 @@ void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 #define MOUSE_Y_GO_DOWN (GAME_INTERNAL_HEIGHT - TILE_SIZE / 8)
 
 #define HOVER_MESSAGE_X 72
-#define HOVER_MESSAGE_Y 189
+#define HOVER_MESSAGE_Y (GAME_INTERNAL_HEIGHT - 11)
 
 #define HEALTH_BAR_QUARTER 4
 #define HEALTH_BAR_HALF 2

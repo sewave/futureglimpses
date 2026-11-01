@@ -313,7 +313,7 @@ void render_queue_submit_ui(GameContext *context, RenderQueue *renderQueue) {
 							 PAL_COLOR_WHITE);
 	#ifdef CHEATS_ENABLED
 	itoa((uint8_t) fps_get(), fpsText, BASE_TEN_NUMBER);
-	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, 290, 1, PAL_COLOR_WHITE, -1);
+	render_queue_submit_text(renderQueue, UI_Z_ORDER + 510, context->gameFont, fpsText, GAME_INTERNAL_WIDTH - 30, 1, PAL_COLOR_WHITE, -1);
 	if (context->areCheatsEnabled) {
 		int blue = 0;
 		int red = 0;

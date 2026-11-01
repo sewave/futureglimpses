@@ -13,7 +13,7 @@
 #include "game/sound/game_sound.h"
 
 #define CMD_BAR_BUTTON_INITIAL_X 2
-#define CMD_BAR_BUTTON_INITIAL_Y 129
+#define CMD_BAR_BUTTON_INITIAL_Y (GAME_INTERNAL_HEIGHT - 71)
 
 #define CMD_BAR_BUTTON_SEPARATION_WIDTH 35
 #define CMD_BAR_BUTTON_SEPARATION_HEIGHT 24
@@ -58,9 +58,10 @@
 #define UNITS_PERCENT " \%"
 
 static Position RESOURCE_LOCATIONS[UNIT_USED_RESOURCES] = {
-		{220, 190},
-		{258, 190},
-		{295, 190}};
+	{220, GAME_INTERNAL_HEIGHT - 10},
+	{258, GAME_INTERNAL_HEIGHT - 10},
+	{295, GAME_INTERNAL_HEIGHT - 10}
+};
 
 static uint8_t buttonIndex;
 static uint8_t unitCount[UNIT_TYPE_NUMBER] = {0};

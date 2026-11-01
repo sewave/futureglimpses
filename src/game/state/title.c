@@ -8,9 +8,11 @@
 #include "game/sound/game_sound.h"
 #include "game/mouse/game_mouse.h"
 
-#define TITLE_BACKGROUND_PATH "assets/gfx/ui/back/title.pcx"
-#define TITLE_TEXT_ES_PATH "assets/gfx/ui/t_txt_es.pcx"
-#define TITLE_TEXT_EN_PATH "assets/gfx/ui/t_txt_en.pcx"
+#define TITLE_BACKGROUND_PATH "assets/gfx/ui/back/" HR_PATH "title.pcx"
+#define TITLE_TEXT_ES_PATH "assets/gfx/ui/" HR_PATH "t_txt_es.pcx"
+#define TITLE_TEXT_EN_PATH "assets/gfx/ui/" HR_PATH "t_txt_en.pcx"
+#define TITLE_TEXT_X (GAME_INTERNAL_WIDTH / 320 * 20)
+#define TITLE_TEXT_Y 10
 
 typedef enum {
 	TITLE_MENU_INITIAL,
@@ -88,16 +90,16 @@ static void credits(GameContext* context) {
 	titleMenuState = TITLE_MENU_CREDITS;
 }
 
-#define CREDITS_WAVE_X 224
-#define CREDITS_WAVE_Y 185
+#define CREDITS_WAVE_X (GAME_INTERNAL_WIDTH - 96)
+#define CREDITS_WAVE_Y (GAME_INTERNAL_HEIGHT - 15)
 
-#define TITLE_MENU_START_Y 120
+#define TITLE_MENU_START_Y (GAME_INTERNAL_HEIGHT - 80)
 #define TITLE_MENU_SPACING 20
 #define TITLE_MENU_BUTTON_WIDTH 120
 #define TITLE_MENU_BUTTON_HEIGHT 18
-#define TITLE_MENU_BUTTON_X 100
-#define TITLE_MENU_Y 130
-#define TITLE_MENU_X 80
+#define TITLE_MENU_BUTTON_X (GAME_INTERNAL_WIDTH / 2 - 60)
+#define TITLE_MENU_Y (GAME_INTERNAL_HEIGHT - 70)
+#define TITLE_MENU_X (GAME_INTERNAL_WIDTH / 2 - 80)
 #define TITLE_MENU_WIDTH 170
 #define TITLE_MENU_HEIGHT 115
 
@@ -118,7 +120,7 @@ static GuiElement titleMenu[TITLE_MENU_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = 20, .y = 10, .z = 1,
+		.x = TITLE_TEXT_X, .y = TITLE_TEXT_Y, .z = 1,
 		.type = GUI_ELEMENT_SPRITE,
 		.typed = { .image = { .bitmap = &titleText } }
 	},
@@ -201,7 +203,7 @@ static GuiElement optionsMenu[TITLE_MENU_OPTIONS_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = 20, .y = 10, .z = 1,
+		.x = TITLE_TEXT_X, .y = TITLE_TEXT_Y, .z = 1,
 		.type = GUI_ELEMENT_SPRITE,
 		.typed = { .image = { .bitmap = &titleText } }
 	},
@@ -269,7 +271,7 @@ static GuiElement confirmOSMenu[TITLE_MENU_CONFIRM_EXIT_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = 20, .y = 10, .z = 1,
+		.x = TITLE_TEXT_X, .y = TITLE_TEXT_Y, .z = 1,
 		.type = GUI_ELEMENT_SPRITE,
 		.typed = { .image = { .bitmap = &titleText } }
 	},
@@ -331,7 +333,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = 20, .y = 10, .z = 1,
+		.x = TITLE_TEXT_X, .y = TITLE_TEXT_Y, .z = 1,
 		.type = GUI_ELEMENT_SPRITE,
 		.typed = { .image = { .bitmap = &titleText } }
 	},
@@ -387,6 +389,7 @@ static GuiElement soundMenu[TITLE_MENU_SOUND_ELEMENTS] = {
 };
 
 #define GAMEPLAY_MENU_ELEMENTS 8
+#define GAMEPLAY_MENU_START_X (GAME_INTERNAL_WIDTH / 2 - 160)
 
 static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
     {
@@ -403,7 +406,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		.typed = { .image = { .bitmap = &titleBackground } }
 	},
 	{
-		.x = 20, .y = 10, .z = 1,
+		.x = TITLE_TEXT_X, .y = TITLE_TEXT_Y, .z = 1,
 		.type = GUI_ELEMENT_SPRITE,
 		.typed = { .image = { .bitmap = &titleText } }
 	},
@@ -423,7 +426,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
         }
     },
 	{
-		.x = 5, .y = TITLE_MENU_Y - 15, .z = 10,
+		.x = GAMEPLAY_MENU_START_X + 5, .y = TITLE_MENU_Y - 15, .z = 10,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS,
 		.textColor = PAL_COLOR_WHITE,
@@ -446,7 +449,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = 125, .y = TITLE_MENU_Y - 15, .z = 10,
+		.x = GAMEPLAY_MENU_START_X + 125, .y = TITLE_MENU_Y - 15, .z = 10,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_LIFE_BARS_STYLE,
 		.textColor = PAL_COLOR_WHITE,
@@ -467,7 +470,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = 255, .y = TITLE_MENU_Y - 15, .z = 11,
+		.x = GAMEPLAY_MENU_START_X + 255, .y = TITLE_MENU_Y - 15, .z = 11,
 		.type = GUI_ELEMENT_OPTION,
 		.textId = GAME_TEXT_ID_MENU_LANGUAGE,
 		.textColor = PAL_COLOR_WHITE,
@@ -488,7 +491,7 @@ static GuiElement gameplayMenu[GAMEPLAY_MENU_ELEMENTS] = {
 		}
 	},
 	{
-		.x = MENU_BACK_X + 10, .y = TITLE_MENU_Y + 25, .z = 11,
+		.x = GAMEPLAY_MENU_START_X + 90, .y = TITLE_MENU_Y + 25, .z = 11,
 		.type = GUI_ELEMENT_BAR,
 		.textId = GAME_TEXT_ID_MENU_GAMEPLAY_GAME_SPEED,
 		.textColor = PAL_COLOR_WHITE,

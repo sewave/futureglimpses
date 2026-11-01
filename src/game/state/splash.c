@@ -3,8 +3,8 @@
 #include "game/video/game_video.h"
 #include "game/sound/game_sound.h"
 
-#define SPLASH_BACKGROUND_PATH "assets/gfx/ui/back/wave.pcx"
-#define SPLASH_MASK_PATH "assets/gfx/ui/back/wavesoft.pcx"
+#define SPLASH_BACKGROUND_PATH "assets/gfx/ui/back/" HR_PATH "wave.pcx"
+#define SPLASH_MASK_PATH "assets/gfx/ui/back/" HR_PATH "wavesoft.pcx"
 
 static const int SPLASH_DURATION_TICKS = 2 * LOGIC_RATE_BPS;
 static const int AFTER_SPLASH_DURATION_TICKS = 2 * LOGIC_RATE_BPS;

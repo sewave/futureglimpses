@@ -2,8 +2,8 @@
 #define GUI_H
 #include "game/game.h"
 
-#define MENU_BACK_X 80
-#define MENU_BACK_Y 25
+#define MENU_BACK_X (GAME_INTERNAL_WIDTH / 2 - 80)
+#define MENU_BACK_Y (GAME_INTERNAL_HEIGHT / 2 - 75)
 #define MENU_BACK_WIDTH 160
 #define MENU_BACK_HEIGHT 160
 #define MENU_TITLE_Y_OFFSET 5

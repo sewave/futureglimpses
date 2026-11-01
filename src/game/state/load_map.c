@@ -13,7 +13,7 @@
 #include "game/sound/game_sound.h"
 
 #define MESSAGES_X 74
-#define MESSAGES_Y 175
+#define MESSAGES_Y (GAME_INTERNAL_HEIGHT - 25)
 #define MESSAGES_Y_INC -14
 #define MESSAGES_Z UI_Z_ORDER + 900
 #define INITIAL_EXPLORE_MULTIPLIER 2

@@ -5,13 +5,13 @@
 #include <stdio.h>
 #include <common/console.h>
 
+#define FRAME_FILE "assets/gfx/ui/back/" HR_PATH "frame.pcx"
+#define MENU_BACK_FILE "assets/gfx/ui/back/menuback.pcx"
 #define CMD_BAR_BUTTONS_FILE "assets/gfx/ui/cmdbtns.pcx"
-#define FRAME_FILE "assets/gfx/ui/back/frame.pcx"
 #define TILESET_FILE "assets/gfx/tileset.pcx"
 #define TILESET_COLORS_FILE "assets/gfx/tilesetm.pcx"
 #define ICONS_FILE "assets/gfx/ui/icons.pcx"
 #define OVERTILES_FILE "assets/gfx/ui/otiles.pcx"
-#define MENU_BACK_FILE "assets/gfx/ui/back/menuback.pcx"
 #define UNIT_ICONS_FILE "assets/gfx/ui/unicons.pcx"
 #define LAZY_WORKERS_BUTTON_FILE "assets/gfx/ui/lazyw.pcx"
 #define RESOURCE_HOVER_FILE "assets/gfx/ui/reshover.pcx"
