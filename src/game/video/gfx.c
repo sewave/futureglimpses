@@ -189,6 +189,7 @@ InitializationStatusEnum game_gfx_load_all() {
 	BITMAP *frameBitmap = load_bitmap(FRAME_FILE, NULL);
 	if (!frameBitmap) return INITIALIZATION_ERROR;
 	frame = get_rle_sprite(frameBitmap);
+	destroy_bitmap(frameBitmap);
 	if (!frame) return INITIALIZATION_ERROR;
 	common_print_load_step(cursorPos.x, cursorPos.y);
 
