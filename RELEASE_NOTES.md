@@ -28,7 +28,7 @@ Versión inicial
 **1.2:**
 Added HD mode with independant executable
 Some performance improvements
-Synchronized low and hihg resolution title screens
+Synchronized low and high resolution title screens
 
 **1.1:**
 Fixes a bug with 8-bit sound cards
