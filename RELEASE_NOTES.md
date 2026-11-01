@@ -1,5 +1,10 @@
 # Español
 
+**1.2:**
+Añadido el modo HD con ejecutable independiente
+Algunas mejoras de rendimiento
+Sincronizada pantalla de título de baja y alta resolución
+
 **1.1:**
 Arregla un bug con tarjetas de sonido de 8 bits
 Arregla un bug al comprobar erróneamente la memoria
@@ -19,6 +24,11 @@ Arregla un bug al mostrar el minimapa en máquinas lentas con alta velocidad de 
 Versión inicial
 
 # English
+
+**1.2:**
+Added HD mode with independant executable
+Some performance improvements
+Synchronized low and hihg resolution title screens
 
 **1.1:**
 Fixes a bug with 8-bit sound cards
