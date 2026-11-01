@@ -1,11 +1,10 @@
 # <span style="display:block;text-align:center">FUTURE GLIMPSES</span>
 
 <span style="display:block;text-align:center">!["Title screen"](resources/en/pic_001.png "Title screen")</span>
-Future glimpses is a small real-time strategy (or RTS) game that pays homage to Warcraft / Age of Empires, blending elements from both among others.
-It aims to be an exercise to see if it was possible to make it functional on a 486DX2/66 with 16MB of RAM, especially for the [MS-DOS Club](https://msdos.club/) contest.
-
-<span style="display:block;text-align:center">!["Loading screen"](resources/en/pic_002.png "Loading screen")</span>
 <span style="display:block;text-align:center">©2026 Wave</span>
+This game is a small real-time strategy (or RTS) game that pays homage to Warcraft / Age of Empires, blending elements from both among others.
+It aims to be an exercise to see if it was possible to make it functional on a 486DX2/66 with 16MB of RAM, especially for the [MS-DOS Club](https://msdos.club/) contest.
+There are two versiones of the game, normal and hd. The HD version has a 640x480 resolution and it is recommended a 486DX2/66 or a Pentium.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
@@ -63,7 +62,7 @@ And other surprises that will be more fun to discover while playing.
 **Knight**: Faster and more powerful melee unit.
 **Mage**: Long-range attack unit; additionally, fireballs deal area-of-effect damage. Be careful not to damage your own troops.
 
-<span style="display:block;text-align:center">!["Game screen"](resources/en/pic_003.png "Game screen")</span>
+<span style="display:block;text-align:center">!["Game screen"](resources/en/pic_002.png "Game screen")</span>
 
 ## Buildings
 
@@ -112,13 +111,13 @@ If we don't want to use contextual actions, we can use the unit's command button
 
 **Note**: You cannot select multiple owned buildings or multiple enemy units/buildings.
 
-<span style="display:block;text-align:center">!["Results screen"](resources/en/pic_004.png "Results screen")</span>
+<span style="display:block;text-align:center">!["Results screen"](resources/en/pic_003.png "Results screen")</span>
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Maps
 
-<span style="display:block;text-align:center">!["Map selection screen"](resources/en/pic_005.png "Map selection screen")</span>
+<span style="display:block;text-align:center">!["Map selection screen"](resources/en/pic_004.png "Map selection screen")</span>
 
 One of the best features of the game is the ability to design your own maps. To do so, you will need the [Tiled](https://www.mapeditor.org/) editor and specific settings. In the /tools/map folder, you will find a Tiled project to manage everything. My recommendation is to copy existing maps and edit them.
 Once completed, they must be exported as **Future Glimpses Map (fgm)** using the included plugin, which will be usable from the maps folder.

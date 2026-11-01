@@ -1,11 +1,10 @@
 # <span style="display:block;text-align:center">ATISBOS DEL FUTURO</span>
 
 <span style="display:block;text-align:center">!["Pantalla de título"](resources/es/pic_001.png "Pantalla de título")</span>
-Atisbos del futuro o Future glimpses es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada entre otros.
-Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486DX2/66 con 16MB de RAM, especialmente para el concurso de [MS-DOS Club](https://msdos.club/).
-
-<span style="display:block;text-align:center">!["Pantalla de carga"](resources/es/pic_002.png "Pantalla de carga")</span>
 <span style="display:block;text-align:center">©2026 Wave</span>
+Este juego es un pequeño juego de estrategia en tiempo real (o RTS) que homenajea a Warcraft / Age of empires, con un poco de cada entre otros.
+Pretende ser un ejercicio para ver si era posible hacerlo funcional en un 486DX2/66 con 16MB de RAM, especialmente para el concurso de [MS-DOS Club](https://msdos.club/).
+Hay dos versiones del juego, normal y HD. La versión HD tiene una resolución de 640x480 y se recomienda para 486DX2/66 o Pentium.
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
@@ -46,7 +45,7 @@ Atisbos del futuro
 * **Niebla de guerra:** Una vez destapada queda el mapa visible.
 * **Grupos de unidades**: Podemos asignar grupos del 1 al 5 y tener un acceso rápido sin límite de unidades.
 * **Recursos**: Tenemos tres recursos, oro, madera y comida. Oro y madera se recolectan con los trabajadores, la comida se obtiene creando nuevas granjas o alcaldías y limita las unidades que podemos tener a la vez.
-* **Sistema de mensajes**: Ppara ver mensajes relacionados con los eventos que ocurren.
+* **Sistema de mensajes**: Para ver mensajes relacionados con los eventos que ocurren.
 * **Cola de unidades**: Puedes encolar entrenamientos en los edificios y cancelarlos.
 * **Obreros vagos**: Cuando un obrero lleve un tiempo sin trabajar podrás ir rápidamente a él con un botón en pantalla. Podrás pasar entre diferentes obreros haciendo clic en caso de haber más de uno.
 * **Pantalla de resultados**: Al terminar un mapa tendremos un resumen de datos sobre lo sucedido en la partida.
@@ -63,7 +62,8 @@ Y otras sorpresas que será más divertido descubrir jugando.
 **Caballero**: Unidad cuerpo a cuerpo más rápida y poderosa.
 **Mago**: Unidad de ataque a larga distancia, además bolas de fuego dañan en área. Cuidado con dañar a tus tropas.
 
-<span style="display:block;text-align:center">!["Pantalla de juego"](resources/es/pic_003.png "Pantalla de juego")</span>
+<span style="display:block;text-align:center">!["Pantalla de juego"](resources/es/pic_002.png "Pantalla de juego")</span>
+
 ## Edificios
 
 **Alcaldía**: El edificio principal, crea obreros y añade comida.
@@ -73,6 +73,7 @@ Y otras sorpresas que será más divertido descubrir jugando.
 **Establos**: Permite entrenar caballeros en los cuarteles y mejorar caballeros, la herrería.
 **Torre**: Permite entrenar y mejorar magos, requiere los establos.
 **Torreta**: Edificio que ataca con flechas a los enemigos, requiere la herrería.
+
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Controles
@@ -110,13 +111,13 @@ Si no queremos usar las acciones contextuales podemos usar los botones de comand
 
 **Nota**: No se pueden seleccionar múltiples edificios propios ni múltiples unidades/edificios enemigos.
 
-<span style="display:block;text-align:center">!["Pantalla de resultados"](resources/es/pic_004.png "Pantalla de resultados")</span>
+<span style="display:block;text-align:center">!["Pantalla de resultados"](resources/es/pic_003.png "Pantalla de resultados")</span>
 
 <div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
 ## Mapas
 
-<span style="display:block;text-align:center">!["Pantalla de selección de mapa"](resources/es/pic_005.png "Pantalla de selección de mapa")</span>
+<span style="display:block;text-align:center">!["Pantalla de selección de mapa"](resources/es/pic_004.png "Pantalla de selección de mapa")</span>
 
 Una de las mejores características del juego es la posibilidad de diseñar tus propios mapas. Para ello hará falta el editor [Tiled](https://www.mapeditor.org/) y unas características concretas. En la carpeta /tools/map encontraréis un projecto de tiled con el que gestionarlo todo. Mi recomendación es copiar mapas y editarlos.
 Una vez se tengan completados, hay que exportarlos como **Future Glimpses Map (fgm)** usando el plugin incluido que será usable desde la carpeta de mapas.
@@ -207,3 +208,4 @@ Además de poder editar el terreno, tenemos la posibilidad de configurar algunas
 [Midi Pack 3 (35 so far)](https://opengameart.org/content/midi-pack-3-35-so-far) - "9088malchakwilder8.mid (intro.mid)", "9095noobusfog.mid (defeat.mid)", "9099clavvictorytune.mid (victory.mid)", "9101pianochordmelody.mid (map2.mid)" y "9094telosvillagecentralsmarket.mid (map3.mid)" por [Tozan](https://opengameart.org/users/tozan), licenciado bajo [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [Cool Text Graphics Generator](https://cooltext.com/) para el título.
+
