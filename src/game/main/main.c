@@ -108,27 +108,23 @@ int main_init() {
 	}
 	readkey();
 
-	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH) != INITIALIZATION_OK) {
+	if (video_init_system(GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH, GAME_COLOR_DEPTH) != INITIALIZATION_OK) {
 		printf("\r\nError initializing video (%d, %d, %d).", GAME_EXTERNAL_WIDTH, GAME_EXTERNAL_HEIGHT, SCREEN_COLOR_DEPTH);
 		return PROGRAM_ERROR;
 	}
 	printf("\n");
-	set_color_depth(GAME_COLOR_DEPTH);
-	set_color_conversion(COLORCONV_NONE);
 	if (game_video_load_universal_pal(context.mainPalette) != INITIALIZATION_OK) {
 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 		printf("Error loading universal game pal.\n");
 		return PROGRAM_ERROR;
 	}
-	set_palette(black_palette);
-	video_fade_reset();
-	fps_init();
 	context.screenBuffer = create_bitmap(GAME_INTERNAL_WIDTH, GAME_INTERNAL_HEIGHT);
 	clear_bitmap(context.screenBuffer);
 	context.gameState = GAME_STATE_SPLASH;
 	render_queue_init(&renderQueue);
 	mouse_initialize_status(&context.mouseStatus, SEC_TO_FRAMES(0.66f));
 	get_minimap_colors(&context);
+	fps_init();
 
 	return PROGRAM_OK;
 }

@@ -2,7 +2,6 @@
 #include <allegro/gfx.h>
 #include <allegro/color.h>
 #include "common/video.h"
-#include "common/console.h"
 
 typedef enum {
 	FADE_NONE,
@@ -19,8 +18,9 @@ static int video_get_color_distance(RGB *source, RGB *target) {
 	return abs(source->r - target->r) + abs(source->g - target->g) + abs(source->b - target->b);
 }
 
-InitializationStatusEnum video_init_system(int width, int height, int depth) {
-	set_color_depth(depth);
+
+InitializationStatusEnum video_init_system(int width, int height, int screenColorDepth, int gameColorDepth) {
+	set_color_depth(screenColorDepth);
 #ifdef __MSDOS__
 	if (set_gfx_mode(GFX_AUTODETECT, width, height, 0, 0) != ALLEGRO_INIT_OK) {
 #endif
@@ -39,6 +39,10 @@ InitializationStatusEnum video_init_system(int width, int height, int depth) {
 #ifndef __MSDOS__
 	set_display_switch_mode(SWITCH_BACKGROUND);
 #endif
+	set_color_depth(gameColorDepth);
+	set_color_conversion(COLORCONV_NONE);
+	set_palette(black_palette);
+	video_fade_reset();
 	return INITIALIZATION_OK;
 }
 
@@ -79,12 +83,17 @@ void video_fade_handle() {
 	// IF __MSDOS__ or DEBUG are defined
 	#if defined(__MSDOS__) || defined(DEBUG)
 	if (fadeType == FADE_IN && fadePalette) {
+		set_palette(black_palette);
 		fade_in(fadePalette, fadeSpeed);
+		set_palette(fadePalette);
 	} else {
-		if (fadeType == FADE_OUT) fade_out(fadeSpeed);
+		if (fadeType == FADE_OUT) {
+			fade_out(fadeSpeed);
+			set_palette(black_palette);
+		}
 	}
 	#endif
-	fadeType = FADE_NONE;
+	video_fade_reset();
 }
 
 void video_fade_in_init(uint8_t speed, PALETTE palette) {

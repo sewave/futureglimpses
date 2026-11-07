@@ -11,7 +11,7 @@ typedef struct RGB_FILE_ENTRY {
 #define TRANSPARENT_COLOR 0
 #define PALETTE_ENTRIES 256
 
-InitializationStatusEnum video_init_system(int width, int height, int depth);
+InitializationStatusEnum video_init_system(int width, int height, int screenColorDepth, int gameColorDepth);
 InitializationStatusEnum video_load_raw_palette(const char *filename, PALETTE p);
 void video_fade_reset();
 void video_fade_in_init(uint8_t speed, PALETTE palette);
