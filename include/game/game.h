@@ -377,10 +377,15 @@ void game_execute_state_exit(GameContext *context);
 void game_execute_state_render(GameContext *context, RenderQueue *renderQueue);
 
 #ifdef __MSDOS__
-#define LOGIC_RATE_BPS 70
+	#ifdef HIGH_RESOLUTION
+		#define LOGIC_RATE_BPS 60
+	#else
+		#define LOGIC_RATE_BPS 70
+	#endif
 #else
-#define LOGIC_RATE_BPS 60
+	#define LOGIC_RATE_BPS 60
 #endif
+
 #define SEC_TO_FRAMES(secs) (1 + (uint16_t) ((float)secs * LOGIC_RATE_BPS))
 #define MAX_CATCHUP_TICKS 5
 #define PROGRAM_REQUIRED_RAM_MB 8
