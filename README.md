@@ -4,6 +4,8 @@
 It is developed in **C** using the **Allegro 4.2** library.
 
 There are two game versions, normal and HD. HD version is 640x480 and recommended for at least 486DX2/66 or Pentium. HD version has more visible field and adapts some screens to higher resolution.
+> [!WARNING]
+> **Warning:** For the higgh resolution version, you must have a VESA compatible card, it's possible that you need to load some driver like UNIVBE.
 
 ## Credits
 

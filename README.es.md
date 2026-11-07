@@ -5,6 +5,9 @@ El proyecto ha sido desarrollado íntegramente en **C** utilizando la librería 
 
 Hay dos versiones del juego: normal y HD. La versión HD tiene una resolución de 640x480 y se recomienda para equipos con, al menos, un 486DX2/66 o un Pentium. Esta versión permite ver una parte más amplia del campo de juego y adapta algunas pantallas a la mayor resolución.
 
+> [!WARNING]
+> **Advertencia:** Para la versión en alta resolución deberás tener una tarjeta compatible VESA, es posible que necesites algún driver tipo UNIVBE.
+
 ## Créditos
 
 **Programación y diseño:** Wave 2026
@@ -20,3 +23,4 @@ Diversos recursos visuales han sido generados mediante IA, incluyendo texturas, 
 * Este trabajo incluye contenido de "[Midi Pack 3 (35 so far)](https://opengameart.org/content/midi-pack-3-35-so-far)" – "9088malchakwilder8.mid (intro.mid)", "9095noobusfog.mid (defeat.mid)", "9099clavvictorytune.mid (victory.mid)", "9101pianochordmelody.mid (map2.mid)" y "9094telosvillagecentralsmarket.mid (map3.mid)" por [Tozan](https://opengameart.org/users/tozan), bajo licencia [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
 El título del juego ha sido generado mediante [Cool Text Graphics Generator](https://cooltext.com/).
+
